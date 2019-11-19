@@ -33,7 +33,7 @@
 #include "GeomGL.h"
 #include "dHighResolutionTimer.h"
 
-ofstream monFlux("C:/Users/pierre.lemerle/Desktop/history.txt");
+ofstream monFlux("history.txt");
 
 
 // memory allocation for Newton
@@ -292,13 +292,11 @@ void NewtonManager::UpdateNewton(dFloat steptime)
 		dFloat timestepInSecunds = aMaxphysicfps;
 		unsigned64 timestepMicrosecunds = unsigned64(timestepInSecunds * 1000000.0f);
 		//
-		monFlux << "passage" << std::endl;
 		unsigned64 currentTime = dGetTimeInMicrosenconds();
 		unsigned64 nextTime = currentTime - aMicrosecunds;
 		if (nextTime > timestepMicrosecunds * 2) { 
 			aMicrosecunds = currentTime - timestepMicrosecunds * 2;
 			nextTime = currentTime - aMicrosecunds;
-			monFlux << "ok"<< std::endl;
 		}
 		//
 		bool newUpdate = false;
