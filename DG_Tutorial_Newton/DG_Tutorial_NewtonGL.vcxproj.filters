@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="Shaders\MainShader.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="Shaders\MainShader.vert">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{92e8f503-78dd-4b9c-bb56-6d7736077b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{cb500c48-8430-42e2-89f5-67d58537c3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{4316db1b-88aa-4e05-bc1a-baa2910e695d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{a9bc64c9-3ba8-4ca6-a039-ba933fb89bdb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TutorialSystem\BaseShader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\Camera.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\dHighResolutionTimer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\GeomGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\NewtonManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\pch.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\VertexGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\WindowGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TutorialSystem\BaseShader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\Camera.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\dHighResolutionTimer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\GeomGL.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\NewtonManager.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\pch.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\shader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\texture.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\WindowGL.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DG_Tutorial_NewtonGL.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DG_Tutorial_NewtonGL.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+</Project>
