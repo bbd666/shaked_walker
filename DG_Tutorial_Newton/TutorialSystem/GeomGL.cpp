@@ -493,6 +493,7 @@ void GeomNewton::Render(Shader* cshd, dFloat steptime)
 		//glDisableVertexAttribArray(0);
 		//
 		glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	//*/
 }
@@ -874,6 +875,7 @@ void GeomAssimp::RenderMeshes(Shader* cshd, dFloat steptime)
 			//glDisableVertexAttribArray(0);
 			//
 			glBindVertexArray(0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 }

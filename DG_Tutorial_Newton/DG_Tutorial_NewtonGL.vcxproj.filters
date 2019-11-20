@@ -53,6 +53,9 @@
     <ClInclude Include="TutorialSystem\WindowGL.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialSystem\biped.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TutorialSystem\BaseShader.cpp">
@@ -84,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="DG_Tutorial_NewtonGL.cpp">
       <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\biped.cpp">
+      <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TutorialSystem\BaseShader.h" />
+    <ClInclude Include="TutorialSystem\biped.h" />
     <ClInclude Include="TutorialSystem\Camera.h" />
     <ClInclude Include="TutorialSystem\dHighResolutionTimer.h" />
     <ClInclude Include="TutorialSystem\GeomGL.h" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClCompile Include="DG_Tutorial_NewtonGL.cpp" />
     <ClCompile Include="TutorialSystem\BaseShader.cpp" />
+    <ClCompile Include="TutorialSystem\biped.cpp" />
     <ClCompile Include="TutorialSystem\Camera.cpp" />
     <ClCompile Include="TutorialSystem\dHighResolutionTimer.cpp" />
     <ClCompile Include="TutorialSystem\GeomGL.cpp" />
