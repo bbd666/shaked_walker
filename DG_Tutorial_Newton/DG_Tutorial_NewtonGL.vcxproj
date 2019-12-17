@@ -68,7 +68,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>wsock32.lib;opengl32.lib;..\glfw-3.3\src\Debug\glfw3.lib;..\glew-2.1.0\lib\Debug\x64\glew32sd.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\newton\Debug\newton_d.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\dCustomJoints\Debug\dCustomJoints_d.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\dMath\Debug\dMath_d.lib;..\assimp\lib\Debug\assimp-vc141-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;opengl32.lib;..\glfw-3.3\src\Debug\glfw3.lib;..\glew-2.1.0\lib\Debug\x64\glew32sd.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\newton\Debug\newton_d.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\dCustomJoints\Debug\dCustomJoints_d.lib;..\newton\sdk\projects\visualStudio_2015_dll\x64\dMath\Debug\dMath_d.lib;..\assimp\lib\Release\assimp-vc141-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:LIBCMTD %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

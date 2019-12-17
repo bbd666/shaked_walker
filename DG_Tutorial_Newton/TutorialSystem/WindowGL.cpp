@@ -277,7 +277,7 @@ WindowMain::WindowMain(int dwidth, int dheight)
 	// make sure no Newton tool or utility leaves leaks behind.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF));
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-	//_CrtSetBreakAlloc (625);
+	//_CrtSetBreakAlloc (1139);
 #endif
 	singletonContextGL = NULL;
 	if (!glfwInit())
@@ -555,6 +555,7 @@ WindowMain::~WindowMain()
   if (Camera)
 	  delete Camera;
   //
+
   if (aManager) {
 	  delete aManager;
   }

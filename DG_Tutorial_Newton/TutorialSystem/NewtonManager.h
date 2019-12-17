@@ -47,6 +47,7 @@ struct NewtonManager
 	std::vector<void*> vGeomList;
 	std::vector<void*> vAssMeshList;
 	std::vector<void*> vJointList;
+	std::vector<void*> vMuscleList;
 	Texture* vTextureManager;
 	//
 	bool IsTerminated;
@@ -58,6 +59,7 @@ struct NewtonManager
 	dFloat GetFps();
 	dFloat GetPhysicTime();
 	static void PhysicsApplyGravityForce(const NewtonBody* body, dFloat timestep, int threadIndex);
+	static void PhysicsApplyControlForce(const NewtonBody* body1, bool action, dFloat timestep, int threadIndex);
 	static void TransformCallback(const NewtonBody* body, const dFloat* matrix, int threadIndex);
 private:
 	int aLastpluginnewton; 

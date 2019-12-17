@@ -32,6 +32,7 @@
 #include "NewtonManager.h"
 #include "GeomGL.h"
 #include "dHighResolutionTimer.h"
+#include "biped.h"
 
 ofstream monFlux("history.txt");
 
@@ -114,6 +115,7 @@ static void UserContactFriction(const NewtonJoint* contactJoint, dFloat timestep
 
 void NewtonManager::PhysicsApplyGravityForce(const NewtonBody* body, dFloat timestep, int threadIndex)
 {
+
 	dFloat Ixx;
 	dFloat Iyy;
 	dFloat Izz;
@@ -125,10 +127,10 @@ void NewtonManager::PhysicsApplyGravityForce(const NewtonBody* body, dFloat time
 	NewtonBodyGetMass(body, &mass, &Ixx, &Iyy, &Izz);
 
 	dVector force(nManager->GetGravity().Scale(mass));
-	NewtonBodySetForce(body, &force.m_x);
+	NewtonBodyAddForce(body, &force.m_x);
 
 	// for regular gravity objects, clamp high angular velocities 
-	dVector omega(0.0f);
+	dVector omega(0.0f);	
 	NewtonBodyGetOmega(body, &omega[0]);
 	dFloat mag2 = omega.DotProduct3(omega);
 	dFloat maxMag = 100.0f;
@@ -136,7 +138,43 @@ void NewtonManager::PhysicsApplyGravityForce(const NewtonBody* body, dFloat time
 		omega = omega.Normalize().Scale(maxMag);
 		NewtonBodySetOmega(body, &omega[0]);
 	}
+
+	// scan and apply Muscle Forces
+	dVector pos(0.0f);
+	dVector Vtemp(0.0f);
+
+
+	for (auto itr = nManager->vMuscleList.begin();
+		itr != nManager->vMuscleList.end(); itr++) 
+	{
+		Muscle* Mobj = (Muscle*)*itr;
+
+		dVector posinsert(0.0f);
+		//fprintf(stderr, "%6.4lf", Mobj->m_Length0);
+		
+		GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
+
+		//if (Mobj == NULL) { fprintf(stderr, "Muscle  NULL\n"); };
+		if (gNewton == NULL) { fprintf(stderr, " pointeur geomnewton NULL\n"); };
+
+	
+
+		NewtonBody* NBody = gNewton->GetBody();
+	/*	NewtonBodyGetPosition(body, &pos[0]);
+		if ( NBody == body){		
+			Vtemp = Mobj->GetForceElas();
+			NewtonBodyAddForce(body, &Vtemp.m_x);
+		};
+		gNewton = (Mobj->body2);
+		NBody = (NewtonBody*)gNewton->GetBody();
+		if (NBody == body) {
+			Vtemp = Mobj->GetForceElas();
+			Vtemp = Vtemp.Scale(-1.0f);
+			NewtonBodyAddForce(body, &Vtemp.m_x);
+		};*/
+	}
 }
+
 
 void NewtonManager::TransformCallback(const NewtonBody* body, const dFloat* matrix, int threadIndex)
 {
@@ -161,7 +199,7 @@ void NewtonManager::TransformCallback(const NewtonBody* body, const dFloat* matr
 
 NewtonManager::NewtonManager()
 	:nWorld(NULL),
-	 nGravity(0.0f, -0.0981f, 0.0f, 0.0f),
+	 nGravity(0.0f, -9.81f, 0.0f, 0.0f),
 	 aMaxphysicfps(1.0f / 1000.0f),
 	 aMicrosecunds(0),
 	 aMainThreadPhysicsTimeAcc(0.0f),
@@ -196,7 +234,7 @@ NewtonManager::NewtonManager()
 	aCurrentPluginID = 1;
 
 	// by default runs on four micro threads
-	NewtonSetThreadsCount(nWorld, 4);
+	NewtonSetThreadsCount(nWorld, 1);
 	//
 	NewtonSetSolverIterations(nWorld, 0);
 	//
@@ -372,9 +410,18 @@ NewtonManager::~NewtonManager()
 	}
 	vJointList.clear();
 	//
+	for (auto itr = vMuscleList.begin();
+		itr != vMuscleList.end(); itr++) {
+		Muscle* aobj = (Muscle*)*itr;
+		delete aobj;
+	}
+	vMuscleList.clear();
+
+	//
 	if (vTextureManager)
 	  delete vTextureManager;
 	//
+
 	NewtonDestroyAllBodies(nWorld);
 	NewtonDestroy(nWorld);
 }

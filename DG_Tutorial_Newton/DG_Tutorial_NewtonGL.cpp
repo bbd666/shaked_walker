@@ -65,11 +65,19 @@ int WINAPI wWinMain(
 	
 	   	 
     Biped* man = new Biped(ContextGL->aManager,3.0f,3.0f,0.0f);
+	dVector VTemp = dVector(0.0f, 0.0f, 0.0f, 1.0f);
+	if (man->GetUp_Leg_L() == NULL) { fprintf(stderr, "OK1 "); }
+	//if (man->Up_Leg_L == NULL) { fprintf(stderr, "OK2 "); }
+
+	Muscle* m1= new Muscle(ContextGL->aManager, man->GetUp_Leg_L(), man->GetLow_Leg_L(), VTemp, VTemp);
 
 	if (ContextGL != NULL) {
 		ContextGL->MainLoop();
+
 		//
 		// delete context and newton manager and close tutorial.
+		if (man) { delete(man); }
+		if (m1) { delete(m1); }
 		delete ContextGL;
 		//
 	}
