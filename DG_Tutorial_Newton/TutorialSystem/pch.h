@@ -91,6 +91,7 @@ typedef long long unsigned64;
 #include <map>
 #include <algorithm>
 
+
 /*
 #ifdef _DEBUG
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -176,7 +177,14 @@ typedef long long unsigned64;
 #include <dCustomPlayerControllerManager.h>
 
 //
-
+#include <dModelAnimTree.h>
+#include <dModelAnimTreePose.h>
+#include <dModelAnimTreePoseBlender.h>
+#include <dModelManager.h>
+#include <dModelNode.h>
+#include <dModelRootNode.h>
+#include <dModelStdAfx.h>
+//
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/mesh.h>

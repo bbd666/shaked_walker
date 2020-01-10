@@ -32,6 +32,7 @@
 #include "WindowGL.h"
 #include "GeomGL.h"
 #include "biped.h"
+#include "OXVehicleRayCast.h"
 
 
 #if defined(_DEBUG)
@@ -64,20 +65,18 @@ int WINAPI wWinMain(
 	Geomfloor->InitNewton(atBox, 25.0f, 0.5f, 25.0f);
 	
 	   	 
-    Biped* man = new Biped(ContextGL->aManager,3.0f,3.0f,0.0f);
-	dVector VTemp = dVector(0.0f, 0.0f, 0.0f, 1.0f);
-	if (man->GetUp_Leg_L() == NULL) { fprintf(stderr, "OK1 "); }
-	//if (man->Up_Leg_L == NULL) { fprintf(stderr, "OK2 "); }
 
-	Muscle* m1= new Muscle(ContextGL->aManager, man->GetUp_Leg_L(), man->GetLow_Leg_L(), VTemp, VTemp);
+	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+	dMatrix matrix(dGetIdentityMatrix());
+	aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
 	if (ContextGL != NULL) {
 		ContextGL->MainLoop();
 
 		//
 		// delete context and newton manager and close tutorial.
-		if (man) { delete(man); }
-		if (m1) { delete(m1); }
+		//if (man) { delete(man); }
+		//if (m1) { delete(m1); }
 		delete ContextGL;
 		//
 	}

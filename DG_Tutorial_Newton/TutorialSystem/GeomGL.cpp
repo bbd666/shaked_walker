@@ -143,16 +143,28 @@ GeomNewton::GeomNewton(NewtonManager* aMan)
     aTexTileV(1.0f),
 	aTurnAngle(0.0f),
     aRollAngle(0.0f),
-    aPitchAngle(0.0f)
+    aPitchAngle(0.0f), 
+	aParentGeom(NULL)
 { 
 	aUserData->SetClassID(666);
 	aUserData->SetDataPointer(this);
 	aManager->vGeomList.push_back(this);
 }
 
+
+void GeomNewton::SetParent(GeomNewton* uParent)
+{
+	aParentGeom = uParent;
+}
+
 void GeomNewton::SetMatrix(dMatrix val)
 {
-	aTrans = val;
+	if (!aParentGeom) {
+		aTrans = val;
+	}
+	else {
+		aTrans = val * aParentGeom->GetMatrix();
+	}
 }
 
 dMatrix GeomNewton::GetMatrix()
@@ -197,7 +209,13 @@ void GeomNewton::SetTransformMatrix(float* pMatrix)
 
 void GeomNewton::SetPosition(float px, float py, float pz)
 {
-	aTrans.m_posit = dVector(px, py, pz, 1.0f);
+	if (!aParentGeom) {
+		aTrans.m_posit = dVector(px, py, pz, 1.0f);
+	}
+	else {
+		aTrans = aTrans * aParentGeom->GetMatrix();
+		aTrans.m_posit = aParentGeom->GetMatrix().m_posit + dVector(px, py, pz, 1.0f);
+	}
 }
 
 void GeomNewton::SetBodyType(GeomBodyType ctype)

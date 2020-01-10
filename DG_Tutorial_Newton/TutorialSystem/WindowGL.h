@@ -66,6 +66,35 @@ private:
 	int aMousemods;
 };
 
+struct LineVertex
+{
+	glm::vec3 point1;
+	glm::vec3 point2;
+	glm::vec4 color;
+	int lineID;
+};
+
+struct LineDebugManager
+{
+	LineDebugManager(MainCamera* mainCam);
+	~LineDebugManager();
+
+	void InitBufferGL();
+	//
+	int AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor);
+	//
+	void RenderLine(double steptime);
+	//
+	std::vector<LineVertex*> aLineList;
+	std::vector<MainVertexPC> aLineBuffer;
+	//
+	GLuint aLineVbo;
+	GLuint aLineVao;
+	MainCamera* aCamera;
+	Shader* aShader;
+	dMatrix aMatrix;
+};
+
 struct WindowMain
 {   // public
 	WindowMain(int dwidth = 1024, int dheight = 768);
@@ -90,6 +119,7 @@ struct WindowMain
 	//
 	NewtonManager* aManager;
 	//
+	LineDebugManager* aLineManager;
 private:
 	NewtonMousePick* aMousePick;
 	GLFWwindow* contextGL;

@@ -252,7 +252,128 @@ NewtonMousePick::~NewtonMousePick()
 	UnPickBody();
 }
 
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+LineDebugManager::LineDebugManager(MainCamera* mainCam) :
+	aCamera(mainCam),
+	aMatrix(dGetIdentityMatrix()),
+	aShader(NULL),
+	aLineVbo(0),
+	aLineVao(0)
+{
+	if (!aShader)
+		aShader = new Shader("LinesManager");
+	//
+	if (aShader) {
+		aShader->attachShader(BaseShader("Shaders/DebugLine_VS.vert"));
+		aShader->attachShader(BaseShader("Shaders/DebugLine_FS.frag"));
+		// linking shader.
+		aShader->linkPrograms();
+	}
+}
+//
+LineDebugManager::~LineDebugManager()
+{
+	if (aShader)
+		delete aShader;
+}
+//
+void LineDebugManager::InitBufferGL()
+{
+	MainVertexPC avert;
+	//
+	for (int i = 0; i < 2; i++) {
+		avert.posit.x = 9999.999f;
+		avert.posit.y = 9999.999f;
+		avert.posit.z = 9999.999f;
+		//
+		avert.color.x = 1.0f;
+		avert.color.y = 1.0f;
+		avert.color.z = 1.0f;
+		//
+		aLineBuffer.push_back(avert);
+	}
+	//
+	glGenVertexArrays(1, &aLineVao);
+	if (aLineVao) {
+		//
+		glBindVertexArray(aLineVao);
+		//
+		glGenBuffers(1, &aLineVbo);
+		//
+		if (aLineVbo) {
+			glBindBuffer(GL_ARRAY_BUFFER, aLineVbo);
+			//
+			glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPC) * aLineBuffer.size(), &aLineBuffer[0], GL_DYNAMIC_DRAW);
+			//
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPC), (void*)0);
+			//
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPC), (void*)(offsetof(MainVertexPC, MainVertexPC::color)));
+			//
+			//glDisableVertexAttribArray(1);
+			//glDisableVertexAttribArray(0);
+			//
+			//aBufferInited = true;
+			//printf("OX_INFO: GL Debug lines static buffer create and inited. \n");
+		}
+		//
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+}
+//
+int LineDebugManager::AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor)
+{
+	MainVertexPC avert1;
+	avert1.posit = linepos1;
+	avert1.color = linecolor;
+	//
+	MainVertexPC avert2;
+	avert2.posit = linepos2;
+	avert2.color = linecolor;
+	//
+	aLineBuffer.push_back(avert1);
+	aLineBuffer.push_back(avert2);
+	//
+	glBindVertexArray(aLineVao);
+	glBindBuffer(GL_ARRAY_BUFFER, aLineVbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPC) * aLineBuffer.size(), &aLineBuffer[0], GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return (int)aLineBuffer.size() ;
+}
+//
+void LineDebugManager::RenderLine(double steptime)
+{
+	if ((!aShader) || (!aCamera)) return;
+	//
+	aShader->use();
+	//printf("debug test \n");
+	//
+	aShader->setMat4("Projection_Matrix", aCamera->GetMatrixProjection());
+	aShader->setMat4("View_Matrix", aCamera->GetMatrixView());
+	aShader->setNMat4("Model_Matrix", aMatrix);
+	//
+	glBindVertexArray(aLineVao);
+	//if (aRequestStaUpdate) {
+	glBindBuffer(GL_ARRAY_BUFFER, aLineVbo);
+	//	if (firstupdate0)
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(MainVertexPC) * aLineBuffer.size(), &aLineBuffer[0]);
+	//	else
+			//glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPC) * aLineBuffer.size(), &aLineBuffer[0], GL_DYNAMIC_DRAW);
+		//
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//	aRequestStaUpdate = false;
+	//	firstupdate0 = true;
+	//}
+	//
+	glDrawArrays(GL_LINES, 0, (GLsizei)(aLineBuffer.size()));
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 WindowMain::WindowMain(int dwidth, int dheight)
 	:MainShader(NULL), 
@@ -270,6 +391,7 @@ WindowMain::WindowMain(int dwidth, int dheight)
     mousescrlx(0.0f),
     mousescrly(0.0f),
 	aManager(NULL),
+	aLineManager(NULL),
 	delayerfps(0)
 {
 #if defined(_DEBUG) && defined(_MSC_VER)
@@ -277,13 +399,14 @@ WindowMain::WindowMain(int dwidth, int dheight)
 	// make sure no Newton tool or utility leaves leaks behind.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF));
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-	//_CrtSetBreakAlloc (1139);
+	//_CrtSetBreakAlloc (1882);
 #endif
 	singletonContextGL = NULL;
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
 	//
 	aManager = new NewtonManager();
+
 	//
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
@@ -493,6 +616,8 @@ void WindowMain::InitGLRender()
 		// linking shader.
 		MainShader->linkPrograms();
 	}
+	aLineManager = new LineDebugManager(Camera);
+	aLineManager->InitBufferGL();
 }
 
 void WindowMain::MainRender()
@@ -533,7 +658,11 @@ void WindowMain::MainRender()
 				}
 				delayerfps++;
 				aManager->Render(MainShader, timestep);
+			    if (aLineManager) {
+				aLineManager->RenderLine(timestep);
+			    }			
 			}
+
 			//
 		}
 	}
@@ -576,4 +705,7 @@ WindowMain::~WindowMain()
   glfwTerminate();
   glfwSetErrorCallback(NULL);
   //
+  if (aLineManager) {
+	  delete aLineManager;
+  }
 }

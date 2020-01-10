@@ -56,6 +56,9 @@
     <ClInclude Include="TutorialSystem\biped.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialSystem\OXVehicleRayCast.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TutorialSystem\BaseShader.cpp">
@@ -89,6 +92,9 @@
       <Filter>Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="TutorialSystem\biped.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\OXVehicleRayCast.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

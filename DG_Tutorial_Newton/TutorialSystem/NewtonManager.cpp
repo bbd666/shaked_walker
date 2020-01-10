@@ -89,6 +89,7 @@ void GenericContactProcess(const NewtonJoint* contactJoint, dFloat timestep, int
 
 static void UserContactFriction(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
 {
+	/*
 	// call  the basic call back
 	GenericContactProcess(contactJoint, timestep, threadIndex);
 
@@ -111,6 +112,7 @@ static void UserContactFriction(const NewtonJoint* contactJoint, dFloat timestep
 		NewtonMaterialSetContactFrictionCoef(material, frictionValue + 0.1f, frictionValue, 0);
 		NewtonMaterialSetContactFrictionCoef(material, frictionValue + 0.1f, frictionValue, 1);
 	}
+	*/
 }
 
 void NewtonManager::PhysicsApplyGravityForce(const NewtonBody* body, dFloat timestep, int threadIndex)
@@ -139,40 +141,7 @@ void NewtonManager::PhysicsApplyGravityForce(const NewtonBody* body, dFloat time
 		NewtonBodySetOmega(body, &omega[0]);
 	}
 
-	// scan and apply Muscle Forces
-	dVector pos(0.0f);
-	dVector Vtemp(0.0f);
 
-
-	for (auto itr = nManager->vMuscleList.begin();
-		itr != nManager->vMuscleList.end(); itr++) 
-	{
-		Muscle* Mobj = (Muscle*)*itr;
-
-		dVector posinsert(0.0f);
-		//fprintf(stderr, "%6.4lf", Mobj->m_Length0);
-		
-		GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
-
-		//if (Mobj == NULL) { fprintf(stderr, "Muscle  NULL\n"); };
-		if (gNewton == NULL) { fprintf(stderr, " pointeur geomnewton NULL\n"); };
-
-	
-
-		NewtonBody* NBody = gNewton->GetBody();
-	/*	NewtonBodyGetPosition(body, &pos[0]);
-		if ( NBody == body){		
-			Vtemp = Mobj->GetForceElas();
-			NewtonBodyAddForce(body, &Vtemp.m_x);
-		};
-		gNewton = (Mobj->body2);
-		NBody = (NewtonBody*)gNewton->GetBody();
-		if (NBody == body) {
-			Vtemp = Mobj->GetForceElas();
-			Vtemp = Vtemp.Scale(-1.0f);
-			NewtonBodyAddForce(body, &Vtemp.m_x);
-		};*/
-	}
 }
 
 
@@ -385,10 +354,21 @@ void NewtonManager::Render(Shader* cshd, dFloat steptime)
 	for (auto itr = vGeomList.begin(); itr != vGeomList.end(); itr++) {
 	  ((GeomNewton*)*itr)->Render(cshd, steptime);
 	}
+	for (auto itr = vMuscleList.begin(); itr != vMuscleList.end(); itr++) {
+		((Muscle*)*itr)->UpdateLineCoord(cshd, steptime);
+	}
 }
 
 NewtonManager::~NewtonManager()
 {
+	//
+	//for (auto itr = vJointList.begin();
+	//	itr != vJointList.end(); itr++) {
+		//dCustomJoint* aobj = (dCustomJoint*)*itr;
+		//delete aobj;
+	//}
+	vJointList.clear();
+	//
 	for (auto itr = vAssMeshList.begin();
 		itr != vAssMeshList.end(); itr++) {
 		GeomAssimp* aobj = (GeomAssimp*)*itr;
@@ -402,13 +382,6 @@ NewtonManager::~NewtonManager()
 		delete aobj;
 	}
 	vGeomList.clear();
-    //
-	for (auto itr = vJointList.begin();
-		itr != vJointList.end(); itr++) {
-		dCustomJoint* aobj = (dCustomJoint*)*itr;
-		delete aobj;
-	}
-	vJointList.clear();
 	//
 	for (auto itr = vMuscleList.begin();
 		itr != vMuscleList.end(); itr++) {
@@ -416,7 +389,6 @@ NewtonManager::~NewtonManager()
 		delete aobj;
 	}
 	vMuscleList.clear();
-
 	//
 	if (vTextureManager)
 	  delete vTextureManager;

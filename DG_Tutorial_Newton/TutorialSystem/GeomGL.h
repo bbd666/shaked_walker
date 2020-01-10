@@ -124,7 +124,10 @@ struct GeomNewton
 	void SetBodyType(GeomBodyType ctype);
 	void InitNewton(GeomType cGeomtype, float cSx, float cSy, float cSz, float cMass = 0.0f);
 	NewtonBody* GetBody();
+	void SetParent(GeomNewton* uParent);
+
   private:
+	  GeomNewton* aParentGeom;
 	  GeomBase* aUserData;
 	  MainVertexPTN* aVtx;
 	  unsigned int* aIndices;

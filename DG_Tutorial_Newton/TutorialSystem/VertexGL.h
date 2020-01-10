@@ -61,6 +61,12 @@ struct MainTexUv
 	float uvy;
 };
 
+struct MainVertexPC
+{ // Used in a similar way to record from pascal
+	glm::vec3 posit;
+	glm::vec3 color;
+};
+
 
 
 #endif //VERTEXGL_H
