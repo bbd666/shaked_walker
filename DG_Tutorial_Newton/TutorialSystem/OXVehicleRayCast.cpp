@@ -19,6 +19,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, Low_Leg_LNode(NULL)
 	, Plantar_LNode(NULL)
 	, Toe_LNode(NULL)
+	/*, ContactFoot_L(NULL)
+	, ContactGround_L(NULL)
+	, NormalFoot_L(NULL)*/
 {
 	string tex("Textures//wood6.png");
 	l_Up_Leg = 1.0f;
@@ -30,7 +33,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	glm::vec3 _Pos(glm::vec3(3.0f, 3.0f, 0.f));
 	Scale = 1.0f;
 
-	Up_Leg_L = new GeomNewton(winctx->aManager);
+	Up_Leg_L = new GeomNewton(m_winManager->aManager);
 	Up_Leg_L->SetBodyType(adtDynamic);
 	Up_Leg_L->SetTexture0(&tex[0], "Tex0");
 	Up_Leg_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
@@ -42,7 +45,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	dMatrix aParenMatrix(dGetIdentityMatrix());
 	NewtonBodyGetMatrix(parentBody, &aParenMatrix[0][0]);
 
-	Low_Leg_L = new GeomNewton(winctx->aManager);
+	Low_Leg_L = new GeomNewton(m_winManager->aManager);
 	Low_Leg_L->SetBodyType(adtDynamic);
 	Low_Leg_L->SetParent(Up_Leg_L);
 	Low_Leg_L->SetTexture0(&tex[0], "Tex0");
@@ -52,7 +55,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Low_Leg_L->GetBody(), NULL);
 	Low_Leg_LNode = new dModelNode(Low_Leg_L->GetBody(), dGetIdentityMatrix(), this);
 
-	Plantar_L = new GeomNewton(winctx->aManager);
+	Plantar_L = new GeomNewton(m_winManager->aManager);
 	Plantar_L->SetBodyType(adtDynamic);
 	Plantar_L->SetParent(Low_Leg_L);
 	Plantar_L->SetTexture0(&tex[0], "Tex0");
@@ -62,7 +65,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Plantar_L->GetBody(), NULL);
 	Plantar_LNode = new dModelNode(Plantar_L->GetBody(), dGetIdentityMatrix(), Low_Leg_LNode);
 
-	Toe_L = new GeomNewton(winctx->aManager);
+	Toe_L = new GeomNewton(m_winManager->aManager);
 	Toe_L->SetBodyType(adtDynamic);
 	Toe_L->SetParent(Plantar_L);
 	Toe_L->SetTexture0(&tex[0], "Tex0");
@@ -77,25 +80,25 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Knee_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 	Knee_LPinMatrix.m_posit = dVector(_Pos.x + Scale * l_Up_Leg / 2, _Pos.y, _Pos.z);
 	Knee_L = new dCustomHinge(Knee_LPinMatrix, Low_Leg_L->GetBody(), Up_Leg_L->GetBody());
-	winctx->aManager->vJointList.push_back(Knee_L);
+	m_winManager->aManager->vJointList.push_back(Knee_L);
 
 	// create ankle joint.
 	dMatrix Ankle_LPinMatrix(dGetIdentityMatrix());
 	Ankle_LPinMatrix = Ankle_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 	Ankle_LPinMatrix.m_posit = dVector(_Pos.x + Scale * (l_Up_Leg / 2 + l_Low_Leg), _Pos.y, _Pos.z);
 	Ankle_L = new dCustomBallAndSocket(Ankle_LPinMatrix,  Plantar_L->GetBody(),Low_Leg_L->GetBody());
-	winctx->aManager->vJointList.push_back(Ankle_L);
+	m_winManager->aManager->vJointList.push_back(Ankle_L);
 
 	// create toe joint.
 	dMatrix Toe_LPinMatrix(dGetIdentityMatrix());
 	Toe_LPinMatrix = Toe_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 	Toe_LPinMatrix.m_posit = dVector(_Pos.x + Scale * (l_Up_Leg / 2 + l_Low_Leg), _Pos.y + 3 * Scale*  l_foot / 4, _Pos.z);
 	Flextoe_L = new dCustomHinge(Toe_LPinMatrix, Plantar_L->GetBody(), Toe_L->GetBody());
-	winctx->aManager->vJointList.push_back(Flextoe_L);
+	m_winManager->aManager->vJointList.push_back(Flextoe_L);
 
 	ins11 = dVector(0.f, 0.f, 0.f);
 	ins12 = dVector(0.f, 0.f, 0.f);
-	m1 = new Muscle(winctx->aLineManager,winctx->aManager, GetUp_Leg_L(), GetLow_Leg_L(), ins11, ins12);
+	m1 = new Muscle(m_winManager->aLineManager, m_winManager->aManager, GetUp_Leg_L(), GetLow_Leg_L(), ins11, ins12);
 	m1->GenerateMesh();
 }
 
@@ -109,6 +112,24 @@ GeomNewton* dRaycastVHModel::GetLow_Leg_L() {
 
 GeomNewton* dRaycastVHModel::GetPlantar_L() {
 	return Plantar_L;
+}
+
+float dRaycastVHModel::GetFoot2Floor_L() {
+	return Foot2Floor_L;
+}
+
+void dRaycastVHModel::CastFoot_L() {
+	NewtonCollision* const collisionA = NewtonBodyGetCollision(Plantar_L->GetBody());
+    dMatrix matrixA;
+	NewtonBodyGetMatrix(Plantar_L->GetBody(), &matrixA[0][0]);
+
+	NewtonCollision* const collisionB = NewtonCreateBox(m_winManager->aManager->GetWorld(), 25.0f, 0.5f, 25.0f, SERIALIZE_ID_BOX, NULL);
+	dMatrix matrixB(dGetIdentityMatrix());
+
+	int res = NewtonCollisionClosestPoint(m_winManager->aManager->GetWorld(), collisionA, &matrixA[0][0], collisionB, &matrixB[0][0], &ContactFoot_L[0], &ContactGround_L[0], &NormalFoot_L[0], 0);
+	NewtonDestroyCollision(collisionB);
+	Foot2Floor_L= abs(ContactFoot_L[1]);
+	m_winManager->SetFootPos_L(to_string(Foot2Floor_L));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -170,6 +191,8 @@ for (auto itr = m_winManager->aManager->vMuscleList.begin();
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep) const
 {
 	//printf("DGVehicleRCManager OnPostUpdate \n");
+	dRaycastVHModel* controller = (dRaycastVHModel*)model;
+	controller->CastFoot_L();
 }
 
 void DGVehicleRCManager::OnUpdateTransform(const dModelNode* const bone, const dMatrix& localMatrix) const

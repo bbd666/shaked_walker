@@ -37,6 +37,8 @@ public:
 	GeomNewton* GetUp_Leg_L();
 	GeomNewton* GetLow_Leg_L();
 	GeomNewton* GetPlantar_L();
+	float GetFoot2Floor_L();
+	void CastFoot_L();
 
 
 private:
@@ -67,6 +69,11 @@ private:
 	Muscle* m1;
 	dVector ins11;
 	dVector ins12;
+
+	dVector  ContactFoot_L;
+	dVector  NormalFoot_L;
+	dVector  ContactGround_L;
+	float Foot2Floor_L;
 };
 
 class DGVehicleRCManager: public dModelManager

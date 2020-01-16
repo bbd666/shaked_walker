@@ -120,6 +120,8 @@ struct WindowMain
 	NewtonManager* aManager;
 	//
 	LineDebugManager* aLineManager;
+	void SetFootPos_L(string s);
+
 private:
 	NewtonMousePick* aMousePick;
 	GLFWwindow* contextGL;
@@ -137,6 +139,7 @@ private:
 	float mousescrlx;
 	float mousescrly;
 	int delayerfps;
+	string FootPos_L;
 };
 
 // WIP: unimplemented, I let's it present just to remember have I need to do later.

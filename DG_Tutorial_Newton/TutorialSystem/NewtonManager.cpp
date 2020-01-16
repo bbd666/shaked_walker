@@ -34,7 +34,7 @@
 #include "dHighResolutionTimer.h"
 #include "biped.h"
 
-ofstream monFlux("history.txt");
+//ofstream monFlux("history.txt");
 
 
 // memory allocation for Newton
@@ -322,7 +322,7 @@ void NewtonManager::UpdateNewton(dFloat steptime)
 			}
 			//
 			physicsTime += NewtonGetLastUpdateTime(nWorld);
-			monFlux <<  physicsTime << std::endl;
+//			monFlux <<  physicsTime << std::endl;
 			//
 			nextTime -= timestepMicrosecunds;
 			aMicrosecunds += timestepMicrosecunds;

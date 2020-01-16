@@ -32,6 +32,7 @@
 #include "WindowGL.h"
 #include "dHighResolutionTimer.h"
 
+
 using namespace std;
 
 static dFloat RayCastFilter(const NewtonBody* const body, const NewtonCollision* const collisionHit, const dFloat* const contact, const dFloat* const normal, dLong collisionID, void* const userData, dFloat intersetParam)
@@ -415,7 +416,7 @@ WindowMain::WindowMain(int dwidth, int dheight)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//
-	contextGL = glfwCreateWindow(dwidth, dheight, "Tutorial for user (Blackbird_dream) - How to use pure Newton api + gl in c++ write by Dave Gravel.", NULL, NULL);
+	contextGL = glfwCreateWindow(dwidth, dheight, "Walking Humanoid", NULL, NULL);
 	//
 	if (contextGL == NULL) {
 #if defined(_DEBUG) && defined(_MSC_VER)
@@ -475,6 +476,11 @@ void WindowMain::ContextKeypress(int key, int scancode, int action, int mods)
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(contextGL, GLFW_TRUE);
 	}
+}
+
+void WindowMain::SetFootPos_L(string s)
+{
+	FootPos_L=s;
 }
 
 NewtonMousePick* WindowMain::GetMousePicking()
@@ -652,7 +658,7 @@ void WindowMain::MainRender()
 				//
 				if (delayerfps >= 1000) {
 					std::stringstream ss;
-					ss << "Tutorial for user (Blackbird_dream) - How to use pure Newton api + gl in c++ write by Dave Gravel." << " [" << aManager->GetFps() << " :FPS "<< aManager->GetPhysicTime() * 1000.0f <<" :ms]";
+					ss  << "left foot distance from the Ground : " << FootPos_L << " - Walking Humanoid - " << " [" << aManager->GetFps() << " :fps "<< aManager->GetPhysicTime() * 1000.0f <<" :ms]";
 					glfwSetWindowTitle(contextGL, ss.str().c_str());
 					delayerfps = 0;
 				}
