@@ -125,7 +125,7 @@ linepos1.x = 0; linepos1.y = 0; linepos1.z = 0;
 linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
 linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
 
-FootLineIndex_L = m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor, false);
+FootLineIndex_L = m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
 }
 
 void dRaycastVHModel::CastFoot_L() {

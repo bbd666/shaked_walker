@@ -326,7 +326,7 @@ void LineDebugManager::InitBufferGL()
 	}
 }
 //
-int LineDebugManager::AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor, bool typ)
+int LineDebugManager::AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor)
 {
 	MainVertexPC avert1;
 	avert1.posit = linepos1;
@@ -344,7 +344,6 @@ int LineDebugManager::AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPC) * aLineBuffer.size(), &aLineBuffer[0], GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	MuscleLine.push_back(typ);
 	
 	return (int)aLineBuffer.size();
 }
