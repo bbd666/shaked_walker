@@ -81,12 +81,13 @@ struct LineDebugManager
 
 	void InitBufferGL();
 	//
-	int AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor);
+	int AddLine(glm::vec3 linepos1, glm::vec3 linepos2, glm::vec3 linecolor, bool typ);
 	//
 	void RenderLine(double steptime);
 	//
 	std::vector<LineVertex*> aLineList;
 	std::vector<MainVertexPC> aLineBuffer;
+	std::vector<bool> MuscleLine;
 	//
 	GLuint aLineVbo;
 	GLuint aLineVao;

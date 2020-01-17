@@ -56,7 +56,7 @@ void Muscle::GenerateMesh() {
 		linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
 		linecolor.x = 1.0f; linecolor.y = 0.f; linecolor.z = 0.f;
 
-		LineIndex=LDebug_Manager->AddLine(linepos1, linepos2, linecolor);
+		LineIndex=LDebug_Manager->AddLine(linepos1, linepos2, linecolor, true);
 		
 }
 

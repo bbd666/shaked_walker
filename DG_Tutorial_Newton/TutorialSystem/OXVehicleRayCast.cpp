@@ -19,9 +19,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, Low_Leg_LNode(NULL)
 	, Plantar_LNode(NULL)
 	, Toe_LNode(NULL)
-	/*, ContactFoot_L(NULL)
-	, ContactGround_L(NULL)
-	, NormalFoot_L(NULL)*/
 {
 	string tex("Textures//wood6.png");
 	l_Up_Leg = 1.0f;
@@ -100,6 +97,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	ins12 = dVector(0.f, 0.f, 0.f);
 	m1 = new Muscle(m_winManager->aLineManager, m_winManager->aManager, GetUp_Leg_L(), GetLow_Leg_L(), ins11, ins12);
 	m1->GenerateMesh();
+	CreateFootScanLine();
 }
 
 GeomNewton* dRaycastVHModel::GetUp_Leg_L() {
@@ -118,6 +116,18 @@ float dRaycastVHModel::GetFoot2Floor_L() {
 	return Foot2Floor_L;
 }
 
+void dRaycastVHModel::CreateFootScanLine() {
+glm::vec3 linepos1;
+glm::vec3 linepos2;
+glm::vec3 linecolor;
+
+linepos1.x = 0; linepos1.y = 0; linepos1.z = 0;
+linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
+linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
+
+FootLineIndex_L = m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor, false);
+}
+
 void dRaycastVHModel::CastFoot_L() {
 	NewtonCollision* const collisionA = NewtonBodyGetCollision(Plantar_L->GetBody());
     dMatrix matrixA;
@@ -129,7 +139,14 @@ void dRaycastVHModel::CastFoot_L() {
 	int res = NewtonCollisionClosestPoint(m_winManager->aManager->GetWorld(), collisionA, &matrixA[0][0], collisionB, &matrixB[0][0], &ContactFoot_L[0], &ContactGround_L[0], &NormalFoot_L[0], 0);
 	NewtonDestroyCollision(collisionB);
 	Foot2Floor_L= abs(ContactFoot_L[1]);
-	m_winManager->SetFootPos_L(to_string(Foot2Floor_L));
+
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 1].posit.x = ContactFoot_L[0];
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 1].posit.y = ContactFoot_L[1];
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 1].posit.z = ContactFoot_L[2];
+	//aLineBuffer[LineIndex].color = newlinecolor;
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 2].posit.x = this->ContactGround_L[0];
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 2].posit.y = this->ContactGround_L[1];
+	m_winManager->aLineManager->aLineBuffer[FootLineIndex_L - 2].posit.z = this->ContactGround_L[2];
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

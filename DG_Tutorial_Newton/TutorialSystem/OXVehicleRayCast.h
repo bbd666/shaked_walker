@@ -39,6 +39,7 @@ public:
 	GeomNewton* GetPlantar_L();
 	float GetFoot2Floor_L();
 	void CastFoot_L();
+	void CreateFootScanLine();
 
 
 private:
@@ -74,6 +75,7 @@ private:
 	dVector  NormalFoot_L;
 	dVector  ContactGround_L;
 	float Foot2Floor_L;
+	int FootLineIndex_L;
 };
 
 class DGVehicleRCManager: public dModelManager
