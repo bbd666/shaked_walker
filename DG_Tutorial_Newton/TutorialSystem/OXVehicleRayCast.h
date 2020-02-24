@@ -34,24 +34,9 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	GeomNewton* GetThigh_L();
-	GeomNewton* GetShank_L();
+	GeomNewton* GetUp_Leg_L();
+	GeomNewton* GetLow_Leg_L();
 	GeomNewton* GetPlantar_L();
-	GeomNewton* GetToe_L();
-	GeomNewton* GetThigh_R();
-	GeomNewton* GetShank_R();
-	GeomNewton* GetPlantar_R();
-	GeomNewton* GetToe_R();
-	GeomNewton* GetHip();
-	GeomNewton* GetSpine();
-	GeomNewton* GetShoulders();
-	GeomNewton* GetNeck();
-	GeomNewton* GetArm_R();
-	GeomNewton* GetForearm_R();
-	GeomNewton* GetHead();
-	GeomNewton* GetArm_L();
-	GeomNewton* GetForearm_L();
-
 	float GetFoot2Floor_L();
 	void CastFoot_L();
 	void CreateFootScanLine();
@@ -59,75 +44,28 @@ public:
 
 private:
 	WindowMain* m_winManager;
-
-	GeomNewton* Thigh_L;
-	GeomNewton* Shank_L;
+	GeomNewton* Up_Leg_L;
+	GeomNewton* Low_Leg_L;
 	GeomNewton* Plantar_L;
 	GeomNewton* Toe_L;
+
+	dModelNode* Low_Leg_LNode;
+	dModelNode* Plantar_LNode;
+	dModelNode* Toe_LNode;
+
 	dCustomHinge* Knee_L;
 	dCustomBallAndSocket* Ankle_L;
 	dCustomHinge* Flextoe_L;
-	GeomNewton* Thigh_R;
-	GeomNewton* Shank_R;
-	GeomNewton* Plantar_R;
-	GeomNewton* Toe_R;
-	dCustomHinge* Knee_R;
-	dCustomBallAndSocket* Ankle_R;
-	dCustomHinge* Flextoe_R;
-	GeomNewton* Hip;
-	GeomNewton* Spine;
-	dCustomBallAndSocket* Hip_spine;
-	GeomNewton* Shoulders;
-	dCustomBallAndSocket* Spine_shoulders;
-	GeomNewton* Neck;
-	dCustomBallAndSocket* Shoulders_neck;
-	GeomNewton* Head;
-	dCustomBallAndSocket* Neck_head;
-	GeomNewton* Arm_R;
-	dCustomBallAndSocket* Shoulders_arm_R;
-	GeomNewton* Forearm_R;
-	dCustomHinge* Farm_arm_R;
-	GeomNewton* Arm_L;
-	dCustomBallAndSocket* Shoulders_arm_L;
-	GeomNewton* Forearm_L;
-	dCustomHinge* Farm_arm_L;
 
 
-	dModelNode* Toe_LNode;
-	dModelNode* Plantar_LNode;
-	dModelNode* Shank_LNode;
-	dModelNode* Toe_RNode;
-	dModelNode* Plantar_RNode;
-	dModelNode* Shank_RNode;
-	dModelNode* Thigh_RNode;
-	dModelNode* Hip_Node;
-	dModelNode* Spine_Node;
-	dModelNode* Shoulders_Node;
-	dModelNode* Neck_Node;
-	dModelNode* Head_Node;
-	dModelNode* Arm_RNode;
-	dModelNode* Forearm_RNode;
-	dModelNode* Arm_LNode;
-	dModelNode* Forearm_LNode;
-
-	float l_Thigh;
-	float l_Shank;
+	float l_Up_Leg;
+	float l_Low_Leg;
 	float r_leg;
 	float l_foot;
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
 	float Scale;
-	float l_hip;
-	float l_spine;
-	float l_shoulders;
-	float l_neck;
-	float l_arm;
-	float l_farm;
-	float d_head;
-	std::vector<float> masses;
-	float tot_w;
-	float h_foot;
 
 	Muscle* m1;
 	dVector ins11;
