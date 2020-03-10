@@ -36,82 +36,86 @@ public:
 
 	GeomNewton* GetThigh_L();
 	GeomNewton* GetShank_L();
-	GeomNewton* GetPlantar_L();
-	GeomNewton* GetToe_L();
+	GeomNewton* GetPlantarC_L();
+	GeomNewton* GetToesC_L();
 	GeomNewton* GetThigh_R();
 	GeomNewton* GetShank_R();
-	GeomNewton* GetPlantar_R();
-	GeomNewton* GetToe_R();
-	GeomNewton* GetHip();
-	GeomNewton* GetSpine();
-	GeomNewton* GetShoulders();
-	GeomNewton* GetNeck();
+	GeomNewton* GetPlantarC_R();
+	GeomNewton* GetToesC_R();
+	GeomNewton* GetTrunk();
+	GeomNewton* GetHead();
 	GeomNewton* GetArm_R();
 	GeomNewton* GetForearm_R();
-	GeomNewton* GetHead();
+	GeomNewton* GetHand_R();
 	GeomNewton* GetArm_L();
 	GeomNewton* GetForearm_L();
-
+	GeomNewton* GetHand_L();
 	float GetFoot2Floor_L();
 	void CastFoot_L();
 	void CreateFootScanLine();
-
-
+	GeomNewton* GetTrunkCompound();
+	
 private:
 	WindowMain* m_winManager;
+	NewtonManager* aManager;
 
 	GeomNewton* Thigh_L;
 	GeomNewton* Shank_L;
-	GeomNewton* Plantar_L;
-	GeomNewton* Toe_L;
+	GeomNewton* PlantarC_L;
+	GeomNewton* ToesC_L;
 	dCustomHinge* Knee_L;
 	dCustomBallAndSocket* Ankle_L;
-	dCustomHinge* Flextoe_L;
+	dCustomHinge* Toes_L;
 	GeomNewton* Thigh_R;
 	GeomNewton* Shank_R;
-	GeomNewton* Plantar_R;
-	GeomNewton* Toe_R;
+	GeomNewton* PlantarC_R;
+	GeomNewton* ToesC_R;
 	dCustomHinge* Knee_R;
 	dCustomBallAndSocket* Ankle_R;
-	dCustomHinge* Flextoe_R;
-	GeomNewton* Hip;
-	GeomNewton* Spine;
-	dCustomBallAndSocket* Hip_spine;
-	GeomNewton* Shoulders;
-	dCustomBallAndSocket* Spine_shoulders;
-	GeomNewton* Neck;
-	dCustomBallAndSocket* Shoulders_neck;
+	dCustomHinge* Toes_R;
+	GeomNewton* Trunk;
 	GeomNewton* Head;
-	dCustomBallAndSocket* Neck_head;
+	dCustomBallAndSocket* Head_trunk;
 	GeomNewton* Arm_R;
 	dCustomBallAndSocket* Shoulders_arm_R;
 	GeomNewton* Forearm_R;
 	dCustomHinge* Farm_arm_R;
+	GeomNewton* Hand_R;
+	dCustomBallAndSocket* Hand_arm_R;
 	GeomNewton* Arm_L;
 	dCustomBallAndSocket* Shoulders_arm_L;
 	GeomNewton* Forearm_L;
 	dCustomHinge* Farm_arm_L;
+	GeomNewton* Hand_L;
+	dCustomBallAndSocket* Hand_arm_L;
+	GeomNewton* Hip_L;
+	GeomNewton* Hip_R;
+	dCustomHinge* Hip_Trunk_R;
+	dCustomHinge* Hip_Trunk_L;
+	GeomNewton* TrunkCompound;
 
-
-	dModelNode* Toe_LNode;
-	dModelNode* Plantar_LNode;
+	dModelNode* ToesC_LNode;
+	dModelNode* PlantarC_LNode;
 	dModelNode* Shank_LNode;
-	dModelNode* Toe_RNode;
-	dModelNode* Plantar_RNode;
+	dModelNode* ToesC_RNode;
+	dModelNode* PlantarC_RNode;
 	dModelNode* Shank_RNode;
 	dModelNode* Thigh_RNode;
 	dModelNode* Hip_Node;
-	dModelNode* Spine_Node;
-	dModelNode* Shoulders_Node;
-	dModelNode* Neck_Node;
+	dModelNode* Trunk_Node;
 	dModelNode* Head_Node;
 	dModelNode* Arm_RNode;
 	dModelNode* Forearm_RNode;
+	dModelNode* Hand_RNode;
 	dModelNode* Arm_LNode;
 	dModelNode* Forearm_LNode;
+	dModelNode* Hand_LNode;
+	dModelNode* Hip_R_Node;
+	dModelNode* Hip_L_Node;
+	dModelNode* TrunkCompoundNode;
 
-	float l_Thigh;
 	float l_Shank;
+	float l_Thigh;
 	float r_leg;
 	float l_foot;
 	float w_foot;
@@ -119,13 +123,17 @@ private:
 	float l_toe;
 	float Scale;
 	float l_hip;
-	float l_spine;
+	float l_trunk;
 	float l_shoulders;
-	float l_neck;
+	float l_head;
 	float l_arm;
 	float l_farm;
-	float d_head;
+	float l_hand;
+
 	std::vector<float> masses;
+	std::vector<float> Ixx;
+	std::vector<float> Iyy;
+	std::vector<float> Izz;
 	float tot_w;
 	float h_foot;
 
@@ -138,6 +146,12 @@ private:
 	dVector  ContactGround_L;
 	float Foot2Floor_L;
 	int FootLineIndex_L;
+
+	MainVertexPTN* aVtx;
+	float aTexTileU;
+	float aTexTileV;
+	unsigned int* aIndices;
+	int aIndiceCount;
 };
 
 class DGVehicleRCManager: public dModelManager
