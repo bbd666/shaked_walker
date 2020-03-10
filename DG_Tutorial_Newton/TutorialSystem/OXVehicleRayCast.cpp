@@ -255,7 +255,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	com.m_z = 0.0f;
 	NewtonBodySetCentreOfMass(Head->GetBody(), &com[0]); // WIP
 
-	if (1) // if 1 model with trunk compound collision, 0 with rigid joints
+	if (0) // if 1 model with trunk compound collision, 0 with rigid joints
 	{	
 		TrunkCompound = new GeomNewton(m_winManager->aManager);
 		TrunkCompound->SetBodyType(adtDynamic);
