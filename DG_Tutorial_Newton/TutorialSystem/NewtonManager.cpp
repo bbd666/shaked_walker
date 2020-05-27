@@ -32,7 +32,7 @@
 #include "NewtonManager.h"
 #include "GeomGL.h"
 #include "dHighResolutionTimer.h"
-#include "biped.h"
+#include "muscle.h"
 
 //ofstream monFlux("history.txt");
 
@@ -274,6 +274,11 @@ void NewtonManager::CalculateFPS(dFloat timestep)
 		aTimestepAcc -= 0.25f;
 		aFramesCount = 0;
 	}
+}
+// Get simulation time in microsecunds
+dFloat NewtonManager::GetSimulationTime()
+{
+	return aMicrosecunds;
 }
 
 dFloat NewtonManager::GetFps()

@@ -26,89 +26,29 @@
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
-#include "biped.h"
+#include "muscle.h"
+#include "MuscleV2.h"
 
-class dRaycastVHModel: public dModelRootNode
+class dRaycastVHModel : public dModelRootNode
 {
 public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
-
 	GeomNewton* GetThigh_L();
 	GeomNewton* GetShank_L();
-	GeomNewton* GetPlantar_L();
-	GeomNewton* GetToe_L();
-	GeomNewton* GetThigh_R();
-	GeomNewton* GetShank_R();
-	GeomNewton* GetPlantar_R();
-	GeomNewton* GetToe_R();
-	GeomNewton* GetHip();
-	GeomNewton* GetSpine();
-	GeomNewton* GetShoulders();
-	GeomNewton* GetNeck();
-	GeomNewton* GetArm_R();
-	GeomNewton* GetForearm_R();
-	GeomNewton* GetHead();
-	GeomNewton* GetArm_L();
-	GeomNewton* GetForearm_L();
-
-	float GetFoot2Floor_L();
-	void CastFoot_L();
-	void CreateFootScanLine();
-
-
+	dCustomHinge* GetKnee_L();
+	GeomNewton* GetCE_KL();
 private:
 	WindowMain* m_winManager;
-
+	NewtonManager* aManager;
 	GeomNewton* Thigh_L;
 	GeomNewton* Shank_L;
-	GeomNewton* Plantar_L;
-	GeomNewton* Toe_L;
-	dCustomHinge* Knee_L;
-	dCustomBallAndSocket* Ankle_L;
-	dCustomHinge* Flextoe_L;
-	GeomNewton* Thigh_R;
-	GeomNewton* Shank_R;
-	GeomNewton* Plantar_R;
-	GeomNewton* Toe_R;
-	dCustomHinge* Knee_R;
-	dCustomBallAndSocket* Ankle_R;
-	dCustomHinge* Flextoe_R;
-	GeomNewton* Hip;
-	GeomNewton* Spine;
-	dCustomBallAndSocket* Hip_spine;
-	GeomNewton* Shoulders;
-	dCustomBallAndSocket* Spine_shoulders;
-	GeomNewton* Neck;
-	dCustomBallAndSocket* Shoulders_neck;
-	GeomNewton* Head;
-	dCustomBallAndSocket* Neck_head;
-	GeomNewton* Arm_R;
-	dCustomBallAndSocket* Shoulders_arm_R;
-	GeomNewton* Forearm_R;
-	dCustomHinge* Farm_arm_R;
-	GeomNewton* Arm_L;
-	dCustomBallAndSocket* Shoulders_arm_L;
-	GeomNewton* Forearm_L;
-	dCustomHinge* Farm_arm_L;
-
-
-	dModelNode* Toe_LNode;
-	dModelNode* Plantar_LNode;
 	dModelNode* Shank_LNode;
-	dModelNode* Toe_RNode;
-	dModelNode* Plantar_RNode;
-	dModelNode* Shank_RNode;
-	dModelNode* Thigh_RNode;
-	dModelNode* Hip_Node;
-	dModelNode* Spine_Node;
-	dModelNode* Shoulders_Node;
-	dModelNode* Neck_Node;
-	dModelNode* Head_Node;
-	dModelNode* Arm_RNode;
-	dModelNode* Forearm_RNode;
-	dModelNode* Arm_LNode;
-	dModelNode* Forearm_LNode;
+	dCustomHinge* Knee_L;
+	GeomNewton* CE_KL;
+	dModelNode* CE_KLNode;
+	GeomNewton* link;
+	dModelNode* linkNode;
 
 	float l_Thigh;
 	float l_Shank;
@@ -119,28 +59,33 @@ private:
 	float l_toe;
 	float Scale;
 	float l_hip;
-	float l_spine;
+	float l_trunk;
 	float l_shoulders;
-	float l_neck;
+	float l_head;
 	float l_arm;
 	float l_farm;
-	float d_head;
+	float l_hand;
+
 	std::vector<float> masses;
+	std::vector<float> Ixx;
+	std::vector<float> Iyy;
+	std::vector<float> Izz;
 	float tot_w;
 	float h_foot;
 
-	Muscle* m1;
-	dVector ins11;
-	dVector ins12;
+	Muscle* VAS_L;
+	MuscleV2* VAS_L2;
+	dVector insVAS_L11;
+	dVector insVAS_L12;
 
-	dVector  ContactFoot_L;
-	dVector  NormalFoot_L;
-	dVector  ContactGround_L;
-	float Foot2Floor_L;
-	int FootLineIndex_L;
+	MainVertexPTN* aVtx;
+	float aTexTileU;
+	float aTexTileV;
+	unsigned int* aIndices;
+	int aIndiceCount;
 };
 
-class DGVehicleRCManager: public dModelManager
+class DGVehicleRCManager : public dModelManager
 {
 public:
 	DGVehicleRCManager(WindowMain* winctx);
@@ -156,6 +101,7 @@ public:
 	dRaycastVHModel* m_player;
 private:
 	WindowMain* m_winManager;
+	GeomNewton* temp;
 };
 
 

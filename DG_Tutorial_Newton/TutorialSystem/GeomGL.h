@@ -59,7 +59,8 @@ enum GeomType
 	atCone            = 2,
 	atCylinder        = 3,
 	atCapsule         = 4,
-	atCylinderChamfer = 5
+	atCylinderChamfer = 5,
+	atCompound		  = 6,
 };
 
 // This is only a data pointer object.
