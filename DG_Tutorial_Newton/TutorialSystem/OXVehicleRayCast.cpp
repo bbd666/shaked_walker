@@ -280,9 +280,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 			NewtonBody* NBody = gNewton->GetBody();
 			//Vtemp = Mobj->GetForceElas(); // Simple elastic force
 			dFloat time = m_winManager->aManager->GetSimulationTime() * pow(10, -6); // simulation time in s
-			Vtemp = Mobj->GetForceMTU_V2(time, m_player); // type Hill's force 
+			Vtemp = Mobj->GetForceMTU_V2(timestep, m_player); // type Hill's force 
 			NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
-			cout << Vtemp.m_x;
 			// Get the Body2 connected and apply the opposite muscle force
 			gNewton = (GeomNewton*)(Mobj->body2);
 			NBody = (NewtonBody*)gNewton->GetBody();
@@ -299,7 +298,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 			float ang = temp->GetJointAngle();
 			//torque_k.m_z = arm[2] * cos(ang - thetamk) * Vtemp.m_z; // computed acccording to geyer and herr
 			torque_k.m_z = arm[2] * Vtemp.m_y;
-			cout << '\t' << torque_k.m_z << '\t' << time << endl;
+			//cout << '\t' << torque_k.m_z << '\t' << time << endl;
 			// Apply torque to bodies
 			GeomNewton* temp2 = controller->GetShank_L();
 			torque_k = torque_k.Scale(1.0f);

@@ -72,6 +72,8 @@ private:
 	int LineIndex1;
 	float m_lce;
 	dFloat m_time_prec;
+	dFloat m_time;
+	double m_vce;
 };
 
 

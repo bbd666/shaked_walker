@@ -32,6 +32,8 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	m_lce = m_Lopt;
 	m_vint = 0;
 	m_time_prec = 0;
+	m_vce = 0;
+	m_time = 0;
 	
 
 }
@@ -159,8 +161,11 @@ class hill_muscle {
 	double l_mtu;
 	double F_max;
 	double l_slack;
+	double v;
 public:
-	hill_muscle(int activation, double loptin, double m_lmtu, double lslack, double Fmax) : act(activation), l_opt(loptin), l_mtu(m_lmtu), l_slack(lslack), F_max(Fmax) { }
+	hill_muscle(int activation, double loptin, double m_lmtu, double lslack, double Fmax, double v_input) : act(activation), l_opt(loptin), l_mtu(m_lmtu), l_slack(lslack), F_max(Fmax), v(v_input){ }
+	double pushv() { return v; }
+	void setv(double vin) { v = vin; }
 
 	void operator() (const state_type& x, state_type& dxdt, const double /* t */)
 	{
@@ -168,16 +173,31 @@ public:
 		double m_lse = l_mtu - x[0];
 		double m_lset = m_lse / l_slack;
 		double fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (m_lcet - 1), 4));
-		double m_Fse = F_max * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
-		double m_Flpe = F_max * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
-		double m_Fhpe = F_max * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
+		double m_Fse = 0;
+		if (m_lset - 1 <= 0) // if l_se < l_slack
+			m_Fse = 0;
+		else
+			m_Fse = F_max * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
+		double m_Flpe = 0;
+		if (m_lcet - 0.44f <= 0) // if l_ce < 44 % of l_opt
+			m_Flpe = 0;
+		else
+			m_Flpe = F_max * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
+		double m_Fhpe = 0;
+		if (m_lcet - 1 <= 0) // if l_ce < l_opt
+			m_Fhpe = 0;
+		else
+			m_Fhpe = F_max * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
+
 		double fv = (m_Fse + m_Flpe - m_Fhpe) / (act * F_max * fl);
 
-		//dxdt = (10.0 * fv - 10.0) * l_opt / (1.0 + 5.0 * fv); // muscle lengthening
-		dxdt[0] = (-10.0f * fv + 10.0f) * l_opt / (-57.2 + 37.8 * fv); // muscle shortening
+	/*	if (v < 0)
+			dxdt[0] = (10.0 * fv - 10.0) * l_opt / (1.0 + 5.0 * fv); 
+		else*/
+			dxdt[0] = (-10.0f * fv + 10.0f) * l_opt / (-57.2 + 37.8 * fv); 
+		setv(dxdt[0]);
 	}
 };
-//]
 
 
 //observer
@@ -201,51 +221,74 @@ dVector Muscle::GetForceMTU_V2(dFloat time, dModelRootNode* model)
 {
 	// m_lce is and input from AI 
 // Caso vas
-	float a = 1;
-	float rho = 0.7f;
-	float fimax = M_PI - 2.88f;
-	float fir = M_PI - 2.18f;
-	float r = 0.056f;
-	float F0 = 6;
+	double a = 1;
+	double rho = 0.7f;
+	double fimax = M_PI - 2.88f;
+	double fir = M_PI - 2.18f;
+	double r = 0.056f;
+	double F0 = 6000;
 	dRaycastVHModel* controller = (dRaycastVHModel*)model;
 	dCustomHinge* Knee_L = (controller->GetKnee_L());
-	float theta = Knee_L->GetJointAngle() + M_PI; // need to access joint angle
-	//float m_Lmtu = m_Lopt + m_Lslack + rho * r * (sin(theta - fimax) - sin(fir - fimax));  // lengthening 
-	float m_Lmtu = m_Lopt + m_Lslack - rho * r * (sin(theta - fimax) - sin(fir - fimax));  // shortening
-	float m_lcet = m_lce / m_Lopt;
-	float m_lse = m_Lmtu - m_lce;
-	float m_lset = m_lse / m_Lslack;
-	float fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (m_lcet - 1), 4));
-	float m_Fse = F0 * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
-	float m_Flpe = F0 * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
-	float m_Fhpe = F0 * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
-	float fv = (m_Fse - m_Flpe - m_Fhpe) / (a * F0 * fl);
-	float m_Fpe = m_Fhpe - m_Flpe;
-	float m_Fce = a * F0 * fl * fv;
+	double theta = Knee_L->GetJointAngle() + M_PI; // need to access joint angle
+	//double m_Lmtu = m_Lopt + m_Lslack + rho * r * (sin(theta - fimax) - sin(fir - fimax));  // lengthening 
+	double m_Lmtu = m_Lopt + m_Lslack - rho * r * (sin(theta - fimax) - sin(fir - fimax));  // shortening
+	double m_lcet = m_lce / m_Lopt;
+	double m_lse = m_Lmtu - m_lce;
+	double m_lset = m_lse / m_Lslack;
+	double fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (m_lcet - 1), 4));
+	double m_Fse = 0;
+	if (m_lset - 1 <= 0) // if l_se < l_slack
+		m_Fse = 0;
+	else
+		m_Fse = F0 * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
+	double m_Flpe = 0;
+	if (m_lcet - 0.44f <= 0) // if l_ce < 44 % of l_opt
+		m_Flpe = F0 * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
+	else
+		m_Flpe = 0;
+	double m_Fhpe = 0;
+	if (m_lcet - 1 <= 0) // if l_ce < l_opt
+		m_Fhpe = 0;
+	else
+		m_Fhpe = F0 * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
+
+	double fv = 0;
+	if (m_vce < 0)
+		fv = (-10 - m_vce) / (-10+5*m_vce);
+	else
+		fv = 1.5+0.5*((-10+m_vce)/(37.8*m_vce+10));
+
+	double m_Fpe = m_Fhpe - m_Flpe;
+	double m_Fce = a * F0 * fl * fv;
 	dVector m_Fmtu;
-	float F = m_Fce + m_Fpe;
-	m_Fmtu.m_x = F * cos(30 * dDegreeToRad);// X component FIX
+	double F = m_Fce + m_Fpe;
+	m_Fmtu.m_x = F;
 	m_Fmtu.m_y = F * sin(30 * dDegreeToRad);// Y component FIX
 	m_Fmtu.m_z = F * sin(00 * dDegreeToRad);// Z component FIX
 
 	// Integration of actual v_ce to update l_ce
-	double dt = (double)time - (double)m_time_prec;// find integration step
-	if (dt > 0.0) // since muscle is called 3 times at same time instant (why?) integration is done only the first call
-	{
-		m_time_prec = time;// class variable update for next call
-		//[ state_initialization
-		state_type x(1);
-		x[0] = m_lce; // start at actual l_ce
+	m_time = m_time + time;
+	//double dt = (double)m_time - (double)m_time_prec;// find integration step
+	double dt = double(time);
 
-		vector<state_type> x_vec;
-		vector<double> times;
+	m_time_prec = m_time;// class variable update for next call
+	//[ state_initialization
+	state_type x(1);
+	x[0] = m_lce; // start at actual l_ce
 
-		hill_muscle hm(a, m_Lopt, m_Lmtu, m_Lslack, F0);
-		//size_t steps = integrate(hm, x, 0.0, dt, dt);
-		size_t steps = integrate(hm, x, 0.0, dt, dt, push_back_state_and_time(x_vec, times));
+	vector<state_type> x_vec;
+	vector<state_type> x_der;
+	vector<double> times;
 
-		m_lce = x[0]; // class variable update for next call
-	}
+	hill_muscle hm(a, m_Lopt, m_Lmtu, m_Lslack, F0, m_vce);
+	//size_t steps = integrate(hm, x, 0.0, dt, dt);
+	size_t steps = integrate(boost::ref(hm), x, (double)m_time - dt, (double)m_time, dt, push_back_state_and_time(x_vec, times));
+
+	m_lce = x[0]; // class variable update for next call
+	cout << m_lce << '\t' << m_vce << '\t' << theta << '\t' << m_Fmtu[0] << endl;
+	m_vce = hm.pushv();
+
+
 	
 	return m_Fmtu;
 }

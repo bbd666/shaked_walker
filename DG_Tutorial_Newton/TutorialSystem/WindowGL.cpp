@@ -583,6 +583,8 @@ void WindowMain::MainLoop()
 		// Clear and Process messages.
 		glfwSwapBuffers(contextGL);
 		glfwPollEvents();
+		//dFloat time = this->GetSimulationTime() * pow(10, -6); // simulation time in s
+		//cout << time << endl;
 	}
 }
 
