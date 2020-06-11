@@ -31,7 +31,6 @@ struct Muscle
 	dVector GetInsertion2_GlobalRef();
 	void SetLength0(float l);
 	float GetLength0();
-	void SetStiffness(float kpe, float kbe, float kse);
 	void SetLopt(float L);
 	float GetLopt();
 	void SetLslack(float L);
@@ -52,15 +51,11 @@ private:
 	LineDebugManager* LDebug_Manager;
 	GeomBase* aUserData;
 	dVector aDiffuseColor;
-	float m_Length0;
-	float m_Lopt;
-	float m_Lslack; // [m] type hill muscle slack length
-	float m_PE; // [N/m] type hill parallel stiffness
-	float m_BE; // [N/m] type hill buffer stiffness
-	float m_SE; // [N/m] type hill series stiffness
-	float m_CE; // [N] type hill contractive force
+	double m_Length0;
+	double m_Lopt;
+	double m_Lslack; // [m] type hill muscle slack length
 	float m_Stiffness;
-	float m_Fmax;
+	double m_Fmax;
 	float m_Vmax;
 	double m_vint;
 	std::vector<float> m_Arm;
@@ -70,7 +65,7 @@ private:
 	dVector m_insertion2;
 	int LineIndex;
 	int LineIndex1;
-	float m_lce;
+	double m_lce;
 	dFloat m_time_prec;
 	dFloat m_time;
 	double m_vce;
