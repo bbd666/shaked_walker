@@ -38,6 +38,7 @@ public:
 	GeomNewton* GetShank_L();
 	dCustomHinge* GetKnee_L();
 	GeomNewton* GetCE_KL();
+	dCustomSlider* Getslider();
 private:
 	WindowMain* m_winManager;
 	NewtonManager* aManager;
@@ -49,6 +50,7 @@ private:
 	dModelNode* CE_KLNode;
 	GeomNewton* link;
 	dModelNode* linkNode;
+	dCustomSlider* slider;
 
 	float l_Thigh;
 	float l_Shank;

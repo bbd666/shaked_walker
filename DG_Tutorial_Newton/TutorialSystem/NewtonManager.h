@@ -48,6 +48,7 @@ struct NewtonManager
 	std::vector<void*> vAssMeshList;
 	std::vector<void*> vJointList;
 	std::vector<void*> vMuscleList;
+	std::vector<void*> vMuscleV2List;
 	Texture* vTextureManager;
 	//
 	bool IsTerminated;

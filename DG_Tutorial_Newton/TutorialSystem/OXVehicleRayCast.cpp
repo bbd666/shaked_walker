@@ -54,7 +54,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	dVector com;
 	// Delta Hill Muscle insertion points
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	if (0) // V1
+	if (0) // select 1 if you want to use muscle V2 (simple muscle model), or 0 to use version 1 muscle model (type Hill's model)
 	{
 		// LEFT LEG //
 		Thigh_L = new GeomNewton(m_winManager->aManager);
@@ -68,7 +68,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		NewtonBody* const parentBody = GetBody();
 		dMatrix aParenMatrix(dGetIdentityMatrix());
 		NewtonBodyGetMatrix(parentBody, &aParenMatrix[0][0]);
-		NewtonBodySetMassMatrix(Thigh_L->GetBody(), masses[5], Ixx[5], Iyy[5], Izz[5]); //set mass matrix  
+		NewtonBodySetMassMatrix(Thigh_L->GetBody(), 200, Ixx[5], Iyy[5], Izz[5]); //set mass matrix  
 		//NewtonBodyGetCentreOfMass(m_body, &com[0]);
 		//com.m_x = com.m_x + DeltaCMX[5];
 		//NewtonBodySetCentreOfMass(Thigh_L->GetBody(), &com[0]); // WIP
@@ -93,6 +93,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		Knee_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 		Knee_LPinMatrix.m_posit = dVector(_Pos.x + l_Thigh / 2, _Pos.y + r_leg / 2, _Pos.z);
 		Knee_L = new dCustomHinge(Knee_LPinMatrix, Shank_L->GetBody(), Thigh_L->GetBody());
+		Knee_L->EnableLimits(1);
+		//Knee_L->SetLimits(0.0, 180.0);
 		m_winManager->aManager->vJointList.push_back(Knee_L);
 
 		// CE of muscle
@@ -101,8 +103,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		CE_KL->SetParent(Thigh_L);
 		CE_KL->SetTexture0(&tex[0], "Tex0");
 		CE_KL->SetDiffuseColor(0.7f, 0.7f, 0.7f);
-		CE_KL->SetPosition( 0, r_leg/2, 0.0f);
-		CE_KL->InitNewton(atBox, r_leg, r_leg, r_leg, 0.05f);
+		CE_KL->SetPosition( 0, r_leg, 0.0f);
+		CE_KL->InitNewton(atBox, 2*r_leg, r_leg, r_leg, 0.05f);
 		NewtonBodySetTransformCallback(CE_KL->GetBody(), NULL);
 		CE_KLNode = new dModelNode(CE_KL->GetBody(), dGetIdentityMatrix(), this);
 
@@ -110,16 +112,19 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		dMatrix matrix;
 		// connect the bodies by a Slider joint
 		NewtonBodyGetMatrix(Thigh_L->GetBody(), &matrix[0][0]);
-		dCustomSlider* const slider = new dCustomSlider(matrix, CE_KL->GetBody(), Thigh_L->GetBody());
+		slider = new dCustomSlider(matrix, CE_KL->GetBody(), Thigh_L->GetBody());
+		//slider->SetAsSpringDamper(1, 0.9, 0.9, 10); // not working
+		slider->EnableLimits(1);
+		slider->SetLimits(-0.1f, 0.1f);
+		m_winManager->aManager->vJointList.push_back(slider);
 
 		link = new GeomNewton(m_winManager->aManager);
 		link->SetBodyType(adtDynamic);
 		link->SetParent(Shank_L);
 		link->SetTexture0(&tex[0], "Tex0");
-		//Shank_L->SetTurnAngle(30.0f);
 		link->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 		link->SetPosition(-l_Shank / 2, r_leg, 0.0f);
-		link->InitNewton(atCapsule, r_leg/4, r_leg/4, l_Thigh/2 + l_Shank/2, 0.05f);
+		link->InitNewton(atCapsule, r_leg/4, r_leg/4, l_Thigh/3 + l_Shank/3, 0.05f);
 		NewtonBodySetTransformCallback(link->GetBody(), NULL);
 		linkNode = new dModelNode(link->GetBody(), dGetIdentityMatrix(), Shank_LNode);
 
@@ -128,22 +133,16 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		link_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 		link_LPinMatrix.m_posit = dVector(_Pos.x + l_Thigh / 2 + l_Shank / 2, _Pos.y + 3*r_leg / 2, _Pos.z);
 		dCustomBallAndSocket* link_L = new dCustomBallAndSocket(link_LPinMatrix, Shank_L->GetBody(), link->GetBody());
-
+		m_winManager->aManager->vJointList.push_back(link_L);
 		//right link JOINT //
 		link_LPinMatrix.m_posit = dVector(_Pos.x, _Pos.y + 3*r_leg / 2, _Pos.z);
 		dCustomBallAndSocket* link_R = new dCustomBallAndSocket(link_LPinMatrix, CE_KL->GetBody(), link->GetBody());
+		m_winManager->aManager->vJointList.push_back(link_R);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		 //MUSCLES //
 		 //VAS Left Vasti
-
-		insVAS_L11 = dVector(0.0f, r_leg / 2, 0.0f); // inserire delta x, delta y e delta z da COM del body 1
-		insVAS_L12 = dVector(0.0f, r_leg / 2, 0.0f);// inserire delta x, delta y e delta z da COM del body 2
-		dMatrix matrix2;
-		NewtonBodyGetMatrix(CE_KL->GetBody(), &matrix2[0][0]);
-		dVector insVAS_L23 = {0.0f,0.0f,0.0f,0.0f};
-		VAS_L2 = new MuscleV2(m_winManager->aLineManager, m_winManager->aManager, GetThigh_L(), GetShank_L(), GetCE_KL(), insVAS_L11, insVAS_L12, insVAS_L23);
-		//VAS_L2->GenerateMesh();
+		VAS_L2 = new MuscleV2(m_winManager->aManager, GetCE_KL(), Getslider());
 
 	}
 	else {
@@ -159,7 +158,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		NewtonBody* const parentBody = GetBody();
 		dMatrix aParenMatrix(dGetIdentityMatrix());
 		NewtonBodyGetMatrix(parentBody, &aParenMatrix[0][0]);
-		NewtonBodySetMassMatrix(Thigh_L->GetBody(), masses[5], Ixx[5], Iyy[5], Izz[5]); //set mass matrix  
+		NewtonBodySetMassMatrix(Thigh_L->GetBody(), 200, Ixx[5], Iyy[5], Izz[5]); //set mass matrix  
 		//NewtonBodyGetCentreOfMass(m_body, &com[0]);
 		//com.m_x = com.m_x + DeltaCMX[5];
 		//NewtonBodySetCentreOfMass(Thigh_L->GetBody(), &com[0]); // WIP
@@ -184,7 +183,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		Knee_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 		Knee_LPinMatrix.m_posit = dVector(_Pos.x + l_Thigh / 2, _Pos.y + r_leg / 2, _Pos.z);
 		Knee_L = new dCustomHinge(Knee_LPinMatrix, Shank_L->GetBody(), Thigh_L->GetBody());
-
+		Knee_L->EnableLimits(1);
+		//Knee_L->SetLimits(0.0, 180.0);
 		m_winManager->aManager->vJointList.push_back(Knee_L);
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,7 +194,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		insVAS_L11 = dVector(0.0f, r_leg / 2, 0.0f); // inserire delta x, delta y e delta z da COM del body 1
 		insVAS_L12 = dVector(0.0f, r_leg / 2, 0.0f);// inserire delta x, delta y e delta z da COM del body 2
 		dVector insVAS_L23 = dVector(-l_Shank / 2, 0.05f, 0.0f);// inserire delta x, delta y e delta z da COM del body 2
-		dMatrix VAS_LMatrix(dGetIdentityMatrix());
 		VAS_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, GetThigh_L(), GetShank_L(), insVAS_L11, insVAS_L12, insVAS_L23);
 		VAS_L->GenerateMesh();
 	}
@@ -214,6 +213,10 @@ GeomNewton* dRaycastVHModel::GetShank_L() {
 
 GeomNewton* dRaycastVHModel::GetCE_KL() {
 	return CE_KL;
+}
+
+dCustomSlider* dRaycastVHModel::Getslider() {
+	return slider;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -246,64 +249,46 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 	dVector Vtemp(0.0f);
 
 	float thetamk;
-	// scan all  Muscle Elements
+	// scan all  Muscle V1 Elements
 	for (auto itr = m_winManager->aManager->vMuscleList.begin();
 		itr != m_winManager->aManager->vMuscleList.end(); itr++)
 	{
-		if (0)
-		{
-			MuscleV2* Mobj = (MuscleV2*)*itr;
+		Muscle* Mobj = (Muscle*)*itr;
 
-			dVector posinsert(0.0f);
-			// Get the Body1 connected to the muscle and apply the muscle force
-			GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
-			NewtonBody* NBody = gNewton->GetBody();
-			Vtemp = Mobj->GetForceMTU_V1(); // Type Hill's force no time integration
-			NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
+		// Get the Body2 connected to the muscle and apply the muscle force
+		GeomNewton* gNewton = (GeomNewton*)(Mobj->body2);
+		NewtonBody* NBody = gNewton->GetBody();
+		//Vtemp = Mobj->GetForceElas(); // Simple elastic force
+		double F = Mobj->GetForceMTU_V1(timestep, m_player); // type Hill's force 
+		//NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
 
-			// Get the Body2 connected and apply the opposite muscle force
-			gNewton = (GeomNewton*)(Mobj->body2);
-			NBody = (NewtonBody*)gNewton->GetBody();
-			Vtemp.m_x = Vtemp.m_x * (-1);
-			NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
-			//NewtonBodyAddForce(NBody, &Vtemp.m_y); // apply force to COM of body
-			//NewtonBodyAddForce(NBody, &Vtemp.m_z); // apply force to COM of body
-			cout << "Force " << Vtemp.m_x << ' ';
-		}
+		//// Torque calculation // shold be generalized for each muscle. now it is ok only for this example
+		dCustomHinge* temp;
+		temp = (m_player->GetKnee_L());
+		thetamk = M_PI - 2.88f; //caso vas e knee
+		dVector arm = { 0.1,0.1,0.056f,0 }; // same as in muscle vas for l mtu calculation
+		float ang = temp->GetJointAngle();
+		float tau = (arm[2] * F * cos(ang - thetamk)); // Check
+		float F_p = tau / 0.2;
+		float Fy = F_p / cos(gNewton->GetTurnAngle());
+		float Fx = F_p * tan(gNewton->GetTurnAngle());
+		Vtemp = {-Fx, Fy, 0.0f}; 
+		NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body to generate torque
 
-		else {
-			Muscle* Mobj = (Muscle*)*itr;
+		// How to apply the torque directly at the knee??
+	}
+	// Scan all Muscle V2 elements
+	for (auto itr = m_winManager->aManager->vMuscleV2List.begin();
+		itr != m_winManager->aManager->vMuscleV2List.end(); itr++)
+	{
+		MuscleV2* Mobj = (MuscleV2*)*itr;
+		// Get the Body1 connected to the muscle and apply the muscle force
+		GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
+		NewtonBody* NBody = gNewton->GetBody();
+		float F = Mobj->GetForceMTU_V2(timestep); // Simple muscle
 
-			dVector posinsert(0.0f);
-			// Get the Body1 connected to the muscle and apply the muscle force
-			GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
-			NewtonBody* NBody = gNewton->GetBody();
-			//Vtemp = Mobj->GetForceElas(); // Simple elastic force
-			dFloat time = m_winManager->aManager->GetSimulationTime() * pow(10, -6); // simulation time in s
-			Vtemp = Mobj->GetForceMTU_V2(timestep, m_player); // type Hill's force 
-			NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
-			// Get the Body2 connected and apply the opposite muscle force
-			gNewton = (GeomNewton*)(Mobj->body2);
-			NBody = (NewtonBody*)gNewton->GetBody();
-			Vtemp.m_x = Vtemp.m_x * (-1);
-			NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body
-			//NewtonBodyAddForce(NBody, &Vtemp.m_y); // apply force to COM of body
-			//NewtonBodyAddForce(NBody, &Vtemp.m_z); // apply force to COM of body
-			//// Torque calculation
-			dCustomHinge* temp;
-			temp = (m_player->GetKnee_L());
-			thetamk = M_PI - 2.88f;
-			dVector arm = { 0.1,0.1,0.056f,0 };
-			dVector torque_k(0.0f, 0.0f, 0.0f);
-			float ang = temp->GetJointAngle();
-			//torque_k.m_z = arm[2] * cos(ang - thetamk) * Vtemp.m_z; // computed acccording to geyer and herr
-			torque_k.m_z = arm[2] * Vtemp.m_y;
-			//cout << '\t' << torque_k.m_z << '\t' << time << endl;
-			// Apply torque to bodies
-			GeomNewton* temp2 = controller->GetShank_L();
-			torque_k = torque_k.Scale(1.0f);
-			NewtonBodyAddTorque(temp2->GetBody(), &torque_k.m_x); //  apply torque to COM of Shank
-		}
+		Vtemp = { -F, 0.0f, 0.0f };
+		NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body to generate torque
 	}
 }
 

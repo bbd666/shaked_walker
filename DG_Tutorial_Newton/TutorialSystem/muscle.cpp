@@ -91,10 +91,6 @@ void Muscle::SetLslack(float L) // modoficare
 	m_Lslack = L;
 }
 
-void Muscle::SetinitialVel(double x) {
-	m_vint = x;
-}
-
 void Muscle::GenerateMesh() {
 
 		glm::vec3 linepos1; //  origin
@@ -131,62 +127,59 @@ void Muscle::UpdateLineCoord(Shader* cshd, dFloat steptime)
 	LDebug_Manager->aLineBuffer[LineIndex1 - 2.0].posit.z = this->GetInsertion2_GlobalRef().m_z;
 
 }
-// Function to compute the elastic force of muscle
-dVector Muscle::GetForceElas() 
-{
-	dVector Elongation;
-	Elongation = ( this->GetInsertion_GlobalRef()) - this->GetOrigin_GlobalRef() ;// check
-	cout << Elongation[0] << '\t' << Elongation[1] << '\t' << Elongation[2] << endl;
-	m_FElas = Elongation.Scale(m_Stiffness / m_Length0);
-
-	return m_FElas;
-}
 
 //[ rhs_class
-/* The rhs of x' = f(x) defined as a class */
+/* The rhs of x' = f(x) defined as a class needed for time integration of v_ce (ODEINT)*/
 class hill_muscle {
-
-	double l_opt;
+	double lmtu;
 	int act;
-	double l_mtu;
-	double F_max;
-	double l_slack;
-	double vcet;
+	double vcet_out;
 public:
-	hill_muscle(int activation, double loptin, double m_lmtu, double lslack, double Fmax, double v_input) : act(activation), l_opt(loptin), l_mtu(m_lmtu), l_slack(lslack), F_max(Fmax), vcet(v_input){ }
-	double pushv() { return vcet; }
-	void setv(double vin) { vcet = vin; }
+	hill_muscle(int activation, double lmtuin) : act(activation), lmtu(lmtuin){ }
+	double pushv() { return vcet_out; }
+	void setv(double vin) { vcet_out = vin; }
 
-	void operator() (const state_type& x, state_type& dxdt, const double /* t */)
+	void operator() (const state_type& x, state_type& dxdt, const double /*t*/ )
 	{
-		double m_lse = l_mtu - x[0]*l_opt;
-		double m_lset = m_lse / l_slack;
-		double fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (x[0] - 1), 4));
-		double m_Fse = 0;
-		double m_Flpe = 0;
-		double m_Fhpe = 0;
-			
-		if ((x[0] - 1) >= 0) // if l_se > l_slack
-			m_Fse = F_max * pow((pow(0.04f* l_slack, -1) * (m_lset - 1)), 2);
-		
-		if ((x[0] - 0.44f) <= 0) // if l_ce < 44 % of l_opt
-			m_Flpe = F_max * pow((pow(0.28f, -1) * (0.44f - x[0])), 2);
-		
-		if ((x[0] - 1) >= 0) // if l_ce > l_opt
-			m_Fhpe = F_max * pow((pow(0.56f, -1) * (x[0] - 1)), 2);
+		// Caso vas
+		double F0 = 6000;
+		double lopt = 0.075f;
+		double lslack = 0.215f;
+		double lcet = x[0];
+		double lse = lmtu - x[0]*lopt;
+		double lset = lse / lslack;
+		double fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (lcet - 1), 4)); //length contribution
+		double Fse = 0; // series force
+		double Fhpe = 0;// high parallel force
+		double Flpe = 0;// low parallel force
 
-		double fv = (m_Fse + m_Flpe - m_Fhpe) / (act * F_max * fl);
+		if ((lset - 1) >= 0) // if l_se > l_slack tendon force is activated
+			Fse = F0 * pow((pow(0.04f, -1) * (lset - 1)), 2);
 
-		if (vcet < 0)
-			dxdt[0] = (10.0 * fv - 10.0) / (1.0 + 5.0 * fv); 
+		if ((lcet - 0.44f) <= 0) // if l_ce < 44 % of l_opt the lower stiffness in // with CE is activated
+			Flpe = F0 * pow((pow(0.28f, -1) * (0.44f - lcet)), 2);
+
+		if ((lcet - 1) >= 0) // if l_ce > l_opt the higher stiffness in // with CE is actuated
+			Fhpe = F0 * pow((pow(0.56f, -1) * (lcet - 1)), 2);
+
+		// find fv
+		double fv;
+		if ((Fse + Flpe - Fhpe == 0) | (Fse + Flpe - Fhpe > F0))
+			fv = 1; // velocity contribution should be between 0 and 1 instead higher values are obtained starting from l_ce = l_opt
 		else
-			dxdt[0] = (-10.0f * fv + 10.0f) / (-57.2 + 37.8 * fv); 
+			fv = (Fse + Flpe - Fhpe) / (act * F0 * fl);
+
+		// computation of v_ce from fv
+		//if (act > 0.0f)
+			dxdt[0] = (10.0 * fv - 10.0) / (1.0 + 5.0 * fv);// for fiber flextion
+		//else
+		//	dxdt[0] = (-10.0f * fv + 10.0f) / (-57.2 + 37.8 * fv); // For extension (not used now)
 		setv(dxdt[0]);
 	}
 };
 
 
-//observer
+//observer for time time integration of v_ce (ODEINT)
 struct push_back_state_and_time
 {
 	std::vector< state_type >& m_states;
@@ -203,7 +196,7 @@ struct push_back_state_and_time
 };
 
  //Optimization locomotion controller additional material 2012
-dVector Muscle::GetForceMTU_V2(dFloat time, dModelRootNode* model)
+double Muscle::GetForceMTU_V1(dFloat time, dModelRootNode* model)
 {
 	// Caso vas
 	double a = 1;
@@ -216,19 +209,8 @@ dVector Muscle::GetForceMTU_V2(dFloat time, dModelRootNode* model)
 	dRaycastVHModel* controller = (dRaycastVHModel*)model;
 	dCustomHinge* Knee_L = (controller->GetKnee_L());
 	double theta = Knee_L->GetJointAngle() + M_PI; // need to access joint angle
-
-	double fv = 0;// velocity contribution
-	if (m_vce < 0)
-	{
-		m_Lmtu = (double)m_Lopt + (double)m_Lslack - rho * r * (sin(theta - fimax) - sin(fir - fimax));  // shortening
-		fv = (-10 - m_vce) / (-10 + 5 * m_vce);
-	}
-	else
-	{
-		fv = 1.5 + 0.5 * ((-10 + m_vce) / (37.8 * m_vce + 10));
-		m_Lmtu = (double)m_Lopt + (double)m_Lslack + rho * r * (sin(theta - fimax) - sin(fir - fimax));  // lengthening
-	}
-
+	double penn = rho * r * (sin(theta - fimax) - sin(fir - fimax));
+	m_Lmtu = (double)m_Lopt + (double)m_Lslack - penn; // ATTENTION sign of penn must change according to contraction velocity
 	double m_lcet = m_lce / m_Lopt;
 	double m_lse = m_Lmtu - m_lce;
 	double m_lset = m_lse / m_Lslack;
@@ -237,24 +219,34 @@ dVector Muscle::GetForceMTU_V2(dFloat time, dModelRootNode* model)
 	double m_Fhpe = 0;// high parallel force
 	double m_Flpe = 0;// low parallel force
 
-	if ((m_lset - 1) >= 0) // if l_se > l_slack
+	if ((m_lset - 1) >= 0) // if l_se > l_slack tendon force is activated
 		m_Fse = F0 * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
 
-	if ((m_lcet - 0.44f) <= 0) // if l_ce < 44 % of l_opt
+	if ((m_lcet - 0.44f) <= 0) // if l_ce < 44 % of l_opt the lower stiffness in // with CE is activated
 		m_Flpe = F0 * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
 
-	if ((m_lcet - 1) >= 0) // if l_ce > l_opt
+	if ((m_lcet - 1) >= 0) // if l_ce > l_opt the higher stiffness in // with CE is actuated
 		m_Fhpe = F0 * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
 
+	// find fv
+	double fv;
+	double m_vcet = m_vce / m_Lopt;
+	//if (m_vcet < 0)
+		fv = (-10 - m_vcet) / (-10 + 5 * m_vcet); // for fiber flextion
+	//else
+	//	fv = 1.5f + 0.5 * ((-10+m_vcet)/(37.8*m_vcet+10)); // For extension (not used now)
+
+		if (fv > 1)
+			fv = 1;
+	// force computation
+	
 	double m_Fpe = m_Fhpe - m_Flpe; // parallel force
 	double m_Fce = a * F0 * fl * fv; // contractile element force
-	dVector m_Fmtu; // force vector for newtonaddforce
-	double F = m_Fce + m_Fpe; // force of the mtu
-	m_Fmtu.m_x = F;
-	m_Fmtu.m_y = F * sin(30 * dDegreeToRad);// Y component FIX
-	m_Fmtu.m_z = 0 * sin(00 * dDegreeToRad);// Z component FIX
+	double m_Fmtu = m_Fce + m_Fpe; // force of the mtu
 
 	// Integration of actual v_ce to update l_ce
+
+	// time integration
 	m_time = m_time + time;
 	m_time_prec = m_time;// class variable update for next call
 
@@ -268,13 +260,14 @@ dVector Muscle::GetForceMTU_V2(dFloat time, dModelRootNode* model)
 	vector<state_type> x_der;
 	vector<double> times;
 
-	hill_muscle hm(a, m_Lopt, m_Lmtu, m_Lslack, F0, m_vce / m_Lopt);
-	//size_t steps = integrate(boost::ref(hm), x, (double)m_time - dt, (double)m_time, dt, push_back_state_and_time(x_vec, times));
-	size_t steps = integrate(boost::ref(hm), x, (double)m_time - dt, (double)m_time, dt);
+	hill_muscle hm(a, m_Lmtu);
+	size_t steps = integrate(boost::ref(hm), x, (double)m_time - dt, (double)m_time, dt, push_back_state_and_time(x_vec, times));
+	//size_t steps = integrate(boost::ref(hm), x, (double)m_time - dt, (double)m_time, dt);
+
+	cout << m_lce << '\t' << m_Lmtu << '\t' << m_vce << '\t' << theta << '\t' << m_time << '\t' << m_Fmtu << endl;
 
 	m_lce = x[0] * m_Lopt; // class variable update for next call
-	cout << m_lce << '\t' << m_vce << '\t' << theta << '\t' << m_time << '\t' << m_Fmtu[0] << endl;
-	m_vce = hm.pushv() * m_Lopt;
+	m_vce = (hm.pushv() * m_Lopt);// class variable update for next call
 	
 	return m_Fmtu;
 }
@@ -292,7 +285,7 @@ void Muscle::SetInsertion(float px, float py, float pz) {
 	m_insertion.m_z = pz;
 	m_insertion.m_w = 1.0f;
 }
-// Function to get musclue origin body global reference
+// Function to get muscle origin body global reference
 dVector Muscle::GetOrigin_GlobalRef() {
 	NewtonBody* NBody1 = (NewtonBody*)body1->GetBody();
 	dVector VTemp(0.0f);

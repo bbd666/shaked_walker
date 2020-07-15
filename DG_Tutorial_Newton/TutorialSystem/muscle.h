@@ -34,14 +34,12 @@ struct Muscle
 	void SetLopt(float L);
 	float GetLopt();
 	void SetLslack(float L);
-	void SetinitialVel(double x);
 	float GetLslack();
 	void SetFmax(float L);
 	float GetFmax();
 	void SetVmax(float V);
 	float GetVmax();
-	dVector GetForceElas();
-	dVector GetForceMTU_V2(dFloat t, dModelRootNode* model);
+	double GetForceMTU_V1(dFloat t, dModelRootNode* model);
 	GeomNewton* body1;
 	GeomNewton* body2;
 	void GenerateMesh();

@@ -31,9 +31,9 @@
 #include "pch.h"
 #include "WindowGL.h"
 #include "GeomGL.h"
-#include "biped.h"
+#include "muscle.h"
 #include "OXVehicleRayCast.h"
-
+#include "MuscleV2.h"
 
 #if defined(_DEBUG)
 int main()
