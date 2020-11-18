@@ -15,8 +15,8 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 ,	LineIndex(0)
 {
 	m_Manager->vMuscleList.push_back(this);
-	m_Length0 = 1.f;
-	m_Stiffness = 1000.f;
+	m_Length0 = 0.1f;
+	m_Stiffness = 100.f;
 }
 
 Muscle::~Muscle() {

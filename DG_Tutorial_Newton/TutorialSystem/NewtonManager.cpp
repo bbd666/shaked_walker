@@ -168,8 +168,9 @@ void NewtonManager::TransformCallback(const NewtonBody* body, const dFloat* matr
 
 NewtonManager::NewtonManager()
 	:nWorld(NULL),
-	 nGravity(0.0f, -9.81f, 0.0f, 0.0f),
-	 aMaxphysicfps(1.0f / 1000.0f),
+	//nGravity(0.0f, 0.0f, 0.0f, 0.0f),
+	nGravity(0.0f, -9.81f, 0.0f, 0.0f),
+	aMaxphysicfps(1.0f / 1000.0f),
 	 aMicrosecunds(0),
 	 aMainThreadPhysicsTimeAcc(0.0f),
 	 aMainThreadPhysicsTime(0.0f),

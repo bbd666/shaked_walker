@@ -20,13 +20,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 //
-#ifndef OXVEHICLE_RAYCAST__H_
-#define OXVEHICLE_RAYCAST__H_
-#pragma once
+#ifndef _OXVEHICLE_RAYCAST__H_
+#define _OXVEHICLE_RAYCAST__H_
+
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
 #include "biped.h"
+
 
 class dRaycastVHModel: public dModelRootNode
 {
@@ -34,108 +35,110 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	GeomNewton* GetThigh_L();
-	GeomNewton* GetShank_L();
-	GeomNewton* GetPlantarC_L();
-	GeomNewton* GetToesC_L();
-	GeomNewton* GetThigh_R();
-	GeomNewton* GetShank_R();
-	GeomNewton* GetPlantarC_R();
-	GeomNewton* GetToesC_R();
-	GeomNewton* GetTrunk();
-	GeomNewton* GetHead();
-	GeomNewton* GetArm_R();
-	GeomNewton* GetForearm_R();
-	GeomNewton* GetHand_R();
-	GeomNewton* GetArm_L();
-	GeomNewton* GetForearm_L();
-	GeomNewton* GetHand_L();
+	GeomNewton* GetUp_Leg_L();
+	GeomNewton* GetLow_Leg_L();
+	GeomNewton* GetPlantar_L();
 	float GetFoot2Floor_L();
-	void CastFoot_L();
-	void CreateFootScanLine();
-	GeomNewton* GetTrunkCompound();
-	
+	void CastFoot(const char* const Laterality);
+	GeomNewton* GetUp_Leg_R();
+	GeomNewton* GetLow_Leg_R();
+	GeomNewton* GetPlantar_R();
+	float GetFoot2Floor_R();
+
+
+	int CreateFootScanLine();
+
+
 private:
 	WindowMain* m_winManager;
-	NewtonManager* aManager;
+	GeomNewton* Sacrum;
+	GeomNewton* Spine;
+	GeomNewton* Hip_L;
+	GeomNewton* Up_Leg_L;
+	GeomNewton* Low_Leg_L;
+	GeomNewton* Plantar_L;
+	GeomNewton* Toe_L;
+	GeomNewton* Hip_R;
+	GeomNewton* Up_Leg_R;
+	GeomNewton* Low_Leg_R;
+	GeomNewton* Plantar_R;
+	GeomNewton* Toe_R;
+	GeomNewton* Clav_L;
+	GeomNewton* Up_Arm_L;
+	GeomNewton* Low_Arm_L;
+	GeomNewton* Hand_L;
+	GeomNewton* Clav_R;
+	GeomNewton* Up_Arm_R;
+	GeomNewton* Low_Arm_R;
+	GeomNewton* Hand_R;
+	GeomNewton* Neck;
+	GeomNewton* Head;
 
-	GeomNewton* Thigh_L;
-	GeomNewton* Shank_L;
-	GeomNewton* PlantarC_L;
-	GeomNewton* ToesC_L;
+//	dModelNode* SacrumNode;
+	dModelNode* Hip_LNode;
+	dModelNode* Up_Leg_LNode;
+	dModelNode* Low_Leg_LNode;
+	dModelNode* Plantar_LNode;
+	dModelNode* Toe_LNode;
+	dModelNode* Hip_RNode;
+	dModelNode* Up_Leg_RNode;
+	dModelNode* Low_Leg_RNode;
+	dModelNode* Plantar_RNode;
+	dModelNode* Toe_RNode;
+	dModelNode* Lumbar_Node;
+	dModelNode* Clav_LNode;
+	dModelNode* Shoulder_LNode;
+	dModelNode* Elbow_LNode;
+	dModelNode* Wrist_LNode;
+	dModelNode* Clav_RNode;
+	dModelNode* Shoulder_RNode;
+	dModelNode* Elbow_RNode;
+	dModelNode* Wrist_RNode;
+	dModelNode* Neck_Node;
+	dModelNode* Head_Node;
+
+
+	dCustomDoubleHinge* Disk1_L;
+	dCustomBallAndSocket* Rotule_L;
 	dCustomHinge* Knee_L;
 	dCustomBallAndSocket* Ankle_L;
-	dCustomHinge* Toes_L;
-	GeomNewton* Thigh_R;
-	GeomNewton* Shank_R;
-	GeomNewton* PlantarC_R;
-	GeomNewton* ToesC_R;
+	dCustomHinge* Flextoe_L;
+	dCustomDoubleHinge* Disk1_R;
+	dCustomBallAndSocket* Rotule_R;
 	dCustomHinge* Knee_R;
 	dCustomBallAndSocket* Ankle_R;
-	dCustomHinge* Toes_R;
-	GeomNewton* Trunk;
-	GeomNewton* Head;
-	dCustomBallAndSocket* Head_trunk;
-	GeomNewton* Arm_R;
-	dCustomBallAndSocket* Shoulders_arm_R;
-	GeomNewton* Forearm_R;
-	dCustomHinge* Farm_arm_R;
-	GeomNewton* Hand_R;
-	dCustomBallAndSocket* Hand_arm_R;
-	GeomNewton* Arm_L;
-	dCustomBallAndSocket* Shoulders_arm_L;
-	GeomNewton* Forearm_L;
-	dCustomHinge* Farm_arm_L;
-	GeomNewton* Hand_L;
-	dCustomBallAndSocket* Hand_arm_L;
-	GeomNewton* Hip_L;
-	GeomNewton* Hip_R;
-	dCustomHinge* Hip_Trunk_R;
-	dCustomHinge* Hip_Trunk_L;
-	GeomNewton* TrunkCompound;
+	dCustomHinge* Flextoe_R;
+	dCustomDoubleHinge* Disk2;
+	dCustomDoubleHinge* Strn_L;
+	dCustomHinge* Elb_L;
+	dCustomBallAndSocket* shld_L;
+	dCustomBallAndSocket* Wr_L;
+	dCustomDoubleHinge* Strn_R;
+	dCustomHinge* Elb_R;
+	dCustomBallAndSocket* shld_R;
+	dCustomBallAndSocket* Wr_R;
+	dCustomDoubleHinge* Hd;
+	dCustomDoubleHinge* Nck;
 
-	dModelNode* ToesC_LNode;
-	dModelNode* PlantarC_LNode;
-	dModelNode* Shank_LNode;
-	dModelNode* ToesC_RNode;
-	dModelNode* PlantarC_RNode;
-	dModelNode* Shank_RNode;
-	dModelNode* Thigh_RNode;
-	dModelNode* Hip_Node;
-	dModelNode* Trunk_Node;
-	dModelNode* Head_Node;
-	dModelNode* Arm_RNode;
-	dModelNode* Forearm_RNode;
-	dModelNode* Hand_RNode;
-	dModelNode* Arm_LNode;
-	dModelNode* Forearm_LNode;
-	dModelNode* Hand_LNode;
-	dModelNode* Hip_R_Node;
-	dModelNode* Hip_L_Node;
-	dModelNode* TrunkCompoundNode;
 
-	float l_Shank;
-	float l_Thigh;
-	float r_leg;
+
+	float l_Hip;
+	float l_Sacrum;
+	float l_Spine;
+	float l_Up_Leg;
+	float l_Low_Leg;
+	float r_bones;
 	float l_foot;
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
 	float Scale;
-	float l_hip;
-	float l_trunk;
-	float l_shoulders;
-	float l_head;
-	float l_arm;
-	float l_farm;
-	float l_hand;
-
-	std::vector<float> masses;
-	std::vector<float> Ixx;
-	std::vector<float> Iyy;
-	std::vector<float> Izz;
-	float tot_w;
-	float h_foot;
+	float l_Clav;
+	float l_Up_Arm;
+	float l_Low_Arm;
+	float l_Hand;
+	float l_Head;
+	float l_Neck;
 
 	Muscle* m1;
 	dVector ins11;
@@ -145,13 +148,12 @@ private:
 	dVector  NormalFoot_L;
 	dVector  ContactGround_L;
 	float Foot2Floor_L;
-	int FootLineIndex_L;
+	int FootLineIndex_L, FootLineIndex_R;
 
-	MainVertexPTN* aVtx;
-	float aTexTileU;
-	float aTexTileV;
-	unsigned int* aIndices;
-	int aIndiceCount;
+	dVector  ContactFoot;
+	dVector  NormalFoot;
+	dVector  ContactGround;
+	float Foot2Floor_R;
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -160,8 +162,8 @@ public:
 	DGVehicleRCManager(WindowMain* winctx);
 	virtual ~DGVehicleRCManager();
 	//
-	virtual void OnPreUpdate(dModelRootNode* const model, dFloat timestep) const;
-	virtual void OnPostUpdate(dModelRootNode* const model, dFloat timestep) const;
+	virtual void OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const;
+	virtual void OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const;
 	virtual void OnUpdateTransform(const dModelNode* const bone, const dMatrix& localMatrix) const;
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
