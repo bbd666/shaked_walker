@@ -112,12 +112,12 @@ private:
 
 
 	dCustomDoubleHinge* Disk1_L;
-	dCustomBallAndSocket* Rotule_L;
+	dCustomDoubleHinge* Rotule_L;
 	dCustomHinge* Knee_L;
 	dCustomBallAndSocket* Ankle_L;
 	dCustomHinge* Flextoe_L;
 	dCustomDoubleHinge* Disk1_R;
-	dCustomBallAndSocket* Rotule_R;
+	dCustomDoubleHinge* Rotule_R;
 	dCustomHinge* Knee_R;
 	dCustomBallAndSocket* Ankle_R;
 	dCustomHinge* Flextoe_R;

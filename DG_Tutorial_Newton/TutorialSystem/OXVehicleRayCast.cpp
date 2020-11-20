@@ -103,7 +103,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	l_Hand = 0.3f;
 	l_Neck = 0.3f;
 	l_Head = 0.4f;
-	r_Pad = 0.07f;
+	r_Pad = 0.05f;
 	h_sphere = 0.03f;
 
 	glm::vec3 _Pos(glm::vec3(3.0f, 3.0f, 0.f));
@@ -578,16 +578,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	// create hip joint. 
 	dMatrix Hip_LPinMatrix(dGetIdentityMatrix());
-	Hip_LPinMatrix = Hip_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
+	Hip_LPinMatrix = Hip_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Hip_LPinMatrix.m_posit = dVector(Up_Leg_L->GetPosition().m_x , Up_Leg_L->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_L->GetPosition().m_z);
-//	Rotule_L = new dCustomDoubleHinge(Hip_LPinMatrix, Up_Leg_L->GetBody(), Hip_L->GetBody());
-//	Rotule_L->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
-//	Rotule_L->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
-	Rotule_L = new dCustomBallAndSocket(Hip_LPinMatrix, Up_Leg_L->GetBody(), Hip_L->GetBody());
-	Rotule_L->EnableCone(true);
-	Rotule_L->EnableTwist(true);
-	Rotule_L->SetTwistLimits(0.f * dDegreeToRad, 0.f * dDegreeToRad);
-	Rotule_L->SetConeLimits(0.f * dDegreeToRad);
+	Rotule_L = new dCustomDoubleHinge(Hip_LPinMatrix, Up_Leg_L->GetBody(), Hip_L->GetBody());
+	Rotule_L->EnableLimits(true);
+	Rotule_L->EnableLimits1(true);
+	Rotule_L->SetLimits(-40.f * dDegreeToRad,120.f * dDegreeToRad);
+	Rotule_L->SetLimits1(-5.f * dDegreeToRad, 30.f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Rotule_L);
 
 	// create knee joint. 
@@ -631,9 +628,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	// create hip joint. 
 	dMatrix Hip_RPinMatrix(dGetIdentityMatrix());
-	Hip_RPinMatrix = Hip_RPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
+	Hip_RPinMatrix = Hip_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Hip_RPinMatrix.m_posit = dVector(Up_Leg_R->GetPosition().m_x , Up_Leg_R->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_R->GetPosition().m_z);
-	Rotule_R = new dCustomBallAndSocket(Hip_RPinMatrix, Up_Leg_R->GetBody(), Hip_R->GetBody());
+	Rotule_R = new dCustomDoubleHinge(Hip_RPinMatrix, Up_Leg_R->GetBody(), Hip_R->GetBody());
+	Rotule_R->EnableLimits(true);
+	Rotule_R->EnableLimits1(true);
+	Rotule_R->SetLimits(-40.f * dDegreeToRad, 120.f * dDegreeToRad);
+	Rotule_R->SetLimits1(-30.f * dDegreeToRad, 5.0f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Rotule_R);
 
 	// create knee joint. 
