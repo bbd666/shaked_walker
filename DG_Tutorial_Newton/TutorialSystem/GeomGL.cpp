@@ -32,6 +32,26 @@
 #include "GeomGL.h"
 #include "WindowGL.h"
 
+static void HandleSoftContacts(const NewtonJoint* const contactJoint, dFloat timestep, int threadIndex)
+{
+	// iterate over all contact point checking is a sphere shape belong to the Biped,
+	// if so declare this a soft contact
+	dAssert(NewtonJointIsActive(contactJoint));
+	NewtonBody* const body0 = NewtonJointGetBody0(contactJoint);
+	NewtonBody* const body1 = NewtonJointGetBody1(contactJoint);
+	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+
+		NewtonCollision* const shape0 = NewtonMaterialGetBodyCollidingShape(material, body0);
+		NewtonCollision* const shape1 = NewtonMaterialGetBodyCollidingShape(material, body1);
+		// this check is too simplistic but will do for this demo.
+		// a better set up should use the Collision Material to stores application info
+		if ((NewtonCollisionGetType(shape0) == SERIALIZE_ID_SPHERE) || (NewtonCollisionGetType(shape1) == SERIALIZE_ID_SPHERE)) {
+			NewtonMaterialSetAsSoftContact(material, 0.01f);
+		}
+	}
+}
+
 GeomBase::GeomBase()
 : aDataPointer(NULL),
   aClassID(0),
@@ -363,6 +383,13 @@ void GeomNewton::GenerateMesh()
 	  default:
 		  break;
 	  }
+
+	  int material = NewtonMaterialGetDefaultGroupID(aManager->GetWorld());
+
+	  NewtonMaterialSetCallbackUserData(aManager->GetWorld(), material, material, this);
+	  NewtonMaterialSetDefaultElasticity(aManager->GetWorld(), material, material, 0.0f);
+	  NewtonMaterialSetDefaultFriction(aManager->GetWorld(), material, material, 0.9f, 0.9f);
+	  NewtonMaterialSetCollisionCallback(aManager->GetWorld(), material, material, NULL, HandleSoftContacts);
 	  
 	  //
       aVerticeCount = NewtonMeshGetPointCount(nMesh);
@@ -923,6 +950,8 @@ NewtonBody* GeomAssimp::GetBody()
 {
 	return aBody;
 }
+
+
 
 GeomAssimp::~GeomAssimp()
 {

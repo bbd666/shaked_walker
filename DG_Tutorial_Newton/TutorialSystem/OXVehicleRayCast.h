@@ -73,6 +73,13 @@ private:
 	GeomNewton* Hand_R;
 	GeomNewton* Neck;
 	GeomNewton* Head;
+	GeomNewton* Heel_L;
+	GeomNewton* Pad1_L;
+	GeomNewton* Pad2_L;
+	GeomNewton* Heel_R;
+	GeomNewton* Pad1_R;
+	GeomNewton* Pad2_R;
+
 
 //	dModelNode* SacrumNode;
 	dModelNode* Hip_LNode;
@@ -96,6 +103,12 @@ private:
 	dModelNode* Wrist_RNode;
 	dModelNode* Neck_Node;
 	dModelNode* Head_Node;
+	dModelNode* Heel_L_Node;
+	dModelNode* Pad1_L_Node;
+	dModelNode* Pad2_L_Node;
+	dModelNode* Heel_R_Node;
+	dModelNode* Pad1_R_Node;
+	dModelNode* Pad2_R_Node;
 
 
 	dCustomDoubleHinge* Disk1_L;
@@ -119,6 +132,12 @@ private:
 	dCustomBallAndSocket* Wr_R;
 	dCustomDoubleHinge* Hd;
 	dCustomDoubleHinge* Nck;
+	dCustomDoubleHinge* Hl_L;
+	dCustomDoubleHinge* Pd1_L;
+	dCustomDoubleHinge* Pd2_L;
+	dCustomDoubleHinge* Hl_R;
+	dCustomDoubleHinge* Pd1_R;
+	dCustomDoubleHinge* Pd2_R;
 
 
 
@@ -139,6 +158,8 @@ private:
 	float l_Hand;
 	float l_Head;
 	float l_Neck;
+	float r_Pad;
+	float h_sphere;
 
 	Muscle* m1;
 	dVector ins11;

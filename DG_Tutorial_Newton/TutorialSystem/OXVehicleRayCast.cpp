@@ -35,7 +35,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, shld_R(NULL)
 	, Elb_R(NULL)
 	, Wr_R(NULL)
-//	, SacrumNode(NULL)
 	, Hip_LNode(NULL)
 	, Up_Leg_LNode(NULL)
 	, Low_Leg_LNode(NULL)
@@ -68,6 +67,24 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, Elbow_RNode(NULL)
 	, Neck_Node(NULL)
 	, Head_Node(NULL)
+	, Heel_L(NULL)
+	, Pad1_L(NULL)
+	, Pad2_L(NULL)
+	, Heel_R(NULL)
+	, Pad1_R(NULL)
+	, Pad2_R(NULL)
+	, Heel_L_Node(NULL)
+	, Pad1_L_Node(NULL)
+	, Pad2_L_Node(NULL)
+	, Heel_R_Node(NULL)
+	, Pad1_R_Node(NULL)
+	, Pad2_R_Node(NULL)
+	, Hl_L(NULL)
+	, Pd1_L(NULL)
+	, Pd2_L(NULL)
+	, Hl_R(NULL)
+	, Pd1_R(NULL)
+	, Pd2_R(NULL)
 
 {
 	string tex("Textures//wood6.png");
@@ -86,6 +103,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	l_Hand = 0.3f;
 	l_Neck = 0.3f;
 	l_Head = 0.4f;
+	r_Pad = 0.07f;
+	h_sphere = 0.03f;
 
 	glm::vec3 _Pos(glm::vec3(3.0f, 3.0f, 0.f));
 	Scale = 1.0f;
@@ -337,8 +356,120 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Wrist_RNode = new dModelNode(Hand_R->GetBody(), dGetIdentityMatrix(), Elbow_RNode);
 	
     
-    
+	// Foot pads
 
+	Heel_L = new GeomNewton(m_winManager->aManager);
+	Heel_L->SetBodyType(adtDynamic);
+	Heel_L->SetParent(Plantar_L);
+	Heel_L->SetTexture0(&tex[0], "Tex0");
+	Heel_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Heel_L->SetPitchAngle(90.0f, false);
+	Heel_L->SetPosition(0, -Scale * h_sphere, Scale * (l_foot / 2));
+	Heel_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Heel_L->GetBody(), NULL);
+	Heel_L_Node = new dModelNode(Heel_L->GetBody(), dGetIdentityMatrix(), Plantar_LNode);
+
+	Pad1_L = new GeomNewton(m_winManager->aManager);
+	Pad1_L->SetBodyType(adtDynamic);
+	Pad1_L->SetParent(Toe_L);
+	Pad1_L->SetTexture0(&tex[0], "Tex0");
+	Pad1_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Pad1_L->SetPitchAngle(90.0f, false);
+	Pad1_L->SetPosition( Scale* w_foot / 2, -Scale * h_sphere,-Scale * (l_foot / 4));
+	Pad1_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Pad1_L->GetBody(), NULL);
+	Pad1_L_Node = new dModelNode(Pad1_L->GetBody(), dGetIdentityMatrix(), Toe_LNode);
+
+	Pad2_L = new GeomNewton(m_winManager->aManager);
+	Pad2_L->SetBodyType(adtDynamic);
+	Pad2_L->SetParent(Toe_L);
+	Pad2_L->SetTexture0(&tex[0], "Tex0");
+	Pad2_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Pad2_L->SetPitchAngle(90.0f, false);
+	Pad2_L->SetPosition( -Scale* w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad2_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Pad2_L->GetBody(), NULL);
+	Pad2_L_Node = new dModelNode(Pad2_L->GetBody(), dGetIdentityMatrix(), Toe_LNode);
+
+	Heel_R = new GeomNewton(m_winManager->aManager);
+	Heel_R->SetBodyType(adtDynamic);
+	Heel_R->SetParent(Plantar_R);
+	Heel_R->SetTexture0(&tex[0], "Tex0");
+	Heel_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Heel_R->SetPitchAngle(90.0f, false);
+	Heel_R->SetPosition(0, -Scale * h_sphere, Scale* (l_foot / 2));
+	Heel_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Heel_R->GetBody(), NULL);
+	Heel_R_Node = new dModelNode(Heel_R->GetBody(), dGetIdentityMatrix(), Plantar_RNode);
+
+	Pad1_R = new GeomNewton(m_winManager->aManager);
+	Pad1_R->SetBodyType(adtDynamic);
+	Pad1_R->SetParent(Toe_R);
+	Pad1_R->SetTexture0(&tex[0], "Tex0");
+	Pad1_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Pad1_R->SetPitchAngle(90.0f, false);
+	Pad1_R->SetPosition(Scale* w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad1_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Pad1_R->GetBody(), NULL);
+	Pad1_R_Node = new dModelNode(Pad1_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
+
+	Pad2_R = new GeomNewton(m_winManager->aManager);
+	Pad2_R->SetBodyType(adtDynamic);
+	Pad2_R->SetParent(Toe_R);
+	Pad2_R->SetTexture0(&tex[0], "Tex0");
+	Pad2_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Pad2_R->SetPitchAngle(90.0f, false);
+	Pad2_R->SetPosition(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad2_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
+	NewtonBodySetTransformCallback(Pad2_R->GetBody(), NULL);
+	Pad2_R_Node = new dModelNode(Pad2_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
+
+
+	//Pad joints
+
+	//Left foot
+	dMatrix Heel_L_PinMatrix(dGetIdentityMatrix());
+	Heel_L_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2));
+	Hl_L = new dCustomDoubleHinge(Heel_L_PinMatrix, Heel_L->GetBody(), Plantar_L->GetBody());
+	Hl_L->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Hl_L->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Hl_L);
+
+	dMatrix Pad1_L_PinMatrix(dGetIdentityMatrix());
+	Pad1_L_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pd1_L = new dCustomDoubleHinge(Pad1_L_PinMatrix, Pad1_L->GetBody(), Toe_L->GetBody());
+	Pd1_L->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Pd1_L->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Pd1_L);
+
+	dMatrix Pad2_L_PinMatrix(dGetIdentityMatrix());
+	Pad2_L_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pd2_L = new dCustomDoubleHinge(Pad2_L_PinMatrix, Pad2_L->GetBody(), Toe_L->GetBody());
+	Pd2_L->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Pd2_L->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Pd2_L);
+
+	//Right foot
+	dMatrix Heel_R_PinMatrix(dGetIdentityMatrix());
+	Heel_R_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2));
+	Hl_R = new dCustomDoubleHinge(Heel_R_PinMatrix, Heel_R->GetBody(), Plantar_R->GetBody());
+	Hl_R->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Hl_R->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Hl_R);
+
+	dMatrix Pad1_R_PinMatrix(dGetIdentityMatrix());
+	Pad1_R_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pd1_R = new dCustomDoubleHinge(Pad1_R_PinMatrix, Pad1_R->GetBody(), Toe_R->GetBody());
+	Pd1_R->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Pd1_R->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Pd1_R);
+
+	dMatrix Pad2_R_PinMatrix(dGetIdentityMatrix());
+	Pad2_R_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pd2_R = new dCustomDoubleHinge(Pad2_R_PinMatrix, Pad2_R->GetBody(), Toe_R->GetBody());
+	Pd2_R->SetAsSpringDamper(true, 0, 1.e20f, 1.e10f);
+	Pd2_R->SetAsSpringDamper1(true, 0, 1.e20f, 1.e10f);
+	m_winManager->aManager->vJointList.push_back(Pd2_R);
 
 	//trunk joints
 
@@ -531,7 +662,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_RPinMatrix = Toe_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Toe_RPinMatrix.m_posit = dVector(Plantar_R->GetPosition().m_x, Plantar_R->GetPosition().m_y, Plantar_R->GetPosition().m_z - Scale * l_foot / 2);
 	Flextoe_R = new dCustomHinge(Toe_RPinMatrix, Plantar_R->GetBody(), Toe_R->GetBody());
-	Flextoe_R->SetAsSpringDamper(true, 0.9, 1000.f, 10.f);
+	Flextoe_R->SetAsSpringDamper(true, 0.9, 10000.f, 100.f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 	
 	ins11 = dVector(0.f, 0.f, 0.f);
