@@ -19,6 +19,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 {
 	string tex("Textures//wood6.png");
+	string tex2("Textures//checker.png");
 	glm::vec3 _Pos(glm::vec3(0.0f, 0.25f, 0.0f));
 	// De leva male
 
@@ -62,7 +63,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		Thigh_L->SetTexture0(&tex[0], "Tex0");
 		Thigh_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 		Thigh_L->SetPosition(_Pos.x, _Pos.y + r_leg / 2, _Pos.z);
-		Thigh_L->InitNewton(atCapsule, r_leg, r_leg, l_Thigh, masses[5]);
+		//Thigh_L->InitNewton(atCapsule, r_leg, r_leg, l_Thigh, masses[5]);
+		Thigh_L->InitNewton(atBox, l_Thigh, r_leg, r_leg, masses[5]);
 		m_body = Thigh_L->GetBody();
 		NewtonBodySetTransformCallback(m_body, NULL);
 		NewtonBody* const parentBody = GetBody();
@@ -80,7 +82,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		//Shank_L->SetTurnAngle(30.0f);
 		Shank_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 		Shank_L->SetPosition(l_Thigh / 2 + l_Shank / 2, 0.0f, 0.0f);
-		Shank_L->InitNewton(atCapsule, r_leg, r_leg, l_Shank, masses[6]);
+		//Shank_L->InitNewton(atCapsule, r_leg, r_leg, l_Shank, masses[6]);
+		Shank_L->InitNewton(atBox, l_Shank, r_leg, r_leg,  masses[6]);
 		NewtonBodySetMassMatrix(Shank_L->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]); //set mass matrix 
 		NewtonBodySetTransformCallback(Shank_L->GetBody(), NULL);
 		Shank_LNode = new dModelNode(Shank_L->GetBody(), dGetIdentityMatrix(), this);
@@ -93,56 +96,15 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		Knee_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 		Knee_LPinMatrix.m_posit = dVector(_Pos.x + l_Thigh / 2, _Pos.y + r_leg / 2, _Pos.z);
 		Knee_L = new dCustomHinge(Knee_LPinMatrix, Shank_L->GetBody(), Thigh_L->GetBody());
-		Knee_L->EnableLimits(1);
+		//Knee_L->EnableLimits(1);
 		//Knee_L->SetLimits(0.0, 180.0);
 		m_winManager->aManager->vJointList.push_back(Knee_L);
 
-		// CE of muscle
-		CE_KL = new GeomNewton(m_winManager->aManager);
-		CE_KL->SetBodyType(adtDynamic);
-		CE_KL->SetParent(Thigh_L);
-		CE_KL->SetTexture0(&tex[0], "Tex0");
-		CE_KL->SetDiffuseColor(0.7f, 0.7f, 0.7f);
-		CE_KL->SetPosition( 0, r_leg, 0.0f);
-		CE_KL->InitNewton(atBox, 2*r_leg, r_leg, r_leg, 0.05f);
-		NewtonBodySetTransformCallback(CE_KL->GetBody(), NULL);
-		CE_KLNode = new dModelNode(CE_KL->GetBody(), dGetIdentityMatrix(), this);
-
-		// Slider
-		dMatrix matrix;
-		// connect the bodies by a Slider joint
-		NewtonBodyGetMatrix(Thigh_L->GetBody(), &matrix[0][0]);
-		slider = new dCustomSlider(matrix, CE_KL->GetBody(), Thigh_L->GetBody());
-		//slider->SetAsSpringDamper(1, 0.9, 0.9, 10); // not working
-		slider->EnableLimits(1);
-		slider->SetLimits(-0.1f, 0.1f);
-		m_winManager->aManager->vJointList.push_back(slider);
-
-		link = new GeomNewton(m_winManager->aManager);
-		link->SetBodyType(adtDynamic);
-		link->SetParent(Shank_L);
-		link->SetTexture0(&tex[0], "Tex0");
-		link->SetDiffuseColor(0.7f, 0.7f, 0.7f);
-		link->SetPosition(-l_Shank / 2, r_leg, 0.0f);
-		link->InitNewton(atCapsule, r_leg/4, r_leg/4, l_Thigh/3 + l_Shank/3, 0.05f);
-		NewtonBodySetTransformCallback(link->GetBody(), NULL);
-		linkNode = new dModelNode(link->GetBody(), dGetIdentityMatrix(), Shank_LNode);
-
-		//LEFT link JOINT //
-		dMatrix link_LPinMatrix(dGetIdentityMatrix());
-		link_LPinMatrix = Knee_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-		link_LPinMatrix.m_posit = dVector(_Pos.x + l_Thigh / 2 + l_Shank / 2, _Pos.y + 3*r_leg / 2, _Pos.z);
-		dCustomBallAndSocket* link_L = new dCustomBallAndSocket(link_LPinMatrix, Shank_L->GetBody(), link->GetBody());
-		m_winManager->aManager->vJointList.push_back(link_L);
-		//right link JOINT //
-		link_LPinMatrix.m_posit = dVector(_Pos.x, _Pos.y + 3*r_leg / 2, _Pos.z);
-		dCustomBallAndSocket* link_R = new dCustomBallAndSocket(link_LPinMatrix, CE_KL->GetBody(), link->GetBody());
-		m_winManager->aManager->vJointList.push_back(link_R);
-
+		//AddMuscleV2_Element(Thigh_L, Shank_L); // WORK IN PROGRESS
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		 //MUSCLES //
-		 //VAS Left Vasti
-		VAS_L2 = new MuscleV2(m_winManager->aManager, GetCE_KL(), Getslider());
+		//MUSCLES //
+		//VAS Left Vasti
+		//VAS_L2 = new MuscleV2(m_winManager->aManager, GetShank_L(), GetThigh_L());
 
 	}
 	else {
@@ -215,9 +177,69 @@ GeomNewton* dRaycastVHModel::GetCE_KL() {
 	return CE_KL;
 }
 
-dCustomSlider* dRaycastVHModel::Getslider() {
-	return slider;
-}
+// WORK IN PROGRESS
+//GeomNewton* dRaycastVHModel::AddMuscleV2_Element(GeomNewton* body1, GeomNewton*body2) {
+//	string tex("Textures//wood6.png");
+//	// CE of muscle
+//	GeomNewton* CE = new GeomNewton(m_winManager->aManager);
+//	CE->SetBodyType(adtDynamic);
+//	CE->SetParent(body1);
+//	CE->SetTexture0(&tex[0], "Tex0");
+//	CE->SetDiffuseColor(0.7f, 0.7f, 0.7f);
+//	CE->SetPosition(l_Thigh / 2, 2 * r_leg, 0.0f);
+//	CE->InitNewton(atBox, r_leg, r_leg / 2, r_leg, 0.05f);
+//	NewtonBodySetTransformCallback(CE_KL->GetBody(), NULL);
+//	dModelNode* CE_Node = new dModelNode(CE_KL->GetBody(), dGetIdentityMatrix(), this);
+//
+//	////right CE JOINT //
+//	// connect CE to Thigh with 4 dof link: spherical + slider
+//	dMatrix matrix0;
+//	//dVector size = {1.0f, 1.0f, 1.0f};
+//	dMatrix pinMatrix(dGrammSchmidt(dVector(0.0f, 1.0f, 0.0f, 0.0f)));// Only around y. Why ?
+//
+//	// Limits
+//	//const dFloat yawLimit = 180.0f * dDegreeToRad;
+//	const dFloat rollLimit = 180.0f * dDegreeToRad;
+//	//const dFloat pitchLimit = 180.0f * dDegreeToRad;
+//	dVector linearlimits = { 0.0f, 0.1f, 0.0f };
+//
+//	// Create 6 dof link
+//	NewtonBodyGetMatrix(CE_KL->GetBody(), &matrix0[0][0]);
+//	pinMatrix.m_posit = matrix0.m_posit + dVector(-l_Thigh / 2, .0f, .0f, 0.0f);
+//	dCustomSixdof* const joint0 = new dCustomSixdof(pinMatrix, CE_KL->GetBody(), Thigh_L->GetBody());
+//
+//	// Set limits
+//	joint0->SetLinearLimits(linearlimits.Scale(-1), linearlimits);
+//
+//	//joint0->SetYawLimits(-yawLimit, yawLimit);
+//	//joint0->SetPitchLimits(-pitchLimit, pitchLimit);
+//	joint0->SetRollLimits(-rollLimit, rollLimit);
+//
+//	// Push to joint list
+//	m_winManager->aManager->vJointList.push_back(joint0);
+//
+//	////Left CE JOINT //
+//	// connect CE to Thigh with 4 dof link: spherical + slider
+//	dMatrix matrix2;
+//	dMatrix pinMatrix2(dGrammSchmidt(dVector(0.0f, 1.0f, 0.0f, 0.0f)));// ???
+//
+//
+//	// Create 6 dof link
+//	NewtonBodyGetMatrix(CE_KL->GetBody(), &matrix2[0][0]);
+//	pinMatrix2.m_posit = matrix2.m_posit + dVector(l_Shank / 2, .0f, .0f, 0.0f);
+//	dCustomSixdof* const joint1 = new dCustomSixdof(pinMatrix2, CE_KL->GetBody(), Shank_L->GetBody());
+//
+//	// Set limits
+//	joint1->SetLinearLimits(linearlimits.Scale(-1), linearlimits);
+//
+//	//joint0->SetYawLimits(-yawLimit, yawLimit);
+//	//joint0->SetPitchLimits(-pitchLimit, pitchLimit);
+//	joint1->SetRollLimits(-rollLimit, rollLimit);
+//
+//	// Push to joint list
+//	m_winManager->aManager->vJointList.push_back(joint1);
+//
+//}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
@@ -270,12 +292,43 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 		float ang = temp->GetJointAngle();
 		float tau = (arm[2] * F * cos(ang - thetamk)); // Check
 		float F_p = tau / 0.2;
-		float Fy = F_p / cos(gNewton->GetTurnAngle());
-		float Fx = F_p * tan(gNewton->GetTurnAngle());
-		Vtemp = {-Fx, Fy, 0.0f}; 
-		NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body to generate torque
 
-		// How to apply the torque directly at the knee??
+		//Adding perpendicular force to shank COM
+		dVector pinAxisVector(0.0f), newDir(0.0f);
+		GeomNewton* gShank = m_player->GetShank_L();
+
+		dMatrix shankMatrix = gShank->GetMatrix();
+		NewtonBody* NShank = gShank->GetBody();
+
+		dVector shankVect = (shankMatrix.m_posit - temp->GetMatrix0().m_posit); // temp is dCustomHinge
+		shankVect = shankVect.Normalize();
+
+		pinAxisVector = temp->GetPinAxis();
+		newDir = shankVect.CrossProduct(pinAxisVector).Scale(F_p);
+
+		NewtonBodyAddForce(NShank, &newDir[0]); // apply perpendicular force to shank
+
+		dFloat angknee = temp->GetJointAngle();
+		/*if (angknee <= 0.0 * dDegreeToRad)
+			cout << '10!!' << endl;
+		if (angknee <= -10.0*dDegreeToRad)
+			cout << '10!!' << endl;
+		if (angknee <= -20.0 * dDegreeToRad)
+			cout << '20!!' << endl;
+		if (angknee <= -30.0 * dDegreeToRad)
+			cout << '30!!' << endl;
+		if (angknee <= -40.0 * dDegreeToRad)
+			cout << '40!!' << endl;
+		if (angknee <= -50.0 * dDegreeToRad)
+			cout << '50!!' << endl;
+		if (angknee <= -60.0 * dDegreeToRad)
+			cout << '60!!' << endl;
+		if (angknee <= -70.0 * dDegreeToRad)
+			cout << '70!!' << endl;
+		if (angknee <= -80.0 * dDegreeToRad)
+			cout << '80!!' << endl;*/
+	/*	if (angknee <= -90.0 * dDegreeToRad)
+			cout << '90!!' << endl;*/
 	}
 	// Scan all Muscle V2 elements
 	for (auto itr = m_winManager->aManager->vMuscleV2List.begin();
@@ -285,10 +338,10 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 		// Get the Body1 connected to the muscle and apply the muscle force
 		GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
 		NewtonBody* NBody = gNewton->GetBody();
-		float F = Mobj->GetForceMTU_V2(timestep); // Simple muscle
+		//float F = Mobj->GetForceMTU_V2(timestep); // Simple muscle
 
-		Vtemp = { -F, 0.0f, 0.0f };
-		NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body to generate torque
+		//Vtemp = { -F, 0.0f, 0.0f };
+		//NewtonBodyAddForce(NBody, &Vtemp.m_x); // apply force to COM of body to generate torque
 	}
 }
 

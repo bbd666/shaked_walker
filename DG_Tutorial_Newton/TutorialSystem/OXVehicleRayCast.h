@@ -38,7 +38,8 @@ public:
 	GeomNewton* GetShank_L();
 	dCustomHinge* GetKnee_L();
 	GeomNewton* GetCE_KL();
-	dCustomSlider* Getslider();
+	void AddMuscleV2_Element(GeomNewton* body1, GeomNewton* body2);
+	
 private:
 	WindowMain* m_winManager;
 	NewtonManager* aManager;
