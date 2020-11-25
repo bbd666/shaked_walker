@@ -174,7 +174,7 @@ typedef long long unsigned64;
 
 #include <dCustomTriggerManager.h>
 #include <dCustomKinematicController.h>
-#include <dCustomPlayerControllerManager.h>
+//#include <dCustomPlayerControllerManager.h>
 
 // 
 #include <dModelAnimTree.h>
