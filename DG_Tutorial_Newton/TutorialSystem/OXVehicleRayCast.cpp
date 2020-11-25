@@ -206,7 +206,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_L->SetTexture0(&tex[0], "Tex0");
 	Toe_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Toe_L->SetPosition( 0,  0,-Scale * ( l_foot / 2 + l_toe / 2));
-	Toe_L->InitNewton(atBox, Scale* 0.1f, Scale*  0.2f, Scale*  0.2f, 10.0f*Scale);
+	Toe_L->InitNewton(atBox, Scale* 0.1f, Scale*  0.2f, Scale*  0.2f, 1.0f*Scale);
 	NewtonBodySetTransformCallback(Toe_L->GetBody(), NULL);
 	Toe_LNode = new dModelNode(Toe_L->GetBody(), dGetIdentityMatrix(), Plantar_LNode);
 
@@ -251,7 +251,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Plantar_R->SetPitchAngle(90.0f, false);
 	Plantar_R->SetPosition(0, -Scale * (l_Low_Leg) / 2 -2* Scale * r_bones, -Scale * (l_foot / 4));
-	Plantar_R->InitNewton(atBox, Scale * 0.1f, Scale* l_foot, Scale* w_foot, 1.0f * Scale);
+	Plantar_R->InitNewton(atBox, Scale * 0.1f, Scale* l_foot, Scale* w_foot, 10.0f * Scale);
 	NewtonBodySetTransformCallback(Plantar_R->GetBody(), NULL);
 	Plantar_RNode = new dModelNode(Plantar_R->GetBody(), dGetIdentityMatrix(), Low_Leg_RNode);
 
@@ -616,7 +616,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_LPinMatrix = Toe_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Toe_LPinMatrix.m_posit = dVector(Plantar_L->GetPosition().m_x, Plantar_L->GetPosition().m_y, Plantar_L->GetPosition().m_z- Scale * l_foot/2);
 	Flextoe_L = new dCustomHinge(Toe_LPinMatrix, Plantar_L->GetBody(), Toe_L->GetBody());
-	Flextoe_L->SetMassIndependentSpringDamper(true,0.01,  1000.f, 100.f);
+	Flextoe_L->SetAsSpringDamper(true,  1.e5f, 1.e4f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_L);
 
 	//Right lower limb joints
@@ -664,7 +664,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_RPinMatrix = Toe_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Toe_RPinMatrix.m_posit = dVector(Plantar_R->GetPosition().m_x, Plantar_R->GetPosition().m_y, Plantar_R->GetPosition().m_z - Scale * l_foot / 2);
 	Flextoe_R = new dCustomHinge(Toe_RPinMatrix, Plantar_R->GetBody(), Toe_R->GetBody());
-	Flextoe_R->SetMassIndependentSpringDamper(true, 0.01, 1000.f, 100.f);
+	Flextoe_R->SetAsSpringDamper(true,  1.e5f, 1.e4f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 	
 	ins11 = dVector(0.f, 0.f, 0.f);
