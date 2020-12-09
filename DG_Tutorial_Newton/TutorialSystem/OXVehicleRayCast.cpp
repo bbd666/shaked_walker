@@ -156,7 +156,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Head_Node = new dModelNode(Head->GetBody(), dGetIdentityMatrix(), Neck_Node);
 
 	//Left lower limb
-
+	
 	Hip_L = new GeomNewton(m_winManager->aManager);
 	Hip_L->SetBodyType(adtDynamic);
 	Hip_L->SetParent(Sacrum);
@@ -167,7 +167,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hip_L->InitNewton(atCapsule, Scale*r_bones, Scale*r_bones, Scale*l_Hip, 10.0f*Scale);
 	NewtonBodySetTransformCallback(Hip_L->GetBody(), NULL);
 	Hip_LNode = new dModelNode(Hip_L->GetBody(), dGetIdentityMatrix(), this);
-
+	 
 	Up_Leg_L = new GeomNewton(m_winManager->aManager);
 	Up_Leg_L->SetBodyType(adtDynamic);
 	Up_Leg_L->SetParent(Hip_L);
@@ -188,7 +188,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Leg_L->InitNewton(atCapsule, Scale* r_bones, Scale*  r_bones, Scale* l_Low_Leg, 10.0f);
 	NewtonBodySetTransformCallback(Low_Leg_L->GetBody(), NULL);
 	Low_Leg_LNode = new dModelNode(Low_Leg_L->GetBody(), dGetIdentityMatrix(), Up_Leg_LNode);
-
+	 
 	Plantar_L = new GeomNewton(m_winManager->aManager);
 	Plantar_L->SetBodyType(adtDynamic);
 	Plantar_L->SetParent(Low_Leg_L);
@@ -423,27 +423,27 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Pad2_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f * Scale);
 	NewtonBodySetTransformCallback(Pad2_R->GetBody(), NULL);
 	Pad2_R_Node = new dModelNode(Pad2_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
-
+	
 
 	//Pad joints
 
 	//Left foot
 	dMatrix Heel_L_PinMatrix(dGetIdentityMatrix());
-	Heel_L_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2));
+	Heel_L_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2),1.0f);
 	Hl_L = new dCustomDoubleHinge(Heel_L_PinMatrix, Heel_L->GetBody(), Plantar_L->GetBody());
 	Hl_L->SetMassIndependentSpringDamper(true,0.01, 1.e20f, 1.e15f);
 	Hl_L->SetMassIndependentSpringDamper1(true,0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Hl_L);
 
 	dMatrix Pad1_L_PinMatrix(dGetIdentityMatrix());
-	Pad1_L_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad1_L_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4) ,1.0f);
 	Pd1_L = new dCustomDoubleHinge(Pad1_L_PinMatrix, Pad1_L->GetBody(), Toe_L->GetBody());
 	Pd1_L->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Pd1_L->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Pd1_L);
 
 	dMatrix Pad2_L_PinMatrix(dGetIdentityMatrix());
-	Pad2_L_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad2_L_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4),1.0f);
 	Pd2_L = new dCustomDoubleHinge(Pad2_L_PinMatrix, Pad2_L->GetBody(), Toe_L->GetBody());
 	Pd2_L->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Pd2_L->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
@@ -451,31 +451,31 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	//Right foot
 	dMatrix Heel_R_PinMatrix(dGetIdentityMatrix());
-	Heel_R_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2));
+	Heel_R_PinMatrix.m_posit = dVector(0, -Scale * h_sphere, Scale * (l_foot / 2),1.0f);
 	Hl_R = new dCustomDoubleHinge(Heel_R_PinMatrix, Heel_R->GetBody(), Plantar_R->GetBody());
 	Hl_R->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Hl_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Hl_R);
 
 	dMatrix Pad1_R_PinMatrix(dGetIdentityMatrix());
-	Pad1_R_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad1_R_PinMatrix.m_posit = dVector(Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4),1.0f);
 	Pd1_R = new dCustomDoubleHinge(Pad1_R_PinMatrix, Pad1_R->GetBody(), Toe_R->GetBody());
 	Pd1_R->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Pd1_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Pd1_R);
 
 	dMatrix Pad2_R_PinMatrix(dGetIdentityMatrix());
-	Pad2_R_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4));
+	Pad2_R_PinMatrix.m_posit = dVector(-Scale * w_foot / 2, -Scale * h_sphere, -Scale * (l_foot / 4),1.0f);
 	Pd2_R = new dCustomDoubleHinge(Pad2_R_PinMatrix, Pad2_R->GetBody(), Toe_R->GetBody());
 	Pd2_R->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Pd2_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Pd2_R); 
-
+	
 	//trunk joints
 
 	// create Lumbar joint. 
 	dMatrix Spine_PinMatrix(dYawMatrix(90.0f * dDegreeToRad));
-	Spine_PinMatrix.m_posit = dVector(_Pos.x , _Pos.y + Scale * l_Sacrum  / 2 + Scale * r_bones, _Pos.z);
+	Spine_PinMatrix.m_posit = dVector(_Pos.x , _Pos.y + Scale * l_Sacrum  / 2 + Scale * r_bones, _Pos.z,1.0f);
 	Disk2 = new dCustomDoubleHinge(Spine_PinMatrix, Spine->GetBody(), Sacrum->GetBody());
 	Disk2->SetMassIndependentSpringDamper(true,0.3,  1.e6f, 1.e4f);
 	Disk2->SetMassIndependentSpringDamper1(true,0.3,  1.e6f, 1.e4f);
@@ -484,7 +484,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create Neck joint. 
 	//dMatrix Neck_PinMatrix(dYawMatrix(90.0f * dDegreeToRad));
 	dMatrix Neck_PinMatrix(dGetIdentityMatrix());
-	Neck_PinMatrix.m_posit = dVector(Neck->GetPosition().m_x, Neck->GetPosition().m_y - Scale * l_Neck / 2 -  Scale * r_bones, Neck->GetPosition().m_z);
+	Neck_PinMatrix.m_posit = dVector(Neck->GetPosition().m_x, Neck->GetPosition().m_y - Scale * l_Neck / 2 -  Scale * r_bones, Neck->GetPosition().m_z,1.0f);
 	Nck = new dCustomDoubleHinge(Neck_PinMatrix, Neck->GetBody(), Spine->GetBody());
 	Nck->SetMassIndependentSpringDamper(true, 0.01, 1000.f, 10.f);
 	Nck->SetMassIndependentSpringDamper1(true, 0.01, 1000.f, 10.f);
@@ -492,7 +492,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	// create Head joint. 
 	dMatrix Head_PinMatrix(dYawMatrix(90.0f * dDegreeToRad));
-	Head_PinMatrix.m_posit = dVector(Head->GetPosition().m_x, Head->GetPosition().m_y - Scale * l_Head / 2 -  Scale * r_bones, Head->GetPosition().m_z);
+	Head_PinMatrix.m_posit = dVector(Head->GetPosition().m_x, Head->GetPosition().m_y - Scale * l_Head / 2 -  Scale * r_bones, Head->GetPosition().m_z,1.0f);
 	Hd = new dCustomDoubleHinge(Head_PinMatrix, Head->GetBody(), Neck->GetBody());
 	Hd->SetMassIndependentSpringDamper(true, 0.01, 1000.f, 10.f);
 	Hd->SetMassIndependentSpringDamper1(true, 0.01, 1000.f, 10.f);
@@ -504,7 +504,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	dMatrix Sternum_PinMatrix(dYawMatrix(90.0f * dDegreeToRad));
 
-	Sternum_PinMatrix.m_posit = dVector(Spine->GetPosition().m_x + Scale * r_bones, Spine->GetPosition().m_y+ Scale * l_Spine / 2, Spine->GetPosition().m_z);
+	Sternum_PinMatrix.m_posit = dVector(Spine->GetPosition().m_x + Scale * r_bones, Spine->GetPosition().m_y+ Scale * l_Spine / 2, Spine->GetPosition().m_z,1.0f);
 	Strn_L = new dCustomDoubleHinge(Sternum_PinMatrix, Clav_L->GetBody(), Spine->GetBody());
 	Strn_L->SetMassIndependentSpringDamper(true, 0.01, 1.e6f, 1.e4f);
 	Strn_L->SetMassIndependentSpringDamper1(true, 0.01, 1.e6f, 1.e4f);
@@ -513,14 +513,14 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create Shoulder joint. 
 	dMatrix Shoulder_LPinMatrix(dGetIdentityMatrix());
 	Shoulder_LPinMatrix = Shoulder_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-	Shoulder_LPinMatrix.m_posit = dVector(Up_Arm_L->GetPosition().m_x, Up_Arm_L->GetPosition().m_y + Scale * l_Up_Arm / 2, Up_Arm_L->GetPosition().m_z);
+	Shoulder_LPinMatrix.m_posit = dVector(Up_Arm_L->GetPosition().m_x, Up_Arm_L->GetPosition().m_y + Scale * l_Up_Arm / 2, Up_Arm_L->GetPosition().m_z,1.0f);
 	shld_L = new dCustomBallAndSocket(Shoulder_LPinMatrix,Up_Arm_L->GetBody(), Clav_L->GetBody() );
 	m_winManager->aManager->vJointList.push_back(shld_L);
 
 	// create elbow joint. 
 	dMatrix Elbow_LPinMatrix(dGetIdentityMatrix());
 	Elbow_LPinMatrix = Elbow_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Elbow_LPinMatrix.m_posit = dVector(Low_Arm_L->GetPosition().m_x, Low_Arm_L->GetPosition().m_y + Scale * l_Low_Arm / 2, Low_Arm_L->GetPosition().m_z);
+	Elbow_LPinMatrix.m_posit = dVector(Low_Arm_L->GetPosition().m_x, Low_Arm_L->GetPosition().m_y + Scale * l_Low_Arm / 2, Low_Arm_L->GetPosition().m_z,1.0f);
 	Elb_L = new dCustomHinge(Elbow_LPinMatrix, Low_Arm_L->GetBody(), Up_Arm_L->GetBody());
 	Elb_L->EnableLimits(true);
 	Elb_L->SetLimits(0.f * dDegreeToRad, 180.f);	
@@ -529,7 +529,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create wrist joint.
 	dMatrix Wrist_LPinMatrix(dGetIdentityMatrix());
 	Wrist_LPinMatrix = Wrist_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-	Wrist_LPinMatrix.m_posit = dVector(Hand_L->GetPosition().m_x, Hand_L->GetPosition().m_y + Scale * l_Hand / 2, Hand_L->GetPosition().m_z);
+	Wrist_LPinMatrix.m_posit = dVector(Hand_L->GetPosition().m_x, Hand_L->GetPosition().m_y + Scale * l_Hand / 2, Hand_L->GetPosition().m_z,1.0f);
 	Wr_L = new dCustomBallAndSocket(Wrist_LPinMatrix, Hand_L->GetBody(), Low_Arm_L->GetBody());
 	m_winManager->aManager->vJointList.push_back(Wr_L);
 
@@ -537,7 +537,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	// create sternum joint. 
 
-	Sternum_PinMatrix.m_posit = dVector(Spine->GetPosition().m_x - Scale * r_bones, Spine->GetPosition().m_y + Scale * l_Spine / 2, Spine->GetPosition().m_z);
+	Sternum_PinMatrix.m_posit = dVector(Spine->GetPosition().m_x - Scale * r_bones, Spine->GetPosition().m_y + Scale * l_Spine / 2, Spine->GetPosition().m_z,1.0f);
 	Strn_R = new dCustomDoubleHinge(Sternum_PinMatrix, Clav_R->GetBody(), Spine->GetBody());
 	Strn_R->SetMassIndependentSpringDamper(true, 0.01, 1.e6f, 1.e4f);
 	Strn_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e6f, 1.e4f);
@@ -547,14 +547,14 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create Shoulder joint. 
 	dMatrix Shoulder_RPinMatrix(dGetIdentityMatrix());
 	Shoulder_RPinMatrix = Shoulder_RPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-	Shoulder_RPinMatrix.m_posit = dVector(Up_Arm_R->GetPosition().m_x, Up_Arm_R->GetPosition().m_y + Scale * l_Up_Arm / 2, Up_Arm_R->GetPosition().m_z);
+	Shoulder_RPinMatrix.m_posit = dVector(Up_Arm_R->GetPosition().m_x, Up_Arm_R->GetPosition().m_y + Scale * l_Up_Arm / 2, Up_Arm_R->GetPosition().m_z,1.0f);
 	shld_R = new dCustomBallAndSocket(Shoulder_RPinMatrix, Up_Arm_R->GetBody(),Clav_R->GetBody());
 	m_winManager->aManager->vJointList.push_back(shld_R);
 
 	// create elbow joint. 
 	dMatrix Elbow_RPinMatrix(dGetIdentityMatrix());
 	Elbow_RPinMatrix = Elbow_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Elbow_RPinMatrix.m_posit = dVector(Low_Arm_R->GetPosition().m_x, Low_Arm_R->GetPosition().m_y + Scale * l_Low_Arm / 2, Low_Arm_R->GetPosition().m_z);
+	Elbow_RPinMatrix.m_posit = dVector(Low_Arm_R->GetPosition().m_x, Low_Arm_R->GetPosition().m_y + Scale * l_Low_Arm / 2, Low_Arm_R->GetPosition().m_z,1.0f);
 	Elb_R = new dCustomHinge(Elbow_RPinMatrix, Low_Arm_R->GetBody(), Up_Arm_R->GetBody());
 	Elb_R->EnableLimits(true);
 	Elb_R->SetLimits(0.f * dDegreeToRad, 180.f);
@@ -563,7 +563,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create wrist joint.
 	dMatrix Wrist_RPinMatrix(dGetIdentityMatrix());
 	Wrist_RPinMatrix = Wrist_RPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-	Wrist_RPinMatrix.m_posit = dVector(Hand_R->GetPosition().m_x, Hand_R->GetPosition().m_y + Scale * l_Hand / 2, Hand_R->GetPosition().m_z);
+	Wrist_RPinMatrix.m_posit = dVector(Hand_R->GetPosition().m_x, Hand_R->GetPosition().m_y + Scale * l_Hand / 2, Hand_R->GetPosition().m_z,1.0f);
 	Wr_R = new dCustomBallAndSocket(Wrist_RPinMatrix, Hand_R->GetBody(), Low_Arm_R->GetBody());
 	m_winManager->aManager->vJointList.push_back(Wr_R);
 
@@ -573,7 +573,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	// create Sacrum joint. 
 	dMatrix Sacrum_PinMatrix(dYawMatrix(90.0f * dDegreeToRad));
-	Sacrum_PinMatrix.m_posit = dVector(_Pos.x + Scale * r_bones, _Pos.y - Scale * l_Sacrum / 2, _Pos.z);
+	Sacrum_PinMatrix.m_posit = dVector(_Pos.x + Scale * r_bones, _Pos.y - Scale * l_Sacrum / 2, _Pos.z,1.0f);
 	Disk1_L = new dCustomDoubleHinge(Sacrum_PinMatrix, Hip_L->GetBody(), Sacrum->GetBody());
 	Disk1_L->SetMassIndependentSpringDamper(true,0.01,  1.e6f, 1.e4f);
 	Disk1_L->SetMassIndependentSpringDamper1(true, 0.01, 1.e6f, 1.e4f);
@@ -582,7 +582,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create hip joint. 
 	dMatrix Hip_LPinMatrix(dGetIdentityMatrix());
 	Hip_LPinMatrix = Hip_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Hip_LPinMatrix.m_posit = dVector(Up_Leg_L->GetPosition().m_x , Up_Leg_L->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_L->GetPosition().m_z);
+	Hip_LPinMatrix.m_posit = dVector(Up_Leg_L->GetPosition().m_x , Up_Leg_L->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_L->GetPosition().m_z,1.0f);
 	Rotule_L = new dCustomDoubleHinge(Hip_LPinMatrix, Up_Leg_L->GetBody(), Hip_L->GetBody());
 	Rotule_L->EnableLimits(true);
 	Rotule_L->EnableLimits1(true);
@@ -593,7 +593,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create knee joint. 
 	dMatrix Knee_LPinMatrix(dGetIdentityMatrix());
 	Knee_LPinMatrix = Knee_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Knee_LPinMatrix.m_posit = dVector(Low_Leg_L->GetPosition().m_x, Low_Leg_L->GetPosition().m_y + Scale * l_Low_Leg / 2 , Low_Leg_L->GetPosition().m_z);
+	Knee_LPinMatrix.m_posit = dVector(Low_Leg_L->GetPosition().m_x, Low_Leg_L->GetPosition().m_y + Scale * l_Low_Leg / 2 , Low_Leg_L->GetPosition().m_z,1.0f);
 	Knee_L = new dCustomHinge(Knee_LPinMatrix, Low_Leg_L->GetBody(), Up_Leg_L->GetBody());
 	Knee_L->EnableLimits(true);
 	Knee_L->SetLimits(-180.f * dDegreeToRad,0.f);
@@ -603,7 +603,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	dMatrix Ankle_LPinMatrix(dGetIdentityMatrix()); //flexion twist
 	//Ankle_LPinMatrix = Ankle_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);//supination twist
 	Ankle_LPinMatrix = Ankle_LPinMatrix * dRollMatrix(90.0f * dDegreeToRad);//torsion twist
-	Ankle_LPinMatrix.m_posit = dVector(Low_Leg_L->GetPosition().m_x, Low_Leg_L->GetPosition().m_y - Scale * l_Low_Leg / 2- Scale * r_bones, Low_Leg_L->GetPosition().m_z);
+	Ankle_LPinMatrix.m_posit = dVector(Low_Leg_L->GetPosition().m_x, Low_Leg_L->GetPosition().m_y - Scale * l_Low_Leg / 2- Scale * r_bones, Low_Leg_L->GetPosition().m_z,1.0f);
 	Ankle_L = new dCustomBallAndSocket(Ankle_LPinMatrix,  Plantar_L->GetBody(),Low_Leg_L->GetBody());
 	Ankle_L->EnableTwist(true);
 	Ankle_L->SetTwistLimits(-15.f * dDegreeToRad,15.f * dDegreeToRad);
@@ -614,15 +614,16 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create toe joint.
 	dMatrix Toe_LPinMatrix(dGetIdentityMatrix());
 	Toe_LPinMatrix = Toe_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Toe_LPinMatrix.m_posit = dVector(Plantar_L->GetPosition().m_x, Plantar_L->GetPosition().m_y, Plantar_L->GetPosition().m_z- Scale * l_foot/2);
+	Toe_LPinMatrix.m_posit = dVector(Plantar_L->GetPosition().m_x, Plantar_L->GetPosition().m_y, Plantar_L->GetPosition().m_z- Scale * l_foot/2,1.0f);
 	Flextoe_L = new dCustomHinge(Toe_LPinMatrix, Plantar_L->GetBody(), Toe_L->GetBody());
-	Flextoe_L->SetAsSpringDamper(true,  1.e5f, 1.e4f);
+	//Flextoe_L->SetMassIndependentSpringDamper(true, 0.01, 1.e5f, 1.e4f);
+	Flextoe_L->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_L);
 
 	//Right lower limb joints
 	
 	// create Sacrum joint. 
-	Sacrum_PinMatrix.m_posit = dVector(_Pos.x - Scale * r_bones, _Pos.y - Scale * l_Sacrum / 2, _Pos.z);
+	Sacrum_PinMatrix.m_posit = dVector(_Pos.x - Scale * r_bones, _Pos.y - Scale * l_Sacrum / 2, _Pos.z,1.0f);
 	Disk1_R = new dCustomDoubleHinge(Sacrum_PinMatrix, Hip_R->GetBody(), Sacrum->GetBody());
 	Disk1_R->SetMassIndependentSpringDamper(true, 0.01, 1.e6f, 1.e4f);
 	Disk1_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e6f, 1.e4f);
@@ -631,7 +632,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create hip joint. 
 	dMatrix Hip_RPinMatrix(dGetIdentityMatrix());
 	Hip_RPinMatrix = Hip_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Hip_RPinMatrix.m_posit = dVector(Up_Leg_R->GetPosition().m_x , Up_Leg_R->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_R->GetPosition().m_z);
+	Hip_RPinMatrix.m_posit = dVector(Up_Leg_R->GetPosition().m_x , Up_Leg_R->GetPosition().m_y + Scale * l_Up_Leg / 2, Up_Leg_R->GetPosition().m_z,1.0f);
 	Rotule_R = new dCustomDoubleHinge(Hip_RPinMatrix, Up_Leg_R->GetBody(), Hip_R->GetBody());
 	Rotule_R->EnableLimits(true);
 	Rotule_R->EnableLimits1(true);
@@ -642,7 +643,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create knee joint. 
 	dMatrix Knee_RPinMatrix(dGetIdentityMatrix());
 	Knee_RPinMatrix = Knee_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Knee_RPinMatrix.m_posit = dVector(Low_Leg_R->GetPosition().m_x, Low_Leg_R->GetPosition().m_y + Scale * l_Low_Leg / 2 , Low_Leg_R->GetPosition().m_z);
+	Knee_RPinMatrix.m_posit = dVector(Low_Leg_R->GetPosition().m_x, Low_Leg_R->GetPosition().m_y + Scale * l_Low_Leg / 2 , Low_Leg_R->GetPosition().m_z,1.0f);
 	Knee_R = new dCustomHinge(Knee_RPinMatrix, Low_Leg_R->GetBody(), Up_Leg_R->GetBody());
 	Knee_R->EnableLimits(true);
 	Knee_R->SetLimits(-180.f * dDegreeToRad, 0);
@@ -651,7 +652,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create ankle joint.
 	dMatrix Ankle_RPinMatrix(dGetIdentityMatrix());
 	Ankle_RPinMatrix = Ankle_RPinMatrix * dRollMatrix(90.0f * dDegreeToRad);
-	Ankle_RPinMatrix.m_posit = dVector(Low_Leg_R->GetPosition().m_x, Low_Leg_R->GetPosition().m_y - Scale * l_Low_Leg / 2- Scale * r_bones, Low_Leg_R->GetPosition().m_z);
+	Ankle_RPinMatrix.m_posit = dVector(Low_Leg_R->GetPosition().m_x, Low_Leg_R->GetPosition().m_y - Scale * l_Low_Leg / 2- Scale * r_bones, Low_Leg_R->GetPosition().m_z,1.0f);
 	Ankle_R = new dCustomBallAndSocket(Ankle_RPinMatrix, Plantar_R->GetBody(), Low_Leg_R->GetBody());
 	Ankle_R->EnableTwist(true);
 	Ankle_R->SetTwistLimits(-15.f * dDegreeToRad, 15.f * dDegreeToRad);
@@ -662,9 +663,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create toe joint.
 	dMatrix Toe_RPinMatrix(dGetIdentityMatrix());
 	Toe_RPinMatrix = Toe_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
-	Toe_RPinMatrix.m_posit = dVector(Plantar_R->GetPosition().m_x, Plantar_R->GetPosition().m_y, Plantar_R->GetPosition().m_z - Scale * l_foot / 2);
+	Toe_RPinMatrix.m_posit = dVector(Plantar_R->GetPosition().m_x, Plantar_R->GetPosition().m_y, Plantar_R->GetPosition().m_z - Scale * l_foot / 2,1.0f);
 	Flextoe_R = new dCustomHinge(Toe_RPinMatrix, Plantar_R->GetBody(), Toe_R->GetBody());
-	Flextoe_R->SetAsSpringDamper(true,  1.e5f, 1.e4f);
+	//Flextoe_R->SetMassIndependentSpringDamper(true, 0.01, 1.e5f, 1.e4f);
+	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 	
 	ins11 = dVector(0.f, 0.f, 0.f);
