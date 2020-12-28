@@ -41,7 +41,7 @@ static dFloat RayCastFilter(const NewtonBody* const body, const NewtonCollision*
 	dFloat Ixx;
 	dFloat Iyy;
 	dFloat Izz;
-
+	 
 	// check if we are hitting a sub shape
 	const NewtonCollision* const parent = NewtonCollisionGetParentInstance(collisionHit);
 	if (parent) {
@@ -583,8 +583,6 @@ void WindowMain::MainLoop()
 		// Clear and Process messages.
 		glfwSwapBuffers(contextGL);
 		glfwPollEvents();
-		//dFloat time = this->GetSimulationTime() * pow(10, -6); // simulation time in s
-		//cout << time << endl;
 	}
 }
 

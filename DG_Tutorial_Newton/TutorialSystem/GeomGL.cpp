@@ -32,6 +32,26 @@
 #include "GeomGL.h"
 #include "WindowGL.h"
 
+static void HandleSoftContacts(const NewtonJoint* const contactJoint, dFloat timestep, int threadIndex)
+{
+	// iterate over all contact point checking is a sphere shape belong to the Biped,
+	// if so declare this a soft contact
+	dAssert(NewtonJointIsActive(contactJoint));
+	NewtonBody* const body0 = NewtonJointGetBody0(contactJoint);
+	NewtonBody* const body1 = NewtonJointGetBody1(contactJoint);
+	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+
+		NewtonCollision* const shape0 = NewtonMaterialGetBodyCollidingShape(material, body0);
+		NewtonCollision* const shape1 = NewtonMaterialGetBodyCollidingShape(material, body1);
+		// this check is too simplistic but will do for this demo.
+		// a better set up should use the Collision Material to stores application info
+		if ((NewtonCollisionGetType(shape0) == SERIALIZE_ID_SPHERE) || (NewtonCollisionGetType(shape1) == SERIALIZE_ID_SPHERE)) {
+			NewtonMaterialSetAsSoftContact(material, 0.01f);
+		}
+	}
+}
+
 GeomBase::GeomBase()
 : aDataPointer(NULL),
   aClassID(0),
@@ -277,6 +297,22 @@ float GeomNewton::GetPitchAngle()
 	return aPitchAngle * dRadToDegree;
 }
 
+dVector GeomNewton::GetParentPosition()
+{
+	if (!aParentGeom) {
+		return dVector(0.f, 0.f, 0.f, 0.0f);
+	}
+	else {
+		return aParentGeom->GetMatrix().m_posit;
+	}
+}
+
+dVector GeomNewton::GetPosition()
+{
+		return aTrans.m_posit;
+}
+
+
 NewtonBody* GeomNewton::GetBody()
 {
 	return aBody;
@@ -286,22 +322,6 @@ void GeomNewton::GenerateMesh()
 {
 	int aVerticeCount = 0;
 	NewtonCollision* mColl = NULL;
-	NewtonCollision* collision1 = NULL;
-	dMatrix matrix1 = dGetIdentityMatrix();
-	NewtonCollision* collision2 = NULL;
-	dMatrix matrix2 = dGetIdentityMatrix();
-	NewtonCollision* collision3 = NULL;
-	dMatrix matrix3 = dGetIdentityMatrix();
-	NewtonCollision* collision4 = NULL;
-	dMatrix matrix4 = dGetIdentityMatrix();
-
-	float l_trunk = 0.5319f; //[m]
-	float l_shoulders = 0.45f; //[m] AGGIUSTARE
-	float r = 0.03f;
-	float r_f = 0.02f;
-	float l_hip = 0.8 * l_shoulders;
-	float l_f = 0.1f;//[m] AGGIUSTARE
-	l_trunk = l_trunk - (l_hip / 4 * sin(30 * dDegreeToRad));
 	//
 	if (aBodyType == adtNone)
 		aBodyType = adtDynamic;
@@ -332,159 +352,44 @@ void GeomNewton::GenerateMesh()
 	case atCylinderChamfer:
 		mColl = NewtonCreateChamferCylinder(aManager->GetWorld(), aSize.x, aSize.y, SERIALIZE_ID_CHAMFERCYLINDER, NULL);
 	break;
-	// Need to add some more type like collisiontree, and convex shape...
-	case atCompound:
-		// create an empty compound collision
-		mColl = NewtonCreateCompoundCollision(aManager->GetWorld(), 0);
-
-		if (aSize.x == 0.0f)
-		{
-			NewtonCompoundCollisionBeginAddRemove(mColl);
-			collision1 = NewtonCreateCapsule(aManager->GetWorld(), r, r, l_trunk, 0, &matrix1[0][0]);
-			dAssert(collision1);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision1, 0);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision1);
-			NewtonDestroyCollision(collision1);
-
-			matrix2 = (dRollMatrix(60 * dDegreeToRad) * matrix2);
-			matrix2.m_posit.m_x = matrix1.m_posit.m_x - ((l_trunk / 2) + (l_hip / 4 * sin(30 * dDegreeToRad)));
-			matrix2.m_posit.m_y = matrix1.m_posit.m_y - (l_hip / 4 * cos(30 * dDegreeToRad));
-			matrix2.m_posit.m_z = matrix1.m_posit.m_z + 0.0f;
-
-			collision2 = NewtonCreateCapsule(aManager->GetWorld(), r, r, l_hip / 2, 0, &matrix2[0][0]);
-			dAssert(collision2);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision2, 1);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision2);
-			NewtonDestroyCollision(collision2);
-
-			matrix3 = (dRollMatrix(300 * dDegreeToRad) * matrix3);
-			matrix3.m_posit.m_x = matrix2.m_posit.m_x + 0.0f;
-			matrix3.m_posit.m_y = matrix2.m_posit.m_y + 2 * (l_hip / 4 * cos(30 * dDegreeToRad));
-			matrix3.m_posit.m_z = matrix2.m_posit.m_z + 0.0f;
-
-			collision3 = NewtonCreateCapsule(aManager->GetWorld(), r, r, l_hip / 2, 0, &matrix3[0][0]);
-			dAssert(collision3);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision3, 2);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision3);
-			NewtonDestroyCollision(collision3);
-
-			matrix4 = (dRollMatrix(90 * dDegreeToRad) * matrix4);
-			matrix4.m_posit.m_x = matrix1.m_posit.m_x + (l_trunk / 2);
-			matrix4.m_posit.m_y = matrix1.m_posit.m_y + 0.0f;
-			matrix4.m_posit.m_z = matrix1.m_posit.m_z + 0.0f;
-
-			collision4 = NewtonCreateCapsule(aManager->GetWorld(), r, r, l_shoulders, 0, &matrix4[0][0]);
-			dAssert(collision4);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision4, 3);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision4);
-			NewtonDestroyCollision(collision4);
-
-			// finish adding shapes
-			NewtonCompoundCollisionEndAddRemove(mColl);
-		}
-		else if (aSize.x == 1.0f) // toes compound
-		{
-			NewtonCompoundCollisionBeginAddRemove(mColl);
-			matrix1.m_posit.m_y = matrix1.m_posit.m_y + r_f;
-			collision1 = NewtonCreateSphere(aManager->GetWorld(), r_f, 0, &matrix1[0][0]);
-			dAssert(collision1);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision1, 0);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision1);
-			NewtonDestroyCollision(collision1);
-
-			matrix2.m_posit.m_x = matrix1.m_posit.m_x + 0.0f;
-			matrix2.m_posit.m_y = matrix1.m_posit.m_y - 2 * r_f ;
-			matrix2.m_posit.m_z = matrix1.m_posit.m_z + 0.0f;
-
-			collision2 = NewtonCreateSphere(aManager->GetWorld(), r_f, 0, &matrix2[0][0]);
-			dAssert(collision2);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision2, 1);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision2);
-			NewtonDestroyCollision(collision2);
-
-			matrix3.m_posit.m_x = matrix1.m_posit.m_x + r_f;
-			matrix3.m_posit.m_y = matrix1.m_posit.m_y - r_f;
-			matrix3.m_posit.m_z = matrix1.m_posit.m_z;
-			collision3 = NewtonCreateBox(aManager->GetWorld(), 1 * r_f, 4 * r_f, 2 * r_f, 0, &matrix3[0][0]);
-			dAssert(collision3);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision3, 2);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision3);
-			NewtonDestroyCollision(collision3);
-
-			// finish adding shapes
-			NewtonCompoundCollisionEndAddRemove(mColl);
-		}
-		else if (aSize.x == 2.0f) // plantar compound
-		{
-			NewtonCompoundCollisionBeginAddRemove(mColl);
-			collision1 = NewtonCreateSphere(aManager->GetWorld(), r_f, 0, &matrix1[0][0]);
-			dAssert(collision1);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision1, 0);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision1);
-			NewtonDestroyCollision(collision1);
-
-			matrix2.m_posit.m_x = matrix1.m_posit.m_x + r_f;
-			matrix2.m_posit.m_y = matrix1.m_posit.m_y;
-			matrix2.m_posit.m_z = matrix1.m_posit.m_z - (l_f / 2);
-			collision2 = NewtonCreateBox(aManager->GetWorld(), 1 * r_f, 2 * r_f, l_f, 0, &matrix2[0][0]);
-			dAssert(collision2);
-			// we can set a collision id, and use data per sub collision 
-			NewtonCollisionSetUserID(collision2, 1);
-			// add this new collision 
-			NewtonCompoundCollisionAddSubCollision(mColl, collision2);
-			NewtonDestroyCollision(collision2);
-
-			// finish adding shapes
-			NewtonCompoundCollisionEndAddRemove(mColl);
-		}
-		break;
+	// Need to add some more type like compound, collisiontree, and convex shape...
 	default:
 		break;
 	}
 	if (mColl) {	  
-		  NewtonMesh* nMesh = NewtonMeshCreateFromCollision(mColl);
-		  NewtonMeshCalculateVertexNormals(nMesh, 60.0f * dDegreeToRad);
-		  //
-		  // The newton mesh shape can have 3 textures.
-		  // In this tutorial I use only one texture.
-		  // In the mapping info I set 0 as default texture id for all.
-		  // If you like to support 3 textures for shape like box.
-		  // Or 2 textures for shape like cylinder, 
-		  // You need to modify the indices loading part in the code.
-		  switch (aMeshType)
-		  {
-		  case atBox:
-			  NewtonMeshApplyBoxMapping(nMesh, 0, 0, 0, &aMappingMat[0][0]);
-			  break;
-		  case atSphere:
-			  NewtonMeshApplySphericalMapping(nMesh, 0, &aMappingMat[0][0]);
-			  break;
-		  case atCone:
-		  case atCylinder:
-		  case atCapsule:
-		  case atCylinderChamfer:
-			  NewtonMeshApplyCylindricalMapping(nMesh, 0, 0, &aMappingMat[0][0]);
-			  break;
-		  case atCompound:
-		  default:
-			  break;
+	  NewtonMesh* nMesh = NewtonMeshCreateFromCollision(mColl);
+	  NewtonMeshCalculateVertexNormals(nMesh, 60.0f * dDegreeToRad);
+	  //
+	  // The newton mesh shape can have 3 textures.
+	  // In this tutorial I use only one texture.
+	  // In the mapping info I set 0 as default texture id for all.
+	  // If you like to support 3 textures for shape like box.
+	  // Or 2 textures for shape like cylinder, 
+	  // You need to modify the indices loading part in the code.
+	  switch (aMeshType)
+	  {
+	  case atBox:
+		  NewtonMeshApplyBoxMapping(nMesh, 0, 0, 0, &aMappingMat[0][0]);
+		  break;
+	  case atSphere:
+		  NewtonMeshApplySphericalMapping(nMesh, 0, &aMappingMat[0][0]);
+		  break;
+	  case atCone:
+	  case atCylinder:
+	  case atCapsule:
+	  case atCylinderChamfer:
+		  NewtonMeshApplyCylindricalMapping(nMesh, 0, 0, &aMappingMat[0][0]);
+		  break;
+	  default:
+		  break;
 	  }
+
+	  int material = NewtonMaterialGetDefaultGroupID(aManager->GetWorld());
+
+	  NewtonMaterialSetCallbackUserData(aManager->GetWorld(), material, material, this);
+	  NewtonMaterialSetDefaultElasticity(aManager->GetWorld(), material, material, 0.0f);
+	  NewtonMaterialSetDefaultFriction(aManager->GetWorld(), material, material, 0.9f, 0.9f);
+	  NewtonMaterialSetCollisionCallback(aManager->GetWorld(), material, material, NULL, HandleSoftContacts);
 	  
 	  //
       aVerticeCount = NewtonMeshGetPointCount(nMesh);
@@ -816,7 +721,7 @@ void GeomAssimp::InitNewton(GeomMeshType cGeomMeshtype, float cHulltolerance, fl
 	if (aBodyType == adtDynamic)
 		aBody = NewtonCreateDynamicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
 	if (aBodyType == adtKinematic)
-		aBody = NewtonCreateKinematicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
+	    aBody = NewtonCreateKinematicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
 	//
 	if (aBody) {
 		NewtonBodySetUserData(aBody, aUserData);
@@ -1045,6 +950,8 @@ NewtonBody* GeomAssimp::GetBody()
 {
 	return aBody;
 }
+
+
 
 GeomAssimp::~GeomAssimp()
 {

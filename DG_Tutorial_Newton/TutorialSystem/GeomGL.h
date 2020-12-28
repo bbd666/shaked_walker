@@ -59,8 +59,7 @@ enum GeomType
 	atCone            = 2,
 	atCylinder        = 3,
 	atCapsule         = 4,
-	atCylinderChamfer = 5,
-	atCompound		  = 6,
+	atCylinderChamfer = 5
 };
 
 // This is only a data pointer object.
@@ -126,6 +125,8 @@ struct GeomNewton
 	void InitNewton(GeomType cGeomtype, float cSx, float cSy, float cSz, float cMass = 0.0f);
 	NewtonBody* GetBody();
 	void SetParent(GeomNewton* uParent);
+	dVector GetParentPosition();
+	dVector GetPosition();
 
   private:
 	  GeomNewton* aParentGeom;

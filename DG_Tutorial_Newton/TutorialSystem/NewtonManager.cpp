@@ -32,10 +32,9 @@
 #include "NewtonManager.h"
 #include "GeomGL.h"
 #include "dHighResolutionTimer.h"
-#include "muscle.h"
+#include "biped.h"
 
 //ofstream monFlux("history.txt");
-
 
 // memory allocation for Newton
 static void* PhysicsAlloc(int sizeInBytes)
@@ -168,8 +167,9 @@ void NewtonManager::TransformCallback(const NewtonBody* body, const dFloat* matr
 
 NewtonManager::NewtonManager()
 	:nWorld(NULL),
-	 nGravity(0.0f, -9.81f, 0.0f, 0.0f),
-	 aMaxphysicfps(1.0f / 1000.0f),
+	//nGravity(0.0f, 0.0f, 0.0f, 0.0f),
+	nGravity(0.0f, -9.81f, 0.0f, 0.0f),
+	aMaxphysicfps(1.0f /200.0f),
 	 aMicrosecunds(0),
 	 aMainThreadPhysicsTimeAcc(0.0f),
 	 aMainThreadPhysicsTime(0.0f),
@@ -225,7 +225,7 @@ NewtonManager::NewtonManager()
 	//NewtonSetContactMergeTolerance(nWorld, ncoltol);
 	NewtonInvalidateCache(nWorld);
 	//
-	aLastpluginnewton = aCurrentPluginID;
+/*	aLastpluginnewton = aCurrentPluginID;
 	void* plugin = NULL;
 	if ((aCurrentPluginID >= 0) && (aCurrentPluginID < 4)) {
 		int index = 0;
@@ -252,7 +252,7 @@ NewtonManager::NewtonManager()
 		pluginnew = "Newton Dynamics Plugin: " + pluginnew;
 		printf("DG Tutorial Current - %s \n", (char*)pluginnew.c_str());
 #endif
-	}
+	}*/
     //
 	vTextureManager = new Texture();
 }
@@ -274,11 +274,6 @@ void NewtonManager::CalculateFPS(dFloat timestep)
 		aTimestepAcc -= 0.25f;
 		aFramesCount = 0;
 	}
-}
-// Get simulation time in microsecunds
-dFloat NewtonManager::GetSimulationTime()
-{
-	return aMicrosecunds;
 }
 
 dFloat NewtonManager::GetFps()

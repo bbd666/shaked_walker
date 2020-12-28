@@ -68,6 +68,8 @@ typedef unsigned int dUnsigned32;
 
 typedef long long unsigned64;
 
+
+
 #include "windows.h"
 #define _USE_MATH_DEFINES
 #include <cmath> 
@@ -174,9 +176,9 @@ typedef long long unsigned64;
 
 #include <dCustomTriggerManager.h>
 #include <dCustomKinematicController.h>
-#include <dCustomPlayerControllerManager.h>
+//#include <dCustomPlayerControllerManager.h>
 
-//
+// 
 #include <dModelAnimTree.h>
 #include <dModelAnimTreePose.h>
 #include <dModelAnimTreePoseBlender.h>
@@ -204,3 +206,4 @@ typedef long long unsigned64;
 #include <mutex> 
 
 #endif //PCH_H
+

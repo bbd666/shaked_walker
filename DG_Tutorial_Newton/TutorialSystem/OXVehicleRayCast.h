@@ -20,72 +20,78 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 //
-#ifndef OXVEHICLE_RAYCAST__H_
-#define OXVEHICLE_RAYCAST__H_
-#pragma once
+#ifndef _OXVEHICLE_RAYCAST__H_
+#define _OXVEHICLE_RAYCAST__H_
+
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
-#include "muscle.h"
-#include "MuscleV2.h"
+#include "biped.h"
+#include "NewtonUtil.h"
 
 class dRaycastVHModel : public dModelRootNode
 {
 public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
-	GeomNewton* GetThigh_L();
-	GeomNewton* GetShank_L();
-	dCustomHinge* GetKnee_L();
-	GeomNewton* GetCE_KL();
-	void AddMuscleV2_Element(GeomNewton* body1, GeomNewton* body2);
-	
+
+	GeomNewton* GetUp_Leg_L();
+	GeomNewton* GetLow_Leg_L();
+	GeomNewton* GetPlantar_L();
+	float GetFoot2Floor_L();
+	GeomNewton* GetUp_Leg_R();
+	GeomNewton* GetLow_Leg_R();
+	GeomNewton* GetPlantar_R();
+	dCustomHingeActuator* GetAnkle_L();
+	float GetFoot2Floor_R();
+
+
+
+
 private:
 	WindowMain* m_winManager;
-	NewtonManager* aManager;
-	GeomNewton* Thigh_L;
-	GeomNewton* Shank_L;
-	dModelNode* Shank_LNode;
-	dCustomHinge* Knee_L;
-	GeomNewton* CE_KL;
-	dModelNode* CE_KLNode;
-	GeomNewton* link;
-	dModelNode* linkNode;
-	dCustomSlider* slider;
+	GeomNewton* Low_Leg_L;
+	GeomNewton* Plantar_L;
+	dModelNode* Plantar_LNode;
 
-	float l_Thigh;
-	float l_Shank;
-	float r_leg;
+
+
+	dCustomHingeActuator* Ankle_L;
+
+
+
+	float l_Hip;
+	float l_Sacrum;
+	float l_Spine;
+	float l_Up_Leg;
+	float l_Low_Leg;
+	float r_bones;
 	float l_foot;
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
 	float Scale;
-	float l_hip;
-	float l_trunk;
-	float l_shoulders;
-	float l_head;
-	float l_arm;
-	float l_farm;
-	float l_hand;
+	float l_Clav;
+	float l_Up_Arm;
+	float l_Low_Arm;
+	float l_Hand;
+	float l_Head;
+	float l_Neck;
 
-	std::vector<float> masses;
-	std::vector<float> Ixx;
-	std::vector<float> Iyy;
-	std::vector<float> Izz;
-	float tot_w;
-	float h_foot;
+	Muscle* m1;
+	dVector ins11;
+	dVector ins12;
 
-	Muscle* VAS_L;
-	MuscleV2* VAS_L2;
-	dVector insVAS_L11;
-	dVector insVAS_L12;
+	dVector  ContactFoot_L;
+	dVector  NormalFoot_L;
+	dVector  ContactGround_L;
+	float Foot2Floor_L;
+	int FootLineIndex_L, FootLineIndex_R;
 
-	MainVertexPTN* aVtx;
-	float aTexTileU;
-	float aTexTileV;
-	unsigned int* aIndices;
-	int aIndiceCount;
+	dVector  ContactFoot;
+	dVector  NormalFoot;
+	dVector  ContactGround;
+	float Foot2Floor_R;
 };
 
 class DGVehicleRCManager : public dModelManager
@@ -94,8 +100,8 @@ public:
 	DGVehicleRCManager(WindowMain* winctx);
 	virtual ~DGVehicleRCManager();
 	//
-	virtual void OnPreUpdate(dModelRootNode* const model, dFloat timestep) const;
-	virtual void OnPostUpdate(dModelRootNode* const model, dFloat timestep) const;
+	virtual void OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const;
+	virtual void OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const;
 	virtual void OnUpdateTransform(const dModelNode* const bone, const dMatrix& localMatrix) const;
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
@@ -104,7 +110,6 @@ public:
 	dRaycastVHModel* m_player;
 private:
 	WindowMain* m_winManager;
-	GeomNewton* temp;
 };
 
 
