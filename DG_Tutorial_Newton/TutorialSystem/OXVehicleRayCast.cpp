@@ -155,7 +155,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Head->GetBody(), NULL);
 	Head_Node = new dModelNode(Head->GetBody(), dGetIdentityMatrix(), Neck_Node);
 
-	//Left lower limb
+	//Left lower limb 
 	
 	Hip_L = new GeomNewton(m_winManager->aManager);
 	Hip_L->SetBodyType(adtDynamic);
@@ -689,7 +689,7 @@ GeomNewton* dRaycastVHModel::GetLow_Leg_L() {
 }
 
 GeomNewton* dRaycastVHModel::GetPlantar_L() {
-//	return Plantar_L;
+	return Plantar_L;
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -780,6 +780,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
 	dVector pos(0.0f);
 	dVector Vtemp(0.0f);
+	dVector V;
 
 	// scan all  Muscle Elements
 for (auto itr = m_winManager->aManager->vMuscleList.begin();
@@ -792,15 +793,18 @@ for (auto itr = m_winManager->aManager->vMuscleList.begin();
 	// Get the Body1 connected to the muscle and apply the muscle force
 	GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
 	NewtonBody* NBody = gNewton->GetBody();
-	Vtemp = Mobj->GetForceElas();
-	NewtonBodyAddForce(NBody, &Vtemp.m_x);
+	Vtemp = Mobj->GetForceElas(timestep);
+	V = Mobj->GetInsert1_GlobalRef();
+	AddForceAtPos(NBody, &Vtemp.m_x, &V.m_x);
+
 
 	// Get the Body2 connected and apply the opposite muscle force
 	gNewton = (GeomNewton*)(Mobj->body2);
 	NBody = (NewtonBody*)gNewton->GetBody();
-	Vtemp = Mobj->GetForceElas();
 	Vtemp = Vtemp.Scale(-1.0f);
-	NewtonBodyAddForce(NBody, &Vtemp.m_x);
+	V = Mobj->GetInsert2_GlobalRef();
+	AddForceAtPos(NBody, &Vtemp.m_x, &V.m_x);
+
 
 }
 }
