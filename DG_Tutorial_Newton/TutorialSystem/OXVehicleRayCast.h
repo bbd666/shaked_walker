@@ -27,7 +27,7 @@
 #include "NewtonManager.h"
 #include "WindowGL.h"
 #include "biped.h"
-
+#include "NewtonUtil.h"
 
 class dRaycastVHModel: public dModelRootNode
 {
