@@ -26,8 +26,9 @@
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
+#include "tinyxml.h"
 #include "biped.h"
-
+#include "NewtonUtil.h"
 
 class dRaycastVHModel: public dModelRootNode
 {
@@ -45,9 +46,12 @@ public:
 	GeomNewton* GetPlantar_R();
 	float GetFoot2Floor_R();
 
-
+	void AddMuscleV2_Element(GeomNewton* body1, GeomNewton* body2);
 	int CreateFootScanLine();
 
+	dCustomHingeActuator* Getjoint1();
+	GeomNewton* Getb1();
+	GeomNewton* Getb2();
 
 private:
 	WindowMain* m_winManager;
@@ -80,6 +84,9 @@ private:
 	GeomNewton* Pad1_R;
 	GeomNewton* Pad2_R;
 
+	GeomNewton* b1;
+	GeomNewton* b2;
+
 
 //	dModelNode* SacrumNode;
 	dModelNode* Hip_LNode;
@@ -110,6 +117,8 @@ private:
 	dModelNode* Pad1_R_Node;
 	dModelNode* Pad2_R_Node;
 
+	dModelNode* b1_Node;
+	dModelNode* b2_Node;
 
 	dCustomDoubleHinge* Disk1_L;
 	dCustomDoubleHinge* Rotule_L;
@@ -138,7 +147,12 @@ private:
 	dCustomDoubleHinge* Hl_R;
 	dCustomDoubleHinge* Pd1_R;
 	dCustomDoubleHinge* Pd2_R;
+	dCustomHingeActuator* joint1;
 
+	void dump_to_stdout(const char* pFilename);
+	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
+	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
+	std::vector<float> v_scale, v_lengths, v_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2;
 
 
 	float l_Hip;
@@ -147,10 +161,11 @@ private:
 	float l_Up_Leg;
 	float l_Low_Leg;
 	float r_bones;
-	float l_foot;
+	float l_plantar;
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
+	float h_foot;
 	float Scale;
 	float l_Clav;
 	float l_Up_Arm;
@@ -161,6 +176,8 @@ private:
 	float r_Pad;
 	float h_sphere;
 
+	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
+	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 	Muscle* m1;
 	dVector ins11;
 	dVector ins12;
