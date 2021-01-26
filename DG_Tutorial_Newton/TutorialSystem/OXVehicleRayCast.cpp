@@ -386,8 +386,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	com.m_y = com.m_y + DeltaCM[0];
 	NewtonBodySetCentreOfMass(Head->GetBody(), &com[0]); // WIP
 
-	//Left lower limb
-
+	//Left lower limb 
+	
 	Hip_L = new GeomNewton(m_winManager->aManager);
 	Hip_L->SetBodyType(adtDynamic);
 	Hip_L->SetParent(Sacrum);
@@ -398,7 +398,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hip_L->InitNewton(atCapsule, r_bones, r_bones, l_Hip, 10.0f);
 	NewtonBodySetTransformCallback(Hip_L->GetBody(), NULL);
 	Hip_LNode = new dModelNode(Hip_L->GetBody(), dGetIdentityMatrix(), this);
-
+	 
 	Up_Leg_L = new GeomNewton(m_winManager->aManager);
 	Up_Leg_L->SetBodyType(adtDynamic);
 	Up_Leg_L->SetParent(Hip_L);
@@ -704,7 +704,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Pad2_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
 	NewtonBodySetTransformCallback(Pad2_R->GetBody(), NULL);
 	Pad2_R_Node = new dModelNode(Pad2_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
-
+	
 
 	//Pad joints
 
@@ -751,7 +751,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Pd2_R->SetMassIndependentSpringDamper(true, 0.01, 1.e20f, 1.e15f);
 	Pd2_R->SetMassIndependentSpringDamper1(true, 0.01, 1.e20f, 1.e15f);
 	m_winManager->aManager->vJointList.push_back(Pd2_R); 
-
+	
 	//trunk joints
 
 	// create Lumbar joint. 
@@ -897,7 +897,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_LPinMatrix = Toe_LPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Toe_LPinMatrix.m_posit = dVector(Plantar_L->GetPosition().m_x, Plantar_L->GetPosition().m_y, Plantar_L->GetPosition().m_z-   l_plantar/2);
 	Flextoe_L = new dCustomHinge(Toe_LPinMatrix, Plantar_L->GetBody(), Toe_L->GetBody());
-	Flextoe_L->SetAsSpringDamper(true,  1.e5f, 1.e4f);
+	//Flextoe_L->SetMassIndependentSpringDamper(true, 0.01, 1.e5f, 1.e4f);
+	Flextoe_L->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_L);
 
 	//Right lower limb joints
@@ -945,7 +946,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_RPinMatrix = Toe_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Toe_RPinMatrix.m_posit = dVector(Plantar_R->GetPosition().m_x, Plantar_R->GetPosition().m_y, Plantar_R->GetPosition().m_z -   l_plantar / 2);
 	Flextoe_R = new dCustomHinge(Toe_RPinMatrix, Plantar_R->GetBody(), Toe_R->GetBody());
-	Flextoe_R->SetAsSpringDamper(true,  1.e5f, 1.e4f);
+	//Flextoe_R->SetMassIndependentSpringDamper(true, 0.01, 1.e5f, 1.e4f);
+	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 	
 	// MUSCLE DEFINITION
@@ -1208,6 +1210,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
 
 	dVector Vtemp(0.0f);
+	dVector V;
 
 	// scan all  Muscle Elements
 	for (auto itr = m_winManager->aManager->vMuscleList.begin();
