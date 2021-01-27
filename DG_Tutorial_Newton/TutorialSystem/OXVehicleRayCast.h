@@ -36,22 +36,10 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	GeomNewton* GetUp_Leg_L();
-	GeomNewton* GetLow_Leg_L();
-	GeomNewton* GetPlantar_L();
+	float GetFoot2Floor_R();
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
-	GeomNewton* GetUp_Leg_R();
-	GeomNewton* GetLow_Leg_R();
-	GeomNewton* GetPlantar_R();
-	float GetFoot2Floor_R();
-
-	void AddMuscleV2_Element(GeomNewton* body1, GeomNewton* body2);
 	int CreateFootScanLine();
-
-	dCustomHingeActuator* Getjoint1();
-	GeomNewton* Getb1();
-	GeomNewton* Getb2();
 
 private:
 	WindowMain* m_winManager;
@@ -84,10 +72,6 @@ private:
 	GeomNewton* Pad1_R;
 	GeomNewton* Pad2_R;
 
-	GeomNewton* b1;
-	GeomNewton* b2;
-
-
 //	dModelNode* SacrumNode;
 	dModelNode* Hip_LNode;
 	dModelNode* Up_Leg_LNode;
@@ -117,9 +101,6 @@ private:
 	dModelNode* Pad1_R_Node;
 	dModelNode* Pad2_R_Node;
 
-	dModelNode* b1_Node;
-	dModelNode* b2_Node;
-
 	dCustomDoubleHinge* Disk1_L;
 	dCustomDoubleHinge* Rotule_L;
 	dCustomHinge* Knee_L;
@@ -147,7 +128,6 @@ private:
 	dCustomDoubleHinge* Hl_R;
 	dCustomDoubleHinge* Pd1_R;
 	dCustomDoubleHinge* Pd2_R;
-	dCustomHingeActuator* joint1;
 
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
@@ -178,9 +158,6 @@ private:
 
 	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
 	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
-	Muscle* m1;
-	dVector ins11;
-	dVector ins12;
 
 	dVector  ContactFoot_L;
 	dVector  NormalFoot_L;

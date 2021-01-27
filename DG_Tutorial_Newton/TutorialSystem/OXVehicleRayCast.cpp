@@ -275,7 +275,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, Hl_R(NULL)
 	, Pd1_R(NULL)
 	, Pd2_R(NULL)
-	, joint1(NULL)
 
 {
 	// LOADING DATA FROM XML//
@@ -438,6 +437,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_L->InitNewton(atBox, h_foot,    l_plantar,   w_foot, 10.f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_L->GetBody(), NULL);
 	Plantar_LNode = new dModelNode(Plantar_L->GetBody(), dGetIdentityMatrix(), Low_Leg_LNode);
+	NewtonBodySetMassMatrix(Plantar_L->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
+	NewtonBodyGetCentreOfMass(Plantar_L->GetBody(), &com[0]);
+	com.m_x = com.m_x - DeltaCM[7];
+	NewtonBodySetCentreOfMass(Plantar_L->GetBody(), &com[0]); // WIP
 
 	Toe_L = new GeomNewton(m_winManager->aManager);
 	Toe_L->SetBodyType(adtDynamic);
@@ -504,6 +507,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_R->InitNewton(atBox, h_foot,   l_plantar,   w_foot, 10.0f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_R->GetBody(), NULL);
 	Plantar_RNode = new dModelNode(Plantar_R->GetBody(), dGetIdentityMatrix(), Low_Leg_RNode);
+	NewtonBodySetMassMatrix(Plantar_R->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
+	NewtonBodyGetCentreOfMass(Plantar_R->GetBody(), &com[0]);
+	com.m_x = com.m_x - DeltaCM[7];
+	NewtonBodySetCentreOfMass(Plantar_R->GetBody(), &com[0]); // WIP
 
 	Toe_R = new GeomNewton(m_winManager->aManager);
 	Toe_R->SetBodyType(adtDynamic);
@@ -641,10 +648,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Heel_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
 	NewtonBodySetTransformCallback(Heel_L->GetBody(), NULL);
 	Heel_L_Node = new dModelNode(Heel_L->GetBody(), dGetIdentityMatrix(), Plantar_LNode);
-	NewtonBodySetMassMatrix(Heel_L->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Heel_L->GetBody(), &com[0]);
-	com.m_x = com.m_x - DeltaCM[7];
-	NewtonBodySetCentreOfMass(Heel_L->GetBody(), &com[0]); // WIP
 
 	Pad1_L = new GeomNewton(m_winManager->aManager);
 	Pad1_L->SetBodyType(adtDynamic);
@@ -653,20 +656,20 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Pad1_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Pad1_L->SetPitchAngle(90.0f, false);
 	Pad1_L->SetPosition(   w_foot / 2, -  h_sphere, - (l_toe / 2));
-	Pad1_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
+	Pad1_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 1.0f  );
 	NewtonBodySetTransformCallback(Pad1_L->GetBody(), NULL);
 	Pad1_L_Node = new dModelNode(Pad1_L->GetBody(), dGetIdentityMatrix(), Toe_LNode);
 
 	Pad2_L = new GeomNewton(m_winManager->aManager);
 	Pad2_L->SetBodyType(adtDynamic);
-	Pad2_L->SetParent(Toe_L);
+	Pad2_L->SetParent(Pad1_L);
 	Pad2_L->SetTexture0(&tex[0], "Tex0");
 	Pad2_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Pad2_L->SetPitchAngle(90.0f, false);
-	Pad2_L->SetPosition( -  w_foot / 2, -  h_sphere, -  (l_toe/ 2));
-	Pad2_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
+	Pad2_L->SetPosition( -  w_foot / 2, 0, 0);
+	Pad2_L->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 1.0f  );
 	NewtonBodySetTransformCallback(Pad2_L->GetBody(), NULL);
-	Pad2_L_Node = new dModelNode(Pad2_L->GetBody(), dGetIdentityMatrix(), Toe_LNode);
+	Pad2_L_Node = new dModelNode(Pad2_L->GetBody(), dGetIdentityMatrix(), Pad1_L_Node);
 
 	Heel_R = new GeomNewton(m_winManager->aManager);
 	Heel_R->SetBodyType(adtDynamic);
@@ -675,13 +678,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Heel_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Heel_R->SetPitchAngle(90.0f, false);
 	Heel_R->SetPosition(0, -  h_sphere,   (l_plantar / 2));
-	Heel_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
+	Heel_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 1.0f  );
 	NewtonBodySetTransformCallback(Heel_R->GetBody(), NULL);
 	Heel_R_Node = new dModelNode(Heel_R->GetBody(), dGetIdentityMatrix(), Plantar_RNode);
-	NewtonBodySetMassMatrix(Heel_R->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Heel_R->GetBody(), &com[0]);
-	com.m_x = com.m_x - DeltaCM[7];
-	NewtonBodySetCentreOfMass(Heel_R->GetBody(), &com[0]); // WIP
 
 	Pad1_R = new GeomNewton(m_winManager->aManager);
 	Pad1_R->SetBodyType(adtDynamic);
@@ -690,20 +689,20 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Pad1_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Pad1_R->SetPitchAngle(90.0f, false);
 	Pad1_R->SetPosition(  w_foot / 2, -  h_sphere, -(l_toe / 2));
-	Pad1_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
+	Pad1_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 1.0f  );
 	NewtonBodySetTransformCallback(Pad1_R->GetBody(), NULL);
 	Pad1_R_Node = new dModelNode(Pad1_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
 
 	Pad2_R = new GeomNewton(m_winManager->aManager);
 	Pad2_R->SetBodyType(adtDynamic);
-	Pad2_R->SetParent(Toe_R);
+	Pad2_R->SetParent(Pad1_R);
 	Pad2_R->SetTexture0(&tex[0], "Tex0");
 	Pad2_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Pad2_R->SetPitchAngle(90.0f, false);
-	Pad2_R->SetPosition(-  w_foot / 2, -  h_sphere, -(l_toe / 2));
-	Pad2_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 10.0f  );
+	Pad2_R->SetPosition(-  w_foot / 2, 0, 0);
+	Pad2_R->InitNewton(atSphere, r_Pad, r_Pad, r_Pad, 1.0f  );
 	NewtonBodySetTransformCallback(Pad2_R->GetBody(), NULL);
-	Pad2_R_Node = new dModelNode(Pad2_R->GetBody(), dGetIdentityMatrix(), Toe_RNode);
+	Pad2_R_Node = new dModelNode(Pad2_R->GetBody(), dGetIdentityMatrix(), Pad1_R_Node);
 	
 
 	//Pad joints
@@ -950,66 +949,12 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 	
-	// MUSCLE DEFINITION
-
-	ins11 = dVector(0.f, 0.f, 0.f);
-	ins12 = dVector(0.f, 0.f, 0.f);
-/*	m1 = new Muscle(m_winManager->aLineManager, m_winManager->aManager, GetUp_Leg_L(), GetLow_Leg_L(), ins11, ins12);
-	m1->GenerateMesh();*/
-
-
 	// FOOT LINES
 	FootLineIndex_L = CreateFootScanLine();
 	FootLineIndex_R = CreateFootScanLine();
 
-	// ADDITIONAL BODIES TO TEST MUSCLE
-	// body 1 //
-	float l1 = 0.5f;
-	float l2 = 0.5f;
-	b1 = new GeomNewton(m_winManager->aManager);
-	b1->SetBodyType(adtDynamic);
-	b1->SetParent(Toe_R);
-	b1->SetTurnAngle(90.0f, false);
-	b1->SetTexture0(&tex[0], "Tex0");
-	b1->SetDiffuseColor(0.7f, 0.7f, 0.7f);
-	b1->SetPosition(5, 0, 0);
-	b1->InitNewton(atBox, l1, 0.1, 0.1, 1);
-	NewtonBodySetTransformCallback(b1->GetBody(), NULL);
-	b1_Node = new dModelNode(b1->GetBody(), dGetIdentityMatrix(), Toe_RNode);
-
-	b2 = new GeomNewton(m_winManager->aManager);
-	b2->SetBodyType(adtDynamic);
-	b2->SetParent(b1);
-	b2->SetTexture0(&tex[0], "Tex0");
-	b2->SetDiffuseColor(0.7f, 0.7f, 0.7f);
-	b2->SetPosition(l1 / 2 + l2 / 2, 0, 0);
-	b2->InitNewton(atBox, l2, 0.1, 0.1, 1);
-	NewtonBodySetTransformCallback(b2->GetBody(), NULL);
-	b2_Node = new dModelNode(b2->GetBody(), dGetIdentityMatrix(), b1_Node);
-
-	// create knee joint. 
-	dMatrix joint1PinMatrix(dGetIdentityMatrix());
-	joint1PinMatrix = joint1PinMatrix * dRollMatrix(90.0f * dDegreeToRad);
-	joint1PinMatrix.m_posit = dVector(b1->GetPosition().m_x + l1/2, b1->GetPosition().m_y , b1->GetPosition().m_z);
-	joint1 = new dCustomHingeActuator(joint1PinMatrix, b1->GetBody(), b2->GetBody());
-	joint1->SetTargetAngle(-50.0f * dDegreeToRad);
-	joint1->EnableMotor(true, 500.0f * dDegreeToRad);
-	joint1->SetLimits(-3600.f, 3600.f * dDegreeToRad);
-	m_winManager->aManager->vJointList.push_back(joint1);
-
-
-
 	if (1) // select 1 if you want to use (type Hill's model)
 	{
-		/*
-		ins11 = dVector(0.f, 0.f, 0.f);
-		ins12 = dVector(0.f, 0.f, 0.f);
-		m1 = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Getb1(), Getb2(), ins11, ins12);
-		m1->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m1);
-		*/
-		
-		
 		//The Origin point is the one that is closer to the trunk
 		//SOL muscle Creation..Origin Point: Low_Leg, Insertion Point: Plantar
 		m_sol_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_L, Plantar_L, dVector(v_x1[0], v_y1[0], v_z1[0]), dVector(v_x2[0], v_y2[0], v_z2[0]));
@@ -1097,38 +1042,12 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	}
 }
 
-
-
-GeomNewton* dRaycastVHModel::GetUp_Leg_L() {
-	return Up_Leg_L;
-}
-
-GeomNewton* dRaycastVHModel::GetLow_Leg_L() {
-	return Low_Leg_L;
-}
-
-GeomNewton* dRaycastVHModel::GetPlantar_L() {
-	return Plantar_L;
-}
-
 float dRaycastVHModel::GetFoot2Floor_L() {
 	return Foot2Floor_L;
 }
 
 float dRaycastVHModel::GetFoot2Floor_R() {
 	return Foot2Floor_R;
-}
-
-dCustomHingeActuator* dRaycastVHModel::Getjoint1() {
-	return joint1;
-}
-
-GeomNewton* dRaycastVHModel::Getb1() {
-	return b1;
-}
-
-GeomNewton* dRaycastVHModel::Getb2() {
-	return b2;
 }
 
 int dRaycastVHModel::CreateFootScanLine() {
@@ -1240,12 +1159,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
 		Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
 	}
-
-	newTime += timestep;
-	if (newTime > 0.5f) {
-		controller->Getjoint1()->SetTargetAngle((-50.0f + 10.0f * sin((newTime - 0.5f) * 2.0f * dPi)) * dDegreeToRad);
-	}
-
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
