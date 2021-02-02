@@ -26,6 +26,7 @@
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
+#include "tinyxml.h"
 #include "biped.h"
 #include "NewtonUtil.h"
 
@@ -40,11 +41,7 @@ public:
 	GeomNewton* GetPlantar_L();
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
-	GeomNewton* GetUp_Leg_R();
-	GeomNewton* GetLow_Leg_R();
-	GeomNewton* GetPlantar_R();
 	float GetFoot2Floor_R();
-
 
 	int CreateFootScanLine();
 
@@ -139,6 +136,10 @@ private:
 	dCustomDoubleHinge* Pd1_R;
 	dCustomDoubleHinge* Pd2_R;
 
+	void dump_to_stdout(const char* pFilename);
+	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
+	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
+	std::vector<float> v_scale, v_lengths, v_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2;
 
 
 	float l_Hip;
@@ -147,11 +148,12 @@ private:
 	float l_Up_Leg;
 	float l_Low_Leg;
 	float r_bones;
-	float l_foot;
+	float l_plantar;
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
-	float Scale;
+	float h_foot;
+	float scale_mass, scale_length;
 	float l_Clav;
 	float l_Up_Arm;
 	float l_Low_Arm;
@@ -161,9 +163,8 @@ private:
 	float r_Pad;
 	float h_sphere;
 
-	Muscle* m1;
-	dVector ins11;
-	dVector ins12;
+	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
+	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 
 	dVector  ContactFoot_L;
 	dVector  NormalFoot_L;

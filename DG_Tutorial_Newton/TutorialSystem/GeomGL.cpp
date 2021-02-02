@@ -721,7 +721,7 @@ void GeomAssimp::InitNewton(GeomMeshType cGeomMeshtype, float cHulltolerance, fl
 	if (aBodyType == adtDynamic)
 		aBody = NewtonCreateDynamicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
 	if (aBodyType == adtKinematic)
-	    aBody = NewtonCreateKinematicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
+		aBody = NewtonCreateKinematicBody(aManager->GetWorld(), aMeshColl, &aTrans[0][0]);
 	//
 	if (aBody) {
 		NewtonBodySetUserData(aBody, aUserData);

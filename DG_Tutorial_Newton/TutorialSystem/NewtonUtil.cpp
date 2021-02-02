@@ -21,7 +21,7 @@ void AddForceAtPos(const NewtonBody* const Body, dFloat* const Force, dFloat* co
 	dVector R, Torque, CoM;
 	NewtonBodyGetCentreOfMass(Body, &CoM[0]);
 	Torque=Rel2AbsPoint(Body, &CoM[0]);
-	R = Point - &Torque.m_x;
+	R = { Point[0] - Torque[0] , Point[1] - Torque[1] ,Point[2] - Torque[2] };
 	Torque = R.CrossProduct(Force);
 	NewtonBodyAddForce(Body, Force);
 	NewtonBodyAddTorque(Body, &Torque.m_x);

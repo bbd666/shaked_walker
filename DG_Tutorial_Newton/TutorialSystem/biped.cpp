@@ -14,8 +14,9 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 ,   LDebug_Manager(LManager)
 ,	LineIndex(0)
 ,	activation(1.0f)
+,	stepSize(1/1000.0f)
 {
-	m_Manager->vMuscleList.push_back(this);
+	//m_Manager->vMuscleList.push_back(this);
 	
 	lCE = 0.5f;
 	l_opt = 0.25f;
@@ -104,10 +105,11 @@ float Muscle::dresidu(const float l, const float t) {
 		dist_insers =sqrt(v.DotProduct3(v));
 		l_tild = (this->lCE + l) / this->l_opt;
 		v_tild = l / t / this->l_opt;
-		f1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4));
+		f1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4)); //fl calculation
 		df1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4)) * (log(0.05f) * 4 * pow((l_tild - 1) / 0.56f, 3)) / 0.56f / this->l_opt;
+		//fv calculation for contracting and extending muscle cases
 		if (v_tild < 0.f) {
-			f2 = -(this->vm + v_tild) / (5.0f*v_tild-this->vm);
+			f2 = -(this->vm + v_tild) / (5.0f*v_tild-this->vm); 
 			df2 = 6.0f * this->vm / t / this->l_opt / pow(5.0f * v_tild - this->vm, 2);
 		}
 		else
@@ -116,16 +118,19 @@ float Muscle::dresidu(const float l, const float t) {
 			df2 = (0.5f * 38.8f * this->vm-1.5f*37.8f) / t / this->l_opt / pow(37.8f * v_tild + this->vm, 2);
 		}
 		f1 = f1 * df2 + f2 * df1;
+		//Fhpe component
 		if (l_tild > 1.0f) {	
 			df2 = 2.0f * (l_tild - 1.0f) / pow(0.56f, 2) / this->l_opt;
 		}
 		else { df2 = 0.f; }
 		f1 = f1 + df2;
+		//Flpe component 
 		if (l_tild < 0.44f) {
 			df2 = -2.0f * (0.44f - l_tild) / pow(0.28f, 2) / this->l_opt;
 		}
 		f1 = f1 + df2;
 		ls_tild = (-(lCE + l) + dist_insers) / this->l_slack;
+		//Fse component
 		if (ls_tild > 1.0f) {
 			f2 = -2.0f * (ls_tild - 1.0f) / pow(0.04f, 2) / this->l_slack;
 		}
@@ -142,7 +147,8 @@ float Muscle::residu(const float l, const float t) {
 	dist_insers = sqrt(v.DotProduct3(v));
 	l_tild = (this->lCE + l) / l_opt;
 	v_tild = l / t / this->l_opt;
-	f1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4));
+	f1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4)); //fl calculation
+	//fv calculation for contracting and extending muscle cases
 	if (v_tild < 0.f) {
 		f2 = -(this->vm + v_tild) / (5.0f * v_tild - this->vm);
 	}
@@ -151,15 +157,18 @@ float Muscle::residu(const float l, const float t) {
 		f2 = 1.5f + 0.5f * (-this->vm + v_tild) / (37.8f * v_tild + this->vm);
 	}
 	f1 = f1 * f2;
+	//Fhpe component
 	if (l_tild > 1.0f) {
 		f2 = pow((l_tild - 1.0f)/0.56f,2);
 	}
 	else { f2 = 0.f; }
+	//Flpe component 
 	if (l_tild < 0.44f) {
 		f2 = -pow((0.44f - l_tild) / 0.28f, 2);
 	}
 	f1 = f1 + f2;
 	ls_tild = (-(lCE + l) + dist_insers) / this->l_slack;
+	//Fse component
 	if (ls_tild > 1.0f) {
 		f2 = pow((ls_tild - 1.0f) / 0.04f, 2);
 	}
@@ -271,7 +280,21 @@ dVector Muscle::GetInsert2_GlobalRef() {
 	return dVector(VTemp.m_x, VTemp.m_y, VTemp.m_z, VTemp.m_w);
 }
 
- 
+void Muscle::GetOriginAndInsertion(dVector& vOrigin, dVector& vInsert) {
+	vOrigin = GetInsert1_GlobalRef();
+	vInsert = GetInsert2_GlobalRef();
+}
+
+void Muscle::SetStepSize(const float iStepSize)
+{
+	stepSize = iStepSize;
+}
+
+void Muscle::SetExcitation(const float iExcitation)
+{
+	activation = 100* stepSize *(iExcitation- activation) + activation;
+}
 
 
-;
+
+

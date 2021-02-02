@@ -21,6 +21,10 @@ struct Muscle
 	void SetInsert2(float px, float py, float pz);
 	dVector GetInsert1_GlobalRef();
 	dVector GetInsert2_GlobalRef();
+	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
+	void SetExcitation(const float iExcitation);
+	void SetStepSize(const float iStepSize);
+	
 	void SetLength0(float l);
 	float GetLength0();
 	float dresidu(const float l,const float t);
@@ -60,6 +64,7 @@ private:
 	float vm;
 	float lCE;
 	float activation;
+	float stepSize;
 	int m_nmax;
 	float m_Delta_l;
 };

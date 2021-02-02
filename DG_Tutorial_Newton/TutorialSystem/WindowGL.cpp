@@ -41,7 +41,7 @@ static dFloat RayCastFilter(const NewtonBody* const body, const NewtonCollision*
 	dFloat Ixx;
 	dFloat Iyy;
 	dFloat Izz;
-	 
+
 	// check if we are hitting a sub shape
 	const NewtonCollision* const parent = NewtonCollisionGetParentInstance(collisionHit);
 	if (parent) {

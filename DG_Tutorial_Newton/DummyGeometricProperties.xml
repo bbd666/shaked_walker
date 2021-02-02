@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<Model>
+    <!-- Parameters for musculoskeletal model -->
+    <Parameters>
+	   <!--Scaling factor of length and mass-->
+        <Scale length ="1.0" mass ="1.0"/>
+	   <!-- Lengths in m, Weight in kg, Masses in % of Weight, Inertia in Radius of gyration in % of Weight, COM in % (starting from proximal point of each segment) of length, Angles in degrees, Insertion Points' distances in m (starting from COM)  -->
+        <Lengths UpLeg="0.4222" LowLeg="0.4340" Plantar="0.183" Spine="0.3862" UpArm="0.28" LowArm="0.27" Hand="0.0862" Head="0.2033" Hip="0.15" Sacrum="0.1457" Toe="0.06" Foot="0.05" Neck="0.0396" Clav="0.225" RBones ="0.04" />
+		<Weight value="73.0"/>
+		<Masses head="0.0694" trunk="0.4346" uparm="0.0271" forearm="0.0162" hand="0.0061" thigh="0.1416" shank="0.0433" foot="0.0137"/>
+		<Inertia>
+			<Ixx head="0.362" trunk="0.372" uparm="0.285" forearm="0.276" hand="0.628" thigh="0.329" shank="0.255" foot="0.257" />
+			<Iyy head="0.376" trunk="0.347" uparm="0.269" forearm="0.265" hand="0.513" thigh="0.329" shank="0.249" foot="0.245" />
+			<Izz head="0.312" trunk="0.191" uparm="0.158" forearm="0.121" hand="0.401" thigh="0.149" shank="0.103" foot="0.124" />
+		</Inertia>
+		<COM head="0.5976" trunk="0.4486" uparm="0.5772" forearm="0.4574" hand="0.7900" thigh="0.4095" shank="0.4459" foot="0.4415" />
+		<Angles hip="-30.0" clav="0.0" />
+		<MuscleInsertionPoints>
+			<X1 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<Y1 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<Z1 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<X2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<Y2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<Z2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+		</MuscleInsertionPoints>
+    </Parameters>
+</Model>

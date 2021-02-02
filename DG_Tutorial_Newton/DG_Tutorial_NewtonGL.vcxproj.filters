@@ -59,6 +59,11 @@
     <ClInclude Include="TutorialSystem\OXVehicleRayCast.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialSystem\NewtonUtil.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialSystem\tinystr.h" />
+    <ClInclude Include="TutorialSystem\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TutorialSystem\BaseShader.cpp">
@@ -97,6 +102,13 @@
     <ClCompile Include="TutorialSystem\OXVehicleRayCast.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="TutorialSystem\NewtonUtil.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialSystem\tinystr.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxml.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxmlerror.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DG_Tutorial_NewtonGL.rc" />
