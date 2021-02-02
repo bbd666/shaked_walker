@@ -2,10 +2,16 @@
 <Model>
     <!-- Parameters for musculoskeletal model -->
     <Parameters>
+
 	   <!--Scaling factor of length and mass-->
         <Scale length ="1.0" mass ="1.0"/>
 	   <!-- Lengths in m, Weight in kg, Masses in % of Weight, Inertia in Radius of gyration in % of Weight, COM in % (starting from proximal point of each segment) of length, Angles in degrees, Insertion Points' distances in m (starting from COM)  -->
         <Lengths UpLeg="0.4222" LowLeg="0.4340" Plantar="0.183" Spine="0.3862" UpArm="0.28" LowArm="0.27" Hand="0.0862" Head="0.2033" Hip="0.15" Sacrum="0.1457" Toe="0.06" Foot="0.05" Neck="0.0396" Clav="0.225" RBones ="0.04" />
+
+        <Scale value="1.0" />
+	   <!-- Lengths in m, Weight in kg, Masses in % of Weight, Inertia in Radius of gyration in % of Weight, COM in % (starting from proximal point of each segment) of length, Angles in degrees, Insertion Points' distances in m (starting from COM)  -->
+        <Lengths UpLeg="0.4222" LowLeg="0.4340" Plantar="0.183" Spine="0.3862" UpArm="0.28" LowArm="0.27" Hand="0.0862" Head="0.2033" Hip="0.15" Sacrum="0.1457" Toe="0.06" Foot="0.1" Neck="0.0396" Clav="0.225" RBones ="0.07" />
+
 		<Weight value="73.0"/>
 		<Masses head="0.0694" trunk="0.4346" uparm="0.0271" forearm="0.0162" hand="0.0061" thigh="0.1416" shank="0.0433" foot="0.0137"/>
 		<Inertia>

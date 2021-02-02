@@ -285,6 +285,7 @@ void Muscle::GetOriginAndInsertion(dVector& vOrigin, dVector& vInsert) {
 	vInsert = GetInsert2_GlobalRef();
 }
 
+
 void Muscle::SetStepSize(const float iStepSize)
 {
 	stepSize = iStepSize;
