@@ -244,6 +244,10 @@ dVector Muscle::GetForceElas(const float t) {
 	m_FElas = m_FElas.Scale(this->activation);
 	lineColor.x = this->fSE(dl); lineColor.z = 1.0f- this->fSE(dl); lineColor.y = 0;
 	m_Delta_l= dl;
+	if (m_nmax >= 99) 
+	{
+		lineColor.x = 1.0f; lineColor.z = 1.0f - this->fSE(dl); lineColor.y = 1.0f;
+	}
 
 	return m_FElas;
 }
@@ -284,7 +288,6 @@ void Muscle::GetOriginAndInsertion(dVector& vOrigin, dVector& vInsert) {
 	vOrigin = GetInsert1_GlobalRef();
 	vInsert = GetInsert2_GlobalRef();
 }
-
 
 void Muscle::SetStepSize(const float iStepSize)
 {
