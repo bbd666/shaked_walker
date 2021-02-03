@@ -246,7 +246,7 @@ dVector Muscle::GetForceElas(const float t) {
 	m_Delta_l= dl;
 	if (m_nmax >= 99) 
 	{
-		lineColor.x = 1.0f; lineColor.z = 1.0f - this->fSE(dl); lineColor.y = 1.0f;
+		lineColor.x = 1.0f; lineColor.z = 1.0f; lineColor.y = 1.0f;
 	}
 
 	return m_FElas;
