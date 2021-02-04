@@ -495,9 +495,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
 	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
 	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
-	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
-	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
-	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
 	NewtonBodyGetCentreOfMass(Low_Leg_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + DeltaCM[6];
 	NewtonBodySetCentreOfMass(Low_Leg_R->GetBody(), &com[0]); // WIP
