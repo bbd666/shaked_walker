@@ -331,7 +331,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	glm::vec3 _Pos(glm::vec3(0.0f, l_Sacrum/2+ l_Up_Leg+ l_Low_Leg+ h_foot+l_Hip+0.25f, 0.f)); // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral) Y(vertical) Z(front)
 
-
 	float hip_angle = v_angles[0];
 	float clav_angle = v_angles[1];
 
@@ -391,7 +390,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
 	//Left lower limb
 
-
 	Hip_L = new GeomNewton(m_winManager->aManager);
 	Hip_L->SetBodyType(adtDynamic);
 	Hip_L->SetParent(Sacrum);
@@ -442,10 +440,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_L->InitNewton(atBox, h_foot,    l_plantar,   w_foot, 10.f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_L->GetBody(), NULL);
 	Plantar_LNode = new dModelNode(Plantar_L->GetBody(), dGetIdentityMatrix(), Low_Leg_LNode);
-	NewtonBodySetMassMatrix(Plantar_L->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Plantar_L->GetBody(), &com[0]);
-	com.m_x = com.m_x - DeltaCM[7];
-	NewtonBodySetCentreOfMass(Plantar_L->GetBody(), &com[0]); // WIP
 
 	Toe_L = new GeomNewton(m_winManager->aManager);
 	Toe_L->SetBodyType(adtDynamic);
@@ -495,6 +489,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
 	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
 	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
+	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
+	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
+	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
 	NewtonBodyGetCentreOfMass(Low_Leg_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + DeltaCM[6];
 	NewtonBodySetCentreOfMass(Low_Leg_R->GetBody(), &com[0]); // WIP
@@ -509,10 +506,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_R->InitNewton(atBox, h_foot,   l_plantar,   w_foot, 10.0f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_R->GetBody(), NULL);
 	Plantar_RNode = new dModelNode(Plantar_R->GetBody(), dGetIdentityMatrix(), Low_Leg_RNode);
-	NewtonBodySetMassMatrix(Plantar_R->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Plantar_R->GetBody(), &com[0]);
-	com.m_x = com.m_x - DeltaCM[7];
-	NewtonBodySetCentreOfMass(Plantar_R->GetBody(), &com[0]); // WIP
 
 	Toe_R = new GeomNewton(m_winManager->aManager);
 	Toe_R->SetBodyType(adtDynamic);
@@ -1052,93 +1045,18 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	
 }
 
-	if (1) // select 1 if you want to use (type Hill's model)
-	{
-		//The Origin point is the one that is closer to the trunk
-		//SOL muscle Creation..Origin Point: Low_Leg, Insertion Point: Plantar
-		m_sol_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_L, Plantar_L, dVector(v_x1[0], v_y1[0], v_z1[0]), dVector(v_x2[0], v_y2[0], v_z2[0]));
-		m_sol_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_sol_L);
 
-		//TA muscle Creation..Origin Point 1: Low_Leg, Insertion Point: Plantar
-		m_ta_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_L, Plantar_L, dVector(v_x1[1], v_y1[1], v_z1[1]), dVector(v_x2[1], v_y2[1], v_z2[1]));
-		m_ta_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_ta_L);
 
-		//GAS muscle Creation..Origin Point: Up_Leg, Insertion Point: Plantar
-		m_gas_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_L, Plantar_L, dVector(v_x1[2], v_y1[2], v_z1[2]), dVector(v_x2[2], v_y2[2], v_z2[2]));
-		m_gas_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_gas_L);
+GeomNewton* dRaycastVHModel::GetUp_Leg_L() {
+	return Up_Leg_L;
+}
 
-		//VAS muscle Creation..Origin Point: Up_Leg, Insertion Point: Low_Leg
-		m_vas_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_L, Low_Leg_L, dVector(v_x1[3], v_y1[3], v_z1[3]), dVector(v_x2[3], v_y2[3], v_z2[3]));
-		m_vas_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_vas_L);
+GeomNewton* dRaycastVHModel::GetLow_Leg_L() {
+	return Low_Leg_L;
+}
 
-		//HAM muscle Creation..Origin Point: Hip, Insertion Point: Low_Leg
-		m_ham_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_L, Low_Leg_L, dVector(v_x1[4], v_y1[4], v_z1[4]), dVector(v_x2[4], v_y2[4], v_z2[4]));
-		m_ham_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_ham_L);
-
-		//RF muscle Creation..Origin Point: Hip, Insertion Point: Low_Leg
-		m_rf_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_L, Low_Leg_L, dVector(v_x1[5], v_y1[5], v_z1[5]), dVector(v_x2[5], v_y2[5], v_z2[5]));
-		m_rf_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_rf_L);
-
-		//GLU muscle Creation..Origin Point: Hip, Insertion Point: Up_Leg
-		m_glu_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_L, Up_Leg_L, dVector(v_x1[6], v_y1[6], v_z1[6]), dVector(v_x2[6], v_y2[6], v_z2[6]));
-		m_glu_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_glu_L);
-
-		//HFL muscle Creation..Origin Point: Hip, Insertion Point: Up_Leg
-		m_hfl_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_L, Up_Leg_L, dVector(v_x1[7], v_y1[7], v_z1[7]), dVector(v_x2[7], v_y2[7], v_z2[7]));
-		m_hfl_L->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_hfl_L);
-
-		//RIGHT SIDE MUSCLE GROUP
-
-		//SOL muscle Creation..Origin Point: Low_Leg, Insertion Point: Plantar
-		m_sol_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_R, Plantar_R, dVector(v_x1[0], v_y1[0], v_z1[0]), dVector(v_x2[0], v_y2[0], v_z2[0]));
-		m_sol_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_sol_R);
-
-		//TA muscle Creation..Origin Point 1: Low_Leg, Insertion Point: Plantar
-		m_ta_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_R, Plantar_R, dVector(v_x1[1], v_y1[1], v_z1[1]), dVector(v_x2[1], v_y2[1], v_z2[1]));
-		m_ta_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_ta_R);
-
-		//GAS muscle Creation..Origin Point: Up_Leg, Insertion Point: Plantar
-		m_gas_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_R, Plantar_R, dVector(v_x1[2], v_y1[2], v_z1[2]), dVector(v_x2[2], v_y2[2], v_z2[2]));
-		m_gas_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_gas_R);
-
-		//VAS muscle Creation..Origin Point: Up_Leg, Insertion Point: Low_Leg
-		m_vas_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_R, Low_Leg_R, dVector(v_x1[3], v_y1[3], v_z1[3]), dVector(v_x2[3], v_y2[3], v_z2[3]));
-		m_vas_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_vas_R);
-
-		//HAM muscle Creation..Origin Point: Hip, Insertion Point: Low_Leg
-		m_ham_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_R, Low_Leg_R, dVector(v_x1[4], v_y1[4], v_z1[4]), dVector(v_x2[4], v_y2[4], v_z2[4]));
-		m_ham_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_ham_R);
-
-		//RF muscle Creation..Origin Point: Hip, Insertion Point: Low_Leg
-		m_rf_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_R, Low_Leg_R, dVector(v_x1[5], v_y1[5], v_z1[5]), dVector(v_x2[5], v_y2[5], v_z2[5]));
-		m_rf_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_rf_R);
-
-		//GLU muscle Creation..Origin Point: Hip, Insertion Point: Up_Leg
-		m_glu_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_R, Up_Leg_R, dVector(v_x1[6], v_y1[6], v_z1[6]), dVector(v_x2[6], v_y2[6], v_z2[6]));
-		m_glu_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_glu_R);
-
-		//HFL muscle Creation..Origin Point: Hip, Insertion Point: Up_Leg
-		m_hfl_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Hip_R, Up_Leg_R, dVector(v_x1[7], v_y1[7], v_z1[7]), dVector(v_x2[7], v_y2[7], v_z2[7]));
-		m_hfl_R->GenerateMesh();
-		m_winManager->aManager->vMuscleList.push_back(m_hfl_R);
-
-		
-	}
+GeomNewton* dRaycastVHModel::GetPlantar_L() {
+	return Plantar_L;
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -1259,6 +1177,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
 		Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
 	}
+
+	
 
 }
 

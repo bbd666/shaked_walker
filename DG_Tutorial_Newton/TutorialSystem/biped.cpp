@@ -228,14 +228,20 @@ dVector Muscle::GetForceElas(const float t) {
 	dVector Elongation;
 	float dl(1.0e-003);
 	float tol(1.0e-003);
+	float nm(100);
 	int n(0);
 	dl = this->lCE / 10000.f;
 	
-	while ((abs(residu(dl,t)) > tol) && (n < 100)) {
-		dl = dl - residu(dl,t) / dresidu(dl,t);
-		n++;
-	}
-	m_nmax = n;
+	//m_nmax = nm;
+	//while (m_nmax >= nm - 1) {
+	//	dl = dl / 10.0f;
+		while ((abs(residu(dl, t)) > tol) && (n < nm)) {
+			dl = dl - residu(dl, t) / dresidu(dl, t);
+			n++;
+		}
+		m_nmax = n;
+	//}
+
 
 	Elongation = this->GetInsert2_GlobalRef() - this->GetInsert1_GlobalRef();
 	Elongation = Elongation.Normalize();
@@ -244,7 +250,7 @@ dVector Muscle::GetForceElas(const float t) {
 	m_FElas = m_FElas.Scale(this->activation);
 	lineColor.x = this->fSE(dl); lineColor.z = 1.0f- this->fSE(dl); lineColor.y = 0;
 	m_Delta_l= dl;
-	if (m_nmax >= 99) 
+	if (m_nmax >= nm-1) 
 	{
 		lineColor.x = 1.0f; lineColor.z = 1.0f; lineColor.y = 1.0f;
 	}

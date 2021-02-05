@@ -24,8 +24,7 @@ struct Muscle
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetExcitation(const float iExcitation);
 	void SetStepSize(const float iStepSize);
-
-
+	
 	void SetLength0(float l);
 	float GetLength0();
 	float dresidu(const float l,const float t);

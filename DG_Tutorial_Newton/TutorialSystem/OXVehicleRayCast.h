@@ -36,12 +36,15 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	float GetFoot2Floor_R();
+	GeomNewton* GetUp_Leg_L();
+	GeomNewton* GetLow_Leg_L();
+	GeomNewton* GetPlantar_L();
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
 	float GetFoot2Floor_R();
 
 	int CreateFootScanLine();
+
 
 private:
 	WindowMain* m_winManager;
@@ -74,6 +77,7 @@ private:
 	GeomNewton* Pad1_R;
 	GeomNewton* Pad2_R;
 
+
 //	dModelNode* SacrumNode;
 	dModelNode* Hip_LNode;
 	dModelNode* Up_Leg_LNode;
@@ -102,6 +106,7 @@ private:
 	dModelNode* Heel_R_Node;
 	dModelNode* Pad1_R_Node;
 	dModelNode* Pad2_R_Node;
+
 
 	dCustomDoubleHinge* Disk1_L;
 	dCustomDoubleHinge* Rotule_L;
@@ -149,7 +154,6 @@ private:
 	float l_toe;
 	float h_foot;
 	float scale_mass, scale_length;
-	float Scale;
 	float l_Clav;
 	float l_Up_Arm;
 	float l_Low_Arm;
