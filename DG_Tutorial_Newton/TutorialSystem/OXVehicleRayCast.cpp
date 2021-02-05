@@ -1173,7 +1173,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 		//P = Mobj->GetInsert2_GlobalRef(); // Check
 		AddForceAtRelPos(NBody, &Vtemp[0], &vInsert[0]);
 
-		monFlux << newTime << "  " << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << std::endl;
+	//	monFlux << newTime << "  " << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << std::endl;
 
 		Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
 	}
