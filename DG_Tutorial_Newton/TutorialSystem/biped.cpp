@@ -13,7 +13,7 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 ,	m_Insert2(ins2)
 ,   LDebug_Manager(LManager)
 ,	LineIndex(0)
-,	activation(1.0f)
+,	activation(0.0f)
 ,	stepSize(1/1000.0f)
 {
 	//m_Manager->vMuscleList.push_back(this);
