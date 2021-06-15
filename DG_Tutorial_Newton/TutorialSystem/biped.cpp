@@ -2,7 +2,6 @@
 #include "GeomGL.h"
 #include "biped.h"
 
-
 Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2) :
 	m_Manager(wMain)
 ,	body1(insert1)
@@ -305,6 +304,128 @@ void Muscle::SetExcitation(const float iExcitation)
 	activation = 100* stepSize *(iExcitation- activation) + activation;
 }
 
+MuscleV2::MuscleV2(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* bodyins, dCustomHinge* jointact) :
+	m_Manager(wMain)
+	, body(bodyins)
+	, LDebug_Manager(LManager)
+	, joint(jointact)
+	, activation(1.0f)
+	, stepSize(1 / 1000.0f)
+	, arm(10.f)
+	, phi_M(0.0f)
+	, phi_R(3.14f)
+	, F_max(2000.0f)
+	, rho(0.5f)
+	, l_opt(11.f)
+	, l_slk(10.f)
+	, l_ce(11.f)
+	, v_ce(0.0f)
+	, theta_actual(0.0f)
+	, m_Fmtu(0.0f)
+	, theta_0(0.0f)
+{
+
+}
+
+MuscleV2::~MuscleV2() {
+	if (!m_Manager->IsTerminated)
+		for (auto itr = m_Manager->vMuscleList.begin();
+			itr != m_Manager->vMuscleList.end(); itr++) {
+		if ((MuscleV2*)*itr == this) {
+			m_Manager->vMuscleList.erase(itr);
+			break;
+		}
+	}
+}
+
+void MuscleV2::SetExcitation(const double iExcitation)
+{
+	activation = 100 * stepSize * (iExcitation - activation) + activation;
+}
+
+void MuscleV2::SetThetazero(double angle)
+{
+	theta_0 = angle;
+}
+
+double MuscleV2::Compute_muscle_length(double jointangle)
+{
+	double penn, l_mtu;
+	penn = rho * arm * (jointangle - phi_R);
+	l_mtu = l_opt + l_slk + penn;
+	return l_mtu;
+}
+
+void MuscleV2::SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk)
+{
+	arm = r;
+	phi_M = phiM;
+	phi_R = phiR;
+	F_max = Fmax;
+	rho = rhoin;
+	l_opt = opt;
+	l_slk = slk;
+}
 
 
+float MuscleV2::Compute_muscle_Torque(dFloat time) {
 
+	theta_actual = theta_0 - joint->GetJointAngle(); // need to access joint angle
+	double l_mtu = Compute_muscle_length(theta_actual);
+	double m_lcet = l_ce / l_opt;
+	double m_lse = l_mtu - l_ce;
+	double m_lset = m_lse / l_slk;
+	double fl = exp(log(0.05f) * pow(pow(0.56f, -1) * (m_lcet - 1), 4)); //length contribution
+	double m_Fse = 0; // series force
+	double m_Fhpe = 0;// high parallel force
+	double m_Flpe = 0;// low parallel force
+
+	if ((m_lset - 1) > 0) // if l_se > l_slack tendon force is activated
+		m_Fse = F_max * pow((pow(0.04f, -1) * (m_lset - 1)), 2);
+
+	if ((m_lcet - 0.44f) < 0) // if l_ce < 44 % of l_opt the lower stiffness in // with CE is activated
+		m_Flpe = F_max * pow((pow(0.28f, -1) * (0.44f - m_lcet)), 2);
+
+	if ((m_lcet - 1) > 0) // if l_ce > l_opt the higher stiffness in // with CE is actuated
+		m_Fhpe = F_max * pow((pow(0.56f, -1) * (m_lcet - 1)), 2);
+
+	// find fv
+	double fv;
+	//if (m_lset <= 1) // to be checked
+	//	fv = 1;
+	//else
+		fv = (m_Fse - m_Fhpe + m_Flpe) / F_max / activation / fl;
+
+	if (fv > 1.5f)
+		fv = 1.5f; // max value for fv given a v_max = 10 length/s
+
+	// force computation
+	double m_Fpe = m_Fhpe - m_Flpe; // parallel force
+	double m_Fce = activation * F_max * fl * fv; // contractile element force
+	m_Fmtu = m_Fce + m_Fpe; // force of the mtu
+
+	// Integration of actual fv to update l_ce
+	double dt = double(time);// integration step
+
+	// computation of actual v_ce
+	double m_vcet;
+	if (theta_actual - theta_prec >= 0) // lengthening
+		m_vcet = ((-10 * fv) + 10) / (-57.2 + (37.8 * fv));
+	else // shortening
+		m_vcet = (-10 + (10 * fv)) / (1 + (5 * fv));
+
+	l_ce = l_ce + m_vcet * dt * l_opt;
+	theta_prec = theta_actual;
+	//cout << l_mtu << '\t' << m_vcet << '\t' << m_lcet << '\t' << theta << '\t' << m_Fmtu << endl;
+
+	double T = m_Fmtu * arm * 0.01f; // in Nm
+	//cout << theta << '\t' << l_ce << '\t'<<  m_Fmtu << '\t' << m_Fce << '\t' << m_Fhpe << '\t' << m_Flpe << '\t' << fl  << '\t' << fv << '\n';
+	return T;
+}
+
+void MuscleV2::GetMuscleParams(double& angle, double& lce, double& Fmuscle)
+{
+	angle = theta_actual;
+	lce = l_ce;
+	Fmuscle = m_Fmtu;
+}

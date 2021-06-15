@@ -69,5 +69,39 @@ private:
 	float m_Delta_l;
 };
 
+struct MuscleV2
+{
+	MuscleV2(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* bodyins, dCustomHinge* jointact);
+	virtual ~MuscleV2();
+	
+	void SetExcitation(const double iExcitation);
+	double Compute_muscle_length(double jointangle);
+	void SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk);
+	void GetMuscleParams(double& angle, double& lce, double& Fmuscle);
+	float Compute_muscle_Torque(dFloat time);
+	void SetThetazero(double angle);
 
+	//float Compute_biarticular_muscle_length(float jointangle);
+	//float Compute_biarticular_Torque(dFloat time);
+private:
+	NewtonManager* m_Manager;
+	LineDebugManager* LDebug_Manager;
+	dCustomHinge* joint;
+	GeomNewton* body;
+	double activation;
+	double stepSize;
+	double arm;
+	double phi_M;
+	double phi_R;
+	double F_max;
+	double rho;
+	double l_slk;
+	double l_opt;
+	double l_ce;
+	double v_ce;
+	double theta_actual;
+	double theta_prec;
+	double m_Fmtu;
+	double theta_0;
+};
 #endif //BIPED_H
