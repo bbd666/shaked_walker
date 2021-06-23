@@ -977,73 +977,25 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Flextoe_R = new dCustomHinge(Toe_RPinMatrix, Plantar_R->GetBody(), Toe_R->GetBody());
 	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
-	
-	// MUSCLE DEFINITION
 
 	// FOOT LINES
 	FootLineIndex_L = CreateFootScanLine();
 	FootLineIndex_R = CreateFootScanLine();
-		
-		
-	////The Origin point is the one that is closer to the trunk
-	////EX: SOL muscle Creation..Origin Point: Low_Leg, Insertion Point: Plantar
-	//m_sol_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Low_Leg_L, Plantar_L, dVector(v_x1[0], v_y1[0], v_z1[0]), dVector(v_x2[0], v_y2[0], v_z2[0]));
-	//m_sol_L->GenerateMesh();
-	//m_winManager->aManager->vMuscleList.push_back(m_sol_L);
 
-	// MUSCLE wang
+	// MUSCLE DEFINITION
 
-	////EX: GLU muscle Creation: input insertion body and actuated joint
-	//m_hfl2_L = new MuscleV2(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_L, Rotule_L);
-	//m_winManager->aManager->vMuscleV2List.push_back(m_glu_L);
-	//m_hfl2_L->SetThetazero(phi_hl * dDegreeToRad);
-}
-MuscleV2* dRaycastVHModel::Gethfl2_L()
-{
-	return m_hfl2_L;
-}
-dCustomDoubleHinge* dRaycastVHModel::GetRotule_R()
-{
-	return Rotule_R;
-}
-dCustomHinge* dRaycastVHModel::GetRotule_L()
-{
-	return Rotule_L;
-}
-dCustomHinge* dRaycastVHModel::GetKnee_L()
-{
-	return Knee_L;
-}
-
-dCustomBallAndSocket* dRaycastVHModel::GetAnkle_L()
-{
-	return Ankle_L;
-}
-
-dCustomHinge* dRaycastVHModel::GetKnee_R()
-{
-	return Knee_R;
-}
-
-dCustomBallAndSocket* dRaycastVHModel::GetAnkle_R()
-{
-	return Ankle_R;
-}
-
-GeomNewton* dRaycastVHModel::GetUp_Leg_L() {
-	return Up_Leg_L;
-}
-
-GeomNewton* dRaycastVHModel::GetLow_Leg_L() {
-	return Low_Leg_L;
-}
-
-GeomNewton* dRaycastVHModel::GetPlantar_L() {
-	return Plantar_L;
-}
-
-GeomNewton* dRaycastVHModel::GetHip_L() {
-	return Hip_L;
+	//EX: hfl muscle Creation:
+	//1. Origin body: Up_Leg, 
+	//2. Insertion body: Hip, 
+	//3. Joint: Rotule, 
+	//4. Mesh coordinates: vector 1 on body 1, vector 2 on body 2 (change the values in 'DummyGeometricProperties.xml' file)
+	m_hfl_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, Up_Leg_L, Hip_L, Rotule_L, dVector(v_x1[7], v_y1[7], v_z1[7]), dVector(v_x2[7], v_y2[7], v_z2[7]));
+	m_hfl_L->GenerateMesh();
+	m_winManager->aManager->vMuscleList.push_back(m_hfl_L);
+	//m_hfl_L->SetThetazero(phi_hl * dDegreeToRad);
+	m_hfl_L->SetThetazero(0* dDegreeToRad); // initial joint angle
+	m_hfl_L->SetMuscleParams(9.4, 0, 0, 2000, 0.5, 10.3, 9.4); // params from Geyer 
+	
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -1053,7 +1005,6 @@ float dRaycastVHModel::GetFoot2Floor_L() {
 float dRaycastVHModel::GetFoot2Floor_R() {
 	return Foot2Floor_R;
 }
-
 
 int dRaycastVHModel::CreateFootScanLine() {
 glm::vec3 linepos1;
@@ -1066,8 +1017,6 @@ linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
 
 return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
 }
-
-
 
 void dRaycastVHModel::CastFoot(const char* const Laterality) {
 	GeomNewton* GNewton;
@@ -1134,55 +1083,36 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
 	dVector Vtemp(0.0f);
 
-	// scan all  Muscle Elements
-	//for (auto itr = m_winManager->aManager->vMuscleList.begin();
-	//	itr != m_winManager->aManager->vMuscleList.end(); itr++)
-	//{
-	//	Muscle* Mobj = (Muscle*)*itr;
+	 //scan all  Muscle Elements
+	for (auto itr = m_winManager->aManager->vMuscleList.begin();
+		itr != m_winManager->aManager->vMuscleList.end(); itr++)
+	{
+		Muscle* Mobj = (Muscle*)*itr;
 
-	//	// Get the Body1 connected to the muscle and apply the muscle force
-	//	GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
-	//	NewtonBody* NBody = gNewton->GetBody();
-	//	//Mobj->SetStepSize(1/1000.0f); //1000 Hz or 1/1000 s
-	//	Mobj->SetExcitation(0.0);
-	//	Vtemp = Mobj->GetForceElas(timestep);
-	//	//cout << timestep << ' ' << Vtemp[0] << ' ' << Vtemp[1] << ' ' << Vtemp[2] << '\n';
-	//	//dVector P = Mobj->GetInsert1_GlobalRef(); // Check
-	//	dVector vOrigin(0.0f), vInsert(0.0f);
-	//	Mobj->GetOriginAndInsertion(vOrigin, vInsert);
-	//	AddForceAtRelPos(NBody, &Vtemp[0], &vOrigin[0]);
+		double Ttemp = Mobj->Compute_muscle_Torque(timestep);
+		// Get the Body1 connected to the muscle and apply the muscle force
+		GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
+		NewtonBody* NBody = gNewton->GetBody();
+		Mobj->SetStepSize(1/1000.0f); //1000 Hz or 1/1000 s
+		dVector T(0.0f, 0.0f, 0.0f);
+ 		T.m_x = Ttemp;
+		NewtonBodyAddTorque(NBody, &T.m_x);
 
-	//	// Get the Body2 connected and apply the opposite muscle force
-	//	gNewton = (GeomNewton*)(Mobj->body2);
-	//	NBody = (NewtonBody*)gNewton->GetBody();
-	//	Vtemp = Vtemp.Scale(-1.0f);
-	//	//P = Mobj->GetInsert2_GlobalRef(); // Check
-	//	AddForceAtRelPos(NBody, &Vtemp[0], &vInsert[0]);
+		// Get the Body2 connected and apply the opposite muscle force
+		gNewton = (GeomNewton*)(Mobj->body2);
+		NBody = (NewtonBody*)gNewton->GetBody();
+		T.Scale(-1); // opposite force on second body
+		NewtonBodyAddTorque(NBody, &T.m_x);
 
-	//	//monFlux << newTime << "  " << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << std::endl;
+		double theta(0.0f), lce(0.0f), Fmtu(0.0f);
+		Mobj->GetMuscleParams(theta, lce, Fmtu);
+		newTime = newTime + timestep;
+		monFlux << newTime << '\t' << theta << '\t' << lce << '\t' << T.m_x << std::endl;
 
-	//	Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
-	//}
-	// EX Geyer's muscle WIP
-	//MuscleV2* mobj = controller->Gethfl2_L();
-	//double Ttemp = mobj->Compute_muscle_Torque(timestep);
-	//GeomNewton* mbody1 = controller->GetUp_Leg_L();
-	//GeomNewton* mbody2 = controller->GetHip_L();
+		//monFlux << newTime << "  " << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << std::endl;
 
-	//dCustomHinge* joint = controller->GetRotule_L();
-	//dFloat ang = joint->GetJointAngle();
-
-	//dVector T(0.0f, 0.0f, 0.0f);
-	//T.m_x = Ttemp - double(200.f);
-	//NewtonBodyAddTorque(mbody1->GetBody(), &T.m_x);
-	//T.Scale(-1); // opposite force on second body
-	//NewtonBodyAddTorque(mbody2->GetBody(), &T.m_x);
-
-	//double theta(0.0f), lce(0.0f), Fmtu(0.0f);
-	//mobj->GetMuscleParams(theta, lce, Fmtu);
-	//newTime = newTime + timestep;
-	//monFlux << newTime << '\t' << theta << '\t' << lce << '\t' << T.m_x << std::endl;
-	
+		Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
+	}	
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const

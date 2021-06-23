@@ -16,12 +16,12 @@
 		<COM head="0.600" uparm="0.580" forearm="0.460" hand="0.790" trunk="0.450" thigh="0.410" shank="0.450" foot="0.440" toes="0.500" UPT="0.300" MPT="0.450" LPT="0.612"/>
 		<Angles hip="0.0" clav="0.0" />
 		<MuscleInsertionPoints>
-			<X1 sol="-0.09" ta="-0.12" gas="0" vas="-0.15" ham="-0.075" rf="-0.075" glu="-0.075" hfl="-0.075"/>
+			<X1 sol="-0.09" ta="-0.12" gas="0" vas="-0.15" ham="-0.075" rf="-0.075" glu="-0.075" hfl="0"/>
 			<Y1 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
-			<Z1 sol="0.05" ta="-0.05" gas="0.07" vas="0.06" ham="0.07" rf="0.07" glu="0.14" hfl="-0.12"/>
-			<X2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0.04" hfl="0.04"/>
+			<Z1 sol="0.05" ta="-0.05" gas="0.07" vas="0.06" ham="0.07" rf="0.07" glu="0.14" hfl="0"/>
+			<X2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0.04" hfl="-0.07"/>
 			<Y2 sol="0.01" ta="-0.08" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
-			<Z2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
+			<Z2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="-0.068"/>
 		</MuscleInsertionPoints>
 		<MaxMuscleForce sol="4000" ta="800" gas="1500" vas="6000" ham="3000" rf="1000" glu="1500" hfl="2000"/>
     </Parameters>

@@ -36,17 +36,6 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	MuscleV2* Gethfl2_L();
-	GeomNewton* GetUp_Leg_L();
-	GeomNewton* GetLow_Leg_L();
-	GeomNewton* GetHip_L();
-	GeomNewton* GetPlantar_L();
-	dCustomHinge* GetKnee_L();
-	dCustomBallAndSocket* GetAnkle_L();
-	dCustomHinge* GetKnee_R();
-	dCustomBallAndSocket* GetAnkle_R();
-	dCustomDoubleHinge* GetRotule_R();
-	dCustomHinge* GetRotule_L();
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
 	float GetFoot2Floor_R();
@@ -172,7 +161,6 @@ private:
 	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
 	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
 	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
-	MuscleV2* m_hfl2_L;
 
 	dVector  ContactFoot_L;
 	dVector  NormalFoot_L;

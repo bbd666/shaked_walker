@@ -13,7 +13,7 @@
 
 struct Muscle
 {
-	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2);
+	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dCustomHinge* jointact, dVector ins1, dVector ins2);
 	virtual ~Muscle();
 	glm::vec3 mColor;
 	void UpdateLineCoord(Shader* cshd, dFloat steptime);
@@ -23,6 +23,7 @@ struct Muscle
 	dVector GetInsert2_GlobalRef();
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetExcitation(const float iExcitation);
+	void GetMuscleParams(double& angle, double& lce, double& Fmuscle);
 	void SetStepSize(const float iStepSize);
 	
 	void SetLength0(float l);
@@ -32,11 +33,13 @@ struct Muscle
 	float fSE(const float l);
 	float fCE(const float l, const float t);
 	float fPE(const float l);
-	void SetStiffness(float l);
-	float GetStiffness();
-	dVector GetForceElas(const float t);
+	double Compute_muscle_Torque(dFloat time);
+	double Compute_muscle_length(double jointangle);
+	void SetThetazero(double angle);
+	void SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk);
 	GeomNewton* body1;
 	GeomNewton* body2;
+	dCustomHinge* joint;
 	void GenerateMesh();
 	float GetNmax();
 	float GetDelta_l();
@@ -55,53 +58,24 @@ private:
 	GLuint aIbo;
 	float m_Length0;
 	float m_Stiffness;
-	dVector m_FElas;
 	dVector m_Insert1;
 	dVector m_Insert2;
 	int LineIndex;
-	float l_opt;
-	float l_slack;
-	float vm;
-	float lCE;
-	float activation;
+	float l_opt; // [cm] optimum muscle length 
+	float vm; // [cm/s] muscle velocity
+	float lCE; // [cm] contractile element length
+	float activation; // activation level of the muscle [0-1]
 	float stepSize;
 	int m_nmax;
-	float m_Delta_l;
-};
-
-struct MuscleV2
-{
-	MuscleV2(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* bodyins, dCustomHinge* jointact);
-	virtual ~MuscleV2();
-	
-	void SetExcitation(const double iExcitation);
-	double Compute_muscle_length(double jointangle);
-	void SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk);
-	void GetMuscleParams(double& angle, double& lce, double& Fmuscle);
-	float Compute_muscle_Torque(dFloat time);
-	void SetThetazero(double angle);
-
-	//float Compute_biarticular_muscle_length(float jointangle);
-	//float Compute_biarticular_Torque(dFloat time);
-private:
-	NewtonManager* m_Manager;
-	LineDebugManager* LDebug_Manager;
-	dCustomHinge* joint;
-	GeomNewton* body;
-	double activation;
-	double stepSize;
-	double arm;
-	double phi_M;
-	double phi_R;
-	double F_max;
-	double rho;
-	double l_slk;
-	double l_opt;
-	double l_ce;
-	double v_ce;
-	double theta_actual;
-	double theta_prec;
+	float m_Delta_l; // [cm] muscle increment
+	double arm; // [cm] maximum moment arm of the muscle
+	double phi_M; // [rad] joint angle with maximum moment arm
+	double phi_R; // [rad] joint angle in which delta = 0 (l_mtu = l_opt + l_slk)
+	double F_max; // max isometric force [N]
 	double m_Fmtu;
-	double theta_0;
+	double rho; // accounts for pennation angle
+	double l_slk; // slack length
+	double theta_actual; // actual angle of the joint
+	double theta_0; // initial angle of the joint
 };
 #endif //BIPED_H

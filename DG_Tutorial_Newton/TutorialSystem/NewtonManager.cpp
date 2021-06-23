@@ -415,13 +415,4 @@ void NewtonManager::SetExcitationList(const std::vector<float> iExcitationList)
 		aobj->SetExcitation(iExcitationList[iCount]);
 		iCount++;
 	}
-
-	//int iCount = 0;
-	//for (auto itr = vMuscleV2List.begin();
-	//	itr != vMuscleV2List.end(); itr++) {
-	//	MuscleV2* aobj = (MuscleV2*)*itr;
-	//	aobj->SetExcitation(iExcitationList[iCount]);
-	//	iCount++;
-	//}
-
 }

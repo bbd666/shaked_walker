@@ -581,9 +581,9 @@ void WindowMain::MainLoop()
 ImGui_ImplGlfwGL3_Init(contextGL, false);
 
 //initialize excitation list
-std::vector<float> initExcitation = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-										  0.0, 0.0, 0.0, 0.0, 0.0 , 0.0 , 0.0, 0.0 };
-
+//std::vector<float> initExcitation = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+//										  0.0, 0.0, 0.0, 0.0, 0.0 , 0.0 , 0.0, 0.0 };
+std::vector<float> initExcitation = { 0.0 };
 while (!glfwWindowShouldClose(contextGL))
 {
 	//create empty frame
@@ -592,8 +592,8 @@ while (!glfwWindowShouldClose(contextGL))
 	// populate frame with 16 Sliders: 8 for left, 8 for right
 	{
 		ImGui::Text("Excitation");
-
-		ImGui::Columns(2);
+		ImGui::SliderFloat("HFL Left", &initExcitation[0], 0.0f, 1.0f);
+		/*ImGui::Columns(2);
 
 		ImGui::SliderFloat("SOL Left", &initExcitation[0], 0.0f, 1.0f);
 		ImGui::SliderFloat("TA Left", &initExcitation[1], 0.0f, 1.0f);
@@ -613,7 +613,7 @@ while (!glfwWindowShouldClose(contextGL))
 		ImGui::SliderFloat("HAM Right", &initExcitation[12], 0.0f, 1.0f);
 		ImGui::SliderFloat("RF Right", &initExcitation[13], 0.0f, 1.0f);
 		ImGui::SliderFloat("GLU Right", &initExcitation[14], 0.0f, 1.0f);
-		ImGui::SliderFloat("HFL Right", &initExcitation[15], 0.0f, 1.0f);
+		ImGui::SliderFloat("HFL Right", &initExcitation[15], 0.0f, 1.0f);*/
 
 		//set excitation values if the ImGui box is clicked
 		//if not for this check, values of excitation are set redundantly at every frame
