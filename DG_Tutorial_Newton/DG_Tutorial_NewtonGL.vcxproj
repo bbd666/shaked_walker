@@ -106,10 +106,13 @@
     <ClInclude Include="TutorialSystem\dHighResolutionTimer.h" />
     <ClInclude Include="TutorialSystem\GeomGL.h" />
     <ClInclude Include="TutorialSystem\NewtonManager.h" />
+    <ClInclude Include="TutorialSystem\NewtonUtil.h" />
     <ClInclude Include="TutorialSystem\OXVehicleRayCast.h" />
     <ClInclude Include="TutorialSystem\pch.h" />
     <ClInclude Include="TutorialSystem\shader.h" />
     <ClInclude Include="TutorialSystem\texture.h" />
+    <ClInclude Include="TutorialSystem\tinystr.h" />
+    <ClInclude Include="TutorialSystem\tinyxml.h" />
     <ClInclude Include="TutorialSystem\VertexGL.h" />
     <ClInclude Include="TutorialSystem\WindowGL.h" />
   </ItemGroup>
@@ -121,6 +124,7 @@
     <ClCompile Include="TutorialSystem\dHighResolutionTimer.cpp" />
     <ClCompile Include="TutorialSystem\GeomGL.cpp" />
     <ClCompile Include="TutorialSystem\NewtonManager.cpp" />
+    <ClCompile Include="TutorialSystem\NewtonUtil.cpp" />
     <ClCompile Include="TutorialSystem\OXVehicleRayCast.cpp" />
     <ClCompile Include="TutorialSystem\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -128,6 +132,10 @@
     </ClCompile>
     <ClCompile Include="TutorialSystem\shader.cpp" />
     <ClCompile Include="TutorialSystem\texture.cpp" />
+    <ClCompile Include="TutorialSystem\tinystr.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxml.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxmlerror.cpp" />
+    <ClCompile Include="TutorialSystem\tinyxmlparser.cpp" />
     <ClCompile Include="TutorialSystem\WindowGL.cpp" />
   </ItemGroup>
   <ItemGroup>

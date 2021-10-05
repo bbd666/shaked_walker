@@ -26,8 +26,9 @@
 #include "pch.h"
 #include "NewtonManager.h"
 #include "WindowGL.h"
+#include "tinyxml.h"
 #include "biped.h"
-
+#include "NewtonUtil.h"
 
 class dRaycastVHModel: public dModelRootNode
 {
@@ -35,24 +36,18 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	GeomNewton* GetUp_Leg_L();
-	GeomNewton* GetLow_Leg_L();
-	GeomNewton* GetPlantar_L();
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
-	GeomNewton* GetUp_Leg_R();
-	GeomNewton* GetLow_Leg_R();
-	GeomNewton* GetPlantar_R();
 	float GetFoot2Floor_R();
-
 
 	int CreateFootScanLine();
 
 
 private:
 	WindowMain* m_winManager;
-	GeomNewton* Sacrum;
-	GeomNewton* Spine;
+	GeomNewton* UPT;
+	GeomNewton* LPT;
+	GeomNewton* MPT;
 	GeomNewton* Hip_L;
 	GeomNewton* Up_Leg_L;
 	GeomNewton* Low_Leg_L;
@@ -71,7 +66,6 @@ private:
 	GeomNewton* Up_Arm_R;
 	GeomNewton* Low_Arm_R;
 	GeomNewton* Hand_R;
-	GeomNewton* Neck;
 	GeomNewton* Head;
 	GeomNewton* Heel_L;
 	GeomNewton* Pad1_L;
@@ -81,16 +75,17 @@ private:
 	GeomNewton* Pad2_R;
 
 
+
 //	dModelNode* SacrumNode;
 	dModelNode* Hip_LNode;
 	dModelNode* Up_Leg_LNode;
 	dModelNode* Low_Leg_LNode;
-	dModelNode* Plantar_LNode;
+	dModelNode* Foot_LNode;
 	dModelNode* Toe_LNode;
 	dModelNode* Hip_RNode;
 	dModelNode* Up_Leg_RNode;
 	dModelNode* Low_Leg_RNode;
-	dModelNode* Plantar_RNode;
+	dModelNode* Foot_RNode;
 	dModelNode* Toe_RNode;
 	dModelNode* Lumbar_Node;
 	dModelNode* Clav_LNode;
@@ -101,7 +96,8 @@ private:
 	dModelNode* Shoulder_RNode;
 	dModelNode* Elbow_RNode;
 	dModelNode* Wrist_RNode;
-	dModelNode* Neck_Node;
+	dModelNode* UPT_Node;
+	dModelNode* LPT_Node;
 	dModelNode* Head_Node;
 	dModelNode* Heel_L_Node;
 	dModelNode* Pad1_L_Node;
@@ -112,7 +108,7 @@ private:
 
 
 	dCustomDoubleHinge* Disk1_L;
-	dCustomDoubleHinge* Rotule_L;
+	dCustomHinge* Rotule_L;
 	dCustomHinge* Knee_L;
 	dCustomBallAndSocket* Ankle_L;
 	dCustomHinge* Flextoe_L;
@@ -139,11 +135,24 @@ private:
 	dCustomDoubleHinge* Pd1_R;
 	dCustomDoubleHinge* Pd2_R;
 
+	void dump_to_stdout(const char* pFilename);
+	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
+	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
+<<<<<<< HEAD
+	int dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<std::string, float>& l, unsigned int indent);
+	std::vector<float> v_scale, v_lengths, v_total_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2, v_maxForce;
+	
+	map<std::string, float> lengths;
+	map<std::string, float> mass_distrib,delta_cm;
+	map<std::string, float> Ixx,Iyy,Izz;
+	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck" };
+	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT"};
+=======
+	std::vector<float> v_scale, v_lengths, v_total_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2, v_maxForce;
+>>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 
 
 	float l_Hip;
-	float l_Sacrum;
-	float l_Spine;
 	float l_Up_Leg;
 	float l_Low_Leg;
 	float r_bones;
@@ -151,19 +160,18 @@ private:
 	float w_foot;
 	glm::vec3 _Pos;
 	float l_toe;
-	float Scale;
+	float h_foot;
+	float scale_mass, scale_length;
 	float l_Clav;
 	float l_Up_Arm;
 	float l_Low_Arm;
 	float l_Hand;
 	float l_Head;
-	float l_Neck;
 	float r_Pad;
 	float h_sphere;
-
-	Muscle* m1;
-	dVector ins11;
-	dVector ins12;
+	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
+	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
+	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 
 	dVector  ContactFoot_L;
 	dVector  NormalFoot_L;

@@ -61,6 +61,7 @@ struct NewtonManager
 	static void PhysicsApplyGravityForce(const NewtonBody* body, dFloat timestep, int threadIndex);
 	static void PhysicsApplyControlForce(const NewtonBody* body1, bool action, dFloat timestep, int threadIndex);
 	static void TransformCallback(const NewtonBody* body, const dFloat* matrix, int threadIndex);
+	void SetExcitationList(const std::vector<float> iExcitationList);
 private:
 	int aLastpluginnewton; 
 	int aCurrentPluginID;

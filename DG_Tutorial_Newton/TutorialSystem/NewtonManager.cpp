@@ -170,7 +170,7 @@ NewtonManager::NewtonManager()
 	:nWorld(NULL),
 	//nGravity(0.0f, 0.0f, 0.0f, 0.0f),
 	nGravity(0.0f, -9.81f, 0.0f, 0.0f),
-	aMaxphysicfps(1.0f /200.0f),
+	aMaxphysicfps(1.0f / 1000.0f),
 	 aMicrosecunds(0),
 	 aMainThreadPhysicsTimeAcc(0.0f),
 	 aMainThreadPhysicsTime(0.0f),
@@ -226,7 +226,7 @@ NewtonManager::NewtonManager()
 	//NewtonSetContactMergeTolerance(nWorld, ncoltol);
 	NewtonInvalidateCache(nWorld);
 	//
-/*	aLastpluginnewton = aCurrentPluginID;
+	aLastpluginnewton = aCurrentPluginID;
 	void* plugin = NULL;
 	if ((aCurrentPluginID >= 0) && (aCurrentPluginID < 4)) {
 		int index = 0;
@@ -253,7 +253,7 @@ NewtonManager::NewtonManager()
 		pluginnew = "Newton Dynamics Plugin: " + pluginnew;
 		printf("DG Tutorial Current - %s \n", (char*)pluginnew.c_str());
 #endif
-	}*/
+	}
     //
 	vTextureManager = new Texture();
 }
@@ -397,4 +397,22 @@ NewtonManager::~NewtonManager()
 
 	NewtonDestroyAllBodies(nWorld);
 	NewtonDestroy(nWorld);
+}
+
+void NewtonManager::SetExcitationList(const std::vector<float> iExcitationList)
+{
+	const int iMuscleListSize = this->vMuscleList.size();
+	if (iExcitationList.size() != iMuscleListSize)
+	{
+		cout << "Incorrect usage of method NewtonManager::SetExcitationList" << endl;
+		return;
+	}
+
+	int iCount = 0;
+	for (auto itr = vMuscleList.begin();
+		itr != vMuscleList.end(); itr++) {
+		Muscle* aobj = (Muscle*)*itr;
+		aobj->SetExcitation(iExcitationList[iCount]);
+		iCount++;
+	}
 }
