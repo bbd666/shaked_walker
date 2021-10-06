@@ -55,7 +55,6 @@ int dRaycastVHModel::dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<
 	return i;
 }
 
-<<<<<<< HEAD
 int dRaycastVHModel::dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<std::string, float>& l, unsigned int indent)
 {
 	if (!pElement) return 0;
@@ -78,8 +77,6 @@ int dRaycastVHModel::dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<st
 }
 
 
-=======
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
 {
 	if (!pParent) return;
@@ -107,11 +104,7 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
 		}
 		else if (sParameter == "Lengths")
 		{
-<<<<<<< HEAD
 			num = dump_attribs_to_stdout2(pParent->ToElement(), lengths, indent + 1);
-=======
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_lengths, indent + 1);
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 		}
 		else if (sParameter == "Weight")
 		{
@@ -119,7 +112,6 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
 		}
 		else if (sParameter == "Masses")
 		{
-<<<<<<< HEAD
 			num = dump_attribs_to_stdout2(pParent->ToElement(), mass_distrib, indent + 1);
 		}
 		else if (sParameter == "Ixx")
@@ -137,25 +129,6 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
 		else if (sParameter == "COM")
 		{
 			num = dump_attribs_to_stdout2(pParent->ToElement(), delta_cm, indent + 1);
-=======
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_masses, indent + 1);
-		}
-		else if (sParameter == "Ixx")
-		{
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_ixx, indent + 1);
-		}
-		else if (sParameter == "Iyy")
-		{
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_iyy, indent + 1);
-		}
-		else if (sParameter == "Izz")
-		{
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_izz, indent + 1);
-		}
-		else if (sParameter == "COM")
-		{
-			num = dump_attribs_to_stdout(pParent->ToElement(), v_com, indent + 1);
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 		}
 		else if (sParameter == "Angles")
 		{
@@ -330,7 +303,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	, Pd2_R(NULL)
 
 {
-<<<<<<< HEAD
 	//key initialization of the maps 'lengths', 'mass_distrib', 'Ixx', 'Iyy' and 'Izz'
 	for (std::vector<std::string>::iterator it = lengths_keys.begin(); it != lengths_keys.end(); it++)
 	{		lengths[*it] = 0.f;	    };
@@ -343,8 +315,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		delta_cm[*it] = 0.f;
 	};
 
-=======
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	// LOADING DATA FROM XML//
 	TiXmlDocument doc("DummyGeometricProperties.xml");
 	bool loadOkay = doc.LoadFile();
@@ -358,7 +328,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	scale_length = v_scale[0]; 
 	scale_mass = v_scale[1];
 
-<<<<<<< HEAD
 
 	// LENGTH DATA
 	l_Head		= scale_length * lengths["Head"];
@@ -378,26 +347,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	w_foot		= scale_length * lengths["FootBreadth"]; // foot breadth
 	h_foot		= scale_length * lengths["AnkleHeight"]; // ankle height
 	l_neck		= scale_length * lengths["Neck"];
-=======
-	// LENGTH DATA
-	l_Head		= scale_length * v_lengths[0]; 
-	l_Up_Arm	= scale_length * v_lengths[1]; 
-	l_Low_Arm	= scale_length * v_lengths[2];  // forearm
-	l_Hand		= scale_length * v_lengths[3];
-	l_trunk		= scale_length * v_lengths[4];
-	l_Up_Leg	= scale_length * v_lengths[5];  // thigh
-	l_Low_Leg	= scale_length * v_lengths[6];  // shank
-	l_foot		= scale_length * v_lengths[7];	
-	l_toe		= scale_length * v_lengths[8];	
-	l_UPT		= scale_length * v_lengths[9];  // upper part trunk
-	l_MPT		= scale_length * v_lengths[10]; // medium part trunk
-	l_LPT		= scale_length * v_lengths[11]; // lower part trunk
-	l_Hip		= scale_length * v_lengths[12];
-	l_Clav		= scale_length * v_lengths[13];	// shoulder 
-	w_foot		= scale_length * v_lengths[14]; // foot breadth
-	h_foot		= scale_length * v_lengths[15]; // ankle height
-	l_neck		= scale_length * v_lengths[16];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	l_delta		= scale_length * (0.0345- 0.0213); // distance from acromion to shoulder joint (arcomion position computed relative to proximal point of UPT 553.2-531.9 mm)
 	r_bones		= h_foot / 2.0f;
 	r_Pad		= w_foot / 4.0f;
@@ -405,7 +354,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	l_foot		= l_foot - l_toe;
 	ankle_j		= scale_length * 0.046f * sin(49 * dDegreeToRad); // [m] distance from heel to ankle joint in z direction ((Isman and Inman, 1969; Lee et al., 2011; Zatsiorsky, 2002)
 
-<<<<<<< HEAD
 	
 	// MASS DATA
 	float tot_w = scale_mass * v_total_weight[0]; 
@@ -434,27 +382,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 		it->second = lengths.find(it->first)->second * (0.5f-it->second);
 	};
 
-=======
-	//						0 head, 1 uparm, 2 forearm, 3 hand, 4 trunk, 5 thigh, 6 shank, 7 foot, 8 toes, 9 UPT, 10 MPT, 11 LPT
-	std::vector<float> l = {l_Head, l_Up_Arm, l_Low_Arm, l_Hand, l_trunk, l_Up_Leg, l_Low_Leg, l_foot, l_toe, l_UPT, l_MPT, l_LPT};
-	
-	// MASS DATA
-	float tot_w = scale_mass * v_total_weight[0]; 
-	//							{0 head, 1 uparm, 2 forearm, 3 hand, 4 trunk, 5 thigh, 6 shank, 7 foot, 8 toes, 9 UPT, 10 MPT, 11 LPT }
-	std::vector<float> masses  = { v_masses[0] * tot_w, v_masses[1] * tot_w, v_masses[2] * tot_w, v_masses[3] * tot_w, v_masses[4] * tot_w, v_masses[5] * tot_w, v_masses[6] * tot_w, v_masses[7] * tot_w, v_masses[8] * tot_w , v_masses[9] * tot_w , v_masses[10] * tot_w , v_masses[11] * tot_w };
-	
-	//INERTIA DATA
-	//	     				 {0 head, 1 uparm, 2 forearm, 3 hand, 4 trunk, 5 thigh, 6 shank, 7 foot, 8 toes, 9 UPT, 10 MPT, 11 LPT } 
-	std::vector<float> Ixx = { masses[0] * v_ixx[0], masses[1] * v_ixx[1], masses[2] * v_ixx[2], masses[3] * v_ixx[3], masses[4] * v_ixx[4], masses[5] * v_ixx[5], masses[6] * v_ixx[6], masses[7] * v_ixx[7] , masses[8] * v_ixx[8] , masses[9] * v_ixx[9] , masses[10] * v_ixx[10] , masses[11] * v_ixx[11] }; //radii of gyration Sagittal (X) %
-	std::vector<float> Iyy = { masses[0] * v_iyy[0], masses[1] * v_iyy[1], masses[2] * v_iyy[2], masses[3] * v_iyy[3], masses[4] * v_iyy[4], masses[5] * v_iyy[5], masses[6] * v_iyy[6], masses[7] * v_iyy[7] , masses[8] * v_iyy[8] , masses[9] * v_iyy[9] , masses[10] * v_iyy[10] , masses[11] * v_iyy[11] }; //radii of gyration Transverse (Y) %
-	std::vector<float> Izz = { masses[0] * v_izz[0], masses[1] * v_izz[1], masses[2] * v_izz[2], masses[3] * v_izz[3], masses[4] * v_izz[4], masses[5] * v_izz[5], masses[6] * v_izz[6], masses[7] * v_izz[7] , masses[8] * v_izz[8] , masses[9] * v_izz[9] , masses[10] * v_izz[10] , masses[11] * v_izz[11] }; //radii of gyration Longitudinal (Z) %
-	
-	// COM distance from the origin of each body (DIRECTION X: IN LOCAL COORDINATE OF THE BODY)
-	vector<float> DeltaCM(v_com.size(), 0);
-
-	for (int ii = 0; ii < DeltaCM.size(); ii++)
-		DeltaCM[ii] = (0.5f - v_com[ii]) * l[ii];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 
 	glm::vec3 _Pos(glm::vec3(0.0f, l_LPT/2+ l_Up_Leg+ l_Low_Leg+ h_foot+0.25f, 0.f)); // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral) Y(vertical) Z(front)
 
@@ -472,10 +399,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// BODIES OF THE DUMMY DEFINITION
 	LPT = new GeomNewton(m_winManager->aManager);
 	LPT->SetBodyType(adtDynamic);
-<<<<<<< HEAD
 	LPT->SetBodyType(adtDynamic);
-=======
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	LPT->SetTexture0(&tex[0], "Tex0");
 	LPT->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	LPT->SetRollAngle(90.0f ,false);
@@ -483,15 +407,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	LPT->InitNewton(atCapsule, r_bones, r_bones, l_LPT, 10.0f);
 	m_body = LPT->GetBody();
 	NewtonBodySetTransformCallback(m_body, NULL);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(LPT->GetBody(), mass_distrib["LPT"], Ixx["LPT"], Iyy["LPT"], Izz["LPT"]);
 	NewtonBodyGetCentreOfMass(LPT->GetBody(), &com[0]);
 	com.m_y += delta_cm["LPT"];
-=======
-	NewtonBodySetMassMatrix(LPT->GetBody(), masses[11], Ixx[11], Iyy[11], Izz[11]);
-	NewtonBodyGetCentreOfMass(LPT->GetBody(), &com[0]);
-	com.m_y += DeltaCM[11];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(LPT->GetBody(), &com[0]); 
 
 	MPT = new GeomNewton(m_winManager->aManager);
@@ -503,15 +421,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	MPT->InitNewton(atCapsule, r_bones, r_bones, l_MPT, 10.0f);
 	NewtonBodySetTransformCallback(MPT->GetBody(), NULL);
 	Lumbar_Node = new dModelNode(MPT->GetBody(), dGetIdentityMatrix(), this);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(MPT->GetBody(), mass_distrib["MPT"], Ixx["MPT"], Iyy["MPT"], Izz["MPT"]);
 	NewtonBodyGetCentreOfMass(MPT->GetBody(), &com[0]);
 	com.m_y += delta_cm["MPT"];
-=======
-	NewtonBodySetMassMatrix(MPT->GetBody(), masses[10], Ixx[10], Iyy[10], Izz[10]);
-	NewtonBodyGetCentreOfMass(MPT->GetBody(), &com[0]);
-	com.m_y += DeltaCM[10];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(MPT->GetBody(), &com[0]);
 
 	UPT = new GeomNewton(m_winManager->aManager);
@@ -523,15 +435,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	UPT->InitNewton(atCapsule, r_bones,  r_bones, l_UPT, 10.0f );
 	NewtonBodySetTransformCallback(UPT->GetBody(), NULL);
 	UPT_Node = new dModelNode(UPT->GetBody(), dGetIdentityMatrix(), Lumbar_Node);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(UPT->GetBody(), mass_distrib["MPT"], Ixx["UPT"], Iyy["UPT"], Izz["UPT"]);
 	NewtonBodyGetCentreOfMass(UPT->GetBody(), &com[0]);
 	com.m_y += delta_cm["MPT"];
-=======
-	NewtonBodySetMassMatrix(UPT->GetBody(), masses[9], Ixx[9], Iyy[9], Izz[9]);
-	NewtonBodyGetCentreOfMass(UPT->GetBody(), &com[0]);
-	com.m_y += DeltaCM[9];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(UPT->GetBody(), &com[0]);
 
 	Head = new GeomNewton(m_winManager->aManager);
@@ -544,15 +450,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	NewtonBodySetTransformCallback(Head->GetBody(), NULL);
 	Head_Node = new dModelNode(Head->GetBody(), dGetIdentityMatrix(), UPT_Node);
 	//NewtonBodySetMassMatrix(Head->GetBody(), 0.0f, 0.0f, 0.0f, 0.0f); // fixed head
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Head->GetBody(), mass_distrib["MPT"], Ixx["Head"], Iyy["Head"], Izz["Head"]);
 	NewtonBodyGetCentreOfMass(Head->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["MPT"];
-=======
-	NewtonBodySetMassMatrix(Head->GetBody(), masses[0], Ixx[0], Iyy[0], Izz[0]);
-	NewtonBodyGetCentreOfMass(Head->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[0];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Head->GetBody(), &com[0]);
 
 	//Left lower limb
@@ -579,15 +479,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Leg_L->InitNewton(atCapsule, r_bones,r_bones, l_Up_Leg, 10.0f);
 	NewtonBodySetTransformCallback(Up_Leg_L->GetBody(), NULL);
 	Up_Leg_LNode = new dModelNode(Up_Leg_L->GetBody(), dGetIdentityMatrix(), Hip_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Up_Leg_L->GetBody(), mass_distrib["Thigh"], Ixx["Thigh"], Iyy["Thigh"], Izz["Thigh"]);
 	NewtonBodyGetCentreOfMass(Up_Leg_L->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Thigh"];
-=======
-	NewtonBodySetMassMatrix(Up_Leg_L->GetBody(), masses[5], Ixx[5], Iyy[5], Izz[5]);
-	NewtonBodyGetCentreOfMass(Up_Leg_L->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[5];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Up_Leg_L->GetBody(), &com[0]); 
 
 	Low_Leg_L = new GeomNewton(m_winManager->aManager);
@@ -600,15 +494,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Leg_L->InitNewton(atCapsule,  r_bones,   r_bones,  l_Low_Leg, 10.0f);
 	NewtonBodySetTransformCallback(Low_Leg_L->GetBody(), NULL);
 	Low_Leg_LNode = new dModelNode(Low_Leg_L->GetBody(), dGetIdentityMatrix(), Up_Leg_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Low_Leg_L->GetBody(), mass_distrib["Shank"], Ixx["Shank"], Iyy["Shank"], Izz["Shank"]);
 	NewtonBodyGetCentreOfMass(Low_Leg_L->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Shank"];
-=======
-	NewtonBodySetMassMatrix(Low_Leg_L->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
-	NewtonBodyGetCentreOfMass(Low_Leg_L->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[6];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Low_Leg_L->GetBody(), &com[0]); 
 
 	Plantar_L = new GeomNewton(m_winManager->aManager);
@@ -622,15 +510,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_L->InitNewton(atBox, h_foot,    l_foot,   w_foot, 10.f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_L->GetBody(), NULL);
 	Foot_LNode = new dModelNode(Plantar_L->GetBody(), dGetIdentityMatrix(), Low_Leg_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Plantar_L->GetBody(), mass_distrib["Foot"], Ixx["Foot"], Iyy["Foot"], Izz["Foot"]);
 	NewtonBodyGetCentreOfMass(Plantar_L->GetBody(), &com[0]);
 	com.m_y += delta_cm["Foot"];
-=======
-	NewtonBodySetMassMatrix(Plantar_L->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Plantar_L->GetBody(), &com[0]);
-	com.m_y += DeltaCM[7];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Plantar_L->GetBody(), &com[0]);
 
 	Toe_L = new GeomNewton(m_winManager->aManager);
@@ -642,15 +524,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_L->InitNewton(atBox, h_foot, l_toe, w_foot, 10.0f);
 	NewtonBodySetTransformCallback(Toe_L->GetBody(), NULL);
 	Toe_LNode = new dModelNode(Toe_L->GetBody(), dGetIdentityMatrix(), Foot_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Toe_L->GetBody(), mass_distrib["Toes"], Ixx["Toes"], Iyy["Toes"], Izz["Toes"]);
 	NewtonBodyGetCentreOfMass(Toe_L->GetBody(), &com[0]);
 	com.m_y += delta_cm["Toes"];
-=======
-	NewtonBodySetMassMatrix(Toe_L->GetBody(), masses[8], Ixx[8], Iyy[8], Izz[8]);
-	NewtonBodyGetCentreOfMass(Toe_L->GetBody(), &com[0]);
-	com.m_y += DeltaCM[8];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Toe_L->GetBody(), &com[0]);
 
 	//Right lower limb
@@ -676,15 +552,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Leg, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Leg_R->GetBody(), NULL);
 	Up_Leg_RNode = new dModelNode(Up_Leg_R->GetBody(), dGetIdentityMatrix(), Hip_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Up_Leg_R->GetBody(), mass_distrib["Thigh"], Ixx["Thigh"], Iyy["Thigh"], Izz["Thigh"]);
 	NewtonBodyGetCentreOfMass(Up_Leg_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Thigh"];
-=======
-	NewtonBodySetMassMatrix(Up_Leg_R->GetBody(), masses[5], Ixx[5], Iyy[5], Izz[5]);
-	NewtonBodyGetCentreOfMass(Up_Leg_R->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[5];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Up_Leg_R->GetBody(), &com[0]); 
 
 	Low_Leg_R = new GeomNewton(m_winManager->aManager);
@@ -696,15 +566,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Leg, 10.0f);
 	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
 	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), mass_distrib["Shank"], Ixx["Shank"], Iyy["Shank"], Izz["Shank"]);
 	NewtonBodyGetCentreOfMass(Low_Leg_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Shank"];
-=======
-	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), masses[6], Ixx[6], Iyy[6], Izz[6]);
-	NewtonBodyGetCentreOfMass(Low_Leg_R->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[6];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Low_Leg_R->GetBody(), &com[0]); 
 
 	Plantar_R = new GeomNewton(m_winManager->aManager);
@@ -717,15 +581,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Plantar_R->InitNewton(atBox, h_foot,   l_foot,   w_foot, 10.0f  ); // CHECK
 	NewtonBodySetTransformCallback(Plantar_R->GetBody(), NULL);
 	Foot_RNode = new dModelNode(Plantar_R->GetBody(), dGetIdentityMatrix(), Low_Leg_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Plantar_R->GetBody(), mass_distrib["Foot"], Ixx["Foot"], Iyy["Foot"], Izz["Foot"]);
 	NewtonBodyGetCentreOfMass(Plantar_R->GetBody(), &com[0]);
 	com.m_y += delta_cm["Foot"];
-=======
-	NewtonBodySetMassMatrix(Plantar_R->GetBody(), masses[7], Ixx[7], Iyy[7], Izz[7]);
-	NewtonBodyGetCentreOfMass(Plantar_R->GetBody(), &com[0]);
-	com.m_y += DeltaCM[7];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Plantar_R->GetBody(), &com[0]);
 
 	Toe_R = new GeomNewton(m_winManager->aManager);
@@ -737,15 +595,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Toe_R->InitNewton(atBox, h_foot, l_toe,    w_foot, 1.f  );// CHECK
 	NewtonBodySetTransformCallback(Toe_R->GetBody(), NULL);
 	Toe_RNode = new dModelNode(Toe_R->GetBody(), dGetIdentityMatrix(), Foot_RNode); 
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Toe_R->GetBody(), mass_distrib["Toes"], Ixx["Toes"], Iyy["Toes"], Izz["Toes"]);
 	NewtonBodyGetCentreOfMass(Toe_R->GetBody(), &com[0]);
 	com.m_y += delta_cm["Toes"];
-=======
-	NewtonBodySetMassMatrix(Toe_R->GetBody(), masses[8], Ixx[8], Iyy[8], Izz[8]);
-	NewtonBodyGetCentreOfMass(Toe_R->GetBody(), &com[0]);
-	com.m_y += DeltaCM[8];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Toe_R->GetBody(), &com[0]);
 
 	// Left upper limb
@@ -771,15 +623,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Arm_L->GetBody(), NULL);
 	Shoulder_LNode = new dModelNode(Up_Arm_L->GetBody(), dGetIdentityMatrix(), Clav_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Up_Arm_L->GetBody(), mass_distrib["UpArm"], Ixx["UpArm"], Iyy["UpArm"], Izz["UpArm"]);
 	NewtonBodyGetCentreOfMass(Up_Arm_L->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["UpArm"];
-=======
-	NewtonBodySetMassMatrix(Up_Arm_L->GetBody(), masses[1], Ixx[1], Iyy[1], Izz[1]);
-	NewtonBodyGetCentreOfMass(Up_Arm_L->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[1];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Up_Arm_L->GetBody(), &com[0]); 
 
 	Low_Arm_L = new GeomNewton(m_winManager->aManager);
@@ -791,15 +637,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm, 10.0f);
 	NewtonBodySetTransformCallback(Low_Arm_L->GetBody(), NULL);
 	Elbow_LNode = new dModelNode(Low_Arm_L->GetBody(), dGetIdentityMatrix(), Shoulder_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Low_Arm_L->GetBody(), mass_distrib["ForeArm"], Ixx["ForeArm"], Iyy["ForeArm"], Izz["ForeArm"]);
 	NewtonBodyGetCentreOfMass(Low_Arm_L->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["ForeArm"];
-=======
-	NewtonBodySetMassMatrix(Low_Arm_L->GetBody(), masses[2], Ixx[2], Iyy[2], Izz[2]);
-	NewtonBodyGetCentreOfMass(Low_Arm_L->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[2];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Low_Arm_L->GetBody(), &com[0]); 
 
 	Hand_L = new GeomNewton(m_winManager->aManager);
@@ -812,15 +652,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hand_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand, 10.0f  );
 	NewtonBodySetTransformCallback(Hand_L->GetBody(), NULL);
 	Wrist_LNode = new dModelNode(Hand_L->GetBody(), dGetIdentityMatrix(), Elbow_LNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Hand_L->GetBody(), mass_distrib["Hand"], Ixx["Hand"], Iyy["Hand"], Izz["Hand"]);
 	NewtonBodyGetCentreOfMass(Hand_L->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Hand"];
-=======
-	NewtonBodySetMassMatrix(Hand_L->GetBody(), masses[3], Ixx[3], Iyy[3], Izz[3]);
-	NewtonBodyGetCentreOfMass(Hand_L->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[3];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Hand_L->GetBody(), &com[0]);
 
 	// Right upper limb
@@ -846,15 +680,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Arm_R->GetBody(), NULL);
 	Shoulder_RNode = new dModelNode(Up_Arm_R->GetBody(), dGetIdentityMatrix(), Clav_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Up_Arm_R->GetBody(), mass_distrib["UpArm"], Ixx["UpArm"], Iyy["UpArm"], Izz["UpArm"]);
 	NewtonBodyGetCentreOfMass(Up_Arm_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["UpArm"];
-=======
-	NewtonBodySetMassMatrix(Up_Arm_R->GetBody(), masses[1], Ixx[1], Iyy[1], Izz[1]);
-	NewtonBodyGetCentreOfMass(Up_Arm_R->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[1];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Up_Arm_R->GetBody(), &com[0]);
 
 	Low_Arm_R = new GeomNewton(m_winManager->aManager);
@@ -866,15 +694,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm, 10.0f);
 	NewtonBodySetTransformCallback(Low_Arm_R->GetBody(), NULL);
 	Elbow_RNode = new dModelNode(Low_Arm_R->GetBody(), dGetIdentityMatrix(), Shoulder_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Low_Arm_R->GetBody(), mass_distrib["ForeArm"], Ixx["ForeArm"], Iyy["ForeArm"], Izz["ForeArm"]);
 	NewtonBodyGetCentreOfMass(Low_Arm_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["ForeArm"];
-=======
-	NewtonBodySetMassMatrix(Low_Arm_R->GetBody(), masses[2], Ixx[2], Iyy[2], Izz[2]);
-	NewtonBodyGetCentreOfMass(Low_Arm_R->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[2];
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	NewtonBodySetCentreOfMass(Low_Arm_R->GetBody(), &com[0]);
 
 	Hand_R = new GeomNewton(m_winManager->aManager);
@@ -887,19 +709,11 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hand_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand, 10.0f  );
 	NewtonBodySetTransformCallback(Hand_R->GetBody(), NULL);
 	Wrist_RNode = new dModelNode(Hand_R->GetBody(), dGetIdentityMatrix(), Elbow_RNode);
-<<<<<<< HEAD
 	NewtonBodySetMassMatrix(Hand_R->GetBody(), mass_distrib["Hand"], Ixx["Hand"], Iyy["Hand"], Izz["Hand"]);
 	NewtonBodyGetCentreOfMass(Hand_R->GetBody(), &com[0]);
 	com.m_y = com.m_y + delta_cm["Hand"];
 	NewtonBodySetCentreOfMass(Hand_R->GetBody(), &com[0]);
  
-=======
-	NewtonBodySetMassMatrix(Hand_R->GetBody(), masses[3], Ixx[3], Iyy[3], Izz[3]);
-	NewtonBodyGetCentreOfMass(Hand_R->GetBody(), &com[0]);
-	com.m_y = com.m_y + DeltaCM[3];
-	NewtonBodySetCentreOfMass(Hand_R->GetBody(), &com[0]);
-    
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	// Foot pads
 
 	Heel_L = new GeomNewton(m_winManager->aManager);
@@ -1209,11 +1023,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 
-<<<<<<< HEAD
 /*	// FOOT LINES
-=======
-	// FOOT LINES
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	FootLineIndex_L = CreateFootScanLine();
 	FootLineIndex_R = CreateFootScanLine();
 
@@ -1230,11 +1040,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	//m_hfl_L->SetThetazero(phi_hl * dDegreeToRad);
 	m_hfl_L->SetThetazero(0* dDegreeToRad); // initial joint angle
 	m_hfl_L->SetMuscleParams(9.4, 0, 0, 2000, 0.5, 10.3, 9.4); // params from Geyer 
-<<<<<<< HEAD
 	*/
-=======
-	
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -1321,11 +1127,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 	//cout << "DGVehicleRCManager OnPreUpdate \n";
 
 	dVector Vtemp(0.0f);
-<<<<<<< HEAD
 	
-=======
-
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 	 //scan all  Muscle Elements
 	for (auto itr = m_winManager->aManager->vMuscleList.begin();
 		itr != m_winManager->aManager->vMuscleList.end(); itr++)
@@ -1355,11 +1157,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 		//monFlux << newTime << "  " << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << std::endl;
 
 		Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l());
-<<<<<<< HEAD
 	}	*/
-=======
-	}	
->>>>>>> 9d995fb93580974d3f7adb0ab9535f70bc03eeb5
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
