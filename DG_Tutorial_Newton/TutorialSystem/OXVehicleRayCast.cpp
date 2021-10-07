@@ -464,7 +464,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hip_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Hip_L->SetRollAngle(90.0f+hip_angle, false);
 	Hip_L->SetPosition(l_Hip*cos(hip_angle * dDegreeToRad)/2, -l_LPT/ 2 + l_Hip*sin(hip_angle * dDegreeToRad)/2, 0.0);
-	Hip_L->InitNewton(atCapsule, r_bones, r_bones, l_Hip, 1.0f);
+	Hip_L->InitNewton(atCapsule, r_bones, r_bones, l_Hip-2*r_bones, 1.0f);
 	NewtonBodySetTransformCallback(Hip_L->GetBody(), NULL);
 	Hip_LNode = new dModelNode(Hip_L->GetBody(), dGetIdentityMatrix(), this);
 
@@ -476,7 +476,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Leg_L->SetRollAngle(-90.0f - hip_angle, false);
 	Up_Leg_L->SetTurnAngle(-(180.f - phi_hl), false);
 	Up_Leg_L->SetPosition( l_Hip / 2*cos(hip_angle* dDegreeToRad) , sin(hip_angle * dDegreeToRad)*  l_Hip / 2 - (l_Up_Leg / 2 * cos(180.f * dDegreeToRad - phi_hl * dDegreeToRad)), -(l_Up_Leg / 2)* sin(180.f*dDegreeToRad -phi_hl* dDegreeToRad));
-	Up_Leg_L->InitNewton(atCapsule, r_bones,r_bones, l_Up_Leg, 10.0f);
+	Up_Leg_L->InitNewton(atCapsule, r_bones,r_bones, l_Up_Leg - 2 * r_bones, 10.0f);
 	NewtonBodySetTransformCallback(Up_Leg_L->GetBody(), NULL);
 	Up_Leg_LNode = new dModelNode(Up_Leg_L->GetBody(), dGetIdentityMatrix(), Hip_LNode);
 	NewtonBodySetMassMatrix(Up_Leg_L->GetBody(), mass_distrib["Thigh"], Ixx["Thigh"], Iyy["Thigh"], Izz["Thigh"]);
@@ -491,7 +491,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Leg_L->SetTexture0(&tex[0], "Tex0");
 	Low_Leg_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Low_Leg_L->SetPosition(0,-l_Up_Leg/2 -((l_Low_Leg / 2) * cos(180.f * dDegreeToRad - phi_kl * dDegreeToRad)),  +(l_Low_Leg / 2) * sin(180.f * dDegreeToRad - phi_kl * dDegreeToRad));
-	Low_Leg_L->InitNewton(atCapsule,  r_bones,   r_bones,  l_Low_Leg, 10.0f);
+	Low_Leg_L->InitNewton(atCapsule,  r_bones,   r_bones,  l_Low_Leg - 2 * r_bones, 10.0f);
 	NewtonBodySetTransformCallback(Low_Leg_L->GetBody(), NULL);
 	Low_Leg_LNode = new dModelNode(Low_Leg_L->GetBody(), dGetIdentityMatrix(), Up_Leg_LNode);
 	NewtonBodySetMassMatrix(Low_Leg_L->GetBody(), mass_distrib["Shank"], Ixx["Shank"], Iyy["Shank"], Izz["Shank"]);
@@ -538,7 +538,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hip_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Hip_R->SetRollAngle(-90.0f - hip_angle, false);
 	Hip_R->SetPosition(-l_Hip*cos(hip_angle* dDegreeToRad) / 2, - l_LPT / 2 + l_Hip * sin(hip_angle * dDegreeToRad) / 2, 0);
-	Hip_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hip, 1.0f  );
+	Hip_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hip-2*r_bones, 1.0f  );
 	NewtonBodySetTransformCallback(Hip_R->GetBody(), NULL);
 	Hip_RNode = new dModelNode(Hip_R->GetBody(), dGetIdentityMatrix(), this);
 
@@ -549,7 +549,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Leg_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Up_Leg_R->SetRollAngle(90.0f + hip_angle, false);
 	Up_Leg_R->SetPosition(-  l_Hip / 2 * cos(hip_angle * dDegreeToRad) , sin(hip_angle* dDegreeToRad)*l_Hip / 2 - l_Up_Leg / 2, 0);
-	Up_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Leg, 10.0f  );
+	Up_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Leg - 2 * r_bones, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Leg_R->GetBody(), NULL);
 	Up_Leg_RNode = new dModelNode(Up_Leg_R->GetBody(), dGetIdentityMatrix(), Hip_RNode);
 	NewtonBodySetMassMatrix(Up_Leg_R->GetBody(), mass_distrib["Thigh"], Ixx["Thigh"], Iyy["Thigh"], Izz["Thigh"]);
@@ -563,7 +563,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Leg_R->SetTexture0(&tex[0], "Tex0");
 	Low_Leg_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Low_Leg_R->SetPosition(0, -  (l_Up_Leg + l_Low_Leg) / 2 , 0);
-	Low_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Leg, 10.0f);
+	Low_Leg_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Leg - 2 * r_bones, 10.0f);
 	NewtonBodySetTransformCallback(Low_Leg_R->GetBody(), NULL);
 	Low_Leg_RNode = new dModelNode(Low_Leg_R->GetBody(), dGetIdentityMatrix(), Up_Leg_RNode);
 	NewtonBodySetMassMatrix(Low_Leg_R->GetBody(), mass_distrib["Shank"], Ixx["Shank"], Iyy["Shank"], Izz["Shank"]);
@@ -609,7 +609,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Clav_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Clav_L->SetRollAngle(90.0f + clav_angle, false);
 	Clav_L->SetPosition(  l_Clav* cos(clav_angle* dDegreeToRad) / 2 + 2 *   r_bones,   l_UPT / 2 +   l_Clav * sin(clav_angle * dDegreeToRad) / 2 - l_delta, 0);
-	Clav_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Clav, 1.0f  );
+	Clav_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Clav - 2 * r_bones, 1.0f  );
 	NewtonBodySetTransformCallback(Clav_L->GetBody(), NULL);
 	Clav_LNode = new dModelNode(Clav_L->GetBody(), dGetIdentityMatrix(), UPT_Node);
 
@@ -620,7 +620,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Arm_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Up_Arm_L->SetRollAngle(-90.0f  - clav_angle, false);
 	Up_Arm_L->SetPosition(  l_Clav * cos(clav_angle * dDegreeToRad) / 2, sin(clav_angle* dDegreeToRad)*   l_Clav / 2 -   l_Up_Arm / 2, 0);
-	Up_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm, 10.0f  );
+	Up_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm - 2 * r_bones, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Arm_L->GetBody(), NULL);
 	Shoulder_LNode = new dModelNode(Up_Arm_L->GetBody(), dGetIdentityMatrix(), Clav_LNode);
 	NewtonBodySetMassMatrix(Up_Arm_L->GetBody(), mass_distrib["UpArm"], Ixx["UpArm"], Iyy["UpArm"], Izz["UpArm"]);
@@ -634,7 +634,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Arm_L->SetTexture0(&tex[0], "Tex0");
 	Low_Arm_L->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Low_Arm_L->SetPosition(0, -  (l_Up_Arm + l_Low_Arm) / 2, 0);
-	Low_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm, 10.0f);
+	Low_Arm_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm - 2 * r_bones, 10.0f);
 	NewtonBodySetTransformCallback(Low_Arm_L->GetBody(), NULL);
 	Elbow_LNode = new dModelNode(Low_Arm_L->GetBody(), dGetIdentityMatrix(), Shoulder_LNode);
 	NewtonBodySetMassMatrix(Low_Arm_L->GetBody(), mass_distrib["ForeArm"], Ixx["ForeArm"], Iyy["ForeArm"], Izz["ForeArm"]);
@@ -649,7 +649,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hand_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Hand_L->SetPitchAngle(90.0f, false);
 	Hand_L->SetPosition(0, -  (l_Low_Arm+ l_Hand) / 2,0);
-	Hand_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand, 10.0f  );
+	Hand_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand - r_bones, 10.0f  );
 	NewtonBodySetTransformCallback(Hand_L->GetBody(), NULL);
 	Wrist_LNode = new dModelNode(Hand_L->GetBody(), dGetIdentityMatrix(), Elbow_LNode);
 	NewtonBodySetMassMatrix(Hand_L->GetBody(), mass_distrib["Hand"], Ixx["Hand"], Iyy["Hand"], Izz["Hand"]);
@@ -666,7 +666,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Clav_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Clav_R->SetRollAngle(90.0f - clav_angle, false);
 	Clav_R->SetPosition(-  l_Clav* cos(clav_angle* dDegreeToRad) / 2 - 2 *   r_bones,   l_UPT / 2 +   l_Clav * sin(clav_angle * dDegreeToRad) / 2 - l_delta, 0);
-	Clav_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Clav, 1.0f  );
+	Clav_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Clav - 2 * r_bones, 1.0f  );
 	NewtonBodySetTransformCallback(Clav_R->GetBody(), NULL);
 	Clav_RNode = new dModelNode(Clav_R->GetBody(), dGetIdentityMatrix(), UPT_Node);
 
@@ -677,7 +677,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Up_Arm_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Up_Arm_R->SetRollAngle(-90.0f + clav_angle, false);
 	Up_Arm_R->SetPosition(-  l_Clav* cos(clav_angle* dDegreeToRad) / 2, sin(clav_angle* dDegreeToRad)*   l_Clav / 2 -   l_Up_Arm / 2, 0);
-	Up_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm, 10.0f  );
+	Up_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Up_Arm - 2 * r_bones, 10.0f  );
 	NewtonBodySetTransformCallback(Up_Arm_R->GetBody(), NULL);
 	Shoulder_RNode = new dModelNode(Up_Arm_R->GetBody(), dGetIdentityMatrix(), Clav_RNode);
 	NewtonBodySetMassMatrix(Up_Arm_R->GetBody(), mass_distrib["UpArm"], Ixx["UpArm"], Iyy["UpArm"], Izz["UpArm"]);
@@ -691,7 +691,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Low_Arm_R->SetTexture0(&tex[0], "Tex0");
 	Low_Arm_R->SetDiffuseColor(0.7f, 0.7f, 0.7f);
 	Low_Arm_R->SetPosition(0, -  (l_Up_Arm + l_Low_Arm) / 2, 0);
-	Low_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm, 10.0f);
+	Low_Arm_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Low_Arm - 2 * r_bones, 10.0f);
 	NewtonBodySetTransformCallback(Low_Arm_R->GetBody(), NULL);
 	Elbow_RNode = new dModelNode(Low_Arm_R->GetBody(), dGetIdentityMatrix(), Shoulder_RNode);
 	NewtonBodySetMassMatrix(Low_Arm_R->GetBody(), mass_distrib["ForeArm"], Ixx["ForeArm"], Iyy["ForeArm"], Izz["ForeArm"]);
@@ -706,7 +706,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hand_R->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 	Hand_R->SetPitchAngle(90.0f, false);
 	Hand_R->SetPosition(0, -  (l_Low_Arm + l_Hand) / 2, 0);
-	Hand_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand, 10.0f  );
+	Hand_R->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand -  r_bones, 10.0f  );
 	NewtonBodySetTransformCallback(Hand_R->GetBody(), NULL);
 	Wrist_RNode = new dModelNode(Hand_R->GetBody(), dGetIdentityMatrix(), Elbow_RNode);
 	NewtonBodySetMassMatrix(Hand_R->GetBody(), mass_distrib["Hand"], Ixx["Hand"], Iyy["Hand"], Izz["Hand"]);
@@ -887,7 +887,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	// create wrist joint.
 	dMatrix Wrist_LPinMatrix(dGetIdentityMatrix());
 	Wrist_LPinMatrix = Wrist_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
-	Wrist_LPinMatrix.m_posit = dVector(Hand_L->GetPosition().m_x, Hand_L->GetPosition().m_y +   l_Hand / 2, Hand_L->GetPosition().m_z, 1.0f);
+	Wrist_LPinMatrix.m_posit = dVector(Hand_L->GetPosition().m_x, Hand_L->GetPosition().m_y +  l_Hand / 2, Hand_L->GetPosition().m_z, 1.0f);
 	Wr_L = new dCustomBallAndSocket(Wrist_LPinMatrix, Hand_L->GetBody(), Low_Arm_L->GetBody());
 	m_winManager->aManager->vJointList.push_back(Wr_L);
 
@@ -994,7 +994,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Rotule_R->SetLimits(-40.f * dDegreeToRad, 120.f * dDegreeToRad);
 	Rotule_R->SetLimits1(-30.f * dDegreeToRad, 5.0f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Rotule_R);
-
+	 
 	// create knee joint. 
 	dMatrix Knee_RPinMatrix(dGetIdentityMatrix());
 	Knee_RPinMatrix = Knee_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
@@ -1023,13 +1023,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Flextoe_R->SetAsSpringDamper(true,  1.e3f, 1.e2f);
 	m_winManager->aManager->vJointList.push_back(Flextoe_R);
 
-/*	// FOOT LINES
+	// FOOT LINES
 	FootLineIndex_L = CreateFootScanLine();
 	FootLineIndex_R = CreateFootScanLine();
 
 	// MUSCLE DEFINITION
 
-	//EX: hfl muscle Creation:
+/*	//EX: hfl muscle Creation:
 	//1. Origin body: Up_Leg, 
 	//2. Insertion body: Hip, 
 	//3. Joint: Rotule, 
@@ -1166,8 +1166,8 @@ void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timest
 {
 	//printf("DGVehicleRCManager OnPostUpdate \n");
 	dRaycastVHModel* controller = (dRaycastVHModel*)model;
-	//controller->CastFoot("L");
-	//controller->CastFoot("R");
+	controller->CastFoot("L");
+	controller->CastFoot("R");
 }
 
 void DGVehicleRCManager::OnUpdateTransform(const dModelNode* const bone, const dMatrix& localMatrix) const
