@@ -121,11 +121,11 @@ private:
 	dCustomDoubleHinge* Strn_L;
 	dCustomHinge* Elb_L;
 	dCustomBallAndSocket* shld_L;
-	dCustomBallAndSocket* Wr_L;
+	dCustomHinge* Wr_L;
 	dCustomDoubleHinge* Strn_R;
 	dCustomHinge* Elb_R;
 	dCustomBallAndSocket* shld_R;
-	dCustomBallAndSocket* Wr_R;
+	dCustomHinge* Wr_R;
 	dCustomDoubleHinge* Hd;
 	dCustomDoubleHinge* Nck;
 	dCustomDoubleHinge* Hl_L;
@@ -144,7 +144,7 @@ private:
 	map<std::string, float> lengths;
 	map<std::string, float> mass_distrib,delta_cm;
 	map<std::string, float> Ixx,Iyy,Izz;
-	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck" };
+	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck", "RadBones","RadSpheres" };
 	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT"};
 
 

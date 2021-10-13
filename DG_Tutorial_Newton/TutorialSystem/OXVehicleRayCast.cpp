@@ -348,9 +348,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	h_foot		= scale_length * lengths["AnkleHeight"]; // ankle height
 	l_neck		= scale_length * lengths["Neck"];
 	l_delta		= scale_length * (0.0345- 0.0213); // distance from acromion to shoulder joint (arcomion position computed relative to proximal point of UPT 553.2-531.9 mm)
-	r_bones		= h_foot / 2.0f;
+	r_bones		= scale_length * lengths["RadBones"];
 	r_Pad		= w_foot / 4.0f;
-	h_sphere	= h_foot / 2.0f;
+	h_sphere	= scale_length * lengths["RadSpheres"];
 	l_foot		= l_foot - l_toe;
 	ankle_j		= scale_length * 0.046f * sin(49 * dDegreeToRad); // [m] distance from heel to ankle joint in z direction ((Isman and Inman, 1969; Lee et al., 2011; Zatsiorsky, 2002)
 
@@ -646,7 +646,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Hand_L->SetBodyType(adtDynamic);
 	Hand_L->SetParent(Low_Arm_L);
 	Hand_L->SetTexture0(&tex[0], "Tex0");
-	Hand_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+	Hand_L->SetDiffuseColor(1.0f, 0.8f, 0.8f);
 	Hand_L->SetPitchAngle(90.0f, false);
 	Hand_L->SetPosition(0, -  (l_Low_Arm+ l_Hand) / 2,0);
 	Hand_L->InitNewton(atCapsule,   r_bones,   r_bones,   l_Hand - r_bones, 10.0f  );
@@ -881,20 +881,21 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Elbow_LPinMatrix.m_posit = dVector(Low_Arm_L->GetPosition().m_x, Low_Arm_L->GetPosition().m_y +   l_Low_Arm / 2, Low_Arm_L->GetPosition().m_z, 1.0f);
 	Elb_L = new dCustomHinge(Elbow_LPinMatrix, Low_Arm_L->GetBody(), Up_Arm_L->GetBody());
 	Elb_L->EnableLimits(true);
-	Elb_L->SetLimits(0.f * dDegreeToRad, 180.f);	
+	Elb_L->SetLimits(0.f * dDegreeToRad, 180.f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Elb_L);
 
 	// create wrist joint.
 	dMatrix Wrist_LPinMatrix(dGetIdentityMatrix());
 	Wrist_LPinMatrix = Wrist_LPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 	Wrist_LPinMatrix.m_posit = dVector(Hand_L->GetPosition().m_x, Hand_L->GetPosition().m_y +  l_Hand / 2, Hand_L->GetPosition().m_z, 1.0f);
-	Wr_L = new dCustomBallAndSocket(Wrist_LPinMatrix, Hand_L->GetBody(), Low_Arm_L->GetBody());
+	Wr_L = new dCustomHinge(Wrist_LPinMatrix, Hand_L->GetBody(), Low_Arm_L->GetBody());
+	Wr_L->EnableLimits(true);
+	Wr_L->SetLimits(45.f * dDegreeToRad, 45.f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Wr_L);
 
 	// Right upper limb joints
 
 	// create sternum joint. 
-
 	Sternum_PinMatrix.m_posit = dVector(MPT->GetPosition().m_x -   r_bones, MPT->GetPosition().m_y +   l_MPT / 2, MPT->GetPosition().m_z, 1.0f);
 	Strn_R = new dCustomDoubleHinge(Sternum_PinMatrix, Clav_R->GetBody(), MPT->GetBody());
 	Strn_R->SetMassIndependentSpringDamper(true, 0.01, 1.e6f, 1.e4f);
@@ -914,15 +915,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Elbow_RPinMatrix = Elbow_RPinMatrix * dPitchMatrix(90.0f * dDegreeToRad);
 	Elbow_RPinMatrix.m_posit = dVector(Low_Arm_R->GetPosition().m_x, Low_Arm_R->GetPosition().m_y +   l_Low_Arm / 2, Low_Arm_R->GetPosition().m_z, 1.0f);
 	Elb_R = new dCustomHinge(Elbow_RPinMatrix, Low_Arm_R->GetBody(), Up_Arm_R->GetBody());
-	Elb_R->EnableLimits(true);
-	Elb_R->SetLimits(0.f * dDegreeToRad, 180.f);
 	m_winManager->aManager->vJointList.push_back(Elb_R);
 
 	// create wrist joint.
 	dMatrix Wrist_RPinMatrix(dGetIdentityMatrix());
 	Wrist_RPinMatrix = Wrist_RPinMatrix * dYawMatrix(90.0f * dDegreeToRad);
 	Wrist_RPinMatrix.m_posit = dVector(Hand_R->GetPosition().m_x, Hand_R->GetPosition().m_y +   l_Hand / 2, Hand_R->GetPosition().m_z, 1.0f);
-	Wr_R = new dCustomBallAndSocket(Wrist_RPinMatrix, Hand_R->GetBody(), Low_Arm_R->GetBody());
+	Wr_R = new dCustomHinge(Wrist_RPinMatrix, Hand_R->GetBody(), Low_Arm_R->GetBody());
 	m_winManager->aManager->vJointList.push_back(Wr_R);
 
 
@@ -952,7 +951,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Knee_LPinMatrix.m_posit = dVector(Low_Leg_L->GetPosition().m_x, Low_Leg_L->GetPosition().m_y +   l_Low_Leg / 2 , Low_Leg_L->GetPosition().m_z, 1.0f);
 	Knee_L = new dCustomHinge(Knee_LPinMatrix, Low_Leg_L->GetBody(), Up_Leg_L->GetBody());
 	Knee_L->EnableLimits(true);
-	Knee_L->SetLimits(-180.f * dDegreeToRad,0.f);
+	Knee_L->SetLimits(-180.f * dDegreeToRad,0.f * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Knee_L);
 
 	// create ankle joint.
@@ -1001,7 +1000,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 	Knee_RPinMatrix.m_posit = dVector(Low_Leg_R->GetPosition().m_x, Low_Leg_R->GetPosition().m_y +   l_Low_Leg / 2 , Low_Leg_R->GetPosition().m_z, 1.0f);
 	Knee_R = new dCustomHinge(Knee_RPinMatrix, Low_Leg_R->GetBody(), Up_Leg_R->GetBody());
 	Knee_R->EnableLimits(true);
-	Knee_R->SetLimits(-180.f * dDegreeToRad, 0);
+	Knee_R->SetLimits(-180.f * dDegreeToRad, 0 * dDegreeToRad);
 	m_winManager->aManager->vJointList.push_back(Knee_R);
 
 	// create ankle joint.

@@ -5,7 +5,7 @@
 	   <!--Scaling factor of length and mass-->
         <Scale length ="1.0" mass ="1.0"/>
 	   <!-- Lengths in m, Weight in kg, Masses in % of Weight, Inertia in Radius of gyration in % of Weight, COM in % (starting from proximal point of each segment) of length, Angles in degrees, Insertion Points' distances in m (starting from COM)  -->
-        <Lengths Head="0.203" UpArm="0.282" ForeArm="0.269" Hand="0.086" Trunk="0.532" Thigh="0.422" Shank="0.434" Foot="0.258" Toes="0.047" UPT="0.171" MPT="0.216" LPT="0.146" Hip="0.166" Shoulder="0.225" FootBreadth="0.096" AnkleHeight="0.068" Neck="0.040"/>
+        <Lengths Head="0.203" UpArm="0.282" ForeArm="0.269" Hand="0.086" Trunk="0.532" Thigh="0.422" Shank="0.434" Foot="0.258" Toes="0.047" UPT="0.171" MPT="0.216" LPT="0.146" Hip="0.166" Shoulder="0.225" FootBreadth="0.096" AnkleHeight="0.048" Neck="0.040" RadBones="0.035" RadSpheres="0.03"/>
 		<Weight value="73.0"/>
 		<Masses Head="0.069" UpArm="0.027" ForeArm="0.016" Hand="0.006" Trunk="0.435" Thigh="0.142" Shank="0.043" Foot="0.014" Toes="0.003" UPT="0.219" MPT="0.224" LPT="0.153"/>
 		<Inertia>
