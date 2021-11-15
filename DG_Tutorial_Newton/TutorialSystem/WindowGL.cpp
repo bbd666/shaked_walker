@@ -575,60 +575,13 @@ MainCamera* WindowMain::GetCamera()
 	return Camera;
 }
 
-void WindowMain::MainLoop()
-//initialize ImGui
-{
-ImGui_ImplGlfwGL3_Init(contextGL, false);
-
-//initialize excitation list
-//std::vector<float> initExcitation = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-//										  0.0, 0.0, 0.0, 0.0, 0.0 , 0.0 , 0.0, 0.0 };
-std::vector<float> initExcitation = { 0.0 };
-while (!glfwWindowShouldClose(contextGL))
-{
-	//create empty frame
-	ImGui_ImplGlfwGL3_NewFrame();
-
-	// populate frame with 16 Sliders: 8 for left, 8 for right
+void WindowMain::MainLoop(){
+	while (!glfwWindowShouldClose(contextGL))
 	{
-		ImGui::Text("Excitation");
-		ImGui::SliderFloat("HFL Left", &initExcitation[0], 0.0f, 1.0f);
-		/*ImGui::Columns(2);
-
-		ImGui::SliderFloat("SOL Left", &initExcitation[0], 0.0f, 1.0f);
-		ImGui::SliderFloat("TA Left", &initExcitation[1], 0.0f, 1.0f);
-		ImGui::SliderFloat("GAS Left", &initExcitation[2], 0.0f, 1.0f);
-		ImGui::SliderFloat("VAS Left", &initExcitation[3], 0.0f, 1.0f);
-		ImGui::SliderFloat("HAM Left", &initExcitation[4], 0.0f, 1.0f);
-		ImGui::SliderFloat("RF Left", &initExcitation[5], 0.0f, 1.0f);
-		ImGui::SliderFloat("GLU Left", &initExcitation[6], 0.0f, 1.0f);
-		ImGui::SliderFloat("HFL Left", &initExcitation[7], 0.0f, 1.0f);
-
-		ImGui::NextColumn();
-
-		ImGui::SliderFloat("SOL Right", &initExcitation[8], 0.0f, 1.0f);
-		ImGui::SliderFloat("TA Right", &initExcitation[9], 0.0f, 1.0f);
-		ImGui::SliderFloat("GAS Right", &initExcitation[10], 0.0f, 1.0f);
-		ImGui::SliderFloat("VAS Right", &initExcitation[11], 0.0f, 1.0f);
-		ImGui::SliderFloat("HAM Right", &initExcitation[12], 0.0f, 1.0f);
-		ImGui::SliderFloat("RF Right", &initExcitation[13], 0.0f, 1.0f);
-		ImGui::SliderFloat("GLU Right", &initExcitation[14], 0.0f, 1.0f);
-		ImGui::SliderFloat("HFL Right", &initExcitation[15], 0.0f, 1.0f);*/
-
-		//set excitation values if the ImGui box is clicked
-		//if not for this check, values of excitation are set redundantly at every frame
-		if (ImGui::IsMouseHoveringWindow() && ImGui::IsMouseDown(0))
-			aManager->SetExcitationList(initExcitation);
+		MainRender();
+		glfwSwapBuffers(contextGL);
+		glfwPollEvents();
 	}
-
-	// Rendering
-	MainRender();
-	ImGui::Render();
-	glfwSwapBuffers(contextGL);
-	glfwPollEvents();
-}
-//close ImGui on exit
-ImGui_ImplGlfwGL3_Shutdown();
 }
 
 void WindowMain::InitGLRender()

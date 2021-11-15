@@ -45,95 +45,14 @@ public:
 
 private:
 	WindowMain* m_winManager;
-	GeomNewton* UPT;
-	GeomNewton* LPT;
 	GeomNewton* MPT;
-	GeomNewton* Hip_L;
-	GeomNewton* Up_Leg_L;
-	GeomNewton* Low_Leg_L;
+	GeomNewton* LPT;
 	GeomNewton* Plantar_L;
-	GeomNewton* Toe_L;
-	GeomNewton* Hip_R;
-	GeomNewton* Up_Leg_R;
-	GeomNewton* Low_Leg_R;
 	GeomNewton* Plantar_R;
-	GeomNewton* Toe_R;
-	GeomNewton* Clav_L;
-	GeomNewton* Up_Arm_L;
-	GeomNewton* Low_Arm_L;
-	GeomNewton* Hand_L;
-	GeomNewton* Clav_R;
-	GeomNewton* Up_Arm_R;
-	GeomNewton* Low_Arm_R;
-	GeomNewton* Hand_R;
-	GeomNewton* Head;
-	GeomNewton* Heel_L;
-	GeomNewton* Pad1_L;
-	GeomNewton* Pad2_L;
-	GeomNewton* Heel_R;
-	GeomNewton* Pad1_R;
-	GeomNewton* Pad2_R;
 
+	dModelNode* N1;
 
-
-//	dModelNode* SacrumNode;
-	dModelNode* Hip_LNode;
-	dModelNode* Up_Leg_LNode;
-	dModelNode* Low_Leg_LNode;
-	dModelNode* Foot_LNode;
-	dModelNode* Toe_LNode;
-	dModelNode* Hip_RNode;
-	dModelNode* Up_Leg_RNode;
-	dModelNode* Low_Leg_RNode;
-	dModelNode* Foot_RNode;
-	dModelNode* Toe_RNode;
-	dModelNode* Lumbar_Node;
-	dModelNode* Clav_LNode;
-	dModelNode* Shoulder_LNode;
-	dModelNode* Elbow_LNode;
-	dModelNode* Wrist_LNode;
-	dModelNode* Clav_RNode;
-	dModelNode* Shoulder_RNode;
-	dModelNode* Elbow_RNode;
-	dModelNode* Wrist_RNode;
-	dModelNode* UPT_Node;
-	dModelNode* LPT_Node;
-	dModelNode* Head_Node;
-	dModelNode* Heel_L_Node;
-	dModelNode* Pad1_L_Node;
-	dModelNode* Pad2_L_Node;
-	dModelNode* Heel_R_Node;
-	dModelNode* Pad1_R_Node;
-	dModelNode* Pad2_R_Node;
-
-
-	dCustomDoubleHinge* Disk1_L;
-	dCustomHinge* Rotule_L;
-	dCustomHinge* Knee_L;
-	dCustomBallAndSocket* Ankle_L;
-	dCustomHinge* Flextoe_L;
-	dCustomDoubleHinge* Disk1_R;
-	dCustomDoubleHinge* Rotule_R;
-	dCustomHinge* Knee_R;
-	dCustomBallAndSocket* Ankle_R;
-	dCustomHinge* Flextoe_R;
-	dCustomDoubleHinge* Disk2;
-	dCustomDoubleHinge* Strn_L;
-	dCustomHinge* Elb_L;
-	dCustomBallAndSocket* shld_L;
-	dCustomHinge* Wr_L;
-	dCustomDoubleHinge* Strn_R;
-	dCustomHinge* Elb_R;
-	dCustomBallAndSocket* shld_R;
-	dCustomHinge* Wr_R;
-	dCustomDoubleHinge* Hd;
-	dCustomDoubleHinge* Nck;
-	dCustomDoubleHinge* Hl_L;
-	dCustomDoubleHinge* Pd1_L;
-	dCustomDoubleHinge* Pd2_L;
-	dCustomDoubleHinge* Hl_R;
-	dCustomDoubleHinge* Pd1_R;
-	dCustomDoubleHinge* Pd2_R;
+	dCustomHinge* J1;
 
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
@@ -166,7 +85,7 @@ private:
 	float r_Pad;
 	float h_sphere;
 	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
-	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
+	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * gluteus;
 	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 
 	dVector  ContactFoot_L;

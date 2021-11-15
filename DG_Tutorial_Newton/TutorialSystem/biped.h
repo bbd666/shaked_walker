@@ -23,7 +23,8 @@ struct Muscle
 	dVector GetInsert2_GlobalRef();
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetExcitation(const float iExcitation);
-	void GetMuscleParams(double& angle, double& lce, double& Fmuscle);
+	float GetExcitation();
+	void GetMuscleParams(double& angle, double& lce, double& Fmuscle, double& V);
 	void SetStepSize(const float iStepSize);
 	
 	void SetLength0(float l);
@@ -33,6 +34,7 @@ struct Muscle
 	float fSE(const float l);
 	float fCE(const float l, const float t);
 	float fPE(const float l);
+	float fDE(const float l, const float t);
 	double Compute_muscle_Torque(dFloat time);
 	double Compute_muscle_length(double jointangle);
 	void SetThetazero(double angle);
@@ -61,8 +63,9 @@ private:
 	dVector m_Insert1;
 	dVector m_Insert2;
 	int LineIndex;
-	float l_opt; // [cm] optimum muscle length 
-	float vm; // [cm/s] muscle velocity
+	float l_opt; // [cm] optimum muscle length
+	float v; // [cm/s]  muscle velocity
+	float vm; // [cm/s] max muscle velocity
 	float lCE; // [cm] contractile element length
 	float activation; // activation level of the muscle [0-1]
 	float stepSize;
