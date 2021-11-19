@@ -45,14 +45,14 @@ public:
 
 private:
 	WindowMain* m_winManager;
-	GeomNewton* MPT;
+	GeomNewton* UP_leg;
 	GeomNewton* LPT;
 	GeomNewton* Plantar_L;
 	GeomNewton* Plantar_R;
 
 	dModelNode* N1;
 
-	dCustomHinge* J1;
+	dCustomHinge* Hip;
 
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
@@ -85,7 +85,7 @@ private:
 	float r_Pad;
 	float h_sphere;
 	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
-	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * gluteus;
+	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * hfl;
 	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 
 	dVector  ContactFoot_L;
@@ -114,6 +114,7 @@ public:
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
 	//
 	dRaycastVHModel* m_player;
+
 private:
 	WindowMain* m_winManager;
 };

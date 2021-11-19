@@ -44,11 +44,9 @@ int dRaycastVHModel::dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<
     printf("\n");
     while (pAttrib)
     {
-        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f]", pIndent, pAttrib->Name(), dval);
+        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
         
-    
         vector.push_back(dval);
-        printf("\n");
         i++;
         pAttrib = pAttrib->Next();
     }
@@ -67,7 +65,7 @@ int dRaycastVHModel::dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<st
     printf("\n");
     while (pAttrib)
     {
-        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f]", pIndent, pAttrib->Name(), dval);
+        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
 
         l.find(pAttrib->Name())->second = dval;
         i++;
@@ -164,14 +162,14 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
         }
         else
         {
-            printf("ERROR IN XML. PLEASE CHECK \n");
+            printf("No attributes \n");
         }
 
         switch (num)
         {
-        case 0:  printf(" (No attributes)"); break;
-        case 1:  printf("%s1 attribute", getIndentAlt(indent)); break;
-        default: printf("%s%d attributes", getIndentAlt(indent), num); break;
+        case 0:  break;
+        case 1:  printf("%s1 attribute \n", getIndentAlt(indent)); break;
+        default: printf("%s%d attributes \n", getIndentAlt(indent), num); break;
         }
         break;
     }
@@ -216,7 +214,9 @@ void dRaycastVHModel::dump_to_stdout(const char* pFilename)
         printf("Failed to load file \"%s\"\n", pFilename);
     }
 }
-
+// ----------------------------------------------------------------------
+// MODEL CLASS DEFINITION
+// ----------------------------------------------------------------------
 dRaycastVHModel::~dRaycastVHModel()
 {
      
@@ -225,7 +225,7 @@ dRaycastVHModel::~dRaycastVHModel()
 dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName, const dMatrix& location, int linkMaterilID)
     : dModelRootNode(NULL, dGetIdentityMatrix())
     , m_winManager(winctx)
-    , MPT(NULL)
+    , UP_leg(NULL)
     , LPT(NULL)
     , Plantar_L(NULL)
     , Plantar_R(NULL)
@@ -248,7 +248,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     TiXmlDocument doc("DummyGeometricProperties.xml");
     bool loadOkay = doc.LoadFile();
     (dump_to_stdout(&doc)); //parse the xml and load parameters
-    if (v_scale.size() != 2 || v_lengths.size() != 17 || v_total_weight.size() != 1 || v_masses.size() != 12 || v_ixx.size() != 12 || v_iyy.size() != 12 || v_izz.size() != 12 || v_com.size() != 12 || v_angles.size() != 2)
+    if (v_scale.size() != 2 || lengths.size() != 19 || v_total_weight.size() != 1 || mass_distrib.size() != 12 || Ixx.size() != 12 || Iyy.size() != 12 || Izz.size() != 12 || delta_cm.size() != 12 || v_angles.size() != 2)
         std::cout << "ERROR IN XML" << std::endl;
     // Saving data in the program//
     string tex("Textures//wood6.png");
@@ -314,7 +314,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
     glm::vec3 _Pos(glm::vec3(0.0f, l_LPT/2+ l_Up_Leg+ l_Low_Leg+ h_foot+0.25f, 0.f)); // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral) Y(vertical) Z(front)
 
-
+    float min_hip_angle = 180 * dDegreeToRad;
     // BODIES OF THE DUMMY DEFINITION
 
     LPT = new GeomNewton(m_winManager->aManager);
@@ -327,27 +327,24 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     m_body = LPT->GetBody();
     NewtonBodySetTransformCallback(m_body, NULL);
 
-
-    MPT = new GeomNewton(m_winManager->aManager);
-    MPT->SetBodyType(adtDynamic);
-    MPT->SetParent(LPT);
-    MPT->SetTexture0(&tex[0], "Tex0");
-    MPT->SetDiffuseColor(1.0f, 1.0f, 1.0f);
-    MPT->SetPosition(0, -l_LPT / 2 - l_MPT / 2  - r_bones, 0);
-    MPT->InitNewton(atCapsule, r_bones, r_bones, l_MPT, 15.0f);
-    NewtonBodySetTransformCallback(MPT->GetBody(), NULL);
-    N1 = new dModelNode(MPT->GetBody(), dGetIdentityMatrix(), this);
+    float mass, ix, iy, iz;
+    UP_leg = new GeomNewton(m_winManager->aManager);
+    UP_leg->SetBodyType(adtDynamic);
+    UP_leg->SetParent(LPT);
+    UP_leg->SetTexture0(&tex[0], "Tex0");
+    UP_leg->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+    UP_leg->SetPosition(0, -l_LPT / 2 - l_Up_Leg / 2  - r_bones, 0);
+    UP_leg->InitNewton(atCapsule, r_bones, r_bones, l_Up_Leg, 15.0f);
+    NewtonBodyGetMass(UP_leg->GetBody(), &mass, &ix, &iy, &iz); // add values in local coordinates of body
+    NewtonBodySetTransformCallback(UP_leg->GetBody(), NULL);
+    N1 = new dModelNode(UP_leg->GetBody(), dGetIdentityMatrix(), this);
 
     // create Neck joint. 
-    dMatrix Neck_PinMatrix(dGetIdentityMatrix()); // define the pin
+    dMatrix Hip_PinMatrix(dGetIdentityMatrix()); // define the pin
     //Neck_PinMatrix = Neck_PinMatrix * dRollMatrix(90.0f * dDegreeToRad);
-    Neck_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
-    J1 = new dCustomHinge(Neck_PinMatrix, LPT->GetBody(), MPT->GetBody());
-    J1->EnableLimits(1);
-    J1->SetLimits(-90.0f * dDegreeToRad, 0.0f);
-    m_winManager->aManager->vJointList.push_back(J1);
-
-
+    Hip_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
+    Hip = new dCustomHinge(Hip_PinMatrix, LPT->GetBody(), UP_leg->GetBody());
+    m_winManager->aManager->vJointList.push_back(Hip);
     ////// MUSCLE DEFINITION
 
     //////EX: hfl muscle Creation:
@@ -355,12 +352,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     //////2. Insertion body: Hip, 
     //////3. Joint: Rotule, 
     //////4. Mesh coordinates: vector 1 on body 1, vector 2 on body 2 (change the values in 'DummyGeometricProperties.xml' file)
-    gluteus = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, MPT, J1, dVector(0, 0, -r_bones), dVector(0, 0, -r_bones));
-    gluteus->GenerateMesh();
-    m_winManager->aManager->vMuscleList.push_back(gluteus);
-    gluteus->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    gluteus->SetMuscleParams(10, 0, 180.0f * dDegreeToRad, 1500, 0.5, 11, 13); // params from Geyer 
-    gluteus->SetLCE(11.0f);
+    hfl = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, Hip, dVector(0, 0, -r_bones), dVector(0, 0, -r_bones));
+    hfl->GenerateMesh();
+    m_winManager->aManager->vMuscleList.push_back(hfl);
+    hfl->SetThetazero((180)* dDegreeToRad); // initial joint angle
+    hfl->SetMuscleParams(10, 0, 180.0f * dDegreeToRad, 2000, 0.5, 11, 10, 12); // params from Geyer 
+    hfl->SetLCE(10.6f); // balanced initial condition
+    hfl->SetMaxJointAngle(min_hip_angle);
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -453,41 +451,35 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         itr != m_winManager->aManager->vMuscleList.end(); itr++)
     {
         Muscle* Mobj = (Muscle*)*itr;
-        float ext;
-        if (newTime < 1.0)
-            ext = 0.0;
-        else if (newTime < 2.0)
-            ext = 0.3;
-        else if (newTime < 4.0)
-            ext = 0;
-        else if (newTime < 5.0)
-            ext = 0.3;
-        else
-            ext = 0.00001;
+        // Impose sinusoidal rotation of joint
+        dCustomHinge* joint = (dCustomHinge*)(Mobj->joint);
+        float mv = 3.14f/3.f; // motor speed in [rad/s]
+        joint->EnableMotor(1, 2*3.14f*mv*cos(2*3.14f*newTime));
+        joint->SetFriction(1.0e4f);
 
-        Mobj->SetExcitation(ext);
+        Mobj->SetNeuralDelay(1.f / 2400.f); // 1.f/2400.f s
+        Mobj->SetActivation(1.0f);
         double Ttemp = Mobj->Compute_muscle_Torque(timestep);
-        // Get the Body1 connected to the muscle and apply the muscle force
-        GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
-        NewtonBody* NBody = gNewton->GetBody();
-        Mobj->SetStepSize(1/1000.0f); //1000 Hz or 1/1000 s
-        dVector T(0.0f, 0.0f, 0.0f);
-        T.m_x = Ttemp;
-        NewtonBodyAddTorque(NBody, &T.m_x);
 
-        // Get the Body2 connected and apply the opposite muscle force
-        gNewton = (GeomNewton*)(Mobj->body2);
-        NBody = (NewtonBody*)gNewton->GetBody();
-        T.Scale(-1); // opposite force on second body
-        NewtonBodyAddTorque(NBody, &T.m_x);
+        //// Get the Body1 connected to the muscle and apply the muscle force
+        //GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
+        //NewtonBody* NBody = gNewton->GetBody();
+        //dVector T(0.0f, 0.0f, 0.0f);
+        //T.m_x = -Ttemp; // check direction
+        //NewtonBodyAddTorque(NBody, &T.m_x);
 
-        double theta(0.0f), lce(0.0f), Fmtu(0.0f), vel(0.0f);
-        Mobj->GetMuscleParams(theta, lce, Fmtu, vel);
-        
+        //// Get the Body2 connected and apply the opposite muscle force
+        //gNewton = (GeomNewton*)(Mobj->body2);
+        //NBody = (NewtonBody*)gNewton->GetBody();
+        //T.Scale(-1); // opposite force on second body
+        //NewtonBodyAddTorque(NBody, &T.m_x);
+
         // stamp data
-        monFlux << newTime << "  " << theta <<  "  "  << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->fDE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << "  " << Mobj->GetExcitation() << "  " << vel << std::endl;
+        float theta(0.0f), lce(0.0f), Fmtu(0.0f), vel(0.0f), lmtu(0.0f);
+        Mobj->GetMuscleParams(theta, lce, Fmtu, vel, lmtu);
+        monFlux << newTime << "  " << theta <<  "  "  << Mobj->fSE(Mobj->GetDelta_l()) << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) << "  " << Mobj->fDE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() << "  " << Mobj->GetDelta_l() << "  " << Mobj->GetActivation() << "  " << vel << "  " << lmtu << std::endl;
         //cout << Mobj->GetNmax() << '\t' << theta << '\t' << lce << '\t' << vel << '\t' << T.m_x << "\n";
-        
+           
         // update for next force update
         newTime = newTime + timestep; // update time
         Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE

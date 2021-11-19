@@ -22,10 +22,12 @@ struct Muscle
 	dVector GetInsert1_GlobalRef();
 	dVector GetInsert2_GlobalRef();
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
-	void SetExcitation(const float iExcitation);
-	float GetExcitation();
-	void GetMuscleParams(double& angle, double& lce, double& Fmuscle, double& V);
-	void SetStepSize(const float iStepSize);
+	void SetActivation(const float iExcitation);
+	float GetActivation();
+	void GetMuscleParams(float& angle, float& lce, float& Fmuscle, float& V, float& lmtu);
+	void SetMaxJointAngle(const float max);
+	float GetMaxJointAngle();
+	void SetNeuralDelay(const float iStepSize);
 	
 	void SetLength0(float l);
 	float GetLength0();
@@ -35,10 +37,10 @@ struct Muscle
 	float fCE(const float l, const float t);
 	float fPE(const float l);
 	float fDE(const float l, const float t);
-	double Compute_muscle_Torque(dFloat time);
-	double Compute_muscle_length(double jointangle);
-	void SetThetazero(double angle);
-	void SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk);
+	float Compute_muscle_Torque(dFloat time);
+	float Compute_muscle_length(float jointangle);
+	void SetThetazero(float angle);
+	void SetMuscleParams(const float r, const float phiM, const float phiR, const float Fmax, const float rhoin, const float opt, const float slk, const float v_max);
 	GeomNewton* body1;
 	GeomNewton* body2;
 	dCustomHinge* joint;
@@ -68,17 +70,19 @@ private:
 	float vm; // [cm/s] max muscle velocity
 	float lCE; // [cm] contractile element length
 	float activation; // activation level of the muscle [0-1]
-	float stepSize;
+	double stepSize;
 	int m_nmax;
 	float m_Delta_l; // [cm] muscle increment
-	double arm; // [cm] maximum moment arm of the muscle
-	double phi_M; // [rad] joint angle with maximum moment arm
-	double phi_R; // [rad] joint angle in which delta = 0 (l_mtu = l_opt + l_slk)
-	double F_max; // max isometric force [N]
-	double m_Fmtu;
-	double rho; // accounts for pennation angle
-	double l_slk; // slack length
-	double theta_actual; // actual angle of the joint
-	double theta_0; // initial angle of the joint
+	float arm; // [cm] maximum moment arm of the muscle
+	float phi_M; // [rad] joint angle with maximum moment arm
+	float phi_R; // [rad] joint angle in which delta = 0 (l_mtu = l_opt + l_slk)
+	float F_max; // max isometric force [N]
+	float m_Fmtu;
+	float rho; // accounts for pennation angle
+	float l_slk; // slack length
+	float l_mtu;
+	float theta_actual; // actual angle of the joint
+	float theta_0; // initial angle of the joint
+	float theta_min; // max joint angle
 };
 #endif //BIPED_H

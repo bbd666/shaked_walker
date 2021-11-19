@@ -21,13 +21,15 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 ,	F_max(2000.0f)
 ,	rho(0.5f)
 ,	l_slk(10.f)
+,   l_mtu(0.0f)
 ,	theta_actual(0.0f)
 ,	m_Fmtu(0.0f)
 ,	theta_0(0.0f)
+,	theta_min(0.0f)
 {	
-	lCE = 10.3f;
-	l_opt = 0.5f;
-	vm = 10.0f; // [cm/s] max fiber contraction velocity 
+	lCE = 0.0f;
+	l_opt = 0.0f;
+	vm = 0.0f; // [l_opt/s] max fiber contraction velocity 
 	v = 0.0f;
 }
 
@@ -101,24 +103,25 @@ float Muscle::dresidu(const float l, const float t) {
 		l_tild = (this->lCE + l) / this->l_opt;
 		v_tild = l / t / this->l_opt; // [-/s] muscle velocity contraction
 
-		//if ((v_tild < 0) & (l_tild < 0.44)) // eq 7 millard 2013
-		//	v_tild = 0;
+		if ((v_tild < 0) & (l_tild < 0.44)) // eq 7 millard 2013
+			v_tild = 0;
 
 		//if (v_tild < -vm / this->l_opt)
 		//	v_tild = -vm / this->l_opt;
 
 		f1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4)); //fl calculation
 		df1 = exp(log(0.05f) * pow((l_tild - 1) / 0.56f, 4)) * (log(0.05f) * 4 * pow((l_tild - 1) / 0.56f, 3)) / 0.56f / this->l_opt; // fl derivative
-		//fv calculation for contracting and extending muscle cases
+		//fv calculation for contracting and lengthening muscle cases
 		if (v_tild < 0.f) {
 			f2 = -(this->vm + v_tild) / (5.0f*v_tild-this->vm); 
 			df2 = 6.0f * this->vm / t / this->l_opt / pow(5.0f * v_tild - this->vm, 2); // fv derivative
+			//df2 = -1 / this->l_opt / t * pow(-10 + 5 * l / this->l_opt / t, -1) + 5 / this->l_opt / t * (10 + l / this->l_opt / t) * pow(-10 + 5 * l / this->l_opt / t, -2);
 		}
 		else
 		{
 			f2 = 1.5f + 0.5f * (-this->vm + v_tild) / (37.8f * v_tild + this->vm);
-			//df2 = (0.5f * 38.8f * this->vm-1.5f*37.8f) / t / this->l_opt / pow(37.8f * v_tild + this->vm, 2); // check
-			df2 = (0.5f * 38.8f * this->vm) / t / this->l_opt / pow(37.8f * v_tild + this->vm, 2); // fv derivative
+			df2 = 38.8 * this->vm * 0.5f / t / this->l_opt / pow(37.8f * v_tild + this->vm, 2); // fv derivative
+			//df2 = 0.5 / this->l_opt / t * pow(37.8 * l / this->l_opt * t + 10, -1) - 0.5 * 37.8 / this->l_opt / t * (-10 + l / this->l_opt / t) * pow(37.8 * l / this->l_opt * t + 10, -2);
 		}
 		f1 = f1 * df2 + f2 * df1;
 		//Fhpe component
@@ -131,7 +134,7 @@ float Muscle::dresidu(const float l, const float t) {
 		if (l_tild < 0.44f) {
 			df2 = -2.0f * (0.44f - l_tild) / pow(0.28f, 2) / this->l_opt;
 		}
-		f1 = f1 + df2;
+		f1 = f1 - df2;
 		ls_tild = (-(lCE + l) + l_mtu) / this->l_slk;
 		//Fse component
 		if (ls_tild > 1.0f) {
@@ -140,11 +143,7 @@ float Muscle::dresidu(const float l, const float t) {
 		else { f2 = 0.0f; }
 		f1 = f1 - f2;
 		// Fdamp component
-		if ((v_tild < 0.0f) & (l_tild < 0.44f)) { // limit eq 7 millard 2013
-			f2 = 0;
-		}
-		else { f2 = 0.1f; } // damper force according to millard 2013 
-		//f2 = 0;
+		f2 = 0.1f / t / this->l_opt;
 		return (f1 + f2);
 	}
 // compute Err(delta) = Fce + Fpe + Fse as a function of ce increment
@@ -155,8 +154,8 @@ float Muscle::residu(const float l, const float t) {
 	l_tild = (this->lCE + l) / l_opt; // [-] l_ce+delta
 	v_tild = l / t / this->l_opt; // [-/s] muscle velocity contraction
 
-	//if ((v_tild < 0) & (l_tild < 0.44)) // eq 7 millard 2013
-	//	v_tild = 0;
+	if ((v_tild < 0) & (l_tild < 0.44)) // eq 7 millard 2013
+		v_tild = 0;
 
 	//if (v_tild < -vm / this->l_opt)
 	//	v_tild = -vm / this->l_opt;
@@ -189,10 +188,7 @@ float Muscle::residu(const float l, const float t) {
 	else { f2 = 0.f; }
 	f1 = f1 - f2;
 	// Fdamp component
-	if ((v_tild < 0.0f) & (l_tild < 0.44f)) {// limit eq 7 millard 2013
-		f2 = 0;
-	}
-	else { f2 = 0.1f * v_tild; } // damper force according to millard 2013 
+	f2 = 0.1f * l / this->l_opt / t;
 	return (f1 + f2); // Err = Fce + Fhpe + Flpe - Fse + Fdamp[-]
 }
 // series element normalized force [-]
@@ -247,40 +243,37 @@ float Muscle::fDE(const float l, const float t) {
 		f = 0;
 	}
 	else { f = 0.1f * v_tild; } // damper force according to millard 2013 
-	//f = 0;
 	return (f);
 }
 // Compute muscle torque with implicit integration method (Newton-Rhaphson)
-double Muscle::Compute_muscle_Torque(dFloat time)
+float Muscle::Compute_muscle_Torque(dFloat time)
 {
-	float dl(1.0e-003);
-	float tol(1.0e-003);
+	theta_actual = theta_0 - joint->GetJointAngle(); // [rad] need to access joint angle 
+	l_mtu = Compute_muscle_length(theta_actual); // [cm] compute the muscle length
+
+	// apply Newton-Rapshon method
+	float dl(1.0e-006); // [m] delta_lce initialization
+	float tol(1.0e-003); // [-] error tolerance
 	float nm(100); // max iterations
 	int n(0);
-	
-	
-	theta_actual = theta_0 - abs(joint->GetJointAngle()); // [rad] need to access joint angle 
-	double l_mtu = Compute_muscle_length(theta_actual); // [cm] compute the muscle length
-	// change sign of dl when joints inverts the rotation
-	dl = this->lCE / 10000.f; // [cm] muscle increment initialization
-	//cout << joint->GetJointAngle() << "\n";
-	// apply newton-Rapshon method
-	// 
 	//m_nmax = nm;
 	//while (m_nmax >= nm - 1) {
 	//	dl = dl / 10.0f;
 	while ((abs(residu(dl, time)) > tol) && (n < nm)) {
-		dl = dl - residu(dl, time) / dresidu(dl, time); // [cm] delta - (Err/dErr)
+		dl = dl - residu(dl, time) / dresidu(dl, time); // [cm] delta_lce - (Err/dErr)
 		n++;
 	}
 	m_nmax = n;
 	//}
+	// don't update Fmtu if the max angle is reached 
+	if (theta_actual > theta_min)
+	{
+		m_Fmtu = F_max * (this->fSE(dl));
+		if (m_Fmtu < 0) // formula 15 millard 2013
+			m_Fmtu = 0;
+	}
 
-	m_Fmtu = F_max * (this->fSE(dl));
-	if (m_Fmtu < 0) // formula 15 millard 2013
-		m_Fmtu = 0;
-
-	double T = m_Fmtu * arm * 0.01f; // [Nm]
+	float T = m_Fmtu * arm * 0.01; // [Nm]
 	m_Delta_l = dl;
 	v = dl / time;
 
@@ -293,20 +286,20 @@ double Muscle::Compute_muscle_Torque(dFloat time)
 	return T;
 }
 // compute muscle length according to formula 11 in Optimizing locomotion controllers using biologically-based actuators and objectives - Supplemental material Wang 2012 
-double Muscle::Compute_muscle_length(double jointangle)
+float Muscle::Compute_muscle_length(float jointangle)
 {
-	double delta, l_mtu;
+	float delta, l_mtu;
 	delta = rho * arm * (jointangle - phi_R); // monoarticular muscles
 	l_mtu = l_opt + l_slk + delta;
 	return l_mtu;
 }
 
-void Muscle::SetThetazero(double angle)
+void Muscle::SetThetazero(float angle)
 {
 	theta_0 = angle;
 }
 
-void Muscle::SetMuscleParams(const double r, const double phiM, const double phiR, const double Fmax, const double rhoin, const double opt, const double slk)
+void Muscle::SetMuscleParams(const float r, const float phiM, const float phiR, const float Fmax, const float rhoin, const float opt, const float slk, const float v_max)
 {
 	arm = r;
 	phi_M = phiM;
@@ -315,6 +308,7 @@ void Muscle::SetMuscleParams(const double r, const double phiM, const double phi
 	rho = rhoin;
 	l_opt = opt;
 	l_slk = slk;
+	vm = v_max;
 }
 
 void Muscle::SetInsert1(float px, float py, float pz) {
@@ -354,26 +348,34 @@ void Muscle::GetOriginAndInsertion(dVector& vOrigin, dVector& vInsert) {
 	vInsert = GetInsert2_GlobalRef();
 }
 
-void Muscle::SetStepSize(const float iStepSize)
+void Muscle::SetNeuralDelay(const float iStepSize)
 {
 	stepSize = iStepSize;
 }
 
-void Muscle::SetExcitation(const float iExcitation)
+void Muscle::SetActivation(const float iExcitation)
 {
-	//activation = 100* stepSize *(iExcitation- activation) + activation;
-	activation =iExcitation;
+	activation = 100* stepSize *(iExcitation- activation) + activation; 
 }
 
-float Muscle::GetExcitation()
+float Muscle::GetActivation()
 {
 	return activation;
 }
 
-void Muscle::GetMuscleParams(double& angle, double& lce, double& Fmuscle, double& V)
+void Muscle::GetMuscleParams(float& angle, float& lce, float& Fmuscle, float& V, float& lmtu)
 {
 	angle = theta_actual;
 	lce = lCE;
 	Fmuscle = m_Fmtu;
 	V= v;
+	lmtu = l_mtu;
+}
+void Muscle::SetMaxJointAngle(const float max)
+{
+	theta_min = max;
+}
+float Muscle::GetMaxJointAngle()
+{
+	return theta_min;
 }
