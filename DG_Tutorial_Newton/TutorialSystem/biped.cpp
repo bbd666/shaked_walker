@@ -2,35 +2,38 @@
 #include "GeomGL.h"
 #include "biped.h"
 
-Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dCustomHinge* jointact, dVector ins1, dVector ins2) :
+Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype) :
 	m_Manager(wMain)
-,	body1(insert1)
-,   body2(insert2)
-,	aVao(0)
-,	aVbo(0)
-,	m_Insert1(ins1)
-,	m_Insert2(ins2)
-,   LDebug_Manager(LManager)
-,	LineIndex(0)
-,	activation(0.0f)
-,	stepSize(1/1000.0f)
-,	joint(jointact)
-,	arm(10.f)
-,	phi_M(0.0f)
-,	phi_R(3.14f)
-,	F_max(2000.0f)
-,	rho(0.5f)
-,	l_slk(10.f)
-,   l_mtu(0.0f)
-,	theta_actual(0.0f)
-,	m_Fmtu(0.0f)
-,	theta_0(0.0f)
-,	theta_min(0.0f)
+	, body1(insert1)
+	, body2(insert2)
+	, aVao(0)
+	, aVbo(0)
+	, m_Insert1(ins1)
+	, m_Insert2(ins2)
+	, LDebug_Manager(LManager)
+	, LineIndex(0)
+	, activation(0.0f)
+	, stepSize(1 / 1000.0f)
+	, arm(10.f)
+	, phi_M(0.0f)
+	, phi_R(3.14f)
+	, F_max(2000.0f)
+	, rho(0.5f)
+	, l_slk(10.f)
+	, l_mtu(0.0f)
+	, theta_actual(0.0f)
+	, m_Fmtu(0.0f)
+	, theta_0(0.0f)
+	, theta_min(0.0f)
+	, damp(0.0f)
+	, Jname(jname)
+	, Jtype(jtype)
 {	
 	lCE = 0.0f;
 	l_opt = 0.0f;
 	vm = 0.0f; // [l_opt/s] max fiber contraction velocity 
 	v = 0.0f;
+	damp = 0.01f;
 }
 
 Muscle::~Muscle() {
@@ -70,6 +73,14 @@ void Muscle::SetDelta_l(const float l) {
 
 void Muscle::SetLength0(float l) {
 	m_Length0 = l;
+}
+
+float Muscle::GetAngle() {
+	return Jang;
+}
+
+void Muscle::SetAngle(float ang) {
+	Jang = ang;
 }
 
 void Muscle::GenerateMesh() {
@@ -143,7 +154,7 @@ float Muscle::dresidu(const float l, const float t) {
 		else { f2 = 0.0f; }
 		f1 = f1 - f2;
 		// Fdamp component
-		f2 = 0.1f / t / this->l_opt;
+		f2 = this->damp / t / this->l_opt;
 		return (f1 + f2);
 	}
 // compute Err(delta) = Fce + Fpe + Fse as a function of ce increment
@@ -188,7 +199,7 @@ float Muscle::residu(const float l, const float t) {
 	else { f2 = 0.f; }
 	f1 = f1 - f2;
 	// Fdamp component
-	f2 = 0.1f * l / this->l_opt / t;
+	f2 = this->damp * l / this->l_opt / t;
 	return (f1 + f2); // Err = Fce + Fhpe + Flpe - Fse + Fdamp[-]
 }
 // series element normalized force [-]
@@ -242,13 +253,13 @@ float Muscle::fDE(const float l, const float t) {
 	if ((v_tild < 0.0f) & (l_tild < 0.44f)){// limit eq 7 millard 2013
 		f = 0;
 	}
-	else { f = 0.1f * v_tild; } // damper force according to millard 2013 
+	else { f = this->damp * v_tild; } // damper force according to millard 2013 
 	return (f);
 }
 // Compute muscle torque with implicit integration method (Newton-Rhaphson)
 float Muscle::Compute_muscle_Torque(dFloat time)
 {
-	theta_actual = theta_0 - joint->GetJointAngle(); // [rad] need to access joint angle 
+	theta_actual = theta_0 - this->GetAngle(); //[rad]
 	l_mtu = Compute_muscle_length(theta_actual); // [cm] compute the muscle length
 
 	// apply Newton-Rapshon method
@@ -266,12 +277,12 @@ float Muscle::Compute_muscle_Torque(dFloat time)
 	m_nmax = n;
 	//}
 	// don't update Fmtu if the max angle is reached 
-	if (theta_actual > theta_min)
-	{
+	/*if (theta_actual > theta_min)
+	{*/
 		m_Fmtu = F_max * (this->fSE(dl));
 		if (m_Fmtu < 0) // formula 15 millard 2013
 			m_Fmtu = 0;
-	}
+	//}
 
 	float T = m_Fmtu * arm * 0.01; // [Nm]
 	m_Delta_l = dl;
@@ -356,6 +367,7 @@ void Muscle::SetNeuralDelay(const float iStepSize)
 void Muscle::SetActivation(const float iExcitation)
 {
 	activation = 100* stepSize *(iExcitation- activation) + activation; 
+	//activation = iExcitation;
 }
 
 float Muscle::GetActivation()

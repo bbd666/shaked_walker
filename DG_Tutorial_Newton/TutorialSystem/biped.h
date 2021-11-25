@@ -9,11 +9,11 @@
 #include "VertexGL.h"
 #include "WindowGL.h"
 
-
+enum JointType { Hinge, Ball, DoubleHinge };
 
 struct Muscle
 {
-	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dCustomHinge* jointact, dVector ins1, dVector ins2);
+	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype);
 	virtual ~Muscle();
 	glm::vec3 mColor;
 	void UpdateLineCoord(Shader* cshd, dFloat steptime);
@@ -30,6 +30,8 @@ struct Muscle
 	void SetNeuralDelay(const float iStepSize);
 	
 	void SetLength0(float l);
+	float GetAngle();
+	void SetAngle(float ang);
 	float GetLength0();
 	float dresidu(const float l,const float t);
 	float residu(const float l,const float t);
@@ -43,13 +45,14 @@ struct Muscle
 	void SetMuscleParams(const float r, const float phiM, const float phiR, const float Fmax, const float rhoin, const float opt, const float slk, const float v_max);
 	GeomNewton* body1;
 	GeomNewton* body2;
-	dCustomHinge* joint;
 	void GenerateMesh();
 	float GetNmax();
 	float GetDelta_l();
 	void SetDelta_l(const float l);
 	float GetLCE();
 	void SetLCE(const float l);
+	string Jname;
+	JointType Jtype;
 
 private:
 	NewtonManager* m_Manager;
@@ -84,5 +87,7 @@ private:
 	float theta_actual; // actual angle of the joint
 	float theta_0; // initial angle of the joint
 	float theta_min; // max joint angle
+	float damp;
+	float Jang; // angle of the joint
 };
 #endif //BIPED_H

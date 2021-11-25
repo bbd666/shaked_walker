@@ -345,14 +345,18 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Hip_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
     Hip = new dCustomHinge(Hip_PinMatrix, LPT->GetBody(), UP_leg->GetBody());
     m_winManager->aManager->vJointList.push_back(Hip);
+    
+    m_winManager->aManager->vJointNameList.push_back("Hip");
     ////// MUSCLE DEFINITION
 
     //////EX: hfl muscle Creation:
     //////1. Origin body: Up_Leg, 
     //////2. Insertion body: Hip, 
-    //////3. Joint: Rotule, 
-    //////4. Mesh coordinates: vector 1 on body 1, vector 2 on body 2 (change the values in 'DummyGeometricProperties.xml' file)
-    hfl = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, Hip, dVector(0, 0, -r_bones), dVector(0, 0, -r_bones));
+    //////3. Mesh coordinates: vector 1 on body 1, vector 2 on body 2 (change the values in 'DummyGeometricProperties.xml' file)
+    //////4. String containing the name of the joint
+    //////5. Enum containing the type of the joint (Hinge, Ball, DoubleHinge)
+
+    hfl = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, dVector(0, 0, -r_bones), dVector(0, 0, -r_bones), "Hip", Hinge);
     hfl->GenerateMesh();
     m_winManager->aManager->vMuscleList.push_back(hfl);
     hfl->SetThetazero((180)* dDegreeToRad); // initial joint angle
@@ -442,7 +446,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 //pour VS<VS2017 supprimer ,int threadID
 {
     dRaycastVHModel* controller = (dRaycastVHModel*)model;
-    //cout << "DGVehicleRCManager OnPreUpdate \n";
+    //cout << "DGVehicleRCManager OnP reUpdate \n";
 
     dVector Vtemp(0.0f);
     
@@ -451,15 +455,44 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         itr != m_winManager->aManager->vMuscleList.end(); itr++)
     {
         Muscle* Mobj = (Muscle*)*itr;
+
+        // ACCESS JOINT ANGLE //
+        // Read the joint name list and find the joint name of the Mobj
+        std::vector<std::string> list = m_winManager->aManager->vJointNameList;
+        int j_index = std::find(list.begin(), list.end(), Mobj->Jname) != list.end();// find index of joint
+        // switch the type joint of the Mobj 
+        switch (Mobj->Jtype) {
+        case Hinge: 
+        {
+            dCustomHinge* joint = (dCustomHinge*)m_winManager->aManager->vJointList[j_index -1];
+            Mobj->SetAngle(joint->GetJointAngle());
+            break;
+        }
+        case Ball:
+        {
+            // ADD //
+            break;
+        }
+
+        case DoubleHinge:
+        {
+            // ADD //
+            break;
+        }
+        }
         // Impose sinusoidal rotation of joint
-        dCustomHinge* joint = (dCustomHinge*)(Mobj->joint);
-        float mv = 3.14f/3.f; // motor speed in [rad/s]
+        dCustomHinge* joint = (dCustomHinge*)m_winManager->aManager->vJointList[j_index - 1];
+        float mv = 3.14f/3.f; // displacement [rad] 60°
         joint->EnableMotor(1, 2*3.14f*mv*cos(2*3.14f*newTime));
         joint->SetFriction(1.0e4f);
-
         Mobj->SetNeuralDelay(1.f / 2400.f); // 1.f/2400.f s
-        Mobj->SetActivation(1.0f);
+        Mobj->SetActivation(0); // modify
         double Ttemp = Mobj->Compute_muscle_Torque(timestep);
+
+        ////Impose muscle as actuator sinusoidal activation
+        //Mobj->SetNeuralDelay(1.f / 2400.f); // 1.f/2400.f s
+        //Mobj->SetActivation(0.5 + 0.5 * sin(2 * 3.14f * newTime));
+        //double Ttemp = Mobj->Compute_muscle_Torque(timestep);
 
         //// Get the Body1 connected to the muscle and apply the muscle force
         //GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);

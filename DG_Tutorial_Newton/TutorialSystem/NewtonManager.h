@@ -47,6 +47,7 @@ struct NewtonManager
 	std::vector<void*> vGeomList;
 	std::vector<void*> vAssMeshList;
 	std::vector<void*> vJointList;
+	std::vector<std::string> vJointNameList;// List of joint names
 	std::vector<void*> vMuscleList;
 	Texture* vTextureManager;
 	//

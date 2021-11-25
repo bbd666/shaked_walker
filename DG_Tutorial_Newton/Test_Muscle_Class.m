@@ -13,7 +13,7 @@ history = table(dataArray{1:end-1}, 'VariableNames', {'time','angle','fSE','fCE'
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %% Plot
-figure(1)
+figure
 subplot(311)
 hold on
 plot(history.time,history.fSE)
