@@ -9,11 +9,11 @@
 #include "VertexGL.h"
 #include "WindowGL.h"
 
-enum JointType { Hinge, Ball, DoubleHinge };
+enum JointType { Hinge, BallAndSocket, DoubleHinge, None};
 
 struct Muscle
 {
-	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype);
+	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype, std::string jname1, JointType jtype1);
 	virtual ~Muscle();
 	glm::vec3 mColor;
 	void UpdateLineCoord(Shader* cshd, dFloat steptime);
@@ -24,7 +24,7 @@ struct Muscle
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetActivation(const float iExcitation);
 	float GetActivation();
-	void GetMuscleParams(float& angle, float& lce, float& Fmuscle, float& V, float& lmtu);
+	void GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmuscle, float& V, float& lmtu);
 	void SetMaxJointAngle(const float max);
 	float GetMaxJointAngle();
 	void SetNeuralDelay(const float iStepSize);
@@ -32,6 +32,8 @@ struct Muscle
 	void SetLength0(float l);
 	float GetAngle();
 	void SetAngle(float ang);
+	float GetAngle1();
+	void SetAngle1(float ang);
 	float GetLength0();
 	float dresidu(const float l,const float t);
 	float residu(const float l,const float t);
@@ -40,9 +42,10 @@ struct Muscle
 	float fPE(const float l);
 	float fDE(const float l, const float t);
 	float Compute_muscle_Torque(dFloat time);
-	float Compute_muscle_length(float jointangle);
+	float Compute_muscle_length(float jointangle, float jointangle1);
 	void SetThetazero(float angle);
-	void SetMuscleParams(const float r, const float phiM, const float phiR, const float Fmax, const float rhoin, const float opt, const float slk, const float v_max);
+	void SetTheta1zero(float angle);
+	void SetMuscleParams(const float Fmax, const float v_max, const float opt, const float slk, const float r, const float rhoin, const float phiM, const float phiR, const float phi1M, const float phi1R);
 	GeomNewton* body1;
 	GeomNewton* body2;
 	void GenerateMesh();
@@ -53,6 +56,8 @@ struct Muscle
 	void SetLCE(const float l);
 	string Jname;
 	JointType Jtype;
+	string Jname1;
+	JointType Jtype1;
 
 private:
 	NewtonManager* m_Manager;
@@ -79,15 +84,20 @@ private:
 	float arm; // [cm] maximum moment arm of the muscle
 	float phi_M; // [rad] joint angle with maximum moment arm
 	float phi_R; // [rad] joint angle in which delta = 0 (l_mtu = l_opt + l_slk)
+	float phi1_M; // [rad] joint 1 angle with maximum moment arm. Joint 1 is the lowest joint of the muscle (proximal ref system)
+	float phi1_R; // [rad] joint 1 angle in which delta = 0 (l_mtu = l_opt + l_slk)
 	float F_max; // max isometric force [N]
 	float m_Fmtu;
 	float rho; // accounts for pennation angle
 	float l_slk; // slack length
 	float l_mtu;
 	float theta_actual; // actual angle of the joint
+	float theta1_actual; // actual angle of the joint 1
 	float theta_0; // initial angle of the joint
+	float theta1_0; // initial angle of the joint 1
 	float theta_min; // max joint angle
 	float damp;
 	float Jang; // angle of the joint
+	float Jang1; // angle of the joint 1
 };
 #endif //BIPED_H

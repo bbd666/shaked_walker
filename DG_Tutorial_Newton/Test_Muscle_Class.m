@@ -5,11 +5,11 @@ clc
 %% load data
 filename = 'history.txt';
 delimiter = ' ';
-formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
+formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 fileID = fopen(filename,'r');
 dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 fclose(fileID);
-history = table(dataArray{1:end-1}, 'VariableNames', {'time','angle','fSE','fCE','fPE','fDE','iteration','lCE','dlCE','act','vel','lmtu'});
+history = table(dataArray{1:end-1}, 'VariableNames', {'time','angle','angle1','fSE','fCE','fPE','fDE','iteration','lCE','dlCE','act','vel','lmtu'});
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %% Plot
@@ -36,6 +36,8 @@ subplot(312)
 hold on
 yyaxis left
 plot(history.time,history.angle*180/pi) %% theta
+plot(history.time,history.angle1*180/pi) %% theta
+legend('\theta', '\theta_1')
 ylabel('Joint Angle [°]')
 yyaxis right
 plot(history.time,history.dlCE*100) %% lce

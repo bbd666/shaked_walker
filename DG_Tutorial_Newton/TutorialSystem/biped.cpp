@@ -2,7 +2,7 @@
 #include "GeomGL.h"
 #include "biped.h"
 
-Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype) :
+Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype, std::string jname1, JointType jtype1) :
 	m_Manager(wMain)
 	, body1(insert1)
 	, body2(insert2)
@@ -17,6 +17,8 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	, arm(10.f)
 	, phi_M(0.0f)
 	, phi_R(3.14f)
+	, phi1_M(0.0f)
+	, phi1_R(3.14f)
 	, F_max(2000.0f)
 	, rho(0.5f)
 	, l_slk(10.f)
@@ -28,6 +30,8 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	, damp(0.0f)
 	, Jname(jname)
 	, Jtype(jtype)
+	, Jname1(jname1)
+	, Jtype1(jtype1)
 {	
 	lCE = 0.0f;
 	l_opt = 0.0f;
@@ -83,6 +87,14 @@ void Muscle::SetAngle(float ang) {
 	Jang = ang;
 }
 
+float Muscle::GetAngle1() {
+	return Jang1;
+}
+
+void Muscle::SetAngle1(float ang) {
+	Jang1 = ang;
+}
+
 void Muscle::GenerateMesh() {
 
 		glm::vec3 linepos1;
@@ -110,7 +122,7 @@ void Muscle::UpdateLineCoord(Shader* cshd, dFloat steptime)
 float Muscle::dresidu(const float l, const float t) {
 		float l_tild,v_tild,ls_tild, a_tild;
 		float f1, f2, df1, df2;
-		float l_mtu = Compute_muscle_length(theta_actual);
+		float l_mtu = Compute_muscle_length(theta_actual, theta1_actual);
 		l_tild = (this->lCE + l) / this->l_opt;
 		v_tild = l / t / this->l_opt; // [-/s] muscle velocity contraction
 
@@ -161,7 +173,7 @@ float Muscle::dresidu(const float l, const float t) {
 float Muscle::residu(const float l, const float t) {
 	float l_tild, v_tild, ls_tild;
 	float f1, f2;
-	float l_mtu = Compute_muscle_length(theta_actual);
+	float l_mtu = Compute_muscle_length(theta_actual, theta1_actual);
 	l_tild = (this->lCE + l) / l_opt; // [-] l_ce+delta
 	v_tild = l / t / this->l_opt; // [-/s] muscle velocity contraction
 
@@ -205,7 +217,7 @@ float Muscle::residu(const float l, const float t) {
 // series element normalized force [-]
 float Muscle::fSE(const float l) {
 	float f, ls_tild;
-	float l_mtu = Compute_muscle_length(theta_actual);
+	float l_mtu = Compute_muscle_length(theta_actual, theta1_actual);
 	ls_tild = (-(this->lCE + l) + l_mtu) / this->l_slk;
 	if (ls_tild > 1.0f) {
 		f = pow((ls_tild - 1.0f) / 0.04f, 2);
@@ -260,7 +272,8 @@ float Muscle::fDE(const float l, const float t) {
 float Muscle::Compute_muscle_Torque(dFloat time)
 {
 	theta_actual = theta_0 - this->GetAngle(); //[rad]
-	l_mtu = Compute_muscle_length(theta_actual); // [cm] compute the muscle length
+	theta1_actual = theta1_0 - this->GetAngle1(); //[rad]
+	l_mtu = Compute_muscle_length(theta_actual, theta1_actual); // [cm] compute the muscle length
 
 	// apply Newton-Rapshon method
 	float dl(1.0e-006); // [m] delta_lce initialization
@@ -297,11 +310,22 @@ float Muscle::Compute_muscle_Torque(dFloat time)
 	return T;
 }
 // compute muscle length according to formula 11 in Optimizing locomotion controllers using biologically-based actuators and objectives - Supplemental material Wang 2012 
-float Muscle::Compute_muscle_length(float jointangle)
+float Muscle::Compute_muscle_length(float jointangle, float jointangle1)
 {
-	float delta, l_mtu;
-	delta = rho * arm * (jointangle - phi_R); // monoarticular muscles
-	l_mtu = l_opt + l_slk + delta;
+	float delta, delta1, l_mtu;
+	l_mtu = l_opt + l_slk;
+	if (Jname1 == "None")// monoarticular muscles
+	{
+		delta = rho * arm * (jointangle - phi_R); // monoarticular muscles
+		l_mtu = l_mtu + delta;
+	}
+	else
+	{
+		delta = rho * arm * (sin(jointangle - phi_M)-sin(phi_R-phi_M)); // biarticular muscles joint
+		delta1 = rho * arm * (sin(jointangle1 - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint1
+		l_mtu = l_mtu + delta + delta1;
+	}
+		
 	return l_mtu;
 }
 
@@ -310,11 +334,18 @@ void Muscle::SetThetazero(float angle)
 	theta_0 = angle;
 }
 
-void Muscle::SetMuscleParams(const float r, const float phiM, const float phiR, const float Fmax, const float rhoin, const float opt, const float slk, const float v_max)
+void Muscle::SetTheta1zero(float angle)
+{
+	theta1_0 = angle;
+}
+
+void Muscle::SetMuscleParams(const float Fmax, const float v_max, const float opt, const float slk, const float r, const float rhoin, const float phiM, const float phiR, const float phi1M, const float phi1R)
 {
 	arm = r;
 	phi_M = phiM;
 	phi_R = phiR;
+	phi1_M = phi1M;
+	phi1_R = phi1R;
 	F_max = Fmax;
 	rho = rhoin;
 	l_opt = opt;
@@ -375,9 +406,10 @@ float Muscle::GetActivation()
 	return activation;
 }
 
-void Muscle::GetMuscleParams(float& angle, float& lce, float& Fmuscle, float& V, float& lmtu)
+void Muscle::GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmuscle, float& V, float& lmtu)
 {
 	angle = theta_actual;
+	angle1 = theta1_actual;
 	lce = lCE;
 	Fmuscle = m_Fmtu;
 	V= v;
