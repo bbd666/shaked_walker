@@ -390,6 +390,7 @@ NewtonManager::~NewtonManager()
 		delete aobj;
 	}
 	vMuscleList.clear();
+	vJointNameList.clear();
 	//
 	if (vTextureManager)
 	  delete vTextureManager;

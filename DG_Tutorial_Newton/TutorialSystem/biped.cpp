@@ -2,10 +2,11 @@
 #include "GeomGL.h"
 #include "biped.h"
 
-Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, dVector ins1, dVector ins2, std::string jname, JointType jtype, std::string jname1, JointType jtype1) :
+Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, GeomNewton* insert3, dVector ins1, dVector ins2, JointName jname, JointType jtype, JointName jname1, JointType jtype1, Mtuname mname) :
 	m_Manager(wMain)
 	, body1(insert1)
 	, body2(insert2)
+	, body3(insert3)
 	, aVao(0)
 	, aVbo(0)
 	, m_Insert1(ins1)
@@ -32,6 +33,7 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	, Jtype(jtype)
 	, Jname1(jname1)
 	, Jtype1(jtype1)
+	, m_name(mname)
 {	
 	lCE = 0.0f;
 	l_opt = 0.0f;
@@ -268,8 +270,8 @@ float Muscle::fDE(const float l, const float t) {
 	else { f = this->damp * v_tild; } // damper force according to millard 2013 
 	return (f);
 }
-// Compute muscle torque with implicit integration method (Newton-Rhaphson)
-float Muscle::Compute_muscle_Torque(dFloat time)
+// Compute muscle torque with implicit integration method (Newton-Rhaphson). T.m_x = torque joint 1, T.m_y = torque joint 2
+dVector Muscle::Compute_muscle_Torque(dFloat time)
 {
 	theta_actual = theta_0 - this->GetAngle(); //[rad]
 	theta1_actual = theta1_0 - this->GetAngle1(); //[rad]
@@ -289,17 +291,74 @@ float Muscle::Compute_muscle_Torque(dFloat time)
 	}
 	m_nmax = n;
 	//}
-	// don't update Fmtu if the max angle is reached 
-	/*if (theta_actual > theta_min)
-	{*/
-		m_Fmtu = F_max * (this->fSE(dl));
-		if (m_Fmtu < 0) // formula 15 millard 2013
-			m_Fmtu = 0;
-	//}
-
-	float T = m_Fmtu * arm * 0.01; // [Nm]
+	// update variable for next call
 	m_Delta_l = dl;
 	v = dl / time;
+	m_Fmtu = F_max * (this->fSE(dl));
+	if (m_Fmtu < 0) // formula 15 millard 2012
+		m_Fmtu = 0;
+
+	// Compute torque for each joint actuated by the muscle. m_x = torque joint, m_y = torque joint 1
+	dVector T(0, 0, 0);
+	switch (Jname) 
+	{
+	case HIP:
+	{
+		T.m_x = m_Fmtu * arm * 0.01;
+		switch (m_name) {
+		case HFL: {T.m_x = T.m_x * (-1);break;}
+		case RF: {T.m_x = T.m_x * (-1);break;}}
+		break;
+	}
+	case KNEE:
+	{
+		T.m_x = m_Fmtu * arm * 0.01;// [Nm] // RF and VAS
+		switch (m_name) {
+		case HAM: {T.m_x = T.m_x * (-1);break;}
+		case GAS: {T.m_x = T.m_x * (-1);break;}}
+		break;
+	}
+	case ANKLE:
+	{
+		T.m_x = m_Fmtu * arm * 0.01;// [Nm] // GAS and SOL
+		switch (m_name) {
+		case TA: {T.m_x = T.m_x * (-1);break;}} 
+		break;
+	}
+	case NOjoint: {
+		T.m_x = 0;// for none
+		break;}
+	}
+	
+	switch (Jname1)
+	{
+	case HIP:
+	{
+		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // GLU and HAM
+		switch (m_name) {
+		case HFL: {T.m_y = T.m_y * (-1);break;}
+		case RF: {T.m_y = T.m_y * (-1);break;}}
+		break;
+	}
+	case KNEE:
+	{
+		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // RF and VAS
+		switch (m_name) {
+		case HAM: {T.m_y = T.m_y * (-1);break;}
+		case GAS: {T.m_y = T.m_y * (-1);break;}} 
+		break;
+	}
+	case ANKLE:
+	{
+		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // GAS and SOL
+		switch (m_name) {
+		case TA: {T.m_y = T.m_y * (-1);break;}} 
+		break;
+	}
+	case NOjoint: {
+		T.m_y = 0;// for none
+		break;}
+	}
 
 	// Assign colors to muscle mesh
 	lineColor.x = this->fSE(dl); lineColor.z = 1.0f - this->fSE(dl); lineColor.y = 0;
@@ -314,18 +373,32 @@ float Muscle::Compute_muscle_length(float jointangle, float jointangle1)
 {
 	float delta, delta1, l_mtu;
 	l_mtu = l_opt + l_slk;
-	if (Jname1 == "None")// monoarticular muscles
+	switch (Jname1) 
 	{
-		delta = rho * arm * (jointangle - phi_R); // monoarticular muscles
-		l_mtu = l_mtu + delta;
-	}
-	else
+	case NOjoint: 
 	{
-		delta = rho * arm * (sin(jointangle - phi_M)-sin(phi_R-phi_M)); // biarticular muscles joint
-		delta1 = rho * arm * (sin(jointangle1 - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint1
-		l_mtu = l_mtu + delta + delta1;
+		delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
+		l_mtu = l_mtu + delta;break;
 	}
-		
+	default: 
+	{		
+		delta = rho * arm * (sin(jointangle - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint
+		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // biarticular muscles joint1
+		l_mtu = l_mtu + delta + delta1;}
+	}
+
+	//if (Jname1 == NOjoint)// uniarticular muscles
+	//{
+	//	delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
+	//	l_mtu = l_mtu + delta;
+	//}
+	//else
+	//{
+	//	delta = rho * arm * (sin(jointangle - phi_M)-sin(phi_R-phi_M)); // biarticular muscles joint
+	//	delta1 = rho * arm1 * (sin(jointangle1 - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint1
+	//	l_mtu = l_mtu + delta + delta1;
+	//}
+	//	
 	return l_mtu;
 }
 
@@ -339,9 +412,10 @@ void Muscle::SetTheta1zero(float angle)
 	theta1_0 = angle;
 }
 
-void Muscle::SetMuscleParams(const float Fmax, const float v_max, const float opt, const float slk, const float r, const float rhoin, const float phiM, const float phiR, const float phi1M, const float phi1R)
+void Muscle::SetMuscleParams(const float Fmax, const float v_max, const float opt, const float slk, const float rhoin, const float r, const float r1, const float phiM, const float phiR, const float phi1M, const float phi1R)
 {
 	arm = r;
+	arm1 = r1;
 	phi_M = phiM;
 	phi_R = phiR;
 	phi1_M = phi1M;
@@ -398,7 +472,6 @@ void Muscle::SetNeuralDelay(const float iStepSize)
 void Muscle::SetActivation(const float iExcitation)
 {
 	activation = 100* stepSize *(iExcitation- activation) + activation; 
-	//activation = iExcitation;
 }
 
 float Muscle::GetActivation()

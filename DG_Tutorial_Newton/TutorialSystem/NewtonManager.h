@@ -35,6 +35,8 @@
 #include "shader.h"
 #include "texture.h"
 
+enum JointName { HIP, KNEE, ANKLE, NOjoint };
+
 struct NewtonManager
 {   // public
 	NewtonManager();
@@ -47,7 +49,7 @@ struct NewtonManager
 	std::vector<void*> vGeomList;
 	std::vector<void*> vAssMeshList;
 	std::vector<void*> vJointList;
-	std::vector<std::string> vJointNameList;// List of joint names
+	std::vector<JointName> vJointNameList;// List of joint names
 	std::vector<void*> vMuscleList;
 	Texture* vTextureManager;
 	//

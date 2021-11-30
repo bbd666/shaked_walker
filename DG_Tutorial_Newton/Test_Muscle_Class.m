@@ -5,11 +5,11 @@ clc
 %% load data
 filename = 'history.txt';
 delimiter = ' ';
-formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
+formatSpec = '%f%f%f%f%f%f%f%f%f%f%f%f%f%f%f%[^\n\r]';
 fileID = fopen(filename,'r');
 dataArray = textscan(fileID, formatSpec, 'Delimiter', delimiter, 'MultipleDelimsAsOne', true, 'TextType', 'string', 'EmptyValue', NaN,  'ReturnOnError', false);
 fclose(fileID);
-history = table(dataArray{1:end-1}, 'VariableNames', {'time','angle','angle1','fSE','fCE','fPE','fDE','iteration','lCE','dlCE','act','vel','lmtu'});
+history = table(dataArray{1:end-1}, 'VariableNames', {'time','angle','angle1','fSE','fCE','fPE','fDE','iteration','lCE','dlCE','act','vel','lmtu','T','T1'});
 clearvars filename delimiter formatSpec fileID dataArray ans;
 
 %% Plot
@@ -62,8 +62,17 @@ xlim([0 1])
 figure(2)
 hold on
 plot(history.time,history.fCE+history.fPE+history.fDE-history.fSE)
+ylabel('Balance Error')
 yyaxis right
-plot(history.time,history.iteration/100,'*')
+plot(history.time,history.act,'*')
+ylabel('Activation')
+
+figure(3)
+hold on
+plot(history.time,history.T,history.time,history.T1)
+legend('T','T1')
+xlabel('Time [s]')
+ylabel('Torque [nm]')
 % name = input('test name','s');
 % save(char(name),'history')
 
