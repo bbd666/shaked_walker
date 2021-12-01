@@ -12,11 +12,11 @@
 enum JointType {Hinge, BallAndSocket, DoubleHinge, NOtype};
 enum Mtuname {GLU, HAM, HFL, RF, VAS, GAS, SOL, TA};
 
-
 struct Muscle
 {
 	Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, GeomNewton* insert3, dVector ins1, dVector ins2, JointName jname, JointType jtype, JointName jname1, JointType jtype1, Mtuname mname);
 	virtual ~Muscle();
+	Mtuname GetMuscleName();
 	glm::vec3 mColor;
 	void UpdateLineCoord(Shader* cshd, dFloat steptime);
 	void SetInsert1(float px, float py, float pz);

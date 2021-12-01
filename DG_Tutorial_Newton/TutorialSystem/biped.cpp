@@ -53,6 +53,10 @@ Muscle::~Muscle() {
 	}
 }
 
+Mtuname Muscle::GetMuscleName() {
+	return m_name;
+}
+
 float Muscle::GetLength0() {
 	return m_Length0;
 }
@@ -86,7 +90,12 @@ float Muscle::GetAngle() {
 }
 
 void Muscle::SetAngle(float ang) {
-	Jang = ang;
+	// change sign if muscle actuate the joint in the opposite direction than global ref system
+	switch (m_name) {
+	case GLU: {Jang = -ang;break;}
+	case SOL: {Jang = -ang;break;}
+	default: Jang = ang;
+	}
 }
 
 float Muscle::GetAngle1() {
@@ -94,7 +103,12 @@ float Muscle::GetAngle1() {
 }
 
 void Muscle::SetAngle1(float ang) {
-	Jang1 = ang;
+	// change sign if muscle actuate the joint in the opposite direction than global ref system
+	switch (m_name) {
+	case HAM: {Jang1 = -ang;break;}
+	case GAS: {Jang1 = -ang;break;}
+	default: Jang1 = ang;
+	}
 }
 
 void Muscle::GenerateMesh() {
@@ -273,6 +287,7 @@ float Muscle::fDE(const float l, const float t) {
 // Compute muscle torque with implicit integration method (Newton-Rhaphson). T.m_x = torque joint 1, T.m_y = torque joint 2
 dVector Muscle::Compute_muscle_Torque(dFloat time)
 {
+	dVector T(0, 0, 0);
 	theta_actual = theta_0 - this->GetAngle(); //[rad]
 	theta1_actual = theta1_0 - this->GetAngle1(); //[rad]
 	l_mtu = Compute_muscle_length(theta_actual, theta1_actual); // [cm] compute the muscle length
@@ -299,7 +314,6 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 		m_Fmtu = 0;
 
 	// Compute torque for each joint actuated by the muscle. m_x = torque joint, m_y = torque joint 1
-	dVector T(0, 0, 0);
 	switch (Jname) 
 	{
 	case HIP:
@@ -386,19 +400,6 @@ float Muscle::Compute_muscle_length(float jointangle, float jointangle1)
 		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // biarticular muscles joint1
 		l_mtu = l_mtu + delta + delta1;}
 	}
-
-	//if (Jname1 == NOjoint)// uniarticular muscles
-	//{
-	//	delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
-	//	l_mtu = l_mtu + delta;
-	//}
-	//else
-	//{
-	//	delta = rho * arm * (sin(jointangle - phi_M)-sin(phi_R-phi_M)); // biarticular muscles joint
-	//	delta1 = rho * arm1 * (sin(jointangle1 - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint1
-	//	l_mtu = l_mtu + delta + delta1;
-	//}
-	//	
 	return l_mtu;
 }
 
@@ -425,6 +426,7 @@ void Muscle::SetMuscleParams(const float Fmax, const float v_max, const float op
 	l_opt = opt;
 	l_slk = slk;
 	vm = v_max;
+	lCE = l_opt; // lce initialized to optimum length
 }
 
 void Muscle::SetInsert1(float px, float py, float pz) {
