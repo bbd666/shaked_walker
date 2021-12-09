@@ -23,6 +23,13 @@
 			<Y2 sol="0.01" ta="-0.08" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
 			<Z2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="-0.068"/>
 		</MuscleInsertionPoints>
-		<MaxMuscleForce sol="4000" ta="800" gas="1500" vas="6000" ham="3000" rf="1000" glu="1500" hfl="2000"/>
+		<Sol_p Fmax="4000" v_max="6" lopt="4" lslk="26" rho="0.5" r="5" phiM="110" phiR="80"/>
+		<Ta_p Fmax="800" v_max="12" lopt="6" lslk="24" rho="0.7" r="4" phiM="80" phiR="110"/>
+		<Vas_p Fmax="6000" v_max="12" lopt="8" lslk="23" rho="0.7" r="6" phiM="165" phiR="125"/>
+		<Gas_p Fmax="1500" v_max="12" lopt="4" lslk="40" rho="0.7" r="5" r1="5" phiM="140" phiR="165" phi1M=110 phi1R=80/>
+		<Hfl_p Fmax="2000" v_max="12" lopt="11" lslk="10" rho="0.5" r="10" phiR="180"/>
+		<Ham_p Fmax="3000" v_max="12" lopt="10" lslk="31" rho="0.7" r="8" r1="5" phiR="155" phi1M=180 phi1R=180/>
+		<Glu_p Fmax="1500" v_max="12" lopt="11" lslk="13" rho="0.5" r="10" phiR="150"/>
+		<Rf_p Fmax="1000" v_max="12" lopt="7.5" lslk="28.1" rho="0.7" r="9.4" r1="5.6" phiR="180" phi1M=165 phi1R=125/>
     </Parameters>
 </Model>

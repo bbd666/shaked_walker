@@ -2,31 +2,28 @@
 #include "OXVehicleRayCast.h"
 #include <tinyxml.h>
 
-ofstream monFlux("history.txt");
-
 dFloat newTime = 0;
-
+ofstream monFlux("history.txt");
 // ----------------------------------------------------------------------
 // STDOUT dump and indenting utility functions
 // ----------------------------------------------------------------------
-const unsigned int NUM_INDENTS_PER_SPACE = 2;
 
-const char* getIndent(unsigned int numIndents)
+const char* dRaycastVHModel::getIndent(unsigned int numIndents)
 {
     static const char* pINDENT = "                                      + ";
     static const unsigned int LENGTH = strlen(pINDENT);
-    unsigned int n = numIndents * NUM_INDENTS_PER_SPACE;
+    unsigned int n = numIndents * 2;
     if (n > LENGTH) n = LENGTH;
 
     return &pINDENT[LENGTH - n];
 }
 
 // same as getIndent but no "+" at the end
-const char* getIndentAlt(unsigned int numIndents)
+const char* dRaycastVHModel::getIndentAlt(unsigned int numIndents)
 {
     static const char* pINDENT = "                                        ";
     static const unsigned int LENGTH = strlen(pINDENT);
-    unsigned int n = numIndents * NUM_INDENTS_PER_SPACE;
+    unsigned int n = numIndents * 2;
     if (n > LENGTH) n = LENGTH;
 
     return &pINDENT[LENGTH - n];
@@ -156,9 +153,9 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
         {
             num = dump_attribs_to_stdout(pParent->ToElement(), v_z2, indent + 1);
         }
-        else if (sParameter == "MaxMuscleForce")
+        else if (sParameter == "Sol_p" || sParameter == "Ta_p" || sParameter == "Vas_p" || sParameter == "Gas_p" || sParameter == "Hfl_p" || sParameter == "Ham_p" || sParameter == "Rf_p" || sParameter == "Glu_p")
         {
-            num = dump_attribs_to_stdout(pParent->ToElement(), v_maxForce, indent + 1);
+            num = dump_attribs_to_stdout2(pParent->ToElement(), sol, indent + 1);
         }
         else
         {
@@ -243,6 +240,17 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         Izz[*it] = 0.f;
         delta_cm[*it] = 0.f;
     };
+    for (std::vector<std::string>::iterator it = muscle_keys.begin(); it != muscle_keys.end(); it++)
+    {
+        sol[*it] = 0.0f;
+        ta[*it] = 0.0f;
+        vas[*it] = 0.0f;
+        gas[*it] = 0.0f;
+        hfl[*it] = 0.0f;
+        ham[*it] = 0.0f;
+        rf[*it] = 0.0f;
+        glu[*it] = 0.0f;
+    };
 
     // LOADING DATA FROM XML//
     TiXmlDocument doc("DummyGeometricProperties.xml");
@@ -256,7 +264,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     // Scale factor for length and mass
     scale_length = v_scale[0]; 
     scale_mass = v_scale[1];
-
 
     // LENGTH DATA
     l_Head		= scale_length * lengths["Head"];
@@ -283,7 +290,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     l_foot		= l_foot - l_toe;
     ankle_j		= scale_length * 0.046f * sin(49 * dDegreeToRad); // [m] distance from heel to ankle joint in z direction ((Isman and Inman, 1969; Lee et al., 2011; Zatsiorsky, 2002)
 
-    
     // MASS DATA
     float tot_w = scale_mass * v_total_weight[0]; 
     for (map<std::string, float>::iterator it = mass_distrib.begin(); it != mass_distrib.end(); it++)
@@ -304,17 +310,17 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         it->second = mass_distrib.find(it->first)->second * it->second;
     };
 
-
     // COM distance from the origin of each body (DIRECTION X: IN LOCAL COORDINATE OF THE BODY)
     for (map<std::string, float>::iterator it = delta_cm.begin(); it != delta_cm.end(); it++)
     {
         it->second = lengths.find(it->first)->second * (0.5f-it->second);
     };
 
-
     glm::vec3 _Pos(glm::vec3(0.0f, 1.5f, 0.f)); // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral) Y(vertical) Z(front)
 
-    float min_hip_angle = 180 * dDegreeToRad;
+    float alfa = 10 * dDegreeToRad;
+    float gamma = 10 * dDegreeToRad;
+    float beta = 90 * dDegreeToRad;
     // BODIES OF THE DUMMY DEFINITION
 
     LPT = new GeomNewton(m_winManager->aManager);
@@ -332,8 +338,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     UP_leg->SetParent(LPT);
     UP_leg->SetTexture0(&tex[0], "Tex0");
     UP_leg->SetDiffuseColor(1.0f, 1.0f, 1.0f);
-    UP_leg->SetPosition(0, -l_LPT / 2 - l_Up_Leg / 2  - r_bones, 0);
-    UP_leg->InitNewton(atCapsule, r_bones, r_bones, l_Up_Leg, 14.6f);
+    UP_leg->SetTurnAngle(-alfa*dRadToDegree, false);
+    UP_leg->SetPosition(0, -l_LPT / 2 - (l_Up_Leg / 2 )*cos(alfa)-r_bones, -(l_Up_Leg / 2 )* sin(alfa));
+    UP_leg->InitNewton(atCapsule, r_bones, r_bones, l_Up_Leg, 1.0f);
     NewtonBodySetMassMatrix(UP_leg->GetBody(), 14.6f, 0.199f, 0.199f, 0.041f); 
     NewtonBodySetTransformCallback(UP_leg->GetBody(), NULL);
     N1 = new dModelNode(UP_leg->GetBody(), dGetIdentityMatrix(), this);
@@ -343,41 +350,55 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     LP_leg->SetParent(UP_leg);
     LP_leg->SetTexture0(&tex[0], "Tex0");
     LP_leg->SetDiffuseColor(1.0f, 1.0f, 1.0f);
-    LP_leg->SetPosition(0,- l_Up_Leg - r_bones, 0);
+    LP_leg->SetTurnAngle((alfa+gamma) * dRadToDegree, false);
+    LP_leg->SetPosition(0, -(l_Up_Leg / 2) * cos(alfa) - r_bones - (l_Up_Leg / 2) * cos(gamma), -(l_Up_Leg / 2) * sin(alfa) + (l_Up_Leg / 2) * sin(gamma));
     LP_leg->InitNewton(atCapsule, r_bones, r_bones, l_Up_Leg, 15.0f);
-    NewtonBodySetMassMatrix(LP_leg->GetBody(), 14.6f, 0.199f, 0.199f, 0.041f);
+    NewtonBodySetMassMatrix(LP_leg->GetBody(), 15.f, 0.199f, 0.199f, 0.041f);
     NewtonBodySetTransformCallback(LP_leg->GetBody(), NULL);
     N2 = new dModelNode(LP_leg->GetBody(), dGetIdentityMatrix(), N1);
 
+    Plantar_L = new GeomNewton(m_winManager->aManager);
+    Plantar_L->SetBodyType(adtDynamic);
+    Plantar_L->SetParent(LP_leg);
+    Plantar_L->SetRollAngle(beta * dRadToDegree, false);
+    Plantar_L->SetTexture0(&tex[0], "Tex0");
+    Plantar_L->SetDiffuseColor(1.0f, 1.0f, 1.0f);
+    Plantar_L->SetPosition(0, -(l_Up_Leg / 2) * cos(gamma) - r_bones, (l_Up_Leg / 2) * sin(gamma) -l_foot/3);
+    Plantar_L->InitNewton(atBox, h_foot, h_foot, l_foot, 4.0f);
+    NewtonBodySetMassMatrix(Plantar_L->GetBody(), 4.0f, 0.01f, 0.04f, 0.04f);
+    NewtonBodySetTransformCallback(Plantar_L->GetBody(), NULL);
+    N3 = new dModelNode(Plantar_L->GetBody(), dGetIdentityMatrix(), N2);
+
+
     //// EX. BallAndSocket joint. 
     //dMatrix Ankle_PinMatrix(dGetIdentityMatrix()); // define the pin
-    //Ankle_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
-    //Ankle = new dCustomBallAndSocket(Ankle_PinMatrix, LPT->GetBody(), UP_leg->GetBody());
-    //Ankle->EnableCone(false);
-    //Ankle->SetConeLimits(40.0f * dPi);
-    //Ankle->EnableTwist(false);
-    //Ankle->SetTwistLimits(-10.0f * dPi, +10.0f * dPi);
+    ////Ankle_PinMatrix = Ankle_PinMatrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+    //Ankle_PinMatrix.m_posit = dVector(LP_leg->GetPosition().m_x, LP_leg->GetPosition().m_y - l_Up_Leg / 2 - r_bones, LP_leg->GetPosition().m_z, 1.0f);
+    //Ankle = new dCustomBallAndSocket(Ankle_PinMatrix, LP_leg->GetBody(), Plantar_L->GetBody());
     //m_winManager->aManager->vJointList.push_back(Ankle);
     //m_winManager->aManager->vJointNameList.push_back(ANKLE);
-    
-    // EX. DOUBLE HINGE joint. 
-    dMatrix Hip_PinMatrix(dGetIdentityMatrix()); // define the pin
-    Hip_PinMatrix = Hip_PinMatrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the first pin must be the one actuated by the muscle)
-    Hip_PinMatrix.m_posit = dVector(UP_leg->GetPosition().m_x, UP_leg->GetPosition().m_y - l_Up_Leg/2, UP_leg->GetPosition().m_z, 1.0f);
-    Hip = new dCustomDoubleHinge(Hip_PinMatrix, UP_leg->GetBody(), LP_leg->GetBody());
-    Hip->EnableLimits(true);
-    Hip->SetLimits(-90.0f * dPi, 90.0f * dPi);
-    m_winManager->aManager->vJointList.push_back(Hip);
-    m_winManager->aManager->vJointNameList.push_back(HIP);
+
+    dMatrix Ankle_PinMatrix(dGetIdentityMatrix()); // define the pin
+    //Ankle_PinMatrix = Ankle_PinMatrix * dYawMatrix(90.0f * dDegreeToRad);
+    Ankle_PinMatrix.m_posit = dVector(LP_leg->GetPosition().m_x, LP_leg->GetPosition().m_y - (l_Up_Leg / 2) * cos(gamma), LP_leg->GetPosition().m_z+ (l_Up_Leg / 2) * sin(gamma), 1.0f);
+    Ankle = new dCustomDoubleHinge(Ankle_PinMatrix, LP_leg->GetBody(), Plantar_L->GetBody());
+    m_winManager->aManager->vJointList.push_back(Ankle);
+    m_winManager->aManager->vJointNameList.push_back(ANKLE);
 
     // EX. HINGE joint. 
     dMatrix Knee_PinMatrix(dGetIdentityMatrix()); // define the pin
-    Knee_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
-    Knee = new dCustomHinge(Knee_PinMatrix, LPT->GetBody(), UP_leg->GetBody());
-    Knee->EnableLimits(false);
-    Knee->SetLimits(-10.0f * dPi, 10.0f * dPi);
+    Knee_PinMatrix.m_posit = dVector(UP_leg->GetPosition().m_x, UP_leg->GetPosition().m_y -(l_Up_Leg / 2) * cos(alfa), UP_leg->GetPosition().m_z - (l_Up_Leg / 2) * sin(alfa), 1.0f);
+    Knee = new dCustomHinge(Knee_PinMatrix, UP_leg->GetBody(), LP_leg->GetBody());
     m_winManager->aManager->vJointList.push_back(Knee);
     m_winManager->aManager->vJointNameList.push_back(KNEE);
+
+    // EX. DOUBLE HINGE joint. 
+    dMatrix Hip_PinMatrix(dGetIdentityMatrix()); // define the pin
+    Hip_PinMatrix = Hip_PinMatrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+    Hip_PinMatrix.m_posit = dVector(LPT->GetPosition().m_x, LPT->GetPosition().m_y - l_LPT / 2 - r_bones, LPT->GetPosition().m_z, 1.0f);
+    Hip = new dCustomDoubleHinge(Hip_PinMatrix, LPT->GetBody(), UP_leg->GetBody());
+    m_winManager->aManager->vJointList.push_back(Hip);
+    m_winManager->aManager->vJointNameList.push_back(HIP);
 
     ////// MUSCLE DEFINITION
 
@@ -390,54 +411,72 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     //////6. Enum containing the type of the first joint (Hinge, Ball, DoubleHinge)
     //////7. String containing the name of the second joint. The name MUST be UNIQUE. Use "None" if the muscle is monoarticular
     //////8. Enum containing the type of the second joint (Hinge, Ball, DoubleHinge, None). select None if the muscle is monoarticular
-        //// ex of monoarticular muscle
-    //m_vas_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, NULL, dVector(0, 0, +r_bones), dVector(0, 0, +r_bones), HIP, DoubleHinge, NOjoint, NOtype, HFL);
-    //m_vas_R->GenerateMesh();
-    //m_winManager->aManager->vMuscleList.push_back(m_vas_R);
-    //m_vas_R->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    //m_vas_R->SetMuscleParams(2000, 12, 11, 10, 0.5, 10, 0, 0, 180.0f * dDegreeToRad, 0, 0); // params from Geyer 
-    //m_vas_R->SetLCE(10.6f); // default is optimal initial condition
-    //m_vas_R->SetMaxJointAngle(min_hip_angle);
-        //// Ex of biarticular muscle
-    //m_ham_L = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, LP_leg, dVector(0, 0, -r_bones), dVector(0, 0, -r_bones), HIP, DoubleHinge, KNEE, Hinge, RF);
-    //m_ham_L->GenerateMesh();
-    //m_winManager->aManager->vMuscleList.push_back(m_ham_L);
-    //m_ham_L->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    //m_ham_L->SetTheta1zero((180)* dDegreeToRad); // initial joint 1 angle
-    //m_ham_L->SetMuscleParams(3000, 12, 10, 31, 0.7, 8, 5, 0, 155.0f * dDegreeToRad, 0, 180.0f * dDegreeToRad); // params from Geyer 
-    ////m_ham_L->SetLCE(10.0f); // default is optimal initial condition
-    //m_ham_L->SetMaxJointAngle(min_hip_angle);
+    
     
     // ex of monoarticular muscle
     m_hfl_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, NULL, dVector(0, 0, -2*r_bones), dVector(0, 0, -2 * r_bones), HIP, DoubleHinge, NOjoint, NOtype, HFL);
     m_hfl_R->GenerateMesh();
     m_winManager->aManager->vMuscleList.push_back(m_hfl_R);
-    m_hfl_R->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    m_hfl_R->SetMuscleParams(2000, 12, 11, 10, 0.5, 10, 0, 0, 150.0f * dDegreeToRad, 0, 0); // params from Geyer  
-
+    m_hfl_R->SetThetazero((180)* dDegreeToRad-alfa); // initial joint angle
+    m_hfl_R->SetMuscleParams(2000, 12, 11, 10, 0.5, 10, 0, 0, 180.0f * dDegreeToRad, 0, 0); // params from Geyer  
+    
     // ex of monoarticular muscle
     m_glu_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, NULL, dVector(0, 0, +2 * r_bones), dVector(0, 0, +2 * r_bones), HIP, DoubleHinge, NOjoint, NOtype, GLU);
     m_glu_R->GenerateMesh();
     m_winManager->aManager->vMuscleList.push_back(m_glu_R);
-    m_glu_R->SetThetazero((180) * dDegreeToRad); // initial joint angle
-    m_glu_R->SetMuscleParams(1500, 12, 11, 13, 0.5, 10, 0, 0, 150.0f * dDegreeToRad, 0, 0); // params from Geyer 
+    m_glu_R->SetThetazero((180) * dDegreeToRad +alfa); // initial joint angle
+    m_glu_R->SetMuscleParams(1500, 12, 11, 10, 0.5, 10, 0, 0, 150.0f * dDegreeToRad, 0, 0); // params from Geyer 
+    m_glu_R->SetLimits(140 * dDegreeToRad, 0);
 
-    // Ex of biarticular muscle
+    //// Ex of biarticular muscle
     m_ham_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, LP_leg, dVector(-l_LPT, 0, 2 * r_bones), dVector(-l_Up_Leg/2, 0, 2 * r_bones), HIP, DoubleHinge, KNEE, Hinge, HAM);
     m_ham_R->GenerateMesh();
     m_winManager->aManager->vMuscleList.push_back(m_ham_R);
-    m_ham_R->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    m_ham_R->SetTheta1zero((180)* dDegreeToRad); // initial joint 1 angle
-    m_ham_R->SetMuscleParams(3000, 12, 10, 31, 0.7, 8, 5, 0, 155.0f * dDegreeToRad, 180.0f * dDegreeToRad, 180.0f * dDegreeToRad); // params from Geyer 
+    m_ham_R->SetThetazero(180* dDegreeToRad + alfa); // initial joint angle
+    m_ham_R->SetTheta1zero(180* dDegreeToRad - gamma); // initial joint 1 angle
+    m_ham_R->SetMuscleParams(3000, 12, 10, 31, 0.7, 8, 5, 0, 155.0f * dDegreeToRad, 180.0f* dDegreeToRad, 180.0f* dDegreeToRad); // params from Geyer 
+    m_ham_R->SetLimits(140 * dDegreeToRad, 0);
 
     // Ex of biarticular muscle
     m_rf_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LPT, UP_leg, LP_leg, dVector(-l_LPT, 0, -2 * r_bones), dVector(-l_Up_Leg/2, 0, -2 * r_bones), HIP, DoubleHinge, KNEE, Hinge, RF);
     m_rf_R->GenerateMesh();
     m_winManager->aManager->vMuscleList.push_back(m_rf_R);
-    m_rf_R->SetThetazero((180)* dDegreeToRad); // initial joint angle
-    m_rf_R->SetTheta1zero((180)* dDegreeToRad); // initial joint 1 angle
-    m_rf_R->SetMuscleParams(1000, 12, 7.5, 28.1, 0.7, 9.4, 5.6, 40 * dDegreeToRad, 15.0f * dDegreeToRad, -20.0f * dDegreeToRad, 100.0f * dDegreeToRad); // params from Geyer 
+    m_rf_R->SetThetazero(180* dDegreeToRad - alfa); // initial joint angle
+    m_rf_R->SetTheta1zero(180* dDegreeToRad + gamma); // initial joint 1 angle
+    m_rf_R->SetMuscleParams(1000, 12, 10, 31, 0.7, 8, 5, 0, 180.0f * dDegreeToRad, M_PI - 165.0f * dDegreeToRad, M_PI - 125.0f * dDegreeToRad); // params from Geyer 
 
+    // ex of monoarticular muscle
+    m_vas_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, UP_leg, LP_leg, NULL, dVector(0, 0, -2 * r_bones), dVector(0, 0, -2 * r_bones), KNEE, Hinge, NOjoint, NOtype, VAS);
+    m_vas_R->GenerateMesh();
+    m_winManager->aManager->vMuscleList.push_back(m_vas_R);
+    m_vas_R->SetThetazero(180 * dDegreeToRad + gamma); // initial joint angle
+    m_vas_R->SetMuscleParams(60, 8, 12, 23, 0.7, 6, 0, M_PI - 165 * dDegreeToRad, M_PI - 125.0f * dDegreeToRad, 0, 0); // params from Geyer  
+    m_vas_R->SetLimits(185 * dDegreeToRad, 0);
+
+    // ex of monoarticular muscle
+    m_sol_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LP_leg, Plantar_L, NULL, dVector(0, 0, 2*r_bones), dVector(0, 0, 2 * r_bones), ANKLE, DoubleHinge, NOjoint, NOtype, SOL);
+    m_sol_R->GenerateMesh();
+    m_winManager->aManager->vMuscleList.push_back(m_sol_R);
+    m_sol_R->SetThetazero(M_PI-beta); // initial joint angle
+    m_sol_R->SetMuscleParams(40, 6, 4, 26, 0.5, 5, 0, M_PI- 110 * dDegreeToRad, M_PI - 80.0f * dDegreeToRad, 0, 0); // params from Geyer  
+    //m_sol_R->SetLimits(230 * dDegreeToRad, 0);
+
+     //ex of monoarticular muscle
+    m_ta_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, LP_leg, Plantar_L, NULL, dVector(0, 0, -2 * r_bones), dVector(0, 0, -2 * r_bones), ANKLE, DoubleHinge, NOjoint, NOtype, TA);
+    m_ta_R->GenerateMesh();
+    m_winManager->aManager->vMuscleList.push_back(m_ta_R);
+    m_ta_R->SetThetazero(beta); // initial joint angle
+    m_ta_R->SetMuscleParams(40, 12, 6, 24, 0.5, 5, 0, 80 * dDegreeToRad, 110.0f * dDegreeToRad, 0, 0); // params from Geyer  
+    m_ta_R->SetLimits(70 * dDegreeToRad, 0);
+
+    // Ex of biarticular muscle
+    m_gas_R = new Muscle(m_winManager->aLineManager, m_winManager->aManager, UP_leg, LP_leg, Plantar_L, dVector(-l_Up_Leg, 0, 2 * r_bones), dVector(-l_Up_Leg/2, 0, 2 * r_bones), KNEE, Hinge, ANKLE, DoubleHinge, GAS);
+    m_gas_R->GenerateMesh();
+    m_winManager->aManager->vMuscleList.push_back(m_gas_R);
+    m_gas_R->SetThetazero(180 * dDegreeToRad - gamma); // initial joint angle
+    m_gas_R->SetTheta1zero(M_PI - beta); // initial joint 1 angle
+    m_gas_R->SetMuscleParams(1500, 12, 5,40, 0.7, 5, 5, 180 * dDegreeToRad, 180 * dDegreeToRad, M_PI - 110.0f * dDegreeToRad, M_PI - 80.0f * dDegreeToRad); // params from Geyer 
+    //m_gas_R->SetLimits(0, 230 * dDegreeToRad);
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -523,9 +562,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     dRaycastVHModel* controller = (dRaycastVHModel*)model;
     //cout << "DGVehicleRCManager OnP reUpdate \n";
 
-    float hip_angle;
-    float knee_angle;
-    float ankle_angle;
+    float hip_angle = 0;
+    float knee_angle = 0;
+    float ankle_angle = 0;
 
      //scan all  Muscle Elements
     for (auto itr = m_winManager->aManager->vMuscleList.begin();
@@ -551,7 +590,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 j_index = std::distance(list.begin(), std::find(list.begin(), list.end(), Mobj->Jname1));// find index of joint in jointnamelist
                 type = Mobj->Jtype1;
             }
-            //dAssert(j_index = 100); // if the muscle is not found ERROR
             // switch the type joint of the Mobj 
             switch (type) {
             case Hinge:
@@ -567,18 +605,26 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                     Mobj->SetAngle1(joint->GetJointAngle()); // joint angle
                     pin1 = joint->GetPinAxis(); // joint pin
                 }
-                
                 break;
             }
             case BallAndSocket:
             {
                 dCustomBallAndSocket* joint = (dCustomBallAndSocket*)m_winManager->aManager->vJointList[j_index]; // joint from jointlist
-                //GetJointAngle() and GetPinAxis() methods must be added inside dCustomAndSocket.cpp. Copy the dCustomHinge.cpp respective methods and build newton again
-                //Mobj->SetAngle(joint->GetJointAngle()); // joint angle
-                //pin = joint->GetPinAxis(); // joint pin
+                //GetJointAngle() and GetPinAxis() methods must be added inside dCustomAndSocket.cpp and the respective header file 
+                //Copy the dCustomHinge.cpp respective methods and build newton again. 
+                //Copy new dll in project folder
+                if (itr1 == 0)
+                {
+                    Mobj->SetAngle(joint->GetJointAngle()); // joint angle
+                    pin = joint->GetPinAxis(); // joint pin
+                }
+                else
+                {
+                    Mobj->SetAngle1(joint->GetJointAngle()); // joint angle
+                    pin1 = joint->GetPinAxis(); // joint pin
+                }
                 break;
             }
-
             case DoubleHinge:
             {
                 dCustomDoubleHinge* joint = (dCustomDoubleHinge*)m_winManager->aManager->vJointList[j_index];
@@ -609,10 +655,17 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             delay = 3.14/2;break;
         case RF:
             delay = 3.14/2;break;
+        case SOL:
+            delay = 3.14 / 2;break;
+        case GAS:
+            delay = 3.14 / 2;break;
         default:
             delay = 0;break;
         }
-        Mobj->SetActivation(0.5 + 0.5 * sin(2 * 3.14f * newTime+delay));
+        Mobj->SetActivation(0.2 + 0.2 * sin(2 * 3.14f * newTime + delay));
+
+        //Mobj->SetActivation(0.5);
+
         dVector Ttemp = Mobj->Compute_muscle_Torque(timestep);
 
         // Get the Body1 connected to the muscle and apply the muscle force
@@ -655,9 +708,11 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             hip_angle = Mobj->GetAngle();
             knee_angle = Mobj->GetAngle1();
         }
+        if (Mobj->GetMuscleName() == TA)
+            ankle_angle = Mobj->GetAngle();
     }	
     // verify total torque on joints
-    monFlux << newTime << "  " << 3.14-hip_angle << "  " << 3.14-knee_angle << endl;
+    monFlux << newTime << "  " << 170*dDegreeToRad-hip_angle << "  " << 190 * dDegreeToRad -knee_angle << "  " << 90 * dDegreeToRad - ankle_angle << endl;
     newTime = newTime + timestep; // update time
 }
 

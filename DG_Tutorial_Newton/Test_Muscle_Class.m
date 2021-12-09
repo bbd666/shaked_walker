@@ -57,7 +57,7 @@ xlabel('Time [s]')
 ylabel('vCE_t [l_o_p_t/s]')
 ax3 = gca;
 linkaxes([ax1, ax2, ax3], 'x')
-xlim([0 1])
+xlim([0 10])
 
 figure(2)
 hold on
@@ -72,7 +72,13 @@ hold on
 plot(history.time,history.T,history.time,history.T1)
 legend('T','T1')
 xlabel('Time [s]')
-ylabel('Torque [nm]')
+ylabel('Torque [Nm]')
 % name = input('test name','s');
 % save(char(name),'history')
 
+figure(4)
+hold on
+plot(history.time,history.T,history.time,history.angle*180/pi)
+legend('T','angle1')
+xlabel('Time [s]')
+ylabel('Torque [Nm]')

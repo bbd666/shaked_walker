@@ -27,7 +27,6 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	, theta_actual(0.0f)
 	, m_Fmtu(0.0f)
 	, theta_0(0.0f)
-	, theta_min(0.0f)
 	, damp(0.0f)
 	, Jname(jname)
 	, Jtype(jtype)
@@ -40,6 +39,10 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	vm = 0.0f; // [l_opt/s] max fiber contraction velocity 
 	v = 0.0f;
 	damp = 0.01f;
+	kj = 0.3f; // [Nm/rad]
+	vj_max = 1; //[rad/s]
+	ang_lim = 0;
+	ang1_lim = 0;;
 }
 
 Muscle::~Muscle() {
@@ -55,10 +58,6 @@ Muscle::~Muscle() {
 
 Mtuname Muscle::GetMuscleName() {
 	return m_name;
-}
-
-float Muscle::GetLength0() {
-	return m_Length0;
 }
 
 float Muscle::GetNmax() {
@@ -81,19 +80,17 @@ void Muscle::SetDelta_l(const float l) {
 	m_Delta_l = l;
 }
 
-void Muscle::SetLength0(float l) {
-	m_Length0 = l;
-}
-
 float Muscle::GetAngle() {
 	return Jang;
 }
 
 void Muscle::SetAngle(float ang) {
-	// change sign if muscle actuate the joint in the opposite direction than global ref system
+	// change sign 
 	switch (m_name) {
-	case GLU: {Jang = -ang;break;}
-	case SOL: {Jang = -ang;break;}
+	case HFL: {Jang = -ang;break;}
+	case RF: {Jang = -ang;break;}
+	case VAS: {Jang = -ang;break;}
+	case TA: {Jang = -ang;break;}
 	default: Jang = ang;
 	}
 }
@@ -103,12 +100,16 @@ float Muscle::GetAngle1() {
 }
 
 void Muscle::SetAngle1(float ang) {
-	// change sign if muscle actuate the joint in the opposite direction than global ref system
+	// change sign
 	switch (m_name) {
-	case HAM: {Jang1 = -ang;break;}
-	case GAS: {Jang1 = -ang;break;}
+	case RF: {Jang1 = -ang;break;}// CHECK
 	default: Jang1 = ang;
 	}
+}
+
+void Muscle::SetLimits(float a_lim, float a1_lim) {
+	ang_lim = a_lim; // limit joint angle
+	ang1_lim = a1_lim; // limitl joint angle 1
 }
 
 void Muscle::GenerateMesh() {
@@ -313,12 +314,35 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	if (m_Fmtu < 0) // formula 15 millard 2012
 		m_Fmtu = 0;
 
+	// Compute reaction torque if theta_max is reached (according to Geyer)
+	float delta_theta = 0, delta_theta1 = 0;
+	float delta_theta_dot = 0, delta_theta1_dot = 0;
+	float T_reac=0, T1_reac = 0;
+
+	if (ang_lim !=0  && theta_actual < ang_lim)
+		delta_theta = ang_lim - theta_actual;
+
+	if (delta_theta != 0)
+	{
+		delta_theta_dot = delta_theta / time;
+		T_reac = kj * delta_theta * (1 + delta_theta_dot / vj_max);
+	}
+
+	if (ang1_lim != 0 && theta1_actual < ang1_lim)
+		delta_theta1 = ang1_lim - theta1_actual;
+
+	if (delta_theta1 != 0)
+	{
+		delta_theta1_dot = delta_theta1 / time;
+		T1_reac = kj * delta_theta1 * (1 + delta_theta1_dot / vj_max);
+	}
+	
 	// Compute torque for each joint actuated by the muscle. m_x = torque joint, m_y = torque joint 1
 	switch (Jname) 
 	{
 	case HIP:
 	{
-		T.m_x = m_Fmtu * arm * 0.01;
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac; // GLU HAM
 		switch (m_name) {
 		case HFL: {T.m_x = T.m_x * (-1);break;}
 		case RF: {T.m_x = T.m_x * (-1);break;}}
@@ -326,17 +350,16 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	}
 	case KNEE:
 	{
-		T.m_x = m_Fmtu * arm * 0.01;// [Nm] // RF and VAS
-		switch (m_name) {
-		case HAM: {T.m_x = T.m_x * (-1);break;}
-		case GAS: {T.m_x = T.m_x * (-1);break;}}
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] // GAS 
+		if (m_name == VAS) // VAS
+			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case ANKLE:
 	{
-		T.m_x = m_Fmtu * arm * 0.01;// [Nm] // GAS and SOL
-		switch (m_name) {
-		case TA: {T.m_x = T.m_x * (-1);break;}} 
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] //  SOL
+		if (m_name == TA) // TA
+			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case NOjoint: {
@@ -346,27 +369,16 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	
 	switch (Jname1)
 	{
-	case HIP:
-	{
-		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // GLU and HAM
-		switch (m_name) {
-		case HFL: {T.m_y = T.m_y * (-1);break;}
-		case RF: {T.m_y = T.m_y * (-1);break;}}
-		break;
-	}
 	case KNEE:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // RF and VAS
-		switch (m_name) {
-		case HAM: {T.m_y = T.m_y * (-1);break;}
-		case GAS: {T.m_y = T.m_y * (-1);break;}} 
+		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // HAM
+		if (m_name == RF) // RF
+			T.m_y = T.m_y * (-1);
 		break;
 	}
 	case ANKLE:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01;// [Nm] // GAS and SOL
-		switch (m_name) {
-		case TA: {T.m_y = T.m_y * (-1);break;}} 
+		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // GAS
 		break;
 	}
 	case NOjoint: {
@@ -385,20 +397,25 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 // compute muscle length according to formula 11 in Optimizing locomotion controllers using biologically-based actuators and objectives - Supplemental material Wang 2012 
 float Muscle::Compute_muscle_length(float jointangle, float jointangle1)
 {
-	float delta, delta1, l_mtu;
+	float delta(0), delta1(0), l_mtu(0);
 	l_mtu = l_opt + l_slk;
-	switch (Jname1) 
-	{
-	case NOjoint: 
-	{
-		delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
-		l_mtu = l_mtu + delta;break;
+	if (m_name == VAS) {
+		delta = rho * arm * (sin(jointangle - phi_M) - sin(phi_R - phi_M)); // knee
+		l_mtu = l_mtu + delta;
 	}
-	default: 
-	{		
-		delta = rho * arm * (sin(jointangle - phi_M) - sin(phi_R - phi_M)); // biarticular muscles joint
-		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // biarticular muscles joint1
-		l_mtu = l_mtu + delta + delta1;}
+	else if (m_name == RF || m_name == HAM) {
+		delta = rho * arm * (jointangle - phi_R); // hip
+		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // knee
+		l_mtu = l_mtu + delta + delta1;
+	}
+	else if (m_name == GAS) {
+		delta = rho * arm * (sin(jointangle - phi_M) - sin(phi_R - phi_M)); // knee
+		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // ankle
+		l_mtu = l_mtu + delta + delta1;
+	}
+	else {// HFL GLU SOL TA
+		delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
+		l_mtu = l_mtu + delta;
 	}
 	return l_mtu;
 }
@@ -489,12 +506,4 @@ void Muscle::GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmu
 	Fmuscle = m_Fmtu;
 	V= v;
 	lmtu = l_mtu;
-}
-void Muscle::SetMaxJointAngle(const float max)
-{
-	theta_min = max;
-}
-float Muscle::GetMaxJointAngle()
-{
-	return theta_min;
 }

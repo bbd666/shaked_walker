@@ -360,14 +360,41 @@ void NewtonManager::Render(Shader* cshd, dFloat steptime)
 	}
 }
 
+void NewtonManager::SetExcitationList(const std::vector<float> iExcitationList)
+{
+	const int iMuscleListSize = this->vMuscleList.size();
+	if (iExcitationList.size() != iMuscleListSize)
+	{
+		cout << "Incorrect usage of method NewtonManager::SetExcitationList" << endl;
+		return;
+	}
+
+	int iCount = 0;
+	for (auto itr = vMuscleList.begin();
+		itr != vMuscleList.end(); itr++) {
+		Muscle* aobj = (Muscle*)*itr;
+		aobj->SetActivation(iExcitationList[iCount]);
+		iCount++;
+	}
+
+	//int iCount = 0;
+	//for (auto itr = vMuscleV2List.begin();
+	//	itr != vMuscleV2List.end(); itr++) {
+	//	MuscleV2* aobj = (MuscleV2*)*itr;
+	//	aobj->SetExcitation(iExcitationList[iCount]);
+	//	iCount++;
+	//}
+
+}
+
 NewtonManager::~NewtonManager()
 {
 	//
-	//for (auto itr = vJointList.begin();
-	//	itr != vJointList.end(); itr++) {
-		//dCustomJoint* aobj = (dCustomJoint*)*itr;
-		//delete aobj;
-	//}
+	for (auto itr = vJointList.begin();
+		itr != vJointList.end(); itr++) {
+		dCustomJoint* aobj = (dCustomJoint*)*itr;
+		delete aobj;
+	}
 	vJointList.clear();
 	//
 	for (auto itr = vAssMeshList.begin();

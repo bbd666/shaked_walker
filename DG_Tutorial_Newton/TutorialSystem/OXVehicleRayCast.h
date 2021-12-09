@@ -54,13 +54,17 @@ private:
 
 	dModelNode* N1;
 	dModelNode* N2;
+	dModelNode* N3;
 
 	dCustomDoubleHinge* Hip;
 	dCustomHinge* Knee;
-	dCustomBallAndSocket* Ankle;
+	//dCustomBallAndSocket* Ankle;
+	dCustomDoubleHinge* Ankle;
 
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
+	const char* getIndent(unsigned int numIndents);
+	const char* getIndentAlt(unsigned int numIndents);
 	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
 	int dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<std::string, float>& l, unsigned int indent);
 	std::vector<float> v_scale, v_lengths, v_total_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2, v_maxForce;
@@ -70,6 +74,8 @@ private:
 	map<std::string, float> Ixx,Iyy,Izz;
 	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck", "RadBones","RadSpheres" };
 	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT"};
+	std::vector<std::string> muscle_keys = { "Fmax", "v_max", "lopt","lslk", "rho", "r", "r1", "phiM", "phiR", "phi1M", "phi1R"};
+	map<std::string, float> sol, ta, gas, vas, hfl, glu, ham, rf;
 
 	float l_Hip;
 	float l_Up_Leg;

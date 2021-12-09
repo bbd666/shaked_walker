@@ -27,8 +27,6 @@ struct Muscle
 	void SetActivation(const float iExcitation);
 	float GetActivation();
 	void GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmuscle, float& V, float& lmtu);
-	void SetMaxJointAngle(const float max);
-	float GetMaxJointAngle();
 	void SetNeuralDelay(const float iStepSize);
 	
 	void SetLength0(float l);
@@ -36,6 +34,7 @@ struct Muscle
 	void SetAngle(float ang);
 	float GetAngle1();
 	void SetAngle1(float ang);
+	void SetLimits(float a_lim, float a1_lim);
 	float GetLength0();
 	float dresidu(const float l,const float t);
 	float residu(const float l,const float t);
@@ -48,15 +47,16 @@ struct Muscle
 	void SetThetazero(float angle);
 	void SetTheta1zero(float angle);
 	void SetMuscleParams(const float Fmax, const float v_max, const float opt, const float slk, const float rhoin, const float r, const float r1, const float phiM, const float phiR, const float phi1M, const float phi1R);
-	GeomNewton* body1;
-	GeomNewton* body2;
-	GeomNewton* body3;
 	void GenerateMesh();
 	float GetNmax();
 	float GetDelta_l();
 	void SetDelta_l(const float l);
 	float GetLCE();
 	void SetLCE(const float l);
+
+	GeomNewton* body1;
+	GeomNewton* body2;
+	GeomNewton* body3;	
 	JointName Jname;
 	JointType Jtype;
 	JointName Jname1;
@@ -100,9 +100,12 @@ private:
 	float theta1_actual; // actual angle of the joint 1
 	float theta_0; // initial angle of the joint
 	float theta1_0; // initial angle of the joint 1
-	float theta_min; // max joint angle
 	float damp;
 	float Jang; // angle of the joint
 	float Jang1; // angle of the joint 1
+	float kj; // joint stiffness
+	float vj_max; // max joint relaxation speed
+	float ang_lim; //min joint angle [rad] local angle reference system
+	float ang1_lim;// max joint angle [rad] local angle reference system joint 1
 };
 #endif //BIPED_H
