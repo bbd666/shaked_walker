@@ -363,7 +363,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 		break;
 	}
 	case NOjoint: {
-		T.m_x = 0;// for none
+		T.m_x = 0;
 		break;}
 	}
 	
@@ -382,7 +382,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 		break;
 	}
 	case NOjoint: {
-		T.m_y = 0;// for none
+		T.m_y = 0;
 		break;}
 	}
 

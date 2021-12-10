@@ -51,10 +51,12 @@ private:
 	GeomNewton* LPT;
 	GeomNewton* Plantar_L;
 	GeomNewton* Plantar_R;
+	GeomNewton* Ball;
 
 	dModelNode* N1;
 	dModelNode* N2;
 	dModelNode* N3;
+	dModelNode* N4;
 
 	dCustomDoubleHinge* Hip;
 	dCustomHinge* Knee;

@@ -21,10 +21,9 @@ hold on
 plot(history.time,history.hip_a/pi*180,'k','LineWidth',2)
 ylabel('Hip angle [°]')
 xlabel('Time [s]')
-ax1 = gca;
-ax1.Box = 'On';
-ax1.FontSize = 12;
-xlim([0 2])
+ax6 = gca;
+ax6.Box = 'On';
+ax6.FontSize = 12;
 ylim([100 250])
 hold off
 
@@ -35,27 +34,25 @@ plot(history.time,history.glu_T/mass)
 plot(history.time,history.ham_T/mass)
 plot(history.time,history.rf_T/mass)
 plot(history.time,(history.hfl_T+history.glu_T+history.ham_T+history.rf_T)/mass,'-r','LineWidth',3)
-ylabel('Normalized Hip Torque [Nm/kg]')
+ylabel('Hip Torque [Nm/kg]')
 xlabel('Time [s]')
 title('HIP actuators')
-legend('HFL','GLU','HAM','RF','total')
+legend('HFL','GLU','HAM','RF','total','Location','northeastoutside')
 ax1 = gca;
 ax1.Box = 'On';
 ax1.FontSize = 12;
-xlim([0 2])
 ylim([-8 8])
 hold off
 
 subplot(3,2,3)
 hold on
-plot(history.time,history.knee_a/pi*180,'k','LineWidth',2)
+plot(history.time,360-history.knee_a/pi*180,'k','LineWidth',2)
 ylabel('Knee angle [°]')
 xlabel('Time [s]')
-ax1 = gca;
-ax1.Box = 'On';
-ax1.FontSize = 12;
-xlim([0 2])
-ylim([100 250])
+ax2 = gca;
+ax2.Box = 'On';
+ax2.FontSize = 12;
+ylim([0 200])
 hold off
 
 subplot(3,2,4)
@@ -65,14 +62,13 @@ plot(history.time,history.rf_T1/mass)
 plot(history.time,history.vas_T/mass)
 plot(history.time,history.gas_T/mass)
 plot(history.time,(history.ham_T1+history.rf_T1+history.vas_T+history.gas_T)/mass,'-r','LineWidth',3)
-ylabel('Normalized Knee Torque [Nm/kg]')
+ylabel('Knee Torque [Nm/kg]')
 xlabel('Time [s]')
-legend('HAM','RF','VAS','GAS','total')
+legend('HAM','RF','VAS','GAS','total','Location','northeastoutside')
 title('KNEE actuators')
-ax1 = gca;
-ax1.Box = 'On';
-ax1.FontSize = 12;
-xlim([0 2])
+ax3 = gca;
+ax3.Box = 'On';
+ax3.FontSize = 12;
 ylim([-8 8])
 hold off
 
@@ -81,11 +77,10 @@ hold on
 plot(history.time,history.ankle_a/pi*180,'k','LineWidth',2)
 ylabel('Ankle angle [°]')
 xlabel('Time [s]')
-ax1 = gca;
-ax1.Box = 'On';
-ax1.FontSize = 12;
-xlim([0 2])
-ylim([50 250])
+ax4 = gca;
+ax4.Box = 'On';
+ax4.FontSize = 12;
+ylim([50 200])
 hold off
 
 subplot(3,2,6)
@@ -94,13 +89,15 @@ plot(history.time,history.ta_T/mass)
 plot(history.time,history.sol_T/mass)
 plot(history.time,history.gas_T1/mass)
 plot(history.time,(history.ta_T+history.sol_T+history.gas_T1)/mass,'-r','LineWidth',3)
-ylabel('Normalized Ankle Torque [Nm/kg]')
+ylabel('Ankle Torque [Nm/kg]')
 xlabel('Time [s]')
-legend('TA','SOL','GAS','total')
+legend('TA','SOL','GAS','total','Location','northeastoutside')
 title('ANKLE actuators')
-ax1 = gca;
-ax1.Box = 'On';
-ax1.FontSize = 12;
-xlim([0 2])
+ax5 = gca;
+ax5.Box = 'On';
+ax5.FontSize = 12;
 ylim([-8 8])
 hold off
+
+linkaxes([ax1 ax2 ax3 ax4 ax5 ax6],'x')
+xlim(ax1,[0 12])

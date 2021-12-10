@@ -9,27 +9,27 @@
 		<Weight value="73.0"/>
 		<Masses Head="0.069" UpArm="0.027" ForeArm="0.016" Hand="0.006" Trunk="0.435" Thigh="0.142" Shank="0.043" Foot="0.014" Toes="0.003" UPT="0.219" MPT="0.224" LPT="0.153"/>
 		<Inertia>
-			<Ixx Head="0.312" UpArm="0.158" ForeArm="0.121" Hand="0.401" Trunk="0.191" Thigh="0.149" Shank="0.103" Foot="0.124" Toes="0.021" UPT="0.454" MPT="0.383" LPT="0.551"/>
-			<Iyy Head="0.362" UpArm="0.285" ForeArm="0.276" Hand="0.628" Trunk="0.372" Thigh="0.329" Shank="0.255" Foot="0.257" Toes="0.068" UPT="0.659" MPT="0.468" LPT="0.587"/>
-			<Izz Head="0.069" UpArm="0.027" ForeArm="0.016" Hand="0.006" Trunk="0.435" Thigh="0.142" Shank="0.043" Foot="0.014" Toes="0.030" UPT="0.716" MPT="0.482" LPT="0.615"/>
+			<Ixx Head="0.376" UpArm="0.269" ForeArm="0.265" Hand="0.513" Trunk="0.347" Thigh="0.329" Shank="0.255" Foot="0.245" Toes="1.432" UPT="0.454" MPT="0.383" LPT="0.551"/>
+			<Iyy Head="0.312" UpArm="0.158" ForeArm="0.121" Hand="0.401" Trunk="0.191" Thigh="0.149" Shank="0.103" Foot="0.124" Toes="0.021" UPT="0.454" MPT="0.383" LPT="0.551"/>
+			<Izz Head="0.362" UpArm="0.285" ForeArm="0.276" Hand="0.628" Trunk="0.372" Thigh="0.329" Shank="0.255" Foot="0.257" Toes="0.068" UPT="0.659" MPT="0.468" LPT="0.587"/>
 		</Inertia>
 		<COM Head="0.600" UpArm="0.580" ForeArm="0.460" Hand="0.790" Trunk="0.450" Thigh="0.410" Shank="0.450" Foot="0.440" Toes="0.500" UPT="0.300" MPT="0.450" LPT="0.612"/>
 		<Angles Hip="0.0" Clav="0.0" />
 		<MuscleInsertionPoints>
-			<X1 sol="-0.09" ta="-0.12" gas="0" vas="-0.15" ham="-0.075" rf="-0.075" glu="-0.075" hfl="0"/>
-			<Y1 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
-			<Z1 sol="0.05" ta="-0.05" gas="0.07" vas="0.06" ham="0.07" rf="0.07" glu="0.14" hfl="0"/>
-			<X2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0.04" hfl="-0.07"/>
-			<Y2 sol="0.01" ta="-0.08" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="0"/>
-			<Z2 sol="0" ta="0" gas="0" vas="0" ham="0" rf="0" glu="0" hfl="-0.068"/>
+			<X1 sol="-0.09" ta="-0.12" 	gas="0" 	vas="-0.15" 	ham="-0.075" 	rf="-0.075" 	glu="-0.075" 	hfl="0"/>
+			<Y1 sol="0" 	ta="0" 		gas="0" 	vas="0" 	ham="0" 	rf="0" 		glu="0" 	hfl="0"/>
+			<Z1 sol="0.05" 	ta="-0.05" 	gas="0.07" 	vas="0.06" 	ham="0.07" 	rf="0.07" 	glu="0.14" 	hfl="0"/>
+			<X2 sol="0" 	ta="0" 		gas="0" 	vas="0" 	ham="0" 	rf="0" 		glu="0.04" 	hfl="-0.07"/>
+			<Y2 sol="0.01" 	ta="-0.08" 	gas="0" 	vas="0" 	ham="0" 	rf="0" 		glu="0" 	hfl="0"/>
+			<Z2 sol="0" 	ta="0" 		gas="0" 	vas="0" 	ham="0" 	rf="0" 		glu="0" 	hfl="-0.068"/>
 		</MuscleInsertionPoints>
-		<Sol_p Fmax="4000" v_max="6" lopt="4" lslk="26" rho="0.5" r="5" phiM="110" phiR="80"/>
-		<Ta_p Fmax="800" v_max="12" lopt="6" lslk="24" rho="0.7" r="4" phiM="80" phiR="110"/>
-		<Vas_p Fmax="6000" v_max="12" lopt="8" lslk="23" rho="0.7" r="6" phiM="165" phiR="125"/>
-		<Gas_p Fmax="1500" v_max="12" lopt="4" lslk="40" rho="0.7" r="5" r1="5" phiM="140" phiR="165" phi1M=110 phi1R=80/>
-		<Hfl_p Fmax="2000" v_max="12" lopt="11" lslk="10" rho="0.5" r="10" phiR="180"/>
-		<Ham_p Fmax="3000" v_max="12" lopt="10" lslk="31" rho="0.7" r="8" r1="5" phiR="155" phi1M=180 phi1R=180/>
-		<Glu_p Fmax="1500" v_max="12" lopt="11" lslk="13" rho="0.5" r="10" phiR="150"/>
-		<Rf_p Fmax="1000" v_max="12" lopt="7.5" lslk="28.1" rho="0.7" r="9.4" r1="5.6" phiR="180" phi1M=165 phi1R=125/>
+		<Sol_p Fmax="4000" v_max="6"  lopt="4" 	 lslk="26"   rho="0.5" r="5"   r1="0"  phiM="110"  phiR="80"  phi1M="0"   phi1R="0"/>
+		<Ta_p  Fmax="800"  v_max="12" lopt="6" 	 lslk="24"   rho="0.7" r="4"   r1="0"   phiM="80"  phiR="110" phi1M="0"   phi1R="0"/>
+		<Vas_p Fmax="6000" v_max="12" lopt="8" 	 lslk="23"   rho="0.7" r="6"   r1="0"   phiM="165" phiR="125" phi1M="0"   phi1R="0"/>
+		<Gas_p Fmax="1500" v_max="12" lopt="4" 	 lslk="40"   rho="0.7" r="5"   r1="5"   phiM="140" phiR="165" phi1M="110" phi1R="80"/>
+		<Hfl_p Fmax="2000" v_max="12" lopt="11"  lslk="10"   rho="0.5" r="10"  r1="0"   phiM="0"   phiR="180" phi1M="0"   phi1R="0"/>
+		<Ham_p Fmax="3000" v_max="12" lopt="10"  lslk="31"   rho="0.7" r="8"   r1="5"   phiM="0"   phiR="155" phi1M="180" phi1R="180"/>
+		<Glu_p Fmax="1500" v_max="12" lopt="11"  lslk="13"   rho="0.5" r="10"  r1="0"   phiM="0"   phiR="150" phi1M="0"   phi1R="0"/>
+		<Rf_p  Fmax="1000" v_max="10" lopt="7.6" lslk="28.6" rho="0.7" r="9.6" r1="5.7" phiM="0"   phiR="180" phi1M="165" phi1R="125"/>
     </Parameters>
 </Model>
