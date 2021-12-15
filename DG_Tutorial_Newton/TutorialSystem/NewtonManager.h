@@ -35,7 +35,7 @@
 #include "shader.h"
 #include "texture.h"
 
-enum JointName { HIP, KNEE, ANKLE, NOjoint };
+enum JointName { HIP_L, KNEE_L, ANKLE_L, HIP_R, KNEE_R, ANKLE_R, NOjoint };
 
 struct NewtonManager
 {   // public

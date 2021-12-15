@@ -40,28 +40,52 @@ public:
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
 	float GetFoot2Floor_R();
-
 	int CreateFootScanLine();
 
 
 private:
 	WindowMain* m_winManager;
-	GeomNewton* UP_leg;
-	GeomNewton* LP_leg;
-	GeomNewton* LPT;
+
+	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
+	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
+	map<std::string, dVector*> body_pos;// vector of body position
+	map<std::string, dVector*> body_dim;// vector of body dimension
+	map<std::string, std::string> child_father;// bodies tree
+		 
+	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
+	std::vector<std::string> muscle_keys = { "hfl_r","glu_r","ham_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "hfl_l","glu_l","ham_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};
+	map<std::string, std::string> m_body1;// body one of muscle
+	map<std::string, std::string> m_body2;// body 2 of muscle
+	map<std::string, std::string> m_body3;// body 3 of muscle
+	map<std::string, dVector> m_point1;// point 1 line muscle
+	map<std::string, dVector> m_point2;// point 2 line muscle
+	map<std::string, JointName> m_joint1;// joint 1 muscle
+	map<std::string, JointName> m_joint2;// joint 2 muscle
+	map<std::string, JointType> m_joint_type1;// joint type 1 muscle
+	map<std::string, JointType> m_joint_type2;// joint type 2 muscle
+	map<std::string, Mtuname> m_muscle_name;// name of muscle
+	map<std::string, map<std::string, float>> m_list_prop;// list containing the list of muscle properties (crazy ;))
+
+	map<std::string, float> m_theta0;// initial angle 1 of muscle
+	map<std::string, float> m_theta10;// initial angle 2 of muscle
+	map<std::string, float> m_lim1;// limit angle 1 of muscle 
+	map<std::string, float> m_lim2;// limit angle 2 of muscle 
+
+	std::vector<std::string> muscle_p_keys = { "Fmax", "v_max", "lopt","lslk", "rho", "r", "r1", "phiM", "phiR", "phi1M", "phi1R" };
+	map<std::string, float> sol, ta, gas, vas, hfl, glu, ham, rf;
+
+	dCustomDoubleHinge* Hip_r;
+	dCustomHinge* Knee_r;
+	//dCustomBallAndSocket* Ankle;
+	dCustomDoubleHinge* Ankle_r;
+
+	dCustomDoubleHinge* Hip_l;
+	dCustomHinge* Knee_l;
+	//dCustomBallAndSocket* Ankle;
+	dCustomDoubleHinge* Ankle_l;
+
 	GeomNewton* Plantar_L;
 	GeomNewton* Plantar_R;
-	GeomNewton* Ball;
-
-	dModelNode* N1;
-	dModelNode* N2;
-	dModelNode* N3;
-	dModelNode* N4;
-
-	dCustomDoubleHinge* Hip;
-	dCustomHinge* Knee;
-	//dCustomBallAndSocket* Ankle;
-	dCustomDoubleHinge* Ankle;
 
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
@@ -69,15 +93,15 @@ private:
 	const char* getIndentAlt(unsigned int numIndents);
 	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
 	int dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<std::string, float>& l, unsigned int indent);
+
 	std::vector<float> v_scale, v_lengths, v_total_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2, v_maxForce;
 	
 	map<std::string, float> lengths;
 	map<std::string, float> mass_distrib,delta_cm;
-	map<std::string, float> Ixx,Iyy,Izz;
+	map<std::string, float> Ixx, Iyy, Izz, body_rot_ang;
 	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck", "RadBones","RadSpheres" };
 	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT"};
-	std::vector<std::string> muscle_keys = { "Fmax", "v_max", "lopt","lslk", "rho", "r", "r1", "phiM", "phiR", "phi1M", "phi1R"};
-	map<std::string, float> sol, ta, gas, vas, hfl, glu, ham, rf;
+	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l" };
 
 	float l_Hip;
 	float l_Up_Leg;
@@ -85,7 +109,7 @@ private:
 	float r_bones;
 	float l_foot;
 	float w_foot;
-	glm::vec3 _Pos;
+	
 	float l_toe;
 	float h_foot;
 	float scale_mass, scale_length;
@@ -97,8 +121,6 @@ private:
 	float r_Pad;
 	float h_sphere;
 	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
-	Muscle* m_sol_L, * m_ta_L, * m_gas_L, * m_vas_L, * m_ham_L, * m_rf_L, * m_glu_L, * m_hfl_L;
-	Muscle* m_sol_R, * m_ta_R, * m_gas_R, * m_vas_R, * m_ham_R, * m_rf_R, * m_glu_R, * m_hfl_R;
 
 	dVector  ContactFoot_L;
 	dVector  NormalFoot_L;
@@ -110,6 +132,8 @@ private:
 	dVector  NormalFoot;
 	dVector  ContactGround;
 	float Foot2Floor_R;
+
+
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -124,6 +148,7 @@ public:
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
+	float MTU_excitation_signal(const Mtuname m_name) const;// the ouput is the excitation signal for muscle m_name
 	//
 	dRaycastVHModel* m_player;
 	dCustomJoint::dAngularIntegration* m_curJointAngle;

@@ -1,7 +1,15 @@
 #include "pch.h"
 #include "GeomGL.h"
 #include "biped.h"
-
+//EX: muscle:
+//1. body 1 (proximal ref)
+//2. body 2 (proximal ref)
+//3. body 3 (proximal ref) (NULL if no body)
+//4. Mesh coordinates: vector 1 on body 1, vector 2 on body 2 (or 3 for biarticular) (change the values in 'DummyGeometricProperties.xml' file)
+//5. Enum containing the name of the first joint. The name MUST be UNIQUE. The first joint is the proximal (closer to the head)
+//6. Enum containing the type of the first joint (Hinge, BallAndSocket, DoubleHinge)
+//7. Enum containing the name of the second joint. The name MUST be UNIQUE. Use NOjoint if the muscle is monoarticular
+//8. Enum containing the type of the second joint (Hinge, BallAndSocket, DoubleHinge). select NOtype if the muscle is monoarticular
 Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* insert1, GeomNewton* insert2, GeomNewton* insert3, dVector ins1, dVector ins2, JointName jname, JointType jtype, JointName jname1, JointType jtype1, Mtuname mname) :
 	m_Manager(wMain)
 	, body1(insert1)
@@ -340,7 +348,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	// Compute torque for each joint actuated by the muscle. m_x = torque joint, m_y = torque joint 1
 	switch (Jname) 
 	{
-	case HIP:
+	case HIP_R:
 	{
 		T.m_x = m_Fmtu * arm * 0.01 - T_reac; // GLU HAM
 		switch (m_name) {
@@ -348,14 +356,37 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 		case RF: {T.m_x = T.m_x * (-1);break;}}
 		break;
 	}
-	case KNEE:
+	case KNEE_R:
 	{
 		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] // GAS 
 		if (m_name == VAS) // VAS
 			T.m_x = T.m_x * (-1);
 		break;
 	}
-	case ANKLE:
+	case ANKLE_R:
+	{
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] //  SOL
+		if (m_name == TA) // TA
+			T.m_x = T.m_x * (-1);
+		break;
+	}
+	case HIP_L:
+	{
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac; // GLU HAM
+		switch (m_name) {
+		case HFL: {T.m_x = T.m_x * (-1);break;}
+		case RF: {T.m_x = T.m_x * (-1);break;}
+		}
+		break;
+	}
+	case KNEE_L:
+	{
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] // GAS 
+		if (m_name == VAS) // VAS
+			T.m_x = T.m_x * (-1);
+		break;
+	}
+	case ANKLE_L:
 	{
 		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] //  SOL
 		if (m_name == TA) // TA
@@ -369,14 +400,26 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	
 	switch (Jname1)
 	{
-	case KNEE:
+	case KNEE_R:
 	{
 		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // HAM
 		if (m_name == RF) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}
-	case ANKLE:
+	case ANKLE_R:
+	{
+		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // GAS
+		break;
+	}
+	case KNEE_L:
+	{
+		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // HAM
+		if (m_name == RF) // RF
+			T.m_y = T.m_y * (-1);
+		break;
+	}
+	case ANKLE_L:
 	{
 		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // GAS
 		break;
