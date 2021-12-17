@@ -26,16 +26,14 @@ struct Muscle
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetActivation(const float iExcitation);
 	float GetActivation();
-	void GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmuscle, float& V, float& lmtu);
+	void GetMuscleParams(float& angle, float& angle1, float& lce, float& lopt, float& lmtu, float& Fmuscle, float& Fmax, float& angle_v, float& V);
 	void SetNeuralDelay(const float iStepSize);
 	
-	void SetLength0(float l);
 	float GetAngle();
 	void SetAngle(float ang);
 	float GetAngle1();
 	void SetAngle1(float ang);
 	void SetLimits(float a_lim, float a1_lim);
-	float GetLength0();
 	float dresidu(const float l,const float t);
 	float residu(const float l,const float t);
 	float fSE(const float l);
@@ -53,6 +51,8 @@ struct Muscle
 	void SetDelta_l(const float l);
 	float GetLCE();
 	void SetLCE(const float l);
+	char GetLaterality();
+	void SetLaterality(char letter);
 
 	GeomNewton* body1;
 	GeomNewton* body2;
@@ -64,6 +64,8 @@ struct Muscle
 	Mtuname m_name;
 
 private:
+	char laterality;
+	
 	NewtonManager* m_Manager;
 	LineDebugManager* LDebug_Manager;
 	GeomBase* aUserData;
@@ -100,6 +102,8 @@ private:
 	float theta1_actual; // actual angle of the joint 1
 	float theta_0; // initial angle of the joint
 	float theta1_0; // initial angle of the joint 1
+	float theta_vel; // actual angle velocity of the joint (initialized at zero at beginning of simulation). Needed for PD control of hip
+	float theta_pre;// angle of previous timestep
 	float damp;
 	float Jang; // angle of the joint
 	float Jang1; // angle of the joint 1

@@ -33,6 +33,8 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	, l_slk(10.f)
 	, l_mtu(0.0f)
 	, theta_actual(0.0f)
+	, theta_vel(0.0f)
+	, theta_pre(0.0f)
 	, m_Fmtu(0.0f)
 	, theta_0(0.0f)
 	, damp(0.0f)
@@ -118,6 +120,16 @@ void Muscle::SetAngle1(float ang) {
 void Muscle::SetLimits(float a_lim, float a1_lim) {
 	ang_lim = a_lim; // limit joint angle
 	ang1_lim = a1_lim; // limitl joint angle 1
+}
+
+char Muscle::GetLaterality()
+{
+	return laterality;
+}
+
+void Muscle::SetLaterality(char letter)
+{
+	laterality = letter;
 }
 
 void Muscle::GenerateMesh() {
@@ -300,6 +312,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	theta_actual = theta_0 - this->GetAngle(); //[rad]
 	theta1_actual = theta1_0 - this->GetAngle1(); //[rad]
 	l_mtu = Compute_muscle_length(theta_actual, theta1_actual); // [cm] compute the muscle length
+	theta_vel = (theta_actual - theta_pre) / time;
 
 	// apply Newton-Rapshon method
 	float dl(1.0e-006); // [m] delta_lce initialization
@@ -321,7 +334,8 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	m_Fmtu = F_max * (this->fSE(dl));
 	if (m_Fmtu < 0) // formula 15 millard 2012
 		m_Fmtu = 0;
-
+	l_mtu = l_mtu + dl;
+	theta_pre = theta_actual; // needed for angle velocity compuatation
 	// Compute reaction torque if theta_max is reached (according to Geyer)
 	float delta_theta = 0, delta_theta1 = 0;
 	float delta_theta_dot = 0, delta_theta1_dot = 0;
@@ -541,7 +555,7 @@ float Muscle::GetActivation()
 	return activation;
 }
 
-void Muscle::GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmuscle, float& V, float& lmtu)
+void Muscle::GetMuscleParams(float& angle, float& angle1, float& lce, float& lopt, float& lmtu,float& Fmuscle, float& Fmax, float& angle_v, float& V)
 {
 	angle = theta_actual;
 	angle1 = theta1_actual;
@@ -549,4 +563,7 @@ void Muscle::GetMuscleParams(float& angle, float& angle1, float& lce, float& Fmu
 	Fmuscle = m_Fmtu;
 	V= v;
 	lmtu = l_mtu;
+	Fmax = F_max;
+	lopt = l_opt;
+	angle_v = theta_vel;
 }

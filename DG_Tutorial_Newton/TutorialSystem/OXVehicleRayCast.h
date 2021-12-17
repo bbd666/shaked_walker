@@ -30,30 +30,46 @@
 #include "tinyxml.h"
 #include "biped.h"
 #include "NewtonUtil.h"
+//#include "dSceneRender.h"
 
 class dRaycastVHModel: public dModelRootNode
 {
 public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
+	map<Mtuname, float> GetGain_Force_Feedback();
+	map<Mtuname, float> GetGain1_Length_Feedback();
+	map<Mtuname, float> GetGain2_Length_Feedback();
+	map<Mtuname, float> GetGain_PDk();
+	map<Mtuname, float> GetGain_PDd();
+	map<Mtuname, float> GetGain_PDa();
 	~dRaycastVHModel();
 
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
+	void DrawLineCom(const int lineID, const vector<float> com);
+	//virtual void DrawFrame(const dMatrix& matrix, dFloat scale);
 	float GetFoot2Floor_R();
-	int CreateFootScanLine();
-
+	int CreateLine();
+	dVector ComputePlayerCOM();
+	map<std::string, GeomNewton*> Get_RigidElemetList();
+	float GetLegLength();
 
 private:
 	WindowMain* m_winManager;
 
+	/// <RIGID ELEMENTS>
+	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l" };//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
 	map<std::string, dVector*> body_dim;// vector of body dimension
 	map<std::string, std::string> child_father;// bodies tree
-		 
+	map<std::string, int> line_id;// id of line passing though com
+	/// </RIGID ELEMENTS>	 
+	/// 
+	/// <MUSCLES>
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> muscle_keys = { "hfl_r","glu_r","ham_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "hfl_l","glu_l","ham_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};
+	std::vector<std::string> muscle_keys = { "hfl_r","glu_r","ham_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "hfl_l","glu_l","ham_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle
@@ -71,9 +87,11 @@ private:
 	map<std::string, float> m_lim1;// limit angle 1 of muscle 
 	map<std::string, float> m_lim2;// limit angle 2 of muscle 
 
-	std::vector<std::string> muscle_p_keys = { "Fmax", "v_max", "lopt","lslk", "rho", "r", "r1", "phiM", "phiR", "phi1M", "phi1R" };
+	std::vector<std::string> muscle_p_keys = { "Fmax", "v_max", "lopt","lslk", "rho", "r", "r1", "phiM", "phiR", "phi1M", "phi1R" };// MTU's PROPERTIES
 	map<std::string, float> sol, ta, gas, vas, hfl, glu, ham, rf;
-
+	/// </MUSCLES>
+	
+	/// <JOINTS>
 	dCustomDoubleHinge* Hip_r;
 	dCustomHinge* Knee_r;
 	//dCustomBallAndSocket* Ankle;
@@ -83,57 +101,43 @@ private:
 	dCustomHinge* Knee_l;
 	//dCustomBallAndSocket* Ankle;
 	dCustomDoubleHinge* Ankle_l;
+	/// </JOINTS>
 
-	GeomNewton* Plantar_L;
-	GeomNewton* Plantar_R;
-
+	/// <DATA IMPORT FROM XML>
 	void dump_to_stdout(const char* pFilename);
 	void dump_to_stdout(TiXmlNode* pParent, unsigned int indent = 0);
 	const char* getIndent(unsigned int numIndents);
 	const char* getIndentAlt(unsigned int numIndents);
-	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float> &vector, unsigned int indent);
+	int dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<float>& vector, unsigned int indent);
 	int dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<std::string, float>& l, unsigned int indent);
+	/// </DATA IMPORT FROM XML>
 
+	/// <GEOMETRIC AND INERTIA PARAMS>
 	std::vector<float> v_scale, v_lengths, v_total_weight, v_masses, v_ixx, v_iyy, v_izz, v_com, v_angles, v_x1, v_y1, v_z1, v_x2, v_y2, v_z2, v_maxForce;
-	
+
 	map<std::string, float> lengths;
-	map<std::string, float> mass_distrib,delta_cm;
+	map<std::string, float> mass_distrib, delta_cm;
 	map<std::string, float> Ixx, Iyy, Izz, body_rot_ang;
 	std::vector<std::string> lengths_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT","Hip","Shoulder","FootBreadth","AnkleHeight","Neck", "RadBones","RadSpheres" };
-	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT"};
-	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l" };
+	std::vector<std::string> mass_keys = { "Head","UpArm","ForeArm","Hand","Trunk","Thigh","Shank","Foot","Toes","UPT","MPT","LPT" };
 
-	float l_Hip;
-	float l_Up_Leg;
-	float l_Low_Leg;
-	float r_bones;
-	float l_foot;
-	float w_foot;
-	
-	float l_toe;
-	float h_foot;
+	float l_Hip,l_Up_Leg,l_Low_Leg,r_bones,l_foot,w_foot,l_toe,h_foot;
 	float scale_mass, scale_length;
-	float l_Clav;
-	float l_Up_Arm;
-	float l_Low_Arm;
-	float l_Hand;
-	float l_Head;
-	float r_Pad;
-	float h_sphere;
-	float 	l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
+	float l_Clav,l_Up_Arm,l_Low_Arm,l_Hand,l_Head, r_Pad, h_sphere,l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
 
-	dVector  ContactFoot_L;
-	dVector  NormalFoot_L;
-	dVector  ContactGround_L;
-	float Foot2Floor_L;
-	int FootLineIndex_L, FootLineIndex_R;
+	dVector  ContactFoot_L,NormalFoot_L,ContactGround_L;
+	dVector  ContactFoot,NormalFoot,ContactGround;
+	float Foot2Floor_L, Foot2Floor_R,FootLineIndex_L, FootLineIndex_R;
+	/// </GEOMETRIC AND INERTIA PARAMS>
 
-	dVector  ContactFoot;
-	dVector  NormalFoot;
-	dVector  ContactGround;
-	float Foot2Floor_R;
-
-
+	/// <Control parameters>
+	map<Mtuname, float> Gf;// gain force feedback
+	map<Mtuname, float> Glg;// gain length 1 feedback
+	map<Mtuname, float> Glh;// gain length 2 feedback
+	map<Mtuname, float> GPDk;// gain PD controller stiffness
+	map<Mtuname, float> GPDd;// gain PD controller damper
+	map<Mtuname, float> GPDa;// gain PD controller angle
+/// </summary>
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -148,10 +152,17 @@ public:
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
-	float MTU_excitation_signal(const Mtuname m_name) const;// the ouput is the excitation signal for muscle m_name
+	float MTU_excitation_sinusoidal_signal(const Mtuname m_name, char lateral) const;
+	float MTU_excitation_signal(Muscle* Mobj, map<Mtuname, float> GainForce, map<Mtuname, float> Gain1length, map<Mtuname, float> Gain2length,
+		map<Mtuname, float> GainPDk, map<Mtuname, float> GainPDd, map<Mtuname, float> GainPDa) const;// the ouput is the excitation signal for muscle m_name
+	//
+	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float clearance) const;
 	//
 	dRaycastVHModel* m_player;
 	dCustomJoint::dAngularIntegration* m_curJointAngle;
+
+/// <Control parameters>
+/// </summary>
 
 private:
 	WindowMain* m_winManager;
