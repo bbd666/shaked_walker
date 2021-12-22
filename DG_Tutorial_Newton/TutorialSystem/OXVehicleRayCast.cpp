@@ -999,29 +999,29 @@ float DGVehicleRCManager::MTU_excitation_signal(Muscle* Mobj, float GainForce, f
     Mobj->GetMuscleParams(angle, angle1, lce, lopt, lmtu, Fmuscle, Fmax, angle_v, V);
 
     // Positive force feedback///
-    float uf = GainForce*Fmuscle/Fmax*(newTime + delay);
+    float uf = GainForce * Fmuscle / Fmax * (newTime + delay);
 
     // Positive length feedback///
-    float ul = Gain1length*(lce/lopt * (newTime + delay)- Gain2length);
+    float ul = Gain1length * (lce / lopt * (newTime + delay) - Gain2length);
     if (ul <= 0)
         ul = 0;
 
     // Muscle-driven P control  for VAS (stance) e HFL (swing)/// 
     float up = 0;
     if (Mobj->m_name == VAS)
-        if (Pstate[1]<0)// Check
+        if (Pstate[1] < 0)// Check
             up = GainP1 * (Pstate[0] * (newTime - delay) - GainP2);
-    else if (Mobj->m_name == HFL)
-        up = GainP1 * (Tstate[0] * (newTime - delay) - GainP2);//Trunk orientation control
+        else if (Mobj->m_name == HFL)
+            up = GainP1 * (Tstate[0] * (newTime - delay) - GainP2);//Trunk orientation control
 
-    // HIP control stance, during Double stance only for lead leg //
+        // HIP control stance, during Double stance only for lead leg //
     float u_hip = 0;
     if (Mobj->m_name == HFL || Mobj->m_name == GLU || Mobj->m_name == HAM)// for trunk orientation
-        u_hip = abs(Gainlead1 * (Tstate[0] * (newTime - delay) - Gainlead2 + Gainlead3* Tstate[1]*(newTime - delay)));
-    if (DS && (Mobj->GetLaterality()!= lead))
+        u_hip = abs(Gainlead1 * (Tstate[0] * (newTime - delay) - Gainlead2 + Gainlead3 * Tstate[1] * (newTime - delay)));
+    if (DS && (Mobj->GetLaterality() != lead))
         u_hip = 0;
 
-    if (STANCE){
+    if (STANCE) {
         switch (Mobj->m_name) {
         case SOL:
             u = p + uf;break;
@@ -1062,7 +1062,7 @@ float DGVehicleRCManager::MTU_excitation_signal(Muscle* Mobj, float GainForce, f
         case GLU:
             u = q + uf;break;
         case HFL:
-            u = q + ul - other_ext+ up;break;
+            u = q + ul - other_ext + up;break;
         default:// RF, SOL, GAS, VAS
             u = q;break;
         }
@@ -1070,7 +1070,7 @@ float DGVehicleRCManager::MTU_excitation_signal(Muscle* Mobj, float GainForce, f
     if (SP) {
         //Muscle-driven PD control in Stance Preparation//
         if (Mobj->m_name == VAS || Mobj->m_name == GLU || Mobj->m_name == HAM)// for trunk orientation
-            u = q + abs(GainPDk * (angle * (newTime - delay) - GainPDa + GainPDd * angle_v * (newTime - delay)));
+            u = q + abs(GainPDk * (Pstate[0] * (newTime - delay) - GainPDa + GainPDd * Pstate[1] * (newTime - delay)));
         // other muscles same as swing
     }
     return u;
@@ -1078,10 +1078,10 @@ float DGVehicleRCManager::MTU_excitation_signal(Muscle* Mobj, float GainForce, f
 
 vector<bool> DGVehicleRCManager::Stance_Swing_Detection(dVector foot, dVector com, float leg, float clearance) const
 {
-    
-    bool SP=false, SI=false, STANCE=false, SWING=false;
+
+    bool SP = false, SI = false, STANCE = false, SWING = false;
     float dsp(0.5), dsi(0.5);// define values
-    float d = (com.m_z - foot.m_z)/leg;
+    float d = (com.m_z - foot.m_z) / leg;
     if (clearance < 0.001)// check value
     {
         STANCE = true;
@@ -1133,15 +1133,18 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         else if ((com_Player.m_z - com_foot_l.m_z) < 0)
             lead = 'L';
     }
-     //scan all  Muscle Elements
+    //scan all  Muscle Elements
     for (auto itr = m_winManager->aManager->vMuscleList.begin();
         itr != m_winManager->aManager->vMuscleList.end(); itr++)
     {
         dVector pin; // needed to apply the torque along the joint pin
         dVector pin1; // needed to apply the torque along the joint 1 pin
         Muscle* Mobj = (Muscle*)*itr;
+        // Get joint angle and joint velocity for proportional controller of VAS (stance)
+        float ang = 0, angvel = 0;
+        char lat = Mobj->GetLaterality();
         // loop on two joints
-        for (auto itr1 = 0; itr1 <= 1; itr1++) 
+        for (auto itr1 = 0; itr1 <= 1; itr1++)
         {
             // Read the joint name list and find the joint name of the Mobj
             std::vector<JointName> list = m_winManager->aManager->vJointNameList;
@@ -1166,6 +1169,10 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 {
                     Mobj->SetAngle(joint->GetJointAngle()); // joint angle
                     pin = joint->GetPinAxis(); // joint pin
+                    if (Mobj->m_name == VAS) {
+                        ang = joint->GetJointAngle();
+                        angvel = joint->GetJointOmega();
+                    }
                 }
                 else
                 {
@@ -1199,12 +1206,16 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 {
                     Mobj->SetAngle(joint->GetJointAngle());
                     pin = joint->GetPinAxis();
+                    if (Mobj->m_name == GLU || Mobj->m_name == HFL) {
+                        ang = joint->GetJointAngle();
+                        angvel = joint->GetJointOmega();
+                    }
                 }
                 else
                 {
                     Mobj->SetAngle1(joint->GetJointAngle());
                     pin1 = joint->GetPinAxis(); // joint pin
-                }                
+                }
                 break;
             }
             case NOtype:
@@ -1220,24 +1231,15 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         // Get trunk angle and velocity
         vector<dFloat> T_state = Mechanical_Model->GetTrunkSagittalState();
 
-        // Get joint angle and joint velocity for proportional controller of VAS (stance)
-        float ang=0, angvel=0;
-        string joint;
-        char lat = Mobj->GetLaterality();
-        if (Mobj->m_name == VAS) {
-            if (lat == 'R') {joint = "Knee_r";} else {joint = "Knee_l";}
-            ang = Mechanical_Model->Get_HingeJointList().find(joint)->second->GetJointAngle();
-            angvel = Mechanical_Model->Get_HingeJointList().find(joint)->second->GetJointOmega();
-        }
-        vector<float> P_state{ ang ,angvel };
+        vector<float> P_state{ ang ,angvel };// P controller state for vas (Stance + SP), GLU and HFL (SP)
 
         // get sol and ham excitation for TA (stance) and HFL (swing) excitation. SOL and HAM must be solved before TA and HFL
         float other_mus_ext = 0;
         if (Mobj->m_name == TA || Mobj->m_name == HFL)
-            other_mus_ext = Mechanical_Model->GetOtherMuscleExcitation(Mobj->m_name,lat);
+            other_mus_ext = Mechanical_Model->GetOtherMuscleExcitation(Mobj->m_name, lat);
 
         //Get muscle control gains form model//
-        float gf=0, glg = 0, glh = 0, gPDk = 0, gPDd = 0, gPDa = 0, gLead1=0, gLead2 = 0, gLead3 =0, gP1 = 0, gP2 = 0;
+        float gf = 0, glg = 0, glh = 0, gPDk = 0, gPDd = 0, gPDa = 0, gLead1 = 0, gLead2 = 0, gLead3 = 0, gP1 = 0, gP2 = 0;
         gf = Mechanical_Model->GetGain_Force_Feedback(Mobj->m_name);
         glg = Mechanical_Model->GetGain1_Length_Feedback(Mobj->m_name);
         glh = Mechanical_Model->GetGain2_Length_Feedback(Mobj->m_name);
@@ -1249,7 +1251,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         gLead3 = Mechanical_Model->GetGain_Lead3(Mobj->m_name);
         gP1 = Mechanical_Model->GetGain_P1(Mobj->m_name);
         gP2 = Mechanical_Model->GetGain_P2(Mobj->m_name);
-        
+
         // Get state of current foot
         vector<bool> gait_state;
         if (lat == 'R')
@@ -1269,7 +1271,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             Mechanical_Model->SaveOtherMuscleExcitation(u, lat, Mobj->m_name);
 
         dVector Ttemp = Mobj->Compute_muscle_Torque(timestep);
-        
+
         // Get the Body1 connected to the muscle and apply the muscle force
         GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
         NewtonBody* NBody = gNewton->GetBody();
@@ -1303,7 +1305,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         //    << "  " << Mobj->fDE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() 
         //    << "  " << Mobj->GetDelta_l() << "  " << Mobj->GetActivation()
         //    << "  " << vel << "  " << lmtu << "  " << Ttemp.m_x << "  " << Ttemp.m_y << std::endl;
- 
+
         // update for next force update
         Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE
 
@@ -1317,7 +1319,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         //}
         //if (Mobj->GetMuscleName() == TA)
         //    ankle_angle = Mobj->GetAngle();
-    }	
+    }
     // verify total torque on joints
     //monFlux << newTime << "  " << 180*dDegreeToRad-hip_angle << "  " << 190 * dDegreeToRad -knee_angle << "  " << 90 * dDegreeToRad - ankle_angle << endl;// check initial angle according to initial geometry
     newTime = newTime + timestep; // update time
