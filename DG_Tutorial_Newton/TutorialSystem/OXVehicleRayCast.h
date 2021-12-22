@@ -36,12 +36,6 @@ class dRaycastVHModel: public dModelRootNode
 {
 public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
-	map<Mtuname, float> GetGain_Force_Feedback();
-	map<Mtuname, float> GetGain1_Length_Feedback();
-	map<Mtuname, float> GetGain2_Length_Feedback();
-	map<Mtuname, float> GetGain_PDk();
-	map<Mtuname, float> GetGain_PDd();
-	map<Mtuname, float> GetGain_PDa();
 	~dRaycastVHModel();
 
 	float GetFoot2Floor_L();
@@ -50,9 +44,27 @@ public:
 	//virtual void DrawFrame(const dMatrix& matrix, dFloat scale);
 	float GetFoot2Floor_R();
 	int CreateLine();
+	vector<dFloat> GetTrunkSagittalState();
 	dVector ComputePlayerCOM();
 	map<std::string, GeomNewton*> Get_RigidElemetList();
+	map<std::string, dCustomHinge*> Get_HingeJointList();
+	map<std::string, dCustomDoubleHinge*> Get_DoubleHingeJointList();
 	float GetLegLength();
+
+	float GetGain_Force_Feedback(Mtuname NAME);
+	float GetGain1_Length_Feedback(Mtuname NAME);
+	float GetGain2_Length_Feedback(Mtuname NAME);
+	float GetGain_PDk(Mtuname NAME);
+	float GetGain_PDd(Mtuname NAME);
+	float GetGain_PDa(Mtuname NAME);
+	float GetGain_Lead1(Mtuname NAME);
+	float GetGain_Lead2(Mtuname NAME);
+	float GetGain_Lead3(Mtuname NAME);
+	float GetGain_P1(Mtuname NAME);
+	float GetGain_P2(Mtuname NAME);
+	vector<float> GetGain_HFLswing();
+	void SaveOtherMuscleExcitation(float u, char lat, Mtuname mname);
+	float GetOtherMuscleExcitation(Mtuname mname, char lat);
 
 private:
 	WindowMain* m_winManager;
@@ -69,7 +81,7 @@ private:
 	/// 
 	/// <MUSCLES>
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> muscle_keys = { "hfl_r","glu_r","ham_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "hfl_l","glu_l","ham_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL
+	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle
@@ -101,6 +113,11 @@ private:
 	dCustomHinge* Knee_l;
 	//dCustomBallAndSocket* Ankle;
 	dCustomDoubleHinge* Ankle_l;
+
+	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l"};
+	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
+	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l"};
+	map<std::string, dCustomHinge*> JHinge;//  muscle as map: use muscle_keys as string
 	/// </JOINTS>
 
 	/// <DATA IMPORT FROM XML>
@@ -137,7 +154,18 @@ private:
 	map<Mtuname, float> GPDk;// gain PD controller stiffness
 	map<Mtuname, float> GPDd;// gain PD controller damper
 	map<Mtuname, float> GPDa;// gain PD controller angle
-/// </summary>
+	map<Mtuname, float> GP1; // gain P controller hfl in swing 
+	map<Mtuname, float> GP2; // gain P controller hfl in swing 
+
+	map<Mtuname, float> Glead1; // gain P controller hfl in swing 
+	map<Mtuname, float> Glead2; // gain P controller hfl in swing  
+	map<Mtuname, float> Glead3; // gain P controller hfl in swing  
+
+	float uf_sol_r;
+	float uf_sol_l;
+	float ul_ham_r;
+	float ul_ham_l;
+/// </Control parameters>
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -152,18 +180,13 @@ public:
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
-	float MTU_excitation_sinusoidal_signal(const Mtuname m_name, char lateral) const;
-	float MTU_excitation_signal(Muscle* Mobj, map<Mtuname, float> GainForce, map<Mtuname, float> Gain1length, map<Mtuname, float> Gain2length,
-		map<Mtuname, float> GainPDk, map<Mtuname, float> GainPDd, map<Mtuname, float> GainPDa) const;// the ouput is the excitation signal for muscle m_name
+	float MTU_excitation_signal(Muscle* Mobj, float GainForce, float Gain1length, float Gain2length,
+		float GainPDk, float GainPDd, float GainPDa, vector<bool> foot_state, float other_ext,
+		vector<dFloat>  Tstate, float Gainlead1, float Gainlead2, float Gainlead3,
+		vector<dFloat>  Pstate, float GainP1, float GainP2, char lead) const;// the ouput is the excitation signal for muscle m_name
 	//
 	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float clearance) const;
 	//
-	dRaycastVHModel* m_player;
-	dCustomJoint::dAngularIntegration* m_curJointAngle;
-
-/// <Control parameters>
-/// </summary>
-
 private:
 	WindowMain* m_winManager;
 };

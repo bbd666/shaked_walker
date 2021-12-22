@@ -52,7 +52,7 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 	kj = 0.3f; // [Nm/rad]
 	vj_max = 1; //[rad/s]
 	ang_lim = 0;
-	ang1_lim = 0;;
+	ang1_lim = 0;
 }
 
 Muscle::~Muscle() {
