@@ -26,7 +26,7 @@ struct Muscle
 	void GetOriginAndInsertion(dVector &vOrigin, dVector &vInsert);
 	void SetActivation(const float iExcitation);
 	float GetActivation();
-	void GetMuscleParams(float& angle, float& angle1, float& lce, float& lopt, float& lmtu, float& Fmuscle, float& Fmax, float& angle_v, float& V);
+	void GetMuscleParams(float& angle, float& angle1, float& lce, float& lopt, float& lmtu, float& Fmuscle, float& Fmax, float& V);
 	void SetNeuralDelay(const float iStepSize);
 	
 	float GetAngle();
@@ -102,8 +102,6 @@ private:
 	float theta1_actual; // actual angle of the joint 1
 	float theta_0; // initial angle of the joint
 	float theta1_0; // initial angle of the joint 1
-	float theta_vel; // actual angle velocity of the joint (initialized at zero at beginning of simulation). Needed for PD control of hip
-	float theta_pre;// angle of previous timestep
 	float damp;
 	float Jang; // angle of the joint
 	float Jang1; // angle of the joint 1

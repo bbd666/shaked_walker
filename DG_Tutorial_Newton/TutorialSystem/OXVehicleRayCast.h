@@ -30,7 +30,7 @@
 #include "tinyxml.h"
 #include "biped.h"
 #include "NewtonUtil.h"
-//#include "dSceneRender.h"
+#include "ControlAlgorithm.h"
 
 class dRaycastVHModel: public dModelRootNode
 {
@@ -40,7 +40,9 @@ public:
 
 	float GetFoot2Floor_L();
 	void CastFoot(const char* const Laterality);
-	void DrawLineCom(const int lineID, const vector<float> com);
+
+	void DrawFrame(const dVector& posit, dFloat scale);
+
 	//virtual void DrawFrame(const dMatrix& matrix, dFloat scale);
 	float GetFoot2Floor_R();
 	int CreateLine();
@@ -50,21 +52,7 @@ public:
 	map<std::string, dCustomHinge*> Get_HingeJointList();
 	map<std::string, dCustomDoubleHinge*> Get_DoubleHingeJointList();
 	float GetLegLength();
-
-	float GetGain_Force_Feedback(Mtuname NAME);
-	float GetGain1_Length_Feedback(Mtuname NAME);
-	float GetGain2_Length_Feedback(Mtuname NAME);
-	float GetGain_PDk(Mtuname NAME);
-	float GetGain_PDd(Mtuname NAME);
-	float GetGain_PDa(Mtuname NAME);
-	float GetGain_Lead1(Mtuname NAME);
-	float GetGain_Lead2(Mtuname NAME);
-	float GetGain_Lead3(Mtuname NAME);
-	float GetGain_P1(Mtuname NAME);
-	float GetGain_P2(Mtuname NAME);
-	vector<float> GetGain_HFLswing();
-	void SaveOtherMuscleExcitation(float u, char lat, Mtuname mname);
-	float GetOtherMuscleExcitation(Mtuname mname, char lat);
+	ControlAlgorithm controller;
 
 private:
 	WindowMain* m_winManager;
@@ -76,7 +64,9 @@ private:
 	map<std::string, dVector*> body_pos;// vector of body position
 	map<std::string, dVector*> body_dim;// vector of body dimension
 	map<std::string, std::string> child_father;// bodies tree
-	map<std::string, int> line_id;// id of line passing though com
+	int COMXline_id;// id of line passing though com
+	int COMYline_id;// id of line passing though com
+	int COMZline_id;// id of line passing though com
 	/// </RIGID ELEMENTS>	 
 	/// 
 	/// <MUSCLES>
@@ -146,26 +136,6 @@ private:
 	dVector  ContactFoot,NormalFoot,ContactGround;
 	float Foot2Floor_L, Foot2Floor_R,FootLineIndex_L, FootLineIndex_R;
 	/// </GEOMETRIC AND INERTIA PARAMS>
-
-	/// <Control parameters>
-	map<Mtuname, float> Gf;// gain force feedback
-	map<Mtuname, float> Glg;// gain length 1 feedback
-	map<Mtuname, float> Glh;// gain length 2 feedback
-	map<Mtuname, float> GPDk;// gain PD controller stiffness
-	map<Mtuname, float> GPDd;// gain PD controller damper
-	map<Mtuname, float> GPDa;// gain PD controller angle
-	map<Mtuname, float> GP1; // gain P controller hfl in swing 
-	map<Mtuname, float> GP2; // gain P controller hfl in swing 
-
-	map<Mtuname, float> Glead1; // gain P controller hfl in swing 
-	map<Mtuname, float> Glead2; // gain P controller hfl in swing  
-	map<Mtuname, float> Glead3; // gain P controller hfl in swing  
-
-	float uf_sol_r;
-	float uf_sol_l;
-	float ul_ham_r;
-	float ul_ham_l;
-/// </Control parameters>
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -180,13 +150,6 @@ public:
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
-	float MTU_excitation_signal(Muscle* Mobj, float GainForce, float Gain1length, float Gain2length,
-		float GainPDk, float GainPDd, float GainPDa, vector<bool> foot_state, float other_ext,
-		vector<dFloat>  Tstate, float Gainlead1, float Gainlead2, float Gainlead3,
-		vector<dFloat>  Pstate, float GainP1, float GainP2, char lead) const;// the ouput is the excitation signal for muscle m_name
-	//
-	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float clearance) const;
-	//
 private:
 	WindowMain* m_winManager;
 };

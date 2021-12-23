@@ -2,6 +2,7 @@
 #include "OXVehicleRayCast.h"
 #include <tinyxml.h>
 
+
 dFloat newTime = 0;
 ofstream monFlux("history.txt");
 // ----------------------------------------------------------------------
@@ -370,7 +371,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         body_pos[*it] = body_pos_vec[aa];
         body_dim[*it] = body_dim_vec[aa];
         rigid_element[*it] = NULL;
-        line_id[*it] = 0;
         nodes[*it] = this;
         aa++;
     };
@@ -424,7 +424,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
         if (body_keys[ind] != "LPT")
             nodes[*it] = new dModelNode(rigid_element[*it]->GetBody(), dGetIdentityMatrix(), nodes[child_father.find(body_keys[ind])->second]);
-        //line_id.find(body_keys[ind])->second = CreateLine(); // WIP. create line passing com
+
         ind++;
     }
     // joint lists initialization
@@ -673,147 +673,17 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         index++;
     }
 
-    /// Control parameter initialization
-    Gf =   { {GLU, 0},    {HAM, 0},   {VAS, 0},   {SOL, 0},     {GAS, 0}};// list gain force feedback
-    Glg =  { {HFL, 0},    {HAM, 0},   {TA, 0}};// list gain length 1 feedback
-    Glh =  { {HFL, 0},    {HAM, 0},   {TA, 0}};// list gain length 2 feedback
-    GPDk = { {HFL, 0},    {GLU, 0},   {VAS, 0}};// list gain PD controller spring
-    GPDd = { {HFL, 0},    {GLU, 0},   {VAS, 0}};// list gain PD controller damper
-    GPDa = { {HFL, 0},    {GLU, 0},   {VAS, 0}};//list gain PD controller ang
-    GP1 = { {HFL, 0}, {VAS, 0} };
-    GP2 = { {HFL, 0}, {VAS, 0} };
-    Glead1 = { {HAM, 0},    {GLU, 0},   {HFL, 0}};
-    Glead2 = { {HAM, 0},    {GLU, 0},   {HFL, 0} };
-    Glead3 = { {HAM, 0},    {GLU, 0},   {HFL, 0} };
     // FOOT LINES
     FootLineIndex_L = CreateLine();
     FootLineIndex_R = CreateLine();
-}
 
-float dRaycastVHModel::GetGain_Force_Feedback(Mtuname NAME) {
-    float g = 0;
-    if (NAME == SOL || NAME == GAS || NAME == VAS || NAME == HAM || NAME == GLU)
-        g = Gf.find(NAME)->second;
-    return g;
-}
+    // Check for body com position!
+    COMXline_id = CreateLine();
+    COMYline_id = CreateLine(); 
+    COMZline_id = CreateLine(); 
 
-float dRaycastVHModel::GetGain1_Length_Feedback(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == TA || NAME == HFL || NAME == HAM)
-        g = Glg.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain2_Length_Feedback(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == TA || NAME == HFL || NAME == HAM)
-        g = Glh.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_PDk(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == VAS || NAME == GLU || NAME == HFL)
-        g = GPDk.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_PDd(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == VAS || NAME == GLU || NAME == HFL)
-        g = GPDd.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_PDa(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == VAS || NAME == GLU || NAME == HFL)
-        g = GPDa.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_Lead1(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == HAM || NAME == GLU || NAME == HFL)
-        g = Glead1.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_Lead2(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == HAM || NAME == GLU || NAME == HFL)
-        g = Glead2.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_Lead3(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == HAM || NAME == GLU || NAME == HFL)
-        g = Glead3.find(NAME)->second;
-    return g;
-}
-
-float dRaycastVHModel::GetGain_P1(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == VAS || NAME == HFL)
-        g = GP1.find(NAME)->second;
-    return g;
-}
-float dRaycastVHModel::GetGain_P2(Mtuname NAME)
-{
-    float g = 0;
-    if (NAME == VAS || NAME == HFL)
-        g = GP2.find(NAME)->second;
-    return g;
-}
-vector<float> dRaycastVHModel::GetGain_HFLswing()
-{
-    float g1 = GP1.find(HFL)->second;
-    float g2 = GP2.find(HFL)->second;
-    return { g1, g2 };
-}
-
-void dRaycastVHModel::SaveOtherMuscleExcitation(float u, char lat, Mtuname mname)
-{
-    if (mname == SOL) {
-        if (lat == 'R')
-            uf_sol_r = u;
-        else
-            uf_sol_l = u;
-    }
-    else if (mname == HAM) {
-        if (lat == 'R')
-            ul_ham_r = u;
-        else
-            ul_ham_l = u;
-    }
-}
-
-float dRaycastVHModel::GetOtherMuscleExcitation(Mtuname mname, char lat)
-{
-    float u;
-    if (mname == TA) {
-        if (lat == 'R')
-            u = uf_sol_r;
-        else
-            u = uf_sol_l;
-    }
-    else if (mname == HFL) {
-        if (lat == 'R')
-            u = ul_ham_r;
-        else
-            u = ul_ham_l;
-    }
-    return u;
+    // Control class initialization. check reference or pointer
+    controller = ControlAlgorithm();
 }
 
 float dRaycastVHModel::GetFoot2Floor_L() {
@@ -923,33 +793,29 @@ void dRaycastVHModel::CastFoot(const char* const Laterality) {
     m_winManager->aLineManager->aLineBuffer[FLindex - 2].posit.y = this->ContactGround[1];
     m_winManager->aLineManager->aLineBuffer[FLindex - 2].posit.z = this->ContactGround[2];
 }
-//WIP
-void dRaycastVHModel::DrawLineCom(const int lineID, const vector<float> com)
+//Draw three lines parallel to global x y and z respectively. The origin of all lines is the input position vector. Use a the second input to set line length
+void dRaycastVHModel::DrawFrame(const dVector& posit, dFloat scale)
 {
-    m_winManager->aLineManager->aLineBuffer[lineID - 1].posit.x = com[0];
-    m_winManager->aLineManager->aLineBuffer[lineID - 1].posit.y = com[1];
-    m_winManager->aLineManager->aLineBuffer[lineID - 1].posit.z = com[2];
-    //aLineBuffer[LineIndex].color = newlinecolor;
-    m_winManager->aLineManager->aLineBuffer[lineID - 2].posit.x = com[0];
-    m_winManager->aLineManager->aLineBuffer[lineID - 2].posit.y = com[1];
-    m_winManager->aLineManager->aLineBuffer[lineID - 2].posit.z = com[2]-0.2;
+    int Xindex = COMXline_id;
+    int Yindex = COMYline_id;
+    int Zindex = COMZline_id;
+    vector <int> ind = { Xindex,Yindex,Zindex };
+    float val1 = 0, val2 = 0, val3 = 0;
+    for (int n = 0; n<3; ++n)
+    {
+        if (n == 0) { val1 = 0.2*scale; val2 = 0; val3 = 0; }
+        else if (n == 1) { val1 = 0; val2 = 0.2 * scale; val3 = 0; }
+        else if (n == 2) { val1 = 0; val2 = 0; val3 = 0.2 * scale; }
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.x = posit[0];
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.y = posit[1];
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.z = posit[2];
+        //aLineBuffer[LineIndex].color = newlinecolor;
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.x = posit[0] + val1;
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.y = posit[1] + val2;
+        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.z = posit[2] + val3;
+    }
+
 }
-// 
-//void dRaycastVHModel::DrawFrame(const dMatrix& matrix, dFloat scale)
-//{
-//    //dVector o0(matrix.m_posit);
-//
-//    dVector x(matrix.m_posit + matrix.RotateVector(dVector(scale, 0.0f, 0.0f, 0.0f)));
-//    int line_ind = CreateLine();
-//
-//    dVector y(matrix.m_posit + matrix.RotateVector(dVector(0.0f, scale, 0.0f, 0.0f)));
-//
-//    DrawLine(matrix.m_posit, y);
-//
-//    dVector z(matrix.m_posit + matrix.RotateVector(dVector(0.0f, 0.0f, scale, 0.0f)));
-//
-//    DrawLine(matrix.m_posit, z);
-//}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
@@ -972,155 +838,36 @@ dModelRootNode* DGVehicleRCManager::CreateWalkerPlayer(const char* const modelNa
     return controller;
 }
 
-//MTU control law based on Force feedback, Length feedback and PD controller
-//The output is the excitation signal for muscle m_name. 
-float DGVehicleRCManager::MTU_excitation_signal(Muscle* Mobj, float GainForce, float Gain1length, float Gain2length,
-    float GainPDk, float GainPDd, float GainPDa, vector<bool> gait_state, float other_ext,
-    vector<dFloat>  Tstate, float Gainlead1, float Gainlead2, float Gainlead3,
-    vector<dFloat>  Pstate, float GainP1, float GainP2, char lead) const
-{
-    float u = 0;
-    float p = 0.05, s = 0.05, q = 0.05;// initial constant excitation
-
-    // Gait state
-    bool SP = false, SI = false, STANCE = false, SWING = false, DS = false;
-    STANCE = gait_state[0];SWING = gait_state[1];SP = gait_state[2]; SI = gait_state[3], DS = gait_state[4];
-
-    // neural trasmission delay for each MTU
-    float delay = 0;// neural signal propagation according to geyer 2010 in [s]
-    if (Mobj->m_name == HFL || Mobj->m_name == GLU || Mobj->m_name == HAM || Mobj->m_name == RF)
-        delay = 5 / 1000;
-    else if (Mobj->m_name == SOL || Mobj->m_name == TA || Mobj->m_name == GAS)
-        delay = 20 / 1000;
-    else
-        delay = 10 / 1000;
-
-    float angle, angle1, lce, Fmuscle, V, lmtu, Fmax, lopt, angle_v;
-    Mobj->GetMuscleParams(angle, angle1, lce, lopt, lmtu, Fmuscle, Fmax, angle_v, V);
-
-    // Positive force feedback///
-    float uf = GainForce * Fmuscle / Fmax * (newTime + delay);
-
-    // Positive length feedback///
-    float ul = Gain1length * (lce / lopt * (newTime + delay) - Gain2length);
-    if (ul <= 0)
-        ul = 0;
-
-    // Muscle-driven P control  for VAS (stance) e HFL (swing)/// 
-    float up = 0;
-    if (Mobj->m_name == VAS)
-        if (Pstate[1] < 0)// Check
-            up = GainP1 * (Pstate[0] * (newTime - delay) - GainP2);
-        else if (Mobj->m_name == HFL)
-            up = GainP1 * (Tstate[0] * (newTime - delay) - GainP2);//Trunk orientation control
-
-        // HIP control stance, during Double stance only for lead leg //
-    float u_hip = 0;
-    if (Mobj->m_name == HFL || Mobj->m_name == GLU || Mobj->m_name == HAM)// for trunk orientation
-        u_hip = abs(Gainlead1 * (Tstate[0] * (newTime - delay) - Gainlead2 + Gainlead3 * Tstate[1] * (newTime - delay)));
-    if (DS && (Mobj->GetLaterality() != lead))
-        u_hip = 0;
-
-    if (STANCE) {
-        switch (Mobj->m_name) {
-        case SOL:
-            u = p + uf;break;
-        case TA:
-            u = p + ul - other_ext;break;
-        case GAS:
-            u = p + uf;break;
-        case VAS:
-            u = p + uf + up;break;
-        case HAM:
-            u = p + u_hip;break;
-        case GLU:
-            u = p + u_hip;break;
-        case HFL:
-            u = p + u_hip;break;
-        case RF:// RF
-            u = p;break;
-        }
-    }
-    if (SI) {
-        switch (Mobj->m_name) {
-        case VAS:
-            u = u - s;break;
-        case RF:
-            u = u + s;break;
-        case GLU:
-            u = u - s;break;
-        case HFL:
-            u = u + s;break;
-        }// other muscles same as stance
-    }
-    if (SWING) {
-        switch (Mobj->m_name) {
-        case TA:
-            u = q + ul;break;
-        case HAM:
-            u = q + uf;break;
-        case GLU:
-            u = q + uf;break;
-        case HFL:
-            u = q + ul - other_ext + up;break;
-        default:// RF, SOL, GAS, VAS
-            u = q;break;
-        }
-    }
-    if (SP) {
-        //Muscle-driven PD control in Stance Preparation//
-        if (Mobj->m_name == VAS || Mobj->m_name == GLU || Mobj->m_name == HAM)// for trunk orientation
-            u = q + abs(GainPDk * (Pstate[0] * (newTime - delay) - GainPDa + GainPDd * Pstate[1] * (newTime - delay)));
-        // other muscles same as swing
-    }
-    return u;
-}
-
-vector<bool> DGVehicleRCManager::Stance_Swing_Detection(dVector foot, dVector com, float leg, float clearance) const
-{
-
-    bool SP = false, SI = false, STANCE = false, SWING = false;
-    float dsp(0.5), dsi(0.5);// define values
-    float d = (com.m_z - foot.m_z) / leg;
-    if (clearance < 0.001)// check value
-    {
-        STANCE = true;
-        if (d > dsi)
-            SI = true;
-    }
-    else
-    {
-        SWING = true;
-        if (d > dsp)// check condition, is different from wang
-            SP = true;
-    }
-    vector<bool> foot_state{ STANCE, SWING, SP, SI };
-    return foot_state;
-}
-
 void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
 //pour VS<VS2017 supprimer ,int threadID
 {
-    dRaycastVHModel* Mechanical_Model = (dRaycastVHModel*)model;
     //cout << "DGVehicleRCManager OnP reUpdate \n";
+
+    dRaycastVHModel* Model = (dRaycastVHModel*)model;
 
     float hip_angle = 0;
     float knee_angle = 0;
     float ankle_angle = 0;
 
     // stance and swing
-    dVector com_Player = Mechanical_Model->ComputePlayerCOM();
+    dVector com_Player = Model->ComputePlayerCOM();
     dVector com_foot_r, com_foot_l;
-    map<std::string, GeomNewton*> list_RE = Mechanical_Model->Get_RigidElemetList();
+    map<std::string, GeomNewton*> list_RE = Model->Get_RigidElemetList();
     GeomNewton* foot = list_RE.find("Foot_r")->second;
     NewtonBodyGetCentreOfMass(foot->GetBody(), &com_foot_r[0]);
     foot = list_RE.find("Foot_l")->second;
     NewtonBodyGetCentreOfMass(foot->GetBody(), &com_foot_l[0]);
-    Mechanical_Model->CastFoot("L");
-    Mechanical_Model->CastFoot("R");
+    Model->CastFoot("L");
+    Model->CastFoot("R");
 
-    vector<bool> state_foot_r = Stance_Swing_Detection(com_foot_r, com_Player, Mechanical_Model->GetLegLength(), Mechanical_Model->GetFoot2Floor_R());
-    vector<bool> state_foot_l = Stance_Swing_Detection(com_foot_l, com_Player, Mechanical_Model->GetLegLength(), Mechanical_Model->GetFoot2Floor_L());
+    vector<bool> state_foot_r = Model->controller.Stance_Swing_Detection(com_foot_r, com_Player, Model->GetLegLength(), Model->GetFoot2Floor_R());
+    vector<bool> state_foot_l = Model->controller.Stance_Swing_Detection(com_foot_l, com_Player, Model->GetLegLength(), Model->GetFoot2Floor_L());
+
+    // Model com visualization
+    Model->DrawFrame(com_Player, 1.0); // comment this line to check single body com position and use following lines
+    //// Check for body com position! change manually the name of the body 
+    //dMatrix mat = list_RE.find("Thigh_r")->second->GetMatrix();;
+    //Model->DrawFrame(mat.m_posit, 1.0);
 
     // leading leg: the one that is in heel strike
     char lead = 'R';
@@ -1225,33 +972,10 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             }
         }
 
-        //Impose muscle as actuator
-        Mobj->SetNeuralDelay(1.f / 3000.f); // 1.f/2400.f s
-
         // Get trunk angle and velocity
-        vector<dFloat> T_state = Mechanical_Model->GetTrunkSagittalState();
-
-        vector<float> P_state{ ang ,angvel };// P controller state for vas (Stance + SP), GLU and HFL (SP)
-
-        // get sol and ham excitation for TA (stance) and HFL (swing) excitation. SOL and HAM must be solved before TA and HFL
-        float other_mus_ext = 0;
-        if (Mobj->m_name == TA || Mobj->m_name == HFL)
-            other_mus_ext = Mechanical_Model->GetOtherMuscleExcitation(Mobj->m_name, lat);
-
-        //Get muscle control gains form model//
-        float gf = 0, glg = 0, glh = 0, gPDk = 0, gPDd = 0, gPDa = 0, gLead1 = 0, gLead2 = 0, gLead3 = 0, gP1 = 0, gP2 = 0;
-        gf = Mechanical_Model->GetGain_Force_Feedback(Mobj->m_name);
-        glg = Mechanical_Model->GetGain1_Length_Feedback(Mobj->m_name);
-        glh = Mechanical_Model->GetGain2_Length_Feedback(Mobj->m_name);
-        gPDk = Mechanical_Model->GetGain_PDk(Mobj->m_name);
-        gPDd = Mechanical_Model->GetGain_PDd(Mobj->m_name);
-        gPDa = Mechanical_Model->GetGain_PDa(Mobj->m_name);
-        gLead1 = Mechanical_Model->GetGain_Lead1(Mobj->m_name);
-        gLead2 = Mechanical_Model->GetGain_Lead2(Mobj->m_name);
-        gLead3 = Mechanical_Model->GetGain_Lead3(Mobj->m_name);
-        gP1 = Mechanical_Model->GetGain_P1(Mobj->m_name);
-        gP2 = Mechanical_Model->GetGain_P2(Mobj->m_name);
-
+        vector<dFloat> T_state = Model->GetTrunkSagittalState();
+        // P controller state for vas (Stance + SP), GLU and HFL (SP)
+        vector<float> P_state{ ang ,angvel };
         // Get state of current foot
         vector<bool> gait_state;
         if (lat == 'R')
@@ -1259,16 +983,14 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         else
             gait_state = state_foot_l;
         gait_state.push_back(DS); // add double stance state
-
         // Get excitation
-        float u = MTU_excitation_signal(Mobj, gf, glg, glh, gPDk, gPDd, gPDa, gait_state, other_mus_ext, T_state, gLead1, gLead2, gLead3, P_state, gP1, gP2, lead);
-
+        float angle, angle1, lce, Fmuscle, mus_vel, lmtu, Fmax, lopt;
+        Mobj->GetMuscleParams(angle, angle1, lce, lopt, lmtu, Fmuscle, Fmax, mus_vel);
+        float u = Model->controller.MTU_excitation(Mobj->m_name, gait_state, T_state, P_state, lead, lat, lce / lopt, Fmuscle / Fmax, newTime);
+        //Impose muscle as actuator
+        Mobj->SetNeuralDelay(1.f / 3000.f); // 1.f/2400.f s
         // set activation
         Mobj->SetActivation(u);
-
-        // set SOL and HAM excitation 
-        if (Mobj->m_name == SOL || Mobj->m_name == HAM)
-            Mechanical_Model->SaveOtherMuscleExcitation(u, lat, Mobj->m_name);
 
         dVector Ttemp = Mobj->Compute_muscle_Torque(timestep);
 
