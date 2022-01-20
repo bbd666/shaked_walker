@@ -1,7 +1,7 @@
 close all
 clearvars
 clc
-mass = 73; % body mass
+
 %% load data
 filename = 'history.txt';
 delimiter = ' ';
@@ -29,15 +29,13 @@ hold off
 
 subplot(3,2,2)
 hold on
-plot(history.time,history.hfl_T/mass)
-plot(history.time,history.glu_T/mass)
-plot(history.time,history.ham_T/mass)
-plot(history.time,history.rf_T/mass)
-plot(history.time,(history.hfl_T+history.glu_T+history.ham_T+history.rf_T)/mass,'-r','LineWidth',3)
-ylabel('Hip Torque [Nm/kg]')
+plot(history.time,history.hfl_T)
+plot(history.time,history.glu_T)
+plot(history.time,history.ham_T)
+plot(history.time,history.rf_T)
+ylabel('Hip excitations [-]')
 xlabel('Time [s]')
-title('HIP actuators')
-legend('HFL','GLU','HAM','RF','total','Location','northeastoutside')
+legend('HFL','GLU','HAM','RF','Location','northeastoutside')
 ax1 = gca;
 ax1.Box = 'On';
 ax1.FontSize = 12;
@@ -57,15 +55,11 @@ hold off
 
 subplot(3,2,4)
 hold on
-plot(history.time,history.ham_T1/mass)
-plot(history.time,history.rf_T1/mass)
-plot(history.time,history.vas_T/mass)
-plot(history.time,history.gas_T/mass)
-plot(history.time,(history.ham_T1+history.rf_T1+history.vas_T+history.gas_T)/mass,'-r','LineWidth',3)
-ylabel('Knee Torque [Nm/kg]')
+plot(history.time,history.vas_T)
+plot(history.time,history.gas_T)
+ylabel('Knee excitations [-]')
 xlabel('Time [s]')
-legend('HAM','RF','VAS','GAS','total','Location','northeastoutside')
-title('KNEE actuators')
+legend('VAS','GAS','Location','northeastoutside')
 ax3 = gca;
 ax3.Box = 'On';
 ax3.FontSize = 12;
@@ -85,14 +79,11 @@ hold off
 
 subplot(3,2,6)
 hold on
-plot(history.time,history.ta_T/mass)
-plot(history.time,history.sol_T/mass)
-plot(history.time,history.gas_T1/mass)
-plot(history.time,(history.ta_T+history.sol_T+history.gas_T1)/mass,'-r','LineWidth',3)
-ylabel('Ankle Torque [Nm/kg]')
+plot(history.time,history.ta_T)
+plot(history.time,history.sol_T)
+ylabel('Ankle excitations [-]')
 xlabel('Time [s]')
-legend('TA','SOL','GAS','total','Location','northeastoutside')
-title('ANKLE actuators')
+legend('TA','SOL','Location','northeastoutside')
 ax5 = gca;
 ax5.Box = 'On';
 ax5.FontSize = 12;

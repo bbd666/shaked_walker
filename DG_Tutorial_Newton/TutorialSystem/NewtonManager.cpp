@@ -66,13 +66,14 @@ static int UserOnAABBOverlap(const NewtonJoint* const contactJoint, dFloat times
 
 void GenericContactProcess(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
 {
-	NewtonBody* const body = NewtonJointGetBody0(contactJoint);
+		NewtonBody* const body = NewtonJointGetBody0(contactJoint);
 	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
 		dVector point(0.0f);
 		dVector normal(0.0f);
 		dVector dir0(0.0f);
 		dVector dir1(0.0f);
 		dVector force(0.0f);
+		
 
 		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
 

@@ -39,7 +39,6 @@ public:
 	~dRaycastVHModel();
 
 	float GetFoot2Floor_L();
-	void CastFoot(const char* const Laterality);
 
 	void DrawFrame(const dVector& posit, dFloat scale);
 
@@ -48,6 +47,8 @@ public:
 	int CreateLine();
 	vector<dFloat> GetTrunkSagittalState();
 	dVector ComputePlayerCOM();
+	dVector ComputePlayerCOMvelocity();
+	GeomNewton* Get_Floor();
 	map<std::string, GeomNewton*> Get_RigidElemetList();
 	map<std::string, dCustomHinge*> Get_HingeJointList();
 	map<std::string, dCustomDoubleHinge*> Get_DoubleHingeJointList();
@@ -58,7 +59,8 @@ private:
 	WindowMain* m_winManager;
 
 	/// <RIGID ELEMENTS>
-	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l" };//  RIGID ELEMENTS OF THE MODEL
+	GeomNewton* Geomfloor;
+	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l","MPT", "UPT"};//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
@@ -104,9 +106,12 @@ private:
 	//dCustomBallAndSocket* Ankle;
 	dCustomDoubleHinge* Ankle_l;
 
+	dCustomHinge* spine1;
+	dCustomHinge* spine2;
+
 	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l"};
 	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l"};
+	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2" };
 	map<std::string, dCustomHinge*> JHinge;//  muscle as map: use muscle_keys as string
 	/// </JOINTS>
 
