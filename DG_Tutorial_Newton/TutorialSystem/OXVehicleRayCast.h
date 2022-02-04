@@ -38,17 +38,14 @@ public:
 	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
-	float GetFoot2Floor_L();
-
 	void DrawFrame(const dVector& posit, dFloat scale);
-
 	//virtual void DrawFrame(const dMatrix& matrix, dFloat scale);
-	float GetFoot2Floor_R();
 	int CreateLine();
 	vector<dFloat> GetTrunkSagittalState();
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
 	GeomNewton* Get_Floor();
+	GeomNewton* Get_box();
 	map<std::string, GeomNewton*> Get_RigidElemetList();
 	map<std::string, dCustomHinge*> Get_HingeJointList();
 	map<std::string, dCustomDoubleHinge*> Get_DoubleHingeJointList();
@@ -59,8 +56,10 @@ private:
 	WindowMain* m_winManager;
 
 	/// <RIGID ELEMENTS>
+	GeomNewton* box;
 	GeomNewton* Geomfloor;
 	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l","MPT", "UPT"};//  RIGID ELEMENTS OF THE MODEL
+	//std::vector<std::string> body_keys = {  "LPT"};//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
@@ -73,7 +72,9 @@ private:
 	/// 
 	/// <MUSCLES>
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	//std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l" };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	//std::vector<std::string> muscle_keys = {  };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle
@@ -139,7 +140,6 @@ private:
 
 	dVector  ContactFoot_L,NormalFoot_L,ContactGround_L;
 	dVector  ContactFoot,NormalFoot,ContactGround;
-	float Foot2Floor_L, Foot2Floor_R,FootLineIndex_L, FootLineIndex_R;
 	/// </GEOMETRIC AND INERTIA PARAMS>
 };
 
@@ -155,6 +155,7 @@ public:
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
 	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
+	int GetContactPoints(NewtonBody* const body, dVector* const points) const;
 private:
 	WindowMain* m_winManager;
 };

@@ -340,12 +340,12 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         it->second = lengths.find(it->first)->second * (0.5f-it->second);
     };
 
-    float alfa = 20 * dDegreeToRad;
+    float alfa = 30 * dDegreeToRad;
     float alfa1 = 0 * dDegreeToRad;
     float gamma = 10 * dDegreeToRad;
     float beta = -10 * dDegreeToRad;
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
-    dVector _Pos0(dVector(0.0f, 0.115 +l_LPT / 2 + l_Up_Leg + l_Low_Leg + h_foot, 0.f)); // LPT
+    dVector _Pos0(dVector(0.0f, 0.115 +l_LPT / 2 + l_Up_Leg + l_Low_Leg + h_foot, -0.1f)); // LPT
     dVector _Pos1(dVector(l_Hip/2, -l_LPT / 2 - (l_Up_Leg / 2) * cos(alfa), -(l_Up_Leg / 2) * sin(alfa)));// Thigh_r
     dVector _Pos2(dVector(0.0f, -(l_Up_Leg / 2) * cos(alfa) - (l_Low_Leg / 2) * cos(gamma), -(l_Up_Leg / 2) * sin(alfa) + (l_Low_Leg / 2) * sin(gamma)));// Shank_r 
     dVector _Pos3(dVector(0, -(l_Low_Leg / 2) * cos(gamma)-h_foot/2, (l_Low_Leg / 2) * sin(gamma) - l_foot / 3));// Foot_r and l
@@ -414,7 +414,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         rigid_element[*it]->SetTexture0(&tex[0], "Tex0");
         rigid_element[*it]->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 
-        if (*it =="LPT")// for plantar ROLL
+        if (*it =="LPT")
             rigid_element[*it]->SetRollAngle(body_rot_ang[*it], false);
         else
             rigid_element[*it]->SetTurnAngle(body_rot_ang[*it], false);
@@ -425,7 +425,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         else
             rigid_element[*it]->InitNewton(atCapsule, body_dim[*it]->m_x, body_dim[*it]->m_y, body_dim[*it]->m_z, 1.0f);
 
-        //if (body_keys[ind] == "LPT")
+        //if (body_keys[ind] == "Thigh_r")
         //    NewtonBodySetMassMatrix(rigid_element[*it]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
         //else
             NewtonBodySetMassMatrix(rigid_element[*it]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
@@ -456,7 +456,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     //Ankle_PinMatrix = Ankle_PinMatrix * dYawMatrix(90.0f * dDegreeToRad);
     Ankle_PinMatrix.m_posit = dVector(b1->GetPosition().m_x, b1->GetPosition().m_y - (l_Low_Leg / 2) * cos(gamma), b1->GetPosition().m_z+ (l_Low_Leg / 2) * sin(gamma), 1.0f);
     Ankle_r = new dCustomDoubleHinge(Ankle_PinMatrix, b1->GetBody(), b2->GetBody());
-    //Ankle_r->SetFriction(1);
+    ////Ankle_r->EnableLimits(true);
+    Ankle_r->EnableLimits1(true);
+    ////Ankle_r->SetLimits(-0.1f, 0.1f);
+    Ankle_r->SetLimits1(-0.1f, 0.1f);
     m_winManager->aManager->vJointList.push_back(Ankle_r);
     m_winManager->aManager->vJointNameList.push_back(ANKLE_R);
     JDoubleHinge.find("Ankle_r")->second = Ankle_r;
@@ -478,6 +481,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Hip_PinMatrix = Hip_PinMatrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
     Hip_PinMatrix.m_posit = dVector(b2->GetPosition().m_x, b1->GetPosition().m_y - l_LPT / 2, b1->GetPosition().m_z, 1.0f);
     Hip_r = new dCustomDoubleHinge(Hip_PinMatrix, b1->GetBody(), b2->GetBody());
+    Hip_r->EnableLimits1(true);
+    Hip_r->SetLimits1(-0.1f, 0.1f);
     m_winManager->aManager->vJointList.push_back(Hip_r);
     m_winManager->aManager->vJointNameList.push_back(HIP_R);
     JDoubleHinge.find("Hip_r")->second = Hip_r;
@@ -489,7 +494,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     //Ankle_PinMatrix = Ankle_PinMatrix * dYawMatrix(90.0f * dDegreeToRad);
     Anklel_PinMatrix.m_posit = dVector(b1->GetPosition().m_x, b1->GetPosition().m_y - (l_Low_Leg / 2) * cos(gamma), b1->GetPosition().m_z + (l_Low_Leg / 2) * sin(gamma), 1.0f);
     Ankle_l = new dCustomDoubleHinge(Anklel_PinMatrix, b1->GetBody(), b2->GetBody());
-    //Ankle_l->SetFriction(1);
+    ////Ankle_l->EnableLimits(true);
+    Ankle_l->EnableLimits1(true);
+    ////Ankle_l->SetLimits(-0.1f, 0.1f);
+    Ankle_l->SetLimits1(-0.01f, 0.01f);
     m_winManager->aManager->vJointList.push_back(Ankle_l);
     m_winManager->aManager->vJointNameList.push_back(ANKLE_L);
     JDoubleHinge.find("Ankle_l")->second = Ankle_l;
@@ -511,6 +519,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Hipl_PinMatrix = Hipl_PinMatrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
     Hipl_PinMatrix.m_posit = dVector(b2->GetPosition().m_x, b1->GetPosition().m_y - l_LPT / 2, b1->GetPosition().m_z, 1.0f);
     Hip_l = new dCustomDoubleHinge(Hipl_PinMatrix, b1->GetBody(), b2->GetBody());
+    Hip_l->EnableLimits1(true);
+    Hip_l->SetLimits1(-0.1f, 0.1f);
     m_winManager->aManager->vJointList.push_back(Hip_l);
     m_winManager->aManager->vJointNameList.push_back(HIP_L);
     JDoubleHinge.find("Hip_l")->second = Hip_l;
@@ -521,7 +531,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dMatrix spine1_PinMatrix(dGetIdentityMatrix()); // define the pin
     spine1_PinMatrix.m_posit = dVector(b1->GetPosition().m_x, b1->GetPosition().m_y + l_LPT/2, b1->GetPosition().m_z, 1.0f);
     spine1 = new dCustomHinge(spine1_PinMatrix, b1->GetBody(), b2->GetBody());
-    spine1->SetAsSpringDamper(1,100000,5.0f);
+    spine1->EnableLimits(true);
+    spine1->SetLimits(-0.01f, 0.01f);
     m_winManager->aManager->vJointList.push_back(spine1);
     //m_winManager->aManager->vJointNameList.push_back(KNEE_L);
     JHinge.find("Spine1")->second = spine1;
@@ -532,7 +543,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dMatrix spine2_PinMatrix(dGetIdentityMatrix()); // define the pin
     spine2_PinMatrix.m_posit = dVector(b1->GetPosition().m_x, b1->GetPosition().m_y + l_MPT / 2, b1->GetPosition().m_z, 1.0f);
     spine2 = new dCustomHinge(spine1_PinMatrix, b1->GetBody(), b2->GetBody());
-    spine2->SetAsSpringDamper(1, 100000, 5.0f);
+    spine2->EnableLimits(true);
+    spine2->SetLimits(-0.01f, 0.01f);
     m_winManager->aManager->vJointList.push_back(spine2);
     //m_winManager->aManager->vJointNameList.push_back(KNEE_L);
     JHinge.find("Spine2")->second = spine2;
@@ -618,17 +630,17 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         {"sol_r", SOL},                 {"sol_l", SOL},
         {"ta_r", TA},                   {"ta_l", TA},
         {"gas_r", GAS},                 {"gas_l", GAS} };// list muscle name
-    m_theta0 = { {"hfl_r", (180) * dDegreeToRad - alfa},    {"hfl_l", (180) * dDegreeToRad - alfa},
-        {"glu_r",(180) * dDegreeToRad + alfa},              {"glu_l",(180) * dDegreeToRad + alfa},
-        {"ham_r",180 * dDegreeToRad + alfa},                {"ham_l",180 * dDegreeToRad + alfa},
-        {"rf_r",180 * dDegreeToRad - alfa},                 {"rf_l",180 * dDegreeToRad - alfa},
-        {"vas_r",180 * dDegreeToRad + gamma},               {"vas_l",180 * dDegreeToRad + gamma},
-        {"sol_r",2 * M_PI - beta},                          {"sol_l",2 * M_PI - beta},
-        {"ta_r",beta},                                      {"ta_l",beta},
-        {"gas_r",180 * dDegreeToRad - gamma},               {"gas_l",180 * dDegreeToRad - gamma} };/////// list muscle initial angle 1
+    m_theta0 = { {"hfl_r", (180) * dDegreeToRad - alfa},    {"hfl_l", (180) * dDegreeToRad - alfa1},
+        {"glu_r",(180) * dDegreeToRad + alfa},              {"glu_l",(180) * dDegreeToRad + alfa1},
+        {"ham_r",180 * dDegreeToRad + alfa},                {"ham_l",180 * dDegreeToRad + alfa1},
+        {"rf_r",180 * dDegreeToRad - alfa},                 {"rf_l",180 * dDegreeToRad - alfa1},
+        {"vas_r",180 * dDegreeToRad - gamma},               {"vas_l",180 * dDegreeToRad - gamma},
+        {"sol_r",2 * M_PI - (M_PI/2 + beta)},                 {"sol_l",2 * M_PI - (M_PI/2 + beta)},
+        {"ta_r", M_PI + beta},                               {"ta_l",M_PI + beta},
+        {"gas_r",180 * dDegreeToRad + gamma},               {"gas_l",180 * dDegreeToRad + gamma} };/////// list muscle initial angle 1
     m_theta10 = { {"ham_r",180 * dDegreeToRad - gamma}, {"ham_l",180 * dDegreeToRad - gamma},
         {"rf_r",180 * dDegreeToRad + gamma},            {"rf_l",180 * dDegreeToRad + gamma},
-        {"gas_r",2 * M_PI - beta},                      {"gas_l",2 * M_PI - beta} };/////list muscle initial angle 2
+        {"gas_r",2 * M_PI - (M_PI/2 +beta)},              {"gas_l",2 * M_PI - (M_PI/2 + beta)} };/////list muscle initial angle 2
     m_list_prop = { {"hfl_r",hfl},  {"hfl_l",hfl},
         {"glu_r",glu},              {"glu_l",glu},
         {"ham_r",ham},              {"ham_l",ham},
@@ -690,10 +702,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         }// params from Geyer 
         else if (muscle_keys[index] == "vas_r"|| muscle_keys[index] == "vas_l")
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
-                M_PI - p["phiM"] * dDegreeToRad, M_PI - p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
+                p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
         else if (muscle_keys[index] == "sol_r"|| muscle_keys[index] == "sol_l")
-            muscles[*it]->SetMuscleParams(p["Fmax"] / 100, p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],// RIDOTTA FORZA MAXXXXXX
-                2 * M_PI - p["phiM"] * dDegreeToRad, 2 * M_PI - p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
+            muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
+                2*M_PI-p["phiM"] * dDegreeToRad, 2 * M_PI-p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
         else if (muscle_keys[index] == "gas_r"|| muscle_keys[index] == "gas_l")
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
                 p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, 2 * M_PI - p["phi1M"] * dDegreeToRad, 2 * M_PI - p["phi1R"] * dDegreeToRad); // params from Geyer 
@@ -706,8 +718,37 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
             muscles[*it]->SetLaterality('R');
         else
             muscles[*it]->SetLaterality('L');
+
+        // Initial condition of muscles
+        if (muscle_keys[index] == "ham_l" || muscle_keys[index] == "glu_l")// CHANGE
+            muscles[*it]->SetLCE(14);
+        if (muscle_keys[index] == "ham_r" || muscle_keys[index] == "glu_r")// CHANGE
+            muscles[*it]->SetLCE(18);
+        if (muscle_keys[index] == "hfl_r" )// CHANGE
+            muscles[*it]->SetLCE(9);
+        if (muscle_keys[index] == "sol_r" || muscle_keys[index] == "sol_l")// CHANGE
+            muscles[*it]->SetLCE(6);
+        if (muscle_keys[index] == "ta_r" || muscle_keys[index] == "ta_l")// CHANGE
+            muscles[*it]->SetLCE(5.5);
+        if (muscle_keys[index] == "vas_l" || muscle_keys[index] == "vas_r")// CHANGE
+            muscles[*it]->SetLCE(15);
+        if (muscle_keys[index] == "gas_r")// CHANGE
+            muscles[*it]->SetLCE(10);
         index++;
     }
+ 
+    //// create floor object zero mass
+    //box = new GeomNewton(m_winManager->aManager);
+    //box->SetBodyType(adtDynamic);
+    //box->SetTexTileU(3.0f);
+    //box->SetTexTileV(3.0f);
+    //box->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
+    //box->SetDiffuseColor(0.45f, 0.45f, 0.45f);
+    //box->SetPitchAngle(-30);
+    //box->SetPosition(0, 1.125, 0);
+    //box->InitNewton(atBox, 1.0f, 2.0f, 1.0f,10.f);
+    //m_body = box->GetBody();
+    //NewtonBodySetTransformCallback(m_body, NULL);
 
     // create floor object zero mass
     Geomfloor = new GeomNewton(m_winManager->aManager);
@@ -716,7 +757,43 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Geomfloor->SetTexTileV(3.0f);
     Geomfloor->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
     Geomfloor->SetDiffuseColor(0.45f, 0.45f, 0.45f);
+    //Geomfloor->SetPitchAngle(-30);
     Geomfloor->InitNewton(atBox, 25.0f, 0.25f, 25.0f);
+
+    //NewtonBodySetMaterialGroupID(Geomfloor->GetBody(), 0);
+
+    //NewtonCollision* const collision2 = NewtonBodyGetCollision(Geomfloor->GetBody());
+
+    //// use the collision user data to save the coefficient of friction 
+    //dFloat coefficientOfFriction = 1.0f;
+
+    //// save the restitution coefficient with the collision user data
+    //NewtonCollisionMaterial material;
+    //NewtonCollisionGetMaterial(collision2, &material);
+    //material.m_userId = 1;
+
+    //// save kinetic friction in param[0]
+    //material.m_userParam[0].m_float = coefficientOfFriction;
+
+    //// save static friction in param[1]
+    //material.m_userParam[1].m_float = coefficientOfFriction;
+    //NewtonCollisionSetMaterial(collision2, &material);
+
+    //NewtonCollision* const collision1 = NewtonBodyGetCollision(rigid_element["Foot_l"]->GetBody());
+
+    //// use the collision user data to save the coefficient of friction 
+    //coefficientOfFriction = 1.0f;
+
+    //// save the restitution coefficient with the collision user data
+    //NewtonCollisionGetMaterial(collision1, &material);
+    //material.m_userId = 1;
+
+    //// save kinetic friction in param[0]
+    //material.m_userParam[0].m_float = coefficientOfFriction;
+
+    //// save static friction in param[1]
+    //material.m_userParam[1].m_float = coefficientOfFriction;
+    //NewtonCollisionSetMaterial(collision1, &material);
 
     // Check for body com position!
     COMXline_id = CreateLine();
@@ -725,14 +802,6 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
     // Control class initialization. check reference or pointer
     controller = ControlAlgorithm();
-}
-
-float dRaycastVHModel::GetFoot2Floor_L() {
-    return Foot2Floor_L;
-}
-
-float dRaycastVHModel::GetFoot2Floor_R() {
-    return Foot2Floor_R;
 }
 
 int dRaycastVHModel::CreateLine() {
@@ -746,13 +815,13 @@ linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
 
 return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
 }
-// Compute trunk orientation and velocity in sagittal plane
+// Compute trunk orientation and rotation velocity in sagittal plane
 vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
 {
     dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
-    dVector dir = mat.m_up;
-    dVector sinDir = dVector(0, 1, 0, 1);
-    dVector cosDir = dVector(0, 0, 1, 1);
+    dVector dir = mat.m_front;
+    dVector cosDir = dVector(0, 1, 0, 1);
+    dVector sinDir = dVector(0, 0, 1, 1);
     dVector projectDir(dir - sinDir.Scale(dir.DotProduct3(sinDir)));
     dFloat cosAngle = projectDir.DotProduct3(cosDir);
     dFloat sinAngle = sinDir.DotProduct3(projectDir.CrossProduct(cosDir));
@@ -760,8 +829,7 @@ vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
     // save the current joint Omega
     dVector omega0(0.0f);
     NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
-    dFloat Omega = mat.m_right.DotProduct3(omega0);/// CHECK DIREZIONE
-    return { ang, Omega };
+    return { ang, omega0.m_x };
 }
 // Compute COM position of the humanoid in global coordinates
 dVector dRaycastVHModel::ComputePlayerCOM()
@@ -807,6 +875,11 @@ dVector dRaycastVHModel::ComputePlayerCOMvelocity()
 GeomNewton* dRaycastVHModel::Get_Floor()
 {
     return Geomfloor;
+}
+
+GeomNewton* dRaycastVHModel::Get_box()
+{
+    return box;
 }
 
 map<std::string, GeomNewton*> dRaycastVHModel::Get_RigidElemetList()
@@ -873,18 +946,57 @@ dModelRootNode* DGVehicleRCManager::CreateWalkerPlayer(const char* const modelNa
     return controller;
 }
 
+int DGVehicleRCManager::GetContactPoints(NewtonBody* const body, dVector* const points) const
+{
+    dVector point(0.0f);
+    dVector normal(0.0f);
+    int count = 0;
+    for (NewtonJoint* contactJoint = NewtonBodyGetFirstContactJoint(body); contactJoint; contactJoint = NewtonBodyGetNextContactJoint(body, contactJoint)) {
+        if (NewtonJointIsActive(contactJoint)) {
+            for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+                NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+                NewtonMaterialGetContactPositionAndNormal(material, body, &point.m_x, &normal.m_x);
+                points[count] = point;
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
 void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
 //pour VS<VS2017 supprimer ,int threadID
 {
-    //cout << "DGVehicleRCManager OnP reUpdate \n";
-
     dRaycastVHModel* Model = (dRaycastVHModel*)model;
+    ////cout << "DGVehicleRCManager OnP reUpdate \n";
+    map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
+    float hip_angle_r = 0, hip_angle_l = 0;
+    float knee_angle_r = 0, knee_angle_l = 0;
+    float ankle_angle_r = 0, ankle_angle_l = 0;
 
-    float hip_angle_r = 0;
-    float knee_angle_r = 0;
-    float ankle_angle_r = 0;
-
-     //stance and swing
+    // //INITIAL CONDITION //
+    //if (newTime < 0.01) {
+    //    GeomNewton* BODY = RE_list.find("MPT")->second;
+    //    float vel = -0.01;
+    //    dVector LPTvel_init = { 0,0,vel };
+    //    NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //BODY = RE_list.find("UPT")->second;
+    //    //LPTvel_init = { 0,0,vel };
+    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //BODY = RE_list.find("Foot_r")->second;
+    //    //LPTvel_init = { 0,0,vel };
+    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //BODY = RE_list.find("Thigh_r")->second;
+    //    //LPTvel_init = { 0,0,vel };
+    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //BODY = RE_list.find("Shank_r")->second;
+    //    //LPTvel_init = { 0,0,vel };
+    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //BODY = RE_list.find("Foot_r")->second;
+    //    //LPTvel_init = { 0,0,2.5 };
+    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+    //    //NewtonBodyAddTorque(BODY->GetBody(), &LPTvel_init.m_x);
+    //}
 
     // find ankle position
     dVector com_Player = Model->ComputePlayerCOM();
@@ -892,37 +1004,27 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     dVector com_ankle_r, com_ankle_l;
     map<std::string, dCustomDoubleHinge*> JDoubleHinge = Model->Get_DoubleHingeJointList();
     dCustomDoubleHinge* ankle = JDoubleHinge.find("Ankle_r")->second;
-    dMatrix mat = ankle->GetMatrix0();
+    dMatrix mat = ankle->GetMatrix0();// error fix
     com_ankle_r = mat.m_posit;
+    GeomNewton* BODY0 = RE_list.find("Foot_r")->second;
+    GeomNewton* BODY1 = RE_list.find("Foot_l")->second;
+    com_ankle_r = Rel2AbsPoint(BODY0->GetBody(), &com_ankle_r.m_x);
     ankle = JDoubleHinge.find("Ankle_l")->second;
-    mat = ankle->GetMatrix0();
+    mat = ankle->GetMatrix0();// error fix
     com_ankle_l = mat.m_posit;
+    com_ankle_l = Rel2AbsPoint(BODY1->GetBody(), &com_ankle_l.m_x);
 
-    // find contact between foot and ground. DOES NOT WORK! TO DO: count number of contact and add threshold?
-    map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
+    // find contact between foot and ground.
     float count_contact = 0;
+    dVector supportPolygon[32];
+    int count = 0;
+    count += GetContactPoints(BODY0->GetBody(), &supportPolygon[count]);
+    vector<bool> state_foot_r = Model->controller.Stance_Swing_Detection(com_ankle_r, com_Player, Model->GetLegLength(), count);
 
-    GeomNewton* foot = RE_list.find("Foot_r")->second;
-    NewtonJoint* const contact0 = NewtonBodyFindContact(foot->GetBody(), Model->Get_Floor()->GetBody());
-    if (contact0 != NULL)
-        count_contact = 1;
-    vector<bool> state_foot_r = Model->controller.Stance_Swing_Detection(com_ankle_r, com_Player, Model->GetLegLength(), count_contact);
-
-    foot = RE_list.find("Foot_l")->second;
-    NewtonJoint* const contact1 = NewtonBodyFindContact(foot->GetBody(), Model->Get_Floor()->GetBody());
-    count_contact = 0;
-    if (contact1 != NULL)
-        count_contact = 1;
-    vector<bool> state_foot_l = Model->controller.Stance_Swing_Detection(com_ankle_l, com_Player, Model->GetLegLength(), count_contact);
-
-    // compute horizontal distance between stance foot and com for stance preparation hip control
-    float d=0;
-    if (state_foot_r[0] == true)
-        d = sqrt(pow(com_Player.m_z - com_ankle_r.m_z, 2) + pow(com_Player.m_x - com_ankle_r.m_x, 2));
-    else if (state_foot_l[0] == true)
-        d = sqrt(pow(com_Player.m_z - com_ankle_l.m_z, 2) + pow(com_Player.m_x - com_ankle_l.m_x, 2));
-    Model->controller.ControlSetHorizontalDistance(d);
-
+    count = 0;
+    count += GetContactPoints(BODY1->GetBody(), &supportPolygon[count]);
+    vector<bool> state_foot_l = Model->controller.Stance_Swing_Detection(com_ankle_l, com_Player, Model->GetLegLength(), count);
+  
     // Model com visualization
     Model->DrawFrame(com_Player, 1.0); // comment this line to check single body com position and use following lines
     //// Check for body com position! change manually the name of the body 
@@ -935,11 +1037,24 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     if (state_foot_r[0] == true && state_foot_l[0] == true)// double stance
     {
         DS = true;
-        if (com_Player.m_z < com_ankle_r.m_z)// Check direzione maggiore/minore
+        if (com_ankle_r.m_z < com_Player.m_z)// Check direzione maggiore/minore
             lead = 'R';
-        else if (com_Player.m_z < com_ankle_l.m_z)
+        else if (com_ankle_l.m_z < com_Player.m_z)
             lead = 'L';
     }
+    state_foot_l.push_back(DS); // add double stance state
+    state_foot_r.push_back(DS); // add double stance state
+
+    float d = 0;// compute horizontal distance between stance foot and com for stance preparation hip control
+    if (!DS)
+    {
+        if (state_foot_r[0] == true)
+            d = sqrt(pow(com_Player.m_z - com_ankle_r.m_z, 2) + pow(com_Player.m_x - com_ankle_r.m_x, 2));
+        else if (state_foot_l[0] == true)
+            d = sqrt(pow(com_Player.m_z - com_ankle_l.m_z, 2) + pow(com_Player.m_x - com_ankle_l.m_x, 2));
+        Model->controller.ControlSetHorizontalDistance(d);
+    }
+
     //scan all  Muscle Elements
     for (auto itr = m_winManager->aManager->vMuscleList.begin();
         itr != m_winManager->aManager->vMuscleList.end(); itr++)
@@ -948,7 +1063,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         dVector pin1; // needed to apply the torque along the joint 1 pin
         Muscle* Mobj = (Muscle*)*itr;
         // Get joint angle and joint velocity for proportional controller of VAS (stance)
-        float ang = 0, angvel = 0;
+        float VAS_ang = 0, VAS_angvel = 0;
         char lat = Mobj->GetLaterality();
         // loop on two joints
         for (auto itr1 = 0; itr1 <= 1; itr1++)
@@ -977,8 +1092,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                     Mobj->SetAngle(joint->GetJointAngle()); // joint angle
                     pin = joint->GetPinAxis(); // joint pin
                     if (Mobj->m_name == VAS) {
-                        ang = joint->GetJointAngle();
-                        angvel = joint->GetJointOmega();
+                        VAS_ang = joint->GetJointAngle();
+                        VAS_angvel = joint->GetJointOmega();
                     }
                 }
                 else
@@ -1013,10 +1128,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 {
                     Mobj->SetAngle(joint->GetJointAngle());
                     pin = joint->GetPinAxis();
-                    if (Mobj->m_name == GLU || Mobj->m_name == HFL) {
-                        ang = joint->GetJointAngle();
-                        angvel = joint->GetJointOmega();
-                    }
                 }
                 else
                 {
@@ -1032,23 +1143,30 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             }
         }
 
-        // Get trunk angle and velocity
-        vector<dFloat> T_state = Model->GetTrunkSagittalState();
-        // P controller state for vas (Stance), HFL (Swing)
-        vector<float> P_state{ ang ,angvel };
+        vector<dFloat> State(0, 0);
+        if (Mobj->m_name == HFL || Mobj->m_name == GLU || Mobj->m_name == HAM) {
+            State = Model->GetTrunkSagittalState(); // Get trunk angle and velocity
+            if (Mobj->m_name == HFL)
+                cout << newTime << ' ' << State[0] << ' ' << State[1] << endl;
+        }
+        else if (Mobj->m_name == VAS)
+            State = { VAS_ang ,VAS_angvel };// P controller state for vas (Stance)
+        
         // Get state of current foot
-        vector<bool> gait_state;
+        vector<bool> Gait;
         if (lat == 'R')
-            gait_state = state_foot_r;
+            Gait = state_foot_r;
         else
-            gait_state = state_foot_l;
-        gait_state.push_back(DS); // add double stance state
+            Gait = state_foot_l;
+
         // Get excitation
         float angle, angle1, lce, Fmuscle, mus_vel, lmtu, Fmax, lopt;
         Mobj->GetMuscleParams(angle, angle1, lce, lopt, lmtu, Fmuscle, Fmax, mus_vel);
-        float u = Model->controller.MTU_excitation(Mobj->m_name, gait_state, T_state, P_state, lead, lat, lce / lopt, Fmuscle / Fmax, timestep, com_Playervel);
+        float u = Model->controller.MTU_excitation(Mobj->m_name, Gait, State, lead, lat, lce / lopt, Fmuscle / Fmax, timestep, com_Playervel);
+        cout << newTime << ' ' << Fmuscle << endl;
         //Impose muscle as actuator
         Mobj->SetNeuralDelay(1.f / 3000.f); // 1.f/2400.f s
+
         // set activation
         Mobj->SetActivation(u);
 
@@ -1079,37 +1197,44 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             pin1.Scale(-1); // opposite force on third body
             NewtonBodyAddTorque(NBody, &pin1.m_x);
         }
-        ////// stamp data for single muscle.// Use Test_Muscle_Class.m to see data
-        //float theta(0.0f), theta1(0.0f), lce(0.0f), Fmtu(0.0f), vel(0.0f), lmtu(0.0f);
-        //Mobj->GetMuscleParams(theta, theta1, lce, Fmtu, vel, lmtu);
-        //monFlux << newTime << "  " << theta <<  "  " << theta1 << "  " << Mobj->fSE(Mobj->GetDelta_l()) 
-        //    << "  " << Mobj->fCE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->fPE(Mobj->GetDelta_l()) 
-        //    << "  " << Mobj->fDE(Mobj->GetDelta_l(), timestep) << "  " << Mobj->GetNmax() << "  " << Mobj->GetLCE() 
-        //    << "  " << Mobj->GetDelta_l() << "  " << Mobj->GetActivation()
-        //    << "  " << vel << "  " << lmtu << "  " << Ttemp.m_x << "  " << Ttemp.m_y << std::endl;
-
         // update for next force update
         Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE
 
-        // stamp torque of all muscles of one leg
-        if (lat == 'L') {
-            //monFlux << Ttemp.m_x << "  " << Ttemp.m_y << "  "; // Use Test_Muscle_Class_V2.m to see data
-            monFlux << u << "  " << 0 << "  ";// Use Test_excitations.m to see data
-        }
+        // stamp u of all muscles
+        monFlux << u << "  ";// Use Test_excitations.m to see data
         
-        if (Mobj->GetMuscleName() == RF && lat == 'L')
+        if (Mobj->GetMuscleName() == RF )
         {
-            hip_angle_r = Mobj->GetAngle();
-            knee_angle_r = Mobj->GetAngle1();
+            if (lat == 'R') {
+                hip_angle_r = Mobj->GetAngle();
+                knee_angle_r = Mobj->GetAngle1();
+            }
+            else if (lat == 'L')
+            {
+                hip_angle_l = Mobj->GetAngle();
+                knee_angle_l = Mobj->GetAngle1();
+            }
         }
-        if (Mobj->GetMuscleName() == TA && lat == 'L')
-            ankle_angle_r = Mobj->GetAngle();
+        if (Mobj->GetMuscleName() == TA)
+        {
+            if (lat == 'R')
+                ankle_angle_r = Mobj->GetAngle();
+            else
+                ankle_angle_l = Mobj->GetAngle();
+        }
+   
     }
-    // verify total torque on joints
-    monFlux << newTime << "  " << 180*dDegreeToRad-hip_angle_r << "  " << 190 * dDegreeToRad -knee_angle_r << "  " << 80 * dDegreeToRad - ankle_angle_r << endl;// check initial angle according to initial geometry
+    monFlux << newTime << "  " << 140*dDegreeToRad-hip_angle_r << "  " << 190 * dDegreeToRad -knee_angle_r << "  " << 80 * dDegreeToRad - ankle_angle_r <<
+        "  " << 180 * dDegreeToRad - hip_angle_l << "  " << 190 * dDegreeToRad - knee_angle_l << "  " << 80 * dDegreeToRad - ankle_angle_l <<
+        "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
+        "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << endl;// check initial angle according to initial geometry
     
+    //BODY1 = RE_list.find("Foot_r")->second;
+    //dVector vector;
+    //NewtonBodyGetTorque(BODY1->GetBody(), &vector.m_x);
+    //cout << newTime << ' ' << state_foot_r[0] << ' ' << state_foot_r[1] << ' ' << state_foot_r[2] << ' ' << state_foot_r[3] << ' ' << vector.m_x << endl;
+
     newTime = newTime + timestep; // update time
-    //cout << "Stance " << state_foot_r[0] << "Swing " << state_foot_r[1] << "sp " << state_foot_r[2] << "si " << state_foot_r[3] << endl;
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const

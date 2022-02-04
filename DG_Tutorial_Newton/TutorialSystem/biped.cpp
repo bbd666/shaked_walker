@@ -467,8 +467,12 @@ float Muscle::Compute_muscle_length(float jointangle, float jointangle1)
 		delta1 = rho * arm1 * (sin(jointangle1 - phi1_M) - sin(phi1_R - phi1_M)); // ankle
 		l_mtu = l_mtu + delta + delta1;
 	}
-	else {// HFL GLU SOL TA
-		delta = rho * arm * (jointangle - phi_R); // uniarticular muscles
+	else if (m_name == TA || m_name == SOL) {
+		delta = rho * arm * (sin(jointangle - phi_M) - sin(phi_R - phi_M)); // knee
+		l_mtu = l_mtu + delta;
+	}
+	else {// HFL GLU
+		delta = rho * arm * (jointangle - phi_R); 
 		l_mtu = l_mtu + delta;
 	}
 	return l_mtu;

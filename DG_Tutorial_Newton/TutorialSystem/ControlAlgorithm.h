@@ -10,7 +10,7 @@ public:
 	ControlAlgorithm();
 	~ControlAlgorithm();
 	float MTU_excitation(Mtuname m_name, vector<bool> gait_state,
-		vector<dFloat>  Tstate, vector<dFloat>  Pstate, char lead, char lat, float l_til, float f_norm, float timestep, dVector com_Playervel);// the ouput is the excitation signal for muscle m_name
+		vector<dFloat>  Tstate, char lead, char lat, float l_til, float f_norm, float timestep, dVector com_Playervel);// the ouput is the excitation signal for muscle m_name
 	//
 	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float contact);
 	void ControlSetHorizontalDistance(float d);
@@ -51,8 +51,12 @@ private:
 	map<string, list<float>>uf_ta_sol_l;// force feedback for TA depending on SOL
 	map<string, list<float>> ul_l;//length feedback
 	map<string, list<float>> up_l;//pd controller of vas e hfl
-	map<string, list<float>> uHIP_sp_l;//pd controller for HIP during SP
+	map<string, list<float>> u_sp_l;//pd controller for HIP during SP
 	map<string, list<float>> uHIP_s_l;//pd controller for HIP during stance
+
+	map<string, list<float>> f_l;// force values
+	map<string, list<float>>f_ta_sol_l;// force values for TA depending on SOL
+	map<string, list<float>> lce_l;//length values
 	/// </Control parameters>
 };
 
