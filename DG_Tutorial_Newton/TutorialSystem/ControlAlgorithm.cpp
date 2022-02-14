@@ -27,28 +27,30 @@ ControlAlgorithm::ControlAlgorithm()
     //Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2} };
 
         /// Control parameter initialization
-    Gf = { {GLU, 0.0},    {HAM, 0.05},   {VAS, 0.3},   {SOL, 1.0},     {GAS, 0.5} };// list gain force feedback
+    
+    Gf = { {GLU, 0.0},    {HAM, 0.0},   {VAS, 0.0},   {SOL, 0.0},     {GAS, 0.0} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.0} };// gain force feedback for TA depending on SOL
-    Glg = { {HFL, 0.5},    {HAM, 0.0},   {TA, 2.0} };// list gain length 1 feedback
-    Glh = { {HFL, 0.65},    {HAM, 1.2},   {TA, 0.8} };// list gain length 2 feedback
+    Glg = { {HFL, 0.0},    {HAM, 0.0},   {TA, 0.0} };// list gain length 1 feedback
+    Glh = { {HFL, 0.6},    {HAM, 1.0},   {TA, 0.8} };// list gain length 2 feedback
     // stance preparation
-    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 0.5} };// list gain  PD controller spring
-    GPDd = { {HFL, 0.5},    {GLU, 0.5},   {VAS, 0.2} };// list gain PD controller damper
-    GPDa = { {HFL, 0.34},    {GLU, 0.34},   {VAS, 0.14} };//list gain PD controller ang in rad. CHECK
+    GPDk = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain  PD controller spring
+    GPDd = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain PD controller damper
+    GPDa = { {HFL, 160*dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
     cd = 0.0;// position/ coeff for  target angle hip SIMBICON
     cv = 0.0; // velocity coeff for  target angle hip SIMBICON
     // P for vas e hfl
-    GP1 = { {HFL, 2.0}, {VAS, 1.0} };
-    GP2 = { {HFL, -0.44}, {VAS, 0.14} };// -20° flessione anca, 8° flessione ginocchio
+    GP1 = { {HFL, 0.0}, {VAS, 0.0} };
+    GP2 = { {HFL, 0.0*dDegreeToRad}, {VAS, 15*dDegreeToRad} };// inclinazione tronco, 15° flessione ginocchio
     // stance hip control initialized
-    Glead1 = { {HAM, 0.3},    {GLU, 0.3},   {HFL, 0.3} };
-    Glead2 = { {HAM, 0.0},    {GLU, 0.0},   {HFL, 0.0} };
-    Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2 } };
+    float trunk_forward_ang = 0 * dDegreeToRad;// inclinazione tronco, negativo in avanti
+    Glead1 = { {HAM, 0.},    {GLU, 0.0},   {HFL, 0.0} };
+    Glead2 = { {HAM, trunk_forward_ang},    {GLU, trunk_forward_ang},   {HFL, trunk_forward_ang} };
+    Glead3 = { {HAM, 0.0},    {GLU, 0.0},   {HFL, 0.0 } };
     
     // excitation list initialization for each muscle
-    list<float> l15(15, 0);// 5 ms delay
-    list<float> l30(30, 0);// 10 ms delay
-    list<float> l60(60, 0);// 20 ms delay 
+    list<float> l15(15, 0.01);// 5 ms delay
+    list<float> l30(30, 0.01);// 10 ms delay
+    list<float> l60(60, 0.01);// 20 ms delay 
 
     uf_l = { {"sol_R", l60 },{"sol_L" , l60},
     {"gas_R", l60 },{"gas_L" , l60},
@@ -73,17 +75,26 @@ ControlAlgorithm::ControlAlgorithm()
     {"glu_R", l15 },{"glu_L" , l15},
     {"ham_R", l15 },{"ham_L" , l15} };
 
-    f_l = { {"sol_R", l60 },{"sol_L" , l60},
-    {"gas_R", l60 },{"gas_L" , l60},
-    {"glu_R", l15 },{"glu_L" , l15},
-    {"ham_R", l15 },{"ham_L" , l15},
-    {"vas_R", l30 },{"vas_L" , l30} };
-
     f_ta_sol_l = { {"sol_R", l60 },{"sol_L" , l60} };
 
-    lce_l = { {"ta_R", l60 },{"ta_L" , l60},
-    {"hfl_R", l15 },{"hfl_L" , l15},
-    {"ham_R", l15 },{"ham_L" , l15} };
+    State_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} };
+    State_position = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} };
+
+    State0_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} };
+    State0_position = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} };
+
 }
 
 ControlAlgorithm::~ControlAlgorithm()
@@ -94,8 +105,7 @@ ControlAlgorithm::~ControlAlgorithm()
 }
 //MTU control law based on Force feedback, Length feedback and PD controller
 //The output is the excitation signal for muscle m_name. 
-float ControlAlgorithm::MTU_excitation(Mtuname m_name, vector<bool> gait_state,
-    vector<dFloat>  state, char lead, char lat, float l_til, float f_norm, float timestep, dVector com_Playervel)
+float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,char lead, char lat, float l_til, float f_norm, dVector com_Playervel)
 {
     //Get muscle control gains form model//
     float gf = 0, glg = 0, glh = 0, gPDk = 0, gPDd = 0, gPDa = 0, gLead1 = 0, gLead2 = 0, gLead3 = 0, gP1 = 0, gP2 = 0;
@@ -112,124 +122,116 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name, vector<bool> gait_state,
     gP2 = GetGain_P2(m_name);
 
     float u = 0;
-    float p = 0.1, s = 0.0, q = 0.0;// initial constant excitation
+    float p = 0.01, p1 = 0.01, p2 =0.01, s = 0.01, q = 0.01;// initial constant excitation
+
+    string muscle = MuscleName(m_name, lat);
 
     // Gait state
     bool SP = false, SI = false, STANCE = false, SWING = false, DS = false;
     STANCE = gait_state[0];SWING = gait_state[1];SP = gait_state[2]; SI = gait_state[3], DS = gait_state[4];
 
-    // Positive force feedback///
-    float uf = gf * f_norm;
-    float uf_ta_sol;
-    if (m_name == SOL)
-        uf_ta_sol = Gf_TA_SOL[SOL] * f_norm;
-
-    // Positive length feedback///
-    float ul = glg * (l_til - glh);
-    if (ul <= 0)
-        ul = 0;
+    // Positive force feedback and length feedback///
+    float uf=0,ul=0;
 
     // Muscle-driven P control  for VAS (stance) e HFL (swing)/// 
     float up = 0;
     if (m_name == VAS) {
-        if (state[1] < 0) {// Check
-            up = -gP1 * (state[0] - gP2);// Check sign (should be - or 0) ADD deltaT
+        if (lat == 'R') {
+            if (State_velocity.find("Sknee_r")->second < 0)// compute excitation just if the knee just if ankle velocity is negative
+                if (State_position.find("Sknee_r")->second - gP2 < 0)//negative excitation just if knee angle is below a threshold
+                    up = gP1 * (State_position.find("Sknee_r")->second - gP2);
+        }
+        else {// the same for left knee
+            if (State_velocity.find("Sknee_l")->second < 0)
+                if (State_position.find("Sknee_l")->second - gP2 < 0)
+                    up = gP1 * (State_position.find("Sknee_l")->second - gP2);
         }
     }
     else if (m_name == HFL)
-        up = gP1 * (state[0] - gP2);//Trunk orientation control
+        up = gP1 * (abs(State_position.find("Strunk")->second) - gP2);//Trunk orientation control
     
-    // control during stance preparation
+    // control during stance preparation VAS HFL GLU
     float u_sp = 0;
-    if (m_name == VAS)
-        u_sp = gPDk * (state[0] - gPDa) + gPDd * state[1];
-    else if (m_name == HFL || m_name == GLU )
-        u_sp = gPDk * (state[0] - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * state[1];
-
-    // HIP control stance, during Double stance only for lead leg //
+    float angle;
+    if (lat == 'R') {
+        if (m_name == VAS) {
+            angle = State0_position.find("Sknee_r")->second - State_position.find("Sknee_r")->second;
+            u_sp = gPDk * (angle - gPDa) + gPDd * State_velocity.find("Sknee_r")->second;
+        }
+        else if (m_name == HFL || m_name == GLU) {
+            angle = State0_position.find("Ship_r")->second + State_position.find("Ship_r")->second;
+            u_sp = gPDk * (angle - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * State_velocity.find("Ship_r")->second;
+        }
+    }
+    else
+    {
+        if (m_name == VAS) {
+            angle = State0_position.find("Sknee_l")->second - State_position.find("Sknee_l")->second;
+            u_sp = gPDk * (angle - gPDa) + gPDd * State_velocity.find("Sknee_l")->second;
+        }
+        else if (m_name == HFL || m_name == GLU) {
+            angle = State0_position.find("Ship_l")->second + State_position.find("Ship_l")->second;
+            u_sp = gPDk * (angle - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * State_velocity.find("Ship_l")->second;
+        }
+    }
+    // HIP control stance, HFL GLU HAM
     float u_hip = 0;
     if (m_name == HFL || m_name == GLU || m_name == HAM)// for trunk orientation
-        u_hip = gLead1 * (state[0] - gLead2) + gLead3 * state[1];
-
-    //if (m_name == HFL && lat == 'L')
-    //    cout << state[0] << ' ' << state[1] << endl;
-    //if (DS && (lat != lead))
-    //    u_hip = 0;
-
-    // remove excitation of previous iteration and add the new one to excitation list. This list is needed to apply neural delay.
-    string muscle;
+        u_hip = gLead1 * (State_position.find("Strunk")->second - gLead2) + gLead3 * (-State_velocity.find("Strunk")->second);
+    
+    // Update of excitation queue for each muscle according to delay
     if (m_name == SOL) {
-        muscle = "sol_";muscle += lat;
-        uf_l[muscle].pop_front();// remove old data
-        uf_ta_sol_l[muscle].pop_front();// remove old data
-        uf_l[muscle].push_back(uf);//populate vectors of excitation
-        uf_ta_sol_l[muscle].push_back(uf_ta_sol);//populate vectors of excitation
+        uf = gf * f_norm;
+        UpdateQueue(muscle, uf_l, uf);
+        float uf_ta_sol = Gf_TA_SOL[SOL] * f_norm;
+        UpdateQueue(muscle, uf_ta_sol_l, uf_ta_sol);
     }
     else if (m_name == TA) {
-        muscle = "ta_";muscle += lat;
-        ul_l[muscle].pop_front();
-        ul_l[muscle].push_back(ul);
+        ul = glg * (l_til - glh);
+        UpdateQueue(muscle, ul_l, ul);
     }
     else if (m_name == VAS) {
-        muscle = "vas_";muscle += lat;
-        f_l[muscle].pop_front();
-        uf_l[muscle].pop_front();
-        up_l[muscle].pop_front();
-        u_sp_l[muscle].pop_front();
-        f_l[muscle].push_back(f_norm);
-        uf_l[muscle].push_back(uf);
-        up_l[muscle].push_back(up);
-        u_sp_l[muscle].push_back(u_sp);
+        uf = gf * f_norm;
+        UpdateQueue(muscle, uf_l, uf);
+        UpdateQueue(muscle, up_l, up);
+        UpdateQueue(muscle, u_sp_l, u_sp);
+        cout << u_sp << endl;
     }
     else if (m_name == GAS){
-        muscle = "gas_";muscle += lat;
-        uf_l[muscle].pop_front();
-        uf_l[muscle].push_back(uf);
+        uf = gf * f_norm;
+        UpdateQueue(muscle, uf_l, uf);
     }
     else if (m_name == HFL) {
-        muscle = "hfl_";muscle += lat;
-        ul_l[muscle].pop_front();
-        u_sp_l[muscle].pop_front();
-        up_l[muscle].pop_front();
-        uHIP_s_l[muscle].pop_front();
-        ul_l[muscle].push_back(ul);
-        up_l[muscle].push_back(up);
-        u_sp_l[muscle].push_back(u_sp);
+        ul = glg * (l_til - glh);
+        UpdateQueue(muscle, ul_l, ul);
+        UpdateQueue(muscle, u_sp_l, u_sp);
+        UpdateQueue(muscle, up_l, up);
         if (!DS || (DS && lat == lead))// if double stance, onlt leading leg is responsible of trunk orientation
-            uHIP_s_l[muscle].push_back(u_hip);
+            UpdateQueue(muscle, uHIP_s_l, u_hip);
         else
-            uHIP_s_l[muscle].push_back(0.0);
+            UpdateQueue(muscle, uHIP_s_l, 0);
     }
     else if (m_name == HAM) {
-        muscle = "ham_";muscle += lat;
-        uf_l[muscle].pop_front();
-        ul_l[muscle].pop_front();
-        uHIP_s_l[muscle].pop_front();
-        uf_l[muscle].push_back(uf);
-        ul_l[muscle].push_back(ul);
+        uf = gf * f_norm;
+        UpdateQueue(muscle, uf_l, uf);
+        ul = glg * (l_til - glh);
+        UpdateQueue(muscle, ul_l, ul);
         if (!DS || (DS && lat == lead))// if double stance, onlt leading leg is responsible of trunk orientation
-            uHIP_s_l[muscle].push_back(u_hip);
+            UpdateQueue(muscle, uHIP_s_l, u_hip);
         else
-            uHIP_s_l[muscle].push_back(0.0);
+            UpdateQueue(muscle, uHIP_s_l, 0);
     }
     else if (m_name == GLU) {
-        muscle = "glu_";muscle += lat;
-        uf_l[muscle].pop_front();
-        u_sp_l[muscle].pop_front();
-        uHIP_s_l[muscle].pop_front();
-        uf_l[muscle].push_back(uf);
-        u_sp_l[muscle].push_back(u_sp);
+        uf = gf * f_norm;
+        UpdateQueue(muscle, uf_l, uf);
+        UpdateQueue(muscle, u_sp_l, u_sp);
         if (!DS || (DS && lat == lead))// if double stance, onlt leading leg is responsible of trunk orientation
-            uHIP_s_l[muscle].push_back(u_hip);
+            UpdateQueue(muscle, uHIP_s_l, u_hip);
         else
-            uHIP_s_l[muscle].push_back(0.0);
-    }
-    else if (m_name == RF){
-        muscle = "rf_";muscle += lat;
+            UpdateQueue(muscle, uHIP_s_l, 0);
     }
 
     if (STANCE) {
-
         switch (m_name) {// p values form wang supplemental material section 5
         case SOL:
             u = p + uf_l[muscle].front();break;
@@ -241,39 +243,39 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name, vector<bool> gait_state,
         case GAS:
             u = p + uf_l[muscle].front();break;
         case VAS: {
-            u = p + uf_l[muscle].front() + up_l[muscle].front();break;}
+            u = uf_l[muscle].front() + up_l[muscle].front();break;}
         case HAM: {
-            if (uHIP_s_l[muscle].front() < 0)
-                u = p + abs(uHIP_s_l[muscle].front());
+            if (uHIP_s_l[muscle].front() > 0)// torque on trunk rotates the body forward
+                u = p1 + abs(uHIP_s_l[muscle].front());
             else
-                u = p;
+                u = p1;
             break;}
         case GLU:{
-            if (uHIP_s_l[muscle].front() < 0)
-                u = p + abs(uHIP_s_l[muscle].front());
+            if (uHIP_s_l[muscle].front() > 0)// torque on trunk rotates the body forward
+                u = p1 + abs(uHIP_s_l[muscle].front());
             else
-                u = p;
+                u = p1;
             break;}
         case HFL: {
-            if (uHIP_s_l[muscle].front() > 0)
-                u = p + abs(uHIP_s_l[muscle].front());
+            if (uHIP_s_l[muscle].front() < 0)// torque on trunk rotates the body backward
+                u = p1 + abs(uHIP_s_l[muscle].front());
             else
-                u = p;
+                u = p1;
             break;}
         case RF:// RF
             u = p;break;
         }
     }
-    if (SI) { // || DS for walking? // s values form wang supplemental material section 5
+    if (SI) { // || DS for walking? // s values from wang supplemental material section 5
         switch (m_name) {
         case VAS:
-            u = u - 1;break;
+            u = u-1;break;
         case RF:
-            u = u + 0.1;break;
+            u = u+0.01;break;
         case GLU:
-            u = u - 0.25;break;
+            u = u-0.25;break;
         case HFL:
-            u = u + 0.25;break;
+            u = u+0.25;break;
         }// other muscles same as stance
     }
     if (SWING) {
@@ -287,37 +289,36 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name, vector<bool> gait_state,
         case HFL: {
             string name = "ham_";
             name += lat;
-            u = q +0.2+ + ul_l[muscle].front() - ul_l[name].front() + up_l[muscle].front();break;}// !!!!the minus ul leads to negative excittaion!!!!
+            u = q + ul_l[muscle].front() - ul_l[name].front() + up_l[muscle].front();break;}// !!!!the minus ul leads to negative excittaion!!!!
         case VAS:
-            u = 0.5;break;
+            u = q;break;
         case RF:
-            u = 0.1;break;
+            u = q;break;
         case GAS:
-            u = 0.1;break;
+            u = q;break;
         case SOL:
-            u = 0.1;break;
+            u = q;break;
         default:// RF, SOL, GAS, VAS
             u = q;break;
         }
     }
     if (SP) {
         //Muscle-driven PD control in Stance Preparation//
-        if (m_name == VAS || m_name == GLU) {// check sign vas
-            if (u_sp_l[muscle].front() > 0)
+        if (m_name == HFL) {
+            if (u_sp_l[muscle].front() > 0) // torque on thigh lifts the knee up
                 u = q + abs(u_sp_l[muscle].front());
             else
-                u = 0;
+                u = q;
         }
-        if (m_name == HFL){
-            if (u_sp_l[muscle].front() < 0)
+        else if (m_name == VAS || m_name == GLU) { 
+            if (u_sp_l[muscle].front() < 0)// GLU: torque on thigh pushes down the knee, VAS: extension on knee
                 u = q + abs(u_sp_l[muscle].front());
-            else 
-                u = 0;
+            else
+                u = q;
         }
-            //other muscles same as swing
     }
-    if (u < 0)// security check: no negative values
-        u = 0;
+    if (u < p)// security check: no negative values
+        u = p;
     return u;
 }
 
@@ -336,7 +337,7 @@ vector<bool> ControlAlgorithm::Stance_Swing_Detection(dVector ankle, dVector com
     else
     {
         SWING = true;
-        if (d < dsp && ankle.m_z < com.m_z)
+        if (d > dsp && ankle.m_z < com.m_z)
             SP = true;
     }
     vector<bool> foot_state{ STANCE, SWING, SP, SI };
@@ -438,4 +439,64 @@ vector<float> ControlAlgorithm::GetGain_HFLswing()
     float g1 = GP1.find(HFL)->second;
     float g2 = GP2.find(HFL)->second;
     return { g1, g2 };
+}
+
+void ControlAlgorithm::SetState(float position, float velocity, string dof)
+{
+    State_velocity.find(dof)->second = velocity;
+    State_position.find(dof)->second = position;
+}
+
+void ControlAlgorithm::SetState0(float position, float velocity, string dof)
+{
+    State0_velocity.find(dof)->second = velocity;
+    State0_position.find(dof)->second = position;
+}
+
+vector<float> ControlAlgorithm::GetState(string dof)
+{
+    vector<float> state{ State_position.find(dof)->second, State_velocity.find(dof)->second };
+    return state;
+}
+
+vector<float> ControlAlgorithm::GetState0(string dof)
+{
+    vector<float> state{ State0_position.find(dof)->second, State0_velocity.find(dof)->second };
+    return state;
+}
+// remove excitation of previous iteration and add the new one to excitation list. This list is needed to apply neural delay.
+void ControlAlgorithm::UpdateQueue(string muscle, map<string, list<float>>& queue, float value)
+{
+   queue[muscle].pop_front();// remove old data
+   queue[muscle].push_back(value);// add new data at the end of list
+}
+
+string ControlAlgorithm::MuscleName(Mtuname m_name, char lat)
+{
+    string muscle;
+    if (m_name == SOL) {
+        muscle = "sol_";muscle += lat;
+    }
+    else if (m_name == TA) {
+        muscle = "ta_";muscle += lat;
+    }
+    else if (m_name == VAS) {
+        muscle = "vas_";muscle += lat;
+    }
+    else if (m_name == GAS) {
+        muscle = "gas_";muscle += lat;
+    }
+    else if (m_name == HFL) {
+        muscle = "hfl_";muscle += lat;
+    }
+    else if (m_name == HAM) {
+        muscle = "ham_";muscle += lat;
+    }
+    else if (m_name == GLU) {
+        muscle = "glu_";muscle += lat;
+    }
+    else if (m_name == RF) {
+        muscle = "rf_";muscle += lat;
+    }
+    return muscle;
 }

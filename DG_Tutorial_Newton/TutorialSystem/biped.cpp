@@ -357,11 +357,18 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	}
 	
 	// Compute torque for each joint actuated by the muscle. m_x = torque joint, m_y = torque joint 1
+	if (m_name == GLU || m_name ==HFL || m_name == HAM || m_name == RF)
+		T.m_x = m_Fmtu * arm * 0.01 - T_reac;
+	else
+		T.m_x = m_Fmtu * arm * 0.01 * cos(theta_actual- phi_M) - T_reac;
+
+	if (T.m_x < 0)// prevents unrealistic negative values due to T reaction torque
+		T.m_x = 0;
 	switch (Jname) 
 	{
 	case HIP_R:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac; // GLU HAM
+		 // GLU HAM
 		switch (m_name) {
 		case HFL: {T.m_x = T.m_x * (-1);break;}
 		case RF: {T.m_x = T.m_x * (-1);break;}}
@@ -369,21 +376,21 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	}
 	case KNEE_R:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] // GAS 
+		 // GAS 
 		if (m_name == VAS) // VAS
 			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case ANKLE_R:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] //  SOL
+		//  SOL
 		if (m_name == TA) // TA
 			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case HIP_L:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac; // GLU HAM
+		// GLU HAM
 		switch (m_name) {
 		case HFL: {T.m_x = T.m_x * (-1);break;}
 		case RF: {T.m_x = T.m_x * (-1);break;}
@@ -392,14 +399,14 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	}
 	case KNEE_L:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] // GAS 
+		 // GAS 
 		if (m_name == VAS) // VAS
 			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case ANKLE_L:
 	{
-		T.m_x = m_Fmtu * arm * 0.01 - T_reac;// [Nm] //  SOL
+		 //  SOL
 		if (m_name == TA) // TA
 			T.m_x = T.m_x * (-1);
 		break;
@@ -409,30 +416,35 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 		break;}
 	}
 	
+
+	T.m_y = m_Fmtu * arm1 * 0.01 * cos(theta1_actual - phi1_M) - T1_reac;
+
+	if (T.m_y < 0)// prevents unrealistic negative values due to T1 reaction torque
+		T.m_y = 0;
 	switch (Jname1)
 	{
 	case KNEE_R:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // HAM
-		if (m_name == RF) // RF
+		// HAM
+		if (m_name == HAM) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}
 	case ANKLE_R:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // GAS
+		 // GAS
 		break;
 	}
 	case KNEE_L:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // HAM
-		if (m_name == RF) // RF
+		// HAM
+		if (m_name == HAM) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}
 	case ANKLE_L:
 	{
-		T.m_y = m_Fmtu * arm1 * 0.01 - T1_reac;// [Nm] // GAS
+		 // GAS
 		break;
 	}
 	case NOjoint: {

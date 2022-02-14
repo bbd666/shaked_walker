@@ -344,6 +344,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     float alfa1 = 0 * dDegreeToRad;
     float gamma = 10 * dDegreeToRad;
     float beta = -10 * dDegreeToRad;
+
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
     dVector _Pos0(dVector(0.0f, 0.115 +l_LPT / 2 + l_Up_Leg + l_Low_Leg + h_foot, -0.1f)); // LPT
     dVector _Pos1(dVector(l_Hip/2, -l_LPT / 2 - (l_Up_Leg / 2) * cos(alfa), -(l_Up_Leg / 2) * sin(alfa)));// Thigh_r
@@ -353,7 +354,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector _Pos4(dVector(-l_Hip / 2, -l_LPT / 2 - (l_Up_Leg / 2) * cos(alfa1), -(l_Up_Leg / 2) * sin(alfa1)));// Thigh_l
     dVector _Pos5(dVector(0.0f, -(l_Up_Leg / 2) * cos(alfa1) - (l_Low_Leg / 2) * cos(gamma), -(l_Up_Leg / 2) * sin(alfa1) + (l_Low_Leg / 2) * sin(gamma)));// Shank_l
 
-    dVector _Pos6(dVector(0.0f, l_LPT / 2 + l_MPT/ 2,0.0f));// MPT
+    dVector _Pos6(dVector(0.0f, l_LPT / 2 + l_MPT / 2, 0.0f));// MPT
     dVector _Pos7(dVector(0.0f, l_MPT / 2 + l_UPT / 2, 0.0f));// UPT
 
 
@@ -375,7 +376,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     // BODIES OF THE DUMMY DEFINITION
     std:vector<float> body_rot_ang_vect = {90.0f ,-alfa * dRadToDegree, alfa * dRadToDegree+(gamma) * dRadToDegree,beta * dRadToDegree,// angles of each body LPT Thigh_r Shank_r Foot_r
                                         -alfa1 * dRadToDegree, alfa1* dRadToDegree + (gamma)* dRadToDegree,beta* dRadToDegree,//Thigh_l Shank_l Foot_l
-                                            0.0f, 0.0f};// MPT, UPT
+                                           0.0f, 0.0f};// MPT, UPT
     int aa = 0;
     for (std::vector<std::string>::iterator it = body_keys.begin(); it != body_keys.end(); it++)
     {
@@ -425,7 +426,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         else
             rigid_element[*it]->InitNewton(atCapsule, body_dim[*it]->m_x, body_dim[*it]->m_y, body_dim[*it]->m_z, 1.0f);
 
-        //if (body_keys[ind] == "Thigh_r")
+        //if (body_keys[ind] == "Thigh_l")
         //    NewtonBodySetMassMatrix(rigid_element[*it]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
         //else
             NewtonBodySetMassMatrix(rigid_element[*it]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
@@ -634,10 +635,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         {"glu_r",(180) * dDegreeToRad + alfa},              {"glu_l",(180) * dDegreeToRad + alfa1},
         {"ham_r",180 * dDegreeToRad + alfa},                {"ham_l",180 * dDegreeToRad + alfa1},
         {"rf_r",180 * dDegreeToRad - alfa},                 {"rf_l",180 * dDegreeToRad - alfa1},
-        {"vas_r",180 * dDegreeToRad - gamma},               {"vas_l",180 * dDegreeToRad - gamma},
+        {"vas_r",180 * dDegreeToRad + gamma},               {"vas_l",180 * dDegreeToRad + gamma},
         {"sol_r",2 * M_PI - (M_PI/2 + beta)},                 {"sol_l",2 * M_PI - (M_PI/2 + beta)},
-        {"ta_r", M_PI + beta},                               {"ta_l",M_PI + beta},
-        {"gas_r",180 * dDegreeToRad + gamma},               {"gas_l",180 * dDegreeToRad + gamma} };/////// list muscle initial angle 1
+        {"ta_r", M_PI/2 + beta},                               {"ta_l",M_PI/2 + beta},
+        {"gas_r",180 * dDegreeToRad - gamma},               {"gas_l",180 * dDegreeToRad - gamma} };/////// list muscle initial angle 1
     m_theta10 = { {"ham_r",180 * dDegreeToRad - gamma}, {"ham_l",180 * dDegreeToRad - gamma},
         {"rf_r",180 * dDegreeToRad + gamma},            {"rf_l",180 * dDegreeToRad + gamma},
         {"gas_r",2 * M_PI - (M_PI/2 +beta)},              {"gas_l",2 * M_PI - (M_PI/2 + beta)} };/////list muscle initial angle 2
@@ -698,17 +699,20 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         map<std::string, float> p = m_list_prop.find(muscle_keys[index])->second;
         if (muscle_keys[index] == "rf_r" || muscle_keys[index] == "rf_l") {// reference and maximum angle in local angle reference system
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
-                p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, M_PI - p["phi1M"] * dDegreeToRad, M_PI - p["phi1R"] * dDegreeToRad);
+                p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, 2 * M_PI - p["phi1M"] * dDegreeToRad, 2 * M_PI - p["phi1R"] * dDegreeToRad);
         }// params from Geyer 
         else if (muscle_keys[index] == "vas_r"|| muscle_keys[index] == "vas_l")
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
-                p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
+                2 * M_PI - p["phiM"] * dDegreeToRad, 2 * M_PI - p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
         else if (muscle_keys[index] == "sol_r"|| muscle_keys[index] == "sol_l")
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
                 2*M_PI-p["phiM"] * dDegreeToRad, 2 * M_PI-p["phiR"] * dDegreeToRad, 0, 0); // params from Geyer  
         else if (muscle_keys[index] == "gas_r"|| muscle_keys[index] == "gas_l")
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
                 p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, 2 * M_PI - p["phi1M"] * dDegreeToRad, 2 * M_PI - p["phi1R"] * dDegreeToRad); // params from Geyer 
+        else if (muscle_keys[index] == "ham_r" || muscle_keys[index] == "ham_l" || muscle_keys[index] == "glu_r" || muscle_keys[index] == "glu_l")
+            muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
+                p["phiM"] * dDegreeToRad, 2 * M_PI - p["phiR"] * dDegreeToRad, p["phi1M"] * dDegreeToRad, p["phi1R"] * dDegreeToRad); // params from Geyer 
         else {
             muscles[*it]->SetMuscleParams(p["Fmax"], p["v_max"], p["lopt"], p["lslk"], p["rho"], p["r"], p["r1"],
                 p["phiM"] * dDegreeToRad, p["phiR"] * dDegreeToRad, p["phi1M"] * dDegreeToRad, p["phi1R"] * dDegreeToRad);
@@ -719,21 +723,12 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         else
             muscles[*it]->SetLaterality('L');
 
-        // Initial condition of muscles
-        if (muscle_keys[index] == "ham_l" || muscle_keys[index] == "glu_l")// CHANGE
-            muscles[*it]->SetLCE(14);
-        if (muscle_keys[index] == "ham_r" || muscle_keys[index] == "glu_r")// CHANGE
-            muscles[*it]->SetLCE(18);
-        if (muscle_keys[index] == "hfl_r" )// CHANGE
-            muscles[*it]->SetLCE(9);
-        if (muscle_keys[index] == "sol_r" || muscle_keys[index] == "sol_l")// CHANGE
-            muscles[*it]->SetLCE(6);
-        if (muscle_keys[index] == "ta_r" || muscle_keys[index] == "ta_l")// CHANGE
-            muscles[*it]->SetLCE(5.5);
-        if (muscle_keys[index] == "vas_l" || muscle_keys[index] == "vas_r")// CHANGE
-            muscles[*it]->SetLCE(15);
-        if (muscle_keys[index] == "gas_r")// CHANGE
-            muscles[*it]->SetLCE(10);
+        //// Initial condition of muscles
+        //if (muscle_keys[index] == "ham_l" || muscle_keys[index] == "glu_l")// CHANGE
+        //    muscles[*it]->SetLCE(14);
+        //if (muscle_keys[index] == "ham_r" || muscle_keys[index] == "glu_r")// CHANGE
+        //    muscles[*it]->SetLCE(18);
+
         index++;
     }
  
@@ -802,6 +797,14 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
     // Control class initialization. check reference or pointer
     controller = ControlAlgorithm();
+    controller.SetState0(180 * dDegreeToRad -gamma, 0, "Sknee_r");
+    controller.SetState0(180 * dDegreeToRad -gamma, 0, "Sknee_l");
+    controller.SetState0(180 * dDegreeToRad - alfa, 0, "Ship_r");
+    controller.SetState0(180 * dDegreeToRad - alfa1, 0, "Ship_l");
+    controller.SetState0(90 * dDegreeToRad + beta, 0, "Sankle_r");
+    controller.SetState0(90 * dDegreeToRad + beta, 0, "Sankle_l");
+    controller.SetState0(0, 0, "Strunk");
+    
 }
 
 int dRaycastVHModel::CreateLine() {
@@ -819,13 +822,14 @@ return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
 vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
 {
     dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
-    dVector dir = mat.m_front;
-    dVector cosDir = dVector(0, 1, 0, 1);
-    dVector sinDir = dVector(0, 0, 1, 1);
-    dVector projectDir(dir - sinDir.Scale(dir.DotProduct3(sinDir)));
-    dFloat cosAngle = projectDir.DotProduct3(cosDir);
-    dFloat sinAngle = sinDir.DotProduct3(projectDir.CrossProduct(cosDir));
-    dFloat ang = dAtan2(sinAngle, cosAngle);
+    dVector body = mat.m_front;
+    dVector vertical = dVector(0, 1, 0, 1);
+    dVector aa = body.CrossProduct(vertical);
+    float norm = sqrt(pow(aa.m_x, 2) + pow(aa.m_y, 2) + pow(aa.m_z, 2));
+    dFloat ang = dAtan2(norm, body.DotProduct3(vertical));
+    if (aa.DotProduct3(dVector(1,0,0,1)) > 0) {
+        ang = -ang;
+    }
     // save the current joint Omega
     dVector omega0(0.0f);
     NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
@@ -970,33 +974,23 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     dRaycastVHModel* Model = (dRaycastVHModel*)model;
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
     map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
-    float hip_angle_r = 0, hip_angle_l = 0;
-    float knee_angle_r = 0, knee_angle_l = 0;
-    float ankle_angle_r = 0, ankle_angle_l = 0;
 
-    // //INITIAL CONDITION //
-    //if (newTime < 0.01) {
-    //    GeomNewton* BODY = RE_list.find("MPT")->second;
-    //    float vel = -0.01;
-    //    dVector LPTvel_init = { 0,0,vel };
-    //    NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //BODY = RE_list.find("UPT")->second;
-    //    //LPTvel_init = { 0,0,vel };
-    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //BODY = RE_list.find("Foot_r")->second;
-    //    //LPTvel_init = { 0,0,vel };
-    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //BODY = RE_list.find("Thigh_r")->second;
-    //    //LPTvel_init = { 0,0,vel };
-    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //BODY = RE_list.find("Shank_r")->second;
-    //    //LPTvel_init = { 0,0,vel };
-    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //BODY = RE_list.find("Foot_r")->second;
-    //    //LPTvel_init = { 0,0,2.5 };
-    //    //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-    //    //NewtonBodyAddTorque(BODY->GetBody(), &LPTvel_init.m_x);
-    //}
+     //INITIAL CONDITION //
+    if (newTime < 0.08) {
+        GeomNewton* BODY = RE_list.find("LPT")->second;
+        float vel = -350;
+        dVector LPTvel_init = { 0,0,vel };
+        NewtonBodyAddForce(BODY->GetBody(), &LPTvel_init[0]);
+        BODY = RE_list.find("UPT")->second;
+        vel = -250;
+        LPTvel_init = { 0,0,vel };
+        NewtonBodyAddForce(BODY->GetBody(), &LPTvel_init[0]);
+        //GeomNewton* BODY = RE_list.find("LPT")->second;
+        //float t = -10;
+        //dVector LPTvel_init = { t,0,0 };
+        //NewtonBodyAddTorque(BODY->GetBody(), &LPTvel_init[0]);
+
+    }
 
     // find ankle position
     dVector com_Player = Model->ComputePlayerCOM();
@@ -1054,6 +1048,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             d = sqrt(pow(com_Player.m_z - com_ankle_l.m_z, 2) + pow(com_Player.m_x - com_ankle_l.m_x, 2));
         Model->controller.ControlSetHorizontalDistance(d);
     }
+    // update sagittal trunk angle and velocity
+    vector<float> state = Model->GetTrunkSagittalState(); 
+    Model->controller.SetState(state[0], state[1], "Strunk");
 
     //scan all  Muscle Elements
     for (auto itr = m_winManager->aManager->vMuscleList.begin();
@@ -1062,8 +1059,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         dVector pin; // needed to apply the torque along the joint pin
         dVector pin1; // needed to apply the torque along the joint 1 pin
         Muscle* Mobj = (Muscle*)*itr;
-        // Get joint angle and joint velocity for proportional controller of VAS (stance)
-        float VAS_ang = 0, VAS_angvel = 0;
+        // Get joint angle and joint velocity for proportional controller of VAS, HFL and GLU (stance preparation)
         char lat = Mobj->GetLaterality();
         // loop on two joints
         for (auto itr1 = 0; itr1 <= 1; itr1++)
@@ -1091,9 +1087,13 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 {
                     Mobj->SetAngle(joint->GetJointAngle()); // joint angle
                     pin = joint->GetPinAxis(); // joint pin
-                    if (Mobj->m_name == VAS) {
-                        VAS_ang = joint->GetJointAngle();
-                        VAS_angvel = joint->GetJointOmega();
+                    if (Mobj->m_name == GAS && lat == 'R') {
+                        vector<float> state = Model->controller.GetState("Sknee_r");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Sknee_r");
+                    }
+                    if (Mobj->m_name == GAS && lat == 'L') {
+                        vector<float> state = Model->controller.GetState("Sknee_l");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Sknee_l");
                     }
                 }
                 else
@@ -1128,6 +1128,22 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 {
                     Mobj->SetAngle(joint->GetJointAngle());
                     pin = joint->GetPinAxis();
+                    if (Mobj->m_name == HFL && lat == 'R') {
+                        vector<float> state = Model->controller.GetState("Ship_r");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Ship_r");
+                    }
+                    if (Mobj->m_name == HFL && lat == 'L') {
+                        vector<float> state = Model->controller.GetState("Ship_l");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Ship_l");
+                    }
+                    if (Mobj->m_name == TA && lat == 'R') {
+                        vector<float> state = Model->controller.GetState("Sankle_r");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Sankle_r");
+                    }
+                    if (Mobj->m_name == TA && lat == 'L') {
+                        vector<float> state = Model->controller.GetState("Sankle_l");
+                        Model->controller.SetState(joint->GetJointAngle(),joint->GetJointOmega(), "Sankle_l");
+                    }
                 }
                 else
                 {
@@ -1142,15 +1158,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             }
             }
         }
-
-        vector<dFloat> State(0, 0);
-        if (Mobj->m_name == HFL || Mobj->m_name == GLU || Mobj->m_name == HAM) {
-            State = Model->GetTrunkSagittalState(); // Get trunk angle and velocity
-            if (Mobj->m_name == HFL)
-                cout << newTime << ' ' << State[0] << ' ' << State[1] << endl;
-        }
-        else if (Mobj->m_name == VAS)
-            State = { VAS_ang ,VAS_angvel };// P controller state for vas (Stance)
         
         // Get state of current foot
         vector<bool> Gait;
@@ -1162,8 +1169,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         // Get excitation
         float angle, angle1, lce, Fmuscle, mus_vel, lmtu, Fmax, lopt;
         Mobj->GetMuscleParams(angle, angle1, lce, lopt, lmtu, Fmuscle, Fmax, mus_vel);
-        float u = Model->controller.MTU_excitation(Mobj->m_name, Gait, State, lead, lat, lce / lopt, Fmuscle / Fmax, timestep, com_Playervel);
-        cout << newTime << ' ' << Fmuscle << endl;
+        float u = Model->controller.MTU_excitation(Mobj->m_name, Gait, lead, lat, lce / lopt, Fmuscle / Fmax, com_Playervel);
+        
         //Impose muscle as actuator
         Mobj->SetNeuralDelay(1.f / 3000.f); // 1.f/2400.f s
 
@@ -1171,6 +1178,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         Mobj->SetActivation(u);
 
         dVector Ttemp = Mobj->Compute_muscle_Torque(timestep);
+        //cout << newTime << ' ' << Ttemp.m_x << endl;
 
         // Get the Body1 connected to the muscle and apply the muscle force
         GeomNewton* gNewton = (GeomNewton*)(Mobj->body1);
@@ -1200,39 +1208,44 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         // update for next force update
         Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE
 
-        // stamp u of all muscles
-        monFlux << u << "  ";// Use Test_excitations.m to see data
-        
-        if (Mobj->GetMuscleName() == RF )
-        {
-            if (lat == 'R') {
-                hip_angle_r = Mobj->GetAngle();
-                knee_angle_r = Mobj->GetAngle1();
-            }
-            else if (lat == 'L')
-            {
-                hip_angle_l = Mobj->GetAngle();
-                knee_angle_l = Mobj->GetAngle1();
-            }
-        }
-        if (Mobj->GetMuscleName() == TA)
-        {
-            if (lat == 'R')
-                ankle_angle_r = Mobj->GetAngle();
-            else
-                ankle_angle_l = Mobj->GetAngle();
-        }
+        //// stamp u of all muscles
+        //monFlux << u << "  ";// Use Test_excitations.m to see data
    
+        // stamp torque of all muscles 
+        monFlux << Ttemp.m_x << "  " << Ttemp.m_y << "  ";
     }
-    monFlux << newTime << "  " << 140*dDegreeToRad-hip_angle_r << "  " << 190 * dDegreeToRad -knee_angle_r << "  " << 80 * dDegreeToRad - ankle_angle_r <<
-        "  " << 180 * dDegreeToRad - hip_angle_l << "  " << 190 * dDegreeToRad - knee_angle_l << "  " << 80 * dDegreeToRad - ankle_angle_l <<
-        "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
-        "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << endl;// check initial angle according to initial geometry
-    
-    //BODY1 = RE_list.find("Foot_r")->second;
-    //dVector vector;
-    //NewtonBodyGetTorque(BODY1->GetBody(), &vector.m_x);
-    //cout << newTime << ' ' << state_foot_r[0] << ' ' << state_foot_r[1] << ' ' << state_foot_r[2] << ' ' << state_foot_r[3] << ' ' << vector.m_x << endl;
+
+     
+    vector<float> statehipr = Model->controller.GetState("Ship_r");
+    vector<float> statehipl = Model->controller.GetState("Ship_l");
+    vector<float> statekneer = Model->controller.GetState("Sknee_r");
+    vector<float> statekneel = Model->controller.GetState("Sknee_l");
+    vector<float> stateankler = Model->controller.GetState("Sankle_r");
+    vector<float> stateanklel = Model->controller.GetState("Sankle_l");
+    vector<float> stateLPT = Model->controller.GetState("Strunk");
+
+    vector<float> state0hipr = Model->controller.GetState0("Ship_r");
+    vector<float> state0hipl = Model->controller.GetState0("Ship_l");
+    vector<float> state0kneer = Model->controller.GetState0("Sknee_r");
+    vector<float> state0kneel = Model->controller.GetState0("Sknee_l");
+    vector<float> state0ankler = Model->controller.GetState0("Sankle_r");
+    vector<float> state0anklel = Model->controller.GetState0("Sankle_l");
+
+    // verify total torque on joints
+    monFlux << newTime << "  " << statehipr[0] << "  " << statekneer[0] << "  " << stateankler[0] 
+        << "  " << statehipl[0] << "  " << statekneel[0] << "  " << stateanklel[0] << "  " << stateLPT[0] << "  " << stateLPT[1] <<
+            "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
+       "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] <<endl;
+
+    //// verify excitations
+    ////monFlux << newTime << "  " << state0hipr[0]+statehipr[0] << "  " << state0kneer[0]+statekneer[0] << "  " << state0kneer[0]+stateankler[0] <<
+    ////    "  " << state0hipl[0]+statehipl[0] << "  " << state0kneel[0]+statekneel[0] << "  " << state0anklel[0]+stateanklel[0] <<
+    ////    "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
+    ////    "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << endl;// check initial angle according to initial geometry
+    //monFlux << newTime << "  " <<statehipr[0] << "  " << statekneer[0] << "  " << stateankler[0] <<
+    //    "  " << statehipl[0] << "  " << statekneel[0] << "  " << stateanklel[0] <<
+    //    "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
+    //    "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << "  " << stateLPT[0] <<endl;// check initial angle according to initial geometry
 
     newTime = newTime + timestep; // update time
 }
