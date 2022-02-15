@@ -7,50 +7,50 @@
 
 ControlAlgorithm::ControlAlgorithm()
 {
-    ///// Control parameter initialization WANG's values
-    //Gf = { {GLU, 0.5},    {HAM, 0.65},   {VAS, 1.2},   {SOL, 1.2},     {GAS, 1.1} };// list gain force feedback
-    //Gf_TA_SOL = { {SOL, 0.4} };// gain force feedback for TA depending ofìn SOL
-    //Glg = { {HFL, 0.5},    {HAM, 4.0},   {TA, 1.1} };// list gain length 1 feedback
-    //Glh = { {HFL, 0.65},    {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
-    //// stance preparation
-    //GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
-    //GPDd = { {HFL, 0.2},    {GLU, 0.2},   {VAS, 0.2} };// list gain PD controller damper
-    //GPDa = { {HFL, M_PI - 2.8},    {GLU, M_PI- 2.8},   {VAS, M_PI - 3.0} };//list gain PD controller ang in rad. CHECK
-    //cd = 0.5;// position/ coeff for  target angle hip SIMBICON
-    //cv = 0.2; // velocity coeff for  target angle hip SIMBICON
-    //// PD for vas e hfl
-    //GP1 = { {HFL, 1.15}, {VAS, 2.0} };
-    //GP2 = { {HFL, M_PI - 2.8}, {VAS, M_PI - 2.97} };// CHECK ANGLE
-    //// stance hip control
-    //Glead1 = { {HAM, 1.91},    {GLU, 1.91},   {HFL, 1.91} }; 
-    //Glead2 = { {HAM, 0.105},    {GLU, 0.105},   {HFL, 0.105} };
-    //Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2} };
+    /// Control parameter initialization WANG's values
+    Gf = { {GLU, 0.5},    {HAM, 0.65},   {VAS, 1.2},   {SOL, 1.2},     {GAS, 1.1} };// list gain force feedback
+    Gf_TA_SOL = { {SOL, 0.4} };// gain force feedback for TA depending ofìn SOL
+    Glg = { {HFL, 0.5},    {HAM, 4.0},   {TA, 1.1} };// list gain length 1 feedback
+    Glh = { {HFL, 0.65},    {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
+    // stance preparation
+    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
+    GPDd = { {HFL, 0.2},    {GLU, 0.2},   {VAS, 0.2} };// list gain PD controller damper
+    GPDa = { {HFL,160 * dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
+    cd = 0.5;// position/ coeff for  target angle hip SIMBICON
+    cv = 0.2; // velocity coeff for  target angle hip SIMBICON
+    // PD for vas e hfl
+    GP1 = { {HFL, 1.15}, {VAS, 2.0} };
+    GP2 = { {HFL, 0.0 * dDegreeToRad}, {VAS, 15 * dDegreeToRad} };// CHECK ANGLE
+    // stance hip control
+    Glead1 = { {HAM, 1.91},    {GLU, 1.91},   {HFL, 1.91} }; 
+    Glead2 = { {HAM, -5 * dDegreeToRad},    {GLU, -5 * dDegreeToRad},   {HFL, -5 * dDegreeToRad} };
+    Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2} };
 
         /// Control parameter initialization
     
-    Gf = { {GLU, 0.0},    {HAM, 0.0},   {VAS, 0.0},   {SOL, 0.0},     {GAS, 0.0} };// list gain force feedback
-    Gf_TA_SOL = { {SOL, 0.0} };// gain force feedback for TA depending on SOL
-    Glg = { {HFL, 0.0},    {HAM, 0.0},   {TA, 0.0} };// list gain length 1 feedback
-    Glh = { {HFL, 0.6},    {HAM, 1.0},   {TA, 0.8} };// list gain length 2 feedback
-    // stance preparation
-    GPDk = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain  PD controller spring
-    GPDd = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain PD controller damper
-    GPDa = { {HFL, 160*dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
-    cd = 0.0;// position/ coeff for  target angle hip SIMBICON
-    cv = 0.0; // velocity coeff for  target angle hip SIMBICON
-    // P for vas e hfl
-    GP1 = { {HFL, 0.0}, {VAS, 0.0} };
-    GP2 = { {HFL, 0.0*dDegreeToRad}, {VAS, 15*dDegreeToRad} };// inclinazione tronco, 15° flessione ginocchio
-    // stance hip control initialized
-    float trunk_forward_ang = 0 * dDegreeToRad;// inclinazione tronco, negativo in avanti
-    Glead1 = { {HAM, 0.},    {GLU, 0.0},   {HFL, 0.0} };
-    Glead2 = { {HAM, trunk_forward_ang},    {GLU, trunk_forward_ang},   {HFL, trunk_forward_ang} };
-    Glead3 = { {HAM, 0.0},    {GLU, 0.0},   {HFL, 0.0 } };
+    //Gf = { {GLU, 0.0},    {HAM, 0.0},   {VAS, 0.0},   {SOL, 0.0},     {GAS, 0.0} };// list gain force feedback
+    //Gf_TA_SOL = { {SOL, 0.0} };// gain force feedback for TA depending on SOL
+    //Glg = { {HFL, 0.0},    {HAM, 0.0},   {TA, 0.0} };// list gain length 1 feedback
+    //Glh = { {HFL, 0.6},    {HAM, 1.0},   {TA, 0.8} };// list gain length 2 feedback
+    //// stance preparation
+    //GPDk = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain  PD controller spring
+    //GPDd = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain PD controller damper
+    //GPDa = { {HFL, 160*dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
+    //cd = 0.0;// position/ coeff for  target angle hip SIMBICON
+    //cv = 0.0; // velocity coeff for  target angle hip SIMBICON
+    //// P for vas e hfl
+    //GP1 = { {HFL, 0.0}, {VAS, 0.0} };
+    //GP2 = { {HFL, 0.0*dDegreeToRad}, {VAS, 15*dDegreeToRad} };// inclinazione tronco, 15° flessione ginocchio
+    //// stance hip control initialized
+    //// inclinazione tronco, negativo in avanti
+    //Glead1 = { {HAM, 2.0},    {GLU, 2.0},   {HFL, 2.0} };
+    //Glead2 = { {HAM, -5 * dDegreeToRad},    {GLU, -5 * dDegreeToRad},   {HFL, -5 * dDegreeToRad} };
+    //Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2 } };
     
     // excitation list initialization for each muscle
-    list<float> l15(15, 0.01);// 5 ms delay
-    list<float> l30(30, 0.01);// 10 ms delay
-    list<float> l60(60, 0.01);// 20 ms delay 
+    list<float> l15(15, 0.0);// 5 ms delay
+    list<float> l30(30, 0.0);// 10 ms delay
+    list<float> l60(60, 0.0);// 20 ms delay 
 
     uf_l = { {"sol_R", l60 },{"sol_L" , l60},
     {"gas_R", l60 },{"gas_L" , l60},
@@ -122,7 +122,7 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     gP2 = GetGain_P2(m_name);
 
     float u = 0;
-    float p = 0.01, p1 = 0.01, p2 =0.01, s = 0.01, q = 0.01;// initial constant excitation
+    float p = 0.0, p1 = 0.0, p2 =0.0, s = 0.0, q = 0.0;// initial constant excitation
 
     string muscle = MuscleName(m_name, lat);
 
@@ -177,8 +177,8 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     // HIP control stance, HFL GLU HAM
     float u_hip = 0;
     if (m_name == HFL || m_name == GLU || m_name == HAM)// for trunk orientation
-        u_hip = gLead1 * (State_position.find("Strunk")->second - gLead2) + gLead3 * (-State_velocity.find("Strunk")->second);
-    
+        u_hip = gLead1 * (State_position.find("Strunk")->second - gLead2) + gLead3 * (State_velocity.find("Strunk")->second);
+    // 
     // Update of excitation queue for each muscle according to delay
     if (m_name == SOL) {
         uf = gf * f_norm;
@@ -195,7 +195,6 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         UpdateQueue(muscle, uf_l, uf);
         UpdateQueue(muscle, up_l, up);
         UpdateQueue(muscle, u_sp_l, u_sp);
-        cout << u_sp << endl;
     }
     else if (m_name == GAS){
         uf = gf * f_norm;

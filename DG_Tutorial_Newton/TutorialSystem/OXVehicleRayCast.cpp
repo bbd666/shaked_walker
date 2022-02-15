@@ -818,22 +818,39 @@ linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
 
 return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
 }
+// Same method of dCustomJoint
+dFloat dRaycastVHModel::CalculateAngle(const dVector& dir, const dVector& cosDir, const dVector& sinDir) const 
+{
+    //dAssert(dAbs(sinDir.DotProduct3(cosDir)) < dFloat (1.0e-4f));
+    dVector projectDir(dir - sinDir.Scale(dir.DotProduct3(sinDir)));
+    dFloat cosAngle = projectDir.DotProduct3(cosDir);
+    dFloat sinAngle = sinDir.DotProduct3(projectDir.CrossProduct(cosDir));
+    return dAtan2(sinAngle, cosAngle);
+}
+
 // Compute trunk orientation and rotation velocity in sagittal plane
 vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
-{
+{   
+    //dVector cos, sin;
+    //dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();// in globa coordinate??
+    //dVector vertical = dVector(0, 1, 0, 1);
+    //cos = mat.m_front.DotProduct3(dVector(1, 0, 1, 1));
+    //sin = mat.m_right.DotProduct3(dVector(1, 0, 1, 1));
+    //dFloat ang = CalculateAngle(vertical, cos, sin);
+    // 
     dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
-    dVector body = mat.m_front;
+    dVector body(0, mat.m_front.m_y, mat.m_front.m_z, 1);
     dVector vertical = dVector(0, 1, 0, 1);
     dVector aa = body.CrossProduct(vertical);
     float norm = sqrt(pow(aa.m_x, 2) + pow(aa.m_y, 2) + pow(aa.m_z, 2));
     dFloat ang = dAtan2(norm, body.DotProduct3(vertical));
-    if (aa.DotProduct3(dVector(1,0,0,1)) > 0) {
+    if (aa.DotProduct3(dVector(1, 0, 0, 1)) < 0) {
         ang = -ang;
     }
     // save the current joint Omega
     dVector omega0(0.0f);
     NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
-    return { ang, omega0.m_x };
+    return { -ang, omega0.m_x };
 }
 // Compute COM position of the humanoid in global coordinates
 dVector dRaycastVHModel::ComputePlayerCOM()
@@ -976,7 +993,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
 
      //INITIAL CONDITION //
-    if (newTime < 0.08) {
+    if (newTime < 0.1) {
         GeomNewton* BODY = RE_list.find("LPT")->second;
         float vel = -350;
         dVector LPTvel_init = { 0,0,vel };
@@ -1048,6 +1065,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             d = sqrt(pow(com_Player.m_z - com_ankle_l.m_z, 2) + pow(com_Player.m_x - com_ankle_l.m_x, 2));
         Model->controller.ControlSetHorizontalDistance(d);
     }
+
+    if (newTime > 0.1633)
+        int a = 0;
     // update sagittal trunk angle and velocity
     vector<float> state = Model->GetTrunkSagittalState(); 
     Model->controller.SetState(state[0], state[1], "Strunk");

@@ -47,26 +47,14 @@ int WINAPI wWinMain(
 	PWSTR       lpCmdLine,
 	int         nCmdShow)
 #endif
-{
-
+{	
 	WindowMain* ContextGL = new WindowMain();
 	//
 	//
 	ContextGL->SetUseMouseViewRotation(true);
 	//
-	//
-	// create floor object zero mass
-	GeomNewton* Geomfloor = new GeomNewton(ContextGL->aManager);
-	Geomfloor->SetBodyType(adtDynamic);
-	Geomfloor->SetTexTileU(3.0f);
-	Geomfloor->SetTexTileV(3.0f);
-	Geomfloor->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
-	Geomfloor->SetDiffuseColor(0.45f, 0.45f, 0.45f);
-	Geomfloor->InitNewton(atBox, 25.0f, 0.5f, 25.0f);
-	
-	   	 
-
-	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+	//	 
+		DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
 	dMatrix matrix(dGetIdentityMatrix());
 	aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
@@ -88,7 +76,6 @@ int WINAPI wWinMain(
 	// I have test to create the window gl only without the manager or any object and the leak is present.
 	// If I don't create the window the leak go away.
 	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
-	_CrtDumpMemoryLeaks();
 #endif 
 	return 0;
 }
