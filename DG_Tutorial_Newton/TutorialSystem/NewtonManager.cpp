@@ -64,30 +64,6 @@ static int UserOnAABBOverlap(const NewtonJoint* const contactJoint, dFloat times
 	return 1;
 }
 
-void GenericContactProcess(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
-{
-		NewtonBody* const body = NewtonJointGetBody0(contactJoint);
-	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
-		dVector point(0.0f);
-		dVector normal(0.0f);
-		dVector dir0(0.0f);
-		dVector dir1(0.0f);
-		dVector force(0.0f);
-		
-
-		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
-
-		NewtonMaterialGetContactForce(material, body, &force.m_x);
-		NewtonMaterialGetContactPositionAndNormal(material, body, &point.m_x, &normal.m_x);
-		NewtonMaterialGetContactTangentDirections(material, body, &dir0.m_x, &dir1.m_x);
-		//dFloat speed = NewtonMaterialGetContactNormalSpeed(material);
-
-		//speed = NewtonMaterialGetContactNormalSpeed(material);
-		// play sound base of the contact speed.
-		//
-	}
-}
-
 static void UserContactFriction(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
 {
 	/*
@@ -220,9 +196,10 @@ NewtonManager::NewtonManager()
 	int MaterialID = NewtonMaterialGetDefaultGroupID(nWorld);
 	NewtonMaterialSetDefaultCollidable(nWorld, MaterialID, MaterialID, 1);
 	NewtonMaterialSetDefaultSoftness(nWorld, MaterialID, MaterialID, 0.01f);
-	NewtonMaterialSetDefaultElasticity(nWorld, MaterialID, MaterialID, 0.4f);
+	NewtonMaterialSetDefaultElasticity(nWorld, MaterialID, MaterialID, 0.0f);
 	NewtonMaterialSetDefaultFriction(nWorld, MaterialID, MaterialID, 1.25f, 1.25f);
-	NewtonMaterialSetCollisionCallback(nWorld, MaterialID, MaterialID, UserOnAABBOverlap, /*UserContactFriction*/NULL);
+	//NewtonMaterialSetCollisionCallback(nWorld, MaterialID, MaterialID, NULL, UserContactRestitution);
+	NewtonMaterialSetCollisionCallback(nWorld, MaterialID, MaterialID, UserOnAABBOverlap, NULL);
 	//
 	//NewtonSetContactMergeTolerance(nWorld, ncoltol);
 	NewtonInvalidateCache(nWorld);

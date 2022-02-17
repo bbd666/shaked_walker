@@ -29,12 +29,12 @@ figure(x)
 subplot(3,2,1)
 hold on
 eval([char("plot(history.time,history.hip") lat char("_a/pi*180,'k','LineWidth',2)")])
+ylabel('Hip flexion [°]')
 yyaxis right
 eval([char("plot(history.time,history.stance_") lat char(",'or')")])
 eval([char("plot(history.time,history.swing_") lat char(",'ok')")])
 eval([char("plot(history.time,history.sp_") lat char(",'ob')")])
 eval([char("plot(history.time,history.si_") lat char(",'og')")])
-ylabel('Hip angle [°]')
 xlabel('Time [s]')
 ax6 = gca;
 ax6.Box = 'On';
@@ -56,9 +56,8 @@ eval([char("plot(history.time,history.ham") lat char("_T/mass)")])
 eval([char("plot(history.time,history.rf") lat char("_T/mass)")])
 eval([char("plot(history.time,(history.hfl") lat char("_T+history.ham") ...
     lat char("_T+history.rf") lat char("_T+history.glu") lat char("_T)/mass,'-r','LineWidth',3)")])
-ylabel('Hip Torque [Nm/kg]')
+ylabel('Hip extension [Nm/kg]')
 xlabel('Time [s]')
-title('HIP actuators')
 legend('HFL','GLU','HAM','RF','total')
 ax1 = gca;
 ax1.Box = 'On';
@@ -69,7 +68,7 @@ hold off
 subplot(3,2,3)
 hold on
 eval([char("plot(history.time,history.knee") lat char("_a/pi*180,'k','LineWidth',2)")])
-ylabel('Knee angle [°]')
+ylabel('Knee flexion [°]')
 xlabel('Time [s]')
 ax2 = gca;
 ax2.Box = 'On';
@@ -85,10 +84,9 @@ eval([char("plot(history.time,history.vas") lat char("_T/mass)")])
 eval([char("plot(history.time,history.gas") lat char("_T/mass)")])
 eval([char("plot(history.time,(history.ham") lat char("_T1+history.rf") ...
     lat char("_T1+history.vas") lat char("_T+history.gas") lat char("_T)/mass,'-r','LineWidth',3)")])
-ylabel('Knee Torque [Nm/kg]')
+ylabel('Knee flexion [Nm/kg]')
 xlabel('Time [s]')
 legend('HAM','RF','VAS','GAS','total')
-title('KNEE actuators')
 ax3 = gca;
 ax3.Box = 'On';
 ax3.FontSize = 12;
@@ -98,7 +96,7 @@ hold off
 subplot(3,2,5)
 hold on
 eval([char("plot(history.time,history.ankle") lat char("_a/pi*180,'k','LineWidth',2)")])
-ylabel('Ankle angle [°]')
+ylabel('Ankle dorsiflection [°]')
 xlabel('Time [s]')
 ax4 = gca;
 ax4.Box = 'On';
@@ -112,10 +110,9 @@ eval([char("plot(history.time,history.sol") lat char("_T/mass)")])
 eval([char("plot(history.time,history.gas") lat char("_T1/mass)")])
 eval([char("plot(history.time,(history.ta") lat char("_T+history.sol") ...
     lat char("_T+history.gas") lat char("_T1)/mass,'-r','LineWidth',3)")])
-ylabel('Ankle Torque [Nm/kg]')
+ylabel('Ankle plantarflexion [Nm/kg]')
 xlabel('Time [s]')
 legend('TA','SOL','GAS','total')
-title('ANKLE actuators')
 ax5 = gca;
 ax5.Box = 'On';
 ax5.FontSize = 12;
@@ -130,7 +127,7 @@ figure
 hold on
 subplot(2,1,1)
 plot(history.time,history.trunk_ang*180/pi)
-ylabel('Angle trunk [°]')
+ylabel('Trunk sagittal inclination [°]')
 xlabel('Time [s]')
 subplot(2,1,2)
 plot(history.time,history.trunk_vel)

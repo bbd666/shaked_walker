@@ -426,7 +426,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case KNEE_R:
 	{
 		// HAM
-		if (m_name == HAM) // RF
+		if (m_name == RF) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}
@@ -438,7 +438,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case KNEE_L:
 	{
 		// HAM
-		if (m_name == HAM) // RF
+		if (m_name == RF) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}

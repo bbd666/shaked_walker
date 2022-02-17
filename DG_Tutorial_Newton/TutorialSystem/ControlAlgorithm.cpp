@@ -7,45 +7,24 @@
 
 ControlAlgorithm::ControlAlgorithm()
 {
-    /// Control parameter initialization WANG's values
-    Gf = { {GLU, 0.5},    {HAM, 0.65},   {VAS, 1.2},   {SOL, 1.2},     {GAS, 1.1} };// list gain force feedback
+    /// Control parameter initialization 
+    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 2.95},   {SOL, 1.2},     {GAS, 1.1} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.4} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 0.5},    {HAM, 4.0},   {TA, 1.1} };// list gain length 1 feedback
+    Glg = { {HFL, 1.1},    {HAM, 0.0},   {TA, 0.255} };// list gain length 1 feedback
     Glh = { {HFL, 0.65},    {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
     GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
     GPDd = { {HFL, 0.2},    {GLU, 0.2},   {VAS, 0.2} };// list gain PD controller damper
     GPDa = { {HFL,160 * dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
-    cd = 0.5;// position/ coeff for  target angle hip SIMBICON
-    cv = 0.2; // velocity coeff for  target angle hip SIMBICON
+    cd = 0.0;// position/ coeff for  target angle hip SIMBICON
+    cv = 0.0; // velocity coeff for  target angle hip SIMBICON
     // PD for vas e hfl
-    GP1 = { {HFL, 1.15}, {VAS, 2.0} };
-    GP2 = { {HFL, 0.0 * dDegreeToRad}, {VAS, 15 * dDegreeToRad} };// CHECK ANGLE
+    GP1 = { {HFL, 0.15}, {VAS, 2.0} };
+    GP2 = { {HFL, 10 * dDegreeToRad}, {VAS, 15 * dDegreeToRad} };// CHECK ANGLE
     // stance hip control
-    Glead1 = { {HAM, 1.91},    {GLU, 1.91},   {HFL, 1.91} }; 
+    Glead1 = { {HAM, 1.91},    {GLU, 1.91},   {HFL, 1.91} };
     Glead2 = { {HAM, -5 * dDegreeToRad},    {GLU, -5 * dDegreeToRad},   {HFL, -5 * dDegreeToRad} };
     Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2} };
-
-        /// Control parameter initialization
-    
-    //Gf = { {GLU, 0.0},    {HAM, 0.0},   {VAS, 0.0},   {SOL, 0.0},     {GAS, 0.0} };// list gain force feedback
-    //Gf_TA_SOL = { {SOL, 0.0} };// gain force feedback for TA depending on SOL
-    //Glg = { {HFL, 0.0},    {HAM, 0.0},   {TA, 0.0} };// list gain length 1 feedback
-    //Glh = { {HFL, 0.6},    {HAM, 1.0},   {TA, 0.8} };// list gain length 2 feedback
-    //// stance preparation
-    //GPDk = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain  PD controller spring
-    //GPDd = { {HFL, 0.0},    {GLU, 0.0},   {VAS, 0.0} };// list gain PD controller damper
-    //GPDa = { {HFL, 160*dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
-    //cd = 0.0;// position/ coeff for  target angle hip SIMBICON
-    //cv = 0.0; // velocity coeff for  target angle hip SIMBICON
-    //// P for vas e hfl
-    //GP1 = { {HFL, 0.0}, {VAS, 0.0} };
-    //GP2 = { {HFL, 0.0*dDegreeToRad}, {VAS, 15*dDegreeToRad} };// inclinazione tronco, 15° flessione ginocchio
-    //// stance hip control initialized
-    //// inclinazione tronco, negativo in avanti
-    //Glead1 = { {HAM, 2.0},    {GLU, 2.0},   {HFL, 2.0} };
-    //Glead2 = { {HAM, -5 * dDegreeToRad},    {GLU, -5 * dDegreeToRad},   {HFL, -5 * dDegreeToRad} };
-    //Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2 } };
     
     // excitation list initialization for each muscle
     list<float> l15(15, 0.0);// 5 ms delay
@@ -122,7 +101,7 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     gP2 = GetGain_P2(m_name);
 
     float u = 0;
-    float p = 0.0, p1 = 0.0, p2 =0.0, s = 0.0, q = 0.0;// initial constant excitation
+    float p = 0.01, p1 = 0.05, p2 =0.08, s = 0.0, q = 0.01;// initial constant excitation
 
     string muscle = MuscleName(m_name, lat);
 
@@ -137,7 +116,7 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     float up = 0;
     if (m_name == VAS) {
         if (lat == 'R') {
-            if (State_velocity.find("Sknee_r")->second < 0)// compute excitation just if the knee just if ankle velocity is negative
+            if (State_velocity.find("Sknee_r")->second < 0)// compute excitation just if the knee  extension velocity is positive
                 if (State_position.find("Sknee_r")->second - gP2 < 0)//negative excitation just if knee angle is below a threshold
                     up = gP1 * (State_position.find("Sknee_r")->second - gP2);
         }
@@ -148,7 +127,10 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         }
     }
     else if (m_name == HFL)
-        up = gP1 * (abs(State_position.find("Strunk")->second) - gP2);//Trunk orientation control
+        if (State_position.find("Strunk")->second - gP2 < 0)
+            up = gP1 * abs(State_position.find("Strunk")->second - gP2);//Trunk orientation control
+        else
+            up = 0;
     
     // control during stance preparation VAS HFL GLU
     float u_sp = 0;
@@ -156,20 +138,20 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     if (lat == 'R') {
         if (m_name == VAS) {
             angle = State0_position.find("Sknee_r")->second - State_position.find("Sknee_r")->second;
-            u_sp = gPDk * (angle - gPDa) + gPDd * State_velocity.find("Sknee_r")->second;
+            u_sp = gPDk * (angle - gPDa) - gPDd * State_velocity.find("Sknee_r")->second;
         }
-        else if (m_name == HFL || m_name == GLU) {
+        else if (m_name == GLU || m_name == HFL) {
             angle = State0_position.find("Ship_r")->second + State_position.find("Ship_r")->second;
-            u_sp = gPDk * (angle - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * State_velocity.find("Ship_r")->second;
+            u_sp = gPDk * (angle - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * State_velocity.find("Ship_r")->second;// check segno velocità com
         }
     }
     else
     {
         if (m_name == VAS) {
             angle = State0_position.find("Sknee_l")->second - State_position.find("Sknee_l")->second;
-            u_sp = gPDk * (angle - gPDa) + gPDd * State_velocity.find("Sknee_l")->second;
+            u_sp = gPDk * (angle - gPDa) - gPDd * State_velocity.find("Sknee_l")->second;
         }
-        else if (m_name == HFL || m_name == GLU) {
+        else if (m_name == GLU || m_name == HFL) {
             angle = State0_position.find("Ship_l")->second + State_position.find("Ship_l")->second;
             u_sp = gPDk * (angle - (gPDa + cd * d + cv * (-com_Playervel.m_z))) + gPDd * State_velocity.find("Ship_l")->second;
         }
@@ -188,6 +170,8 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     }
     else if (m_name == TA) {
         ul = glg * (l_til - glh);
+        if (ul < 0)
+            ul = 0;
         UpdateQueue(muscle, ul_l, ul);
     }
     else if (m_name == VAS) {
@@ -202,6 +186,8 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     }
     else if (m_name == HFL) {
         ul = glg * (l_til - glh);
+        if (ul < 0)
+            ul = 0;
         UpdateQueue(muscle, ul_l, ul);
         UpdateQueue(muscle, u_sp_l, u_sp);
         UpdateQueue(muscle, up_l, up);
@@ -214,6 +200,8 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         uf = gf * f_norm;
         UpdateQueue(muscle, uf_l, uf);
         ul = glg * (l_til - glh);
+        if (ul < 0)
+            ul = 0;
         UpdateQueue(muscle, ul_l, ul);
         if (!DS || (DS && lat == lead))// if double stance, onlt leading leg is responsible of trunk orientation
             UpdateQueue(muscle, uHIP_s_l, u_hip);
@@ -242,14 +230,14 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         case GAS:
             u = p + uf_l[muscle].front();break;
         case VAS: {
-            u = uf_l[muscle].front() + up_l[muscle].front();break;}
+            u = p2 + uf_l[muscle].front() + up_l[muscle].front();break;}
         case HAM: {
             if (uHIP_s_l[muscle].front() > 0)// torque on trunk rotates the body forward
                 u = p1 + abs(uHIP_s_l[muscle].front());
             else
                 u = p1;
             break;}
-        case GLU:{
+        case GLU: {
             if (uHIP_s_l[muscle].front() > 0)// torque on trunk rotates the body forward
                 u = p1 + abs(uHIP_s_l[muscle].front());
             else
@@ -264,18 +252,19 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         case RF:// RF
             u = p;break;
         }
-    }
-    if (SI) { // || DS for walking? // s values from wang supplemental material section 5
-        switch (m_name) {
-        case VAS:
-            u = u-1;break;
-        case RF:
-            u = u+0.01;break;
-        case GLU:
-            u = u-0.25;break;
-        case HFL:
-            u = u+0.25;break;
-        }// other muscles same as stance
+
+        if (SI) { // || DS for walking? // s values from wang supplemental material section 5
+            switch (m_name) {
+            case VAS:
+                u = u - 1;break;
+            case RF:
+                u = u + 0.01;break;
+            case GLU:
+                u = u - 0.25;break;
+            case HFL:
+                u = u + 0.25;break;
+            }// other muscles same as stance
+        }
     }
     if (SWING) {
         switch (m_name) {
@@ -300,20 +289,21 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
         default:// RF, SOL, GAS, VAS
             u = q;break;
         }
-    }
-    if (SP) {
-        //Muscle-driven PD control in Stance Preparation//
-        if (m_name == HFL) {
-            if (u_sp_l[muscle].front() > 0) // torque on thigh lifts the knee up
-                u = q + abs(u_sp_l[muscle].front());
-            else
-                u = q;
-        }
-        else if (m_name == VAS || m_name == GLU) { 
-            if (u_sp_l[muscle].front() < 0)// GLU: torque on thigh pushes down the knee, VAS: extension on knee
-                u = q + abs(u_sp_l[muscle].front());
-            else
-                u = q;
+
+        if (SP) {
+            //Muscle-driven PD control in Stance Preparation//
+            if (m_name == GLU) {
+                if (u_sp_l[muscle].front() > 0) // torque on thigh lifts the knee up
+                    u = q + abs(u_sp_l[muscle].front());
+                else
+                    u = q;
+            }
+            else if (m_name == VAS || m_name == HFL) {
+                if (u_sp_l[muscle].front() < 0)// GLU: torque on thigh pushes down the knee, VAS: extension on knee
+                    u = q + abs(u_sp_l[muscle].front());
+                else
+                    u = q;
+            }
         }
     }
     if (u < p)// security check: no negative values

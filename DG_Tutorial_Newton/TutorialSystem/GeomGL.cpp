@@ -32,6 +32,19 @@
 #include "GeomGL.h"
 #include "WindowGL.h"
 
+static int UserOnAABBOverlap(const NewtonJoint* const contactJoint, dFloat timestep, int threadIndex)
+{
+#ifdef _DEBUG
+	NewtonBody* const body0 = NewtonJointGetBody0(contactJoint);
+	NewtonBody* const body1 = NewtonJointGetBody1(contactJoint);
+	NewtonJoint* const contact0 = NewtonBodyFindContact(body0, body1);
+	NewtonJoint* const contact1 = NewtonBodyFindContact(body1, body0);
+	dAssert(!contact0 || contact0 == contactJoint);
+	dAssert(!contact1 || contact1 == contactJoint);
+#endif	
+	return 1;
+}
+
 static void HandleSoftContacts(const NewtonJoint* const contactJoint, dFloat timestep, int threadIndex)
 {
 	// iterate over all contact point checking is a sphere shape belong to the Biped,
@@ -49,6 +62,82 @@ static void HandleSoftContacts(const NewtonJoint* const contactJoint, dFloat tim
 		if ((NewtonCollisionGetType(shape0) == SERIALIZE_ID_SPHERE) || (NewtonCollisionGetType(shape1) == SERIALIZE_ID_SPHERE)) {
 			NewtonMaterialSetAsSoftContact(material, 0.01f);
 		}
+	}
+}
+
+void GenericContactProcess(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
+{
+	NewtonBody* const body = NewtonJointGetBody0(contactJoint);
+	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+		dVector point(0.0f);
+		dVector normal(0.0f);
+		dVector dir0(0.0f);
+		dVector dir1(0.0f);
+		dVector force(0.0f);
+
+
+		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+
+		NewtonMaterialGetContactForce(material, body, &force.m_x);
+		NewtonMaterialGetContactPositionAndNormal(material, body, &point.m_x, &normal.m_x);
+		NewtonMaterialGetContactTangentDirections(material, body, &dir0.m_x, &dir1.m_x);
+		//dFloat speed = NewtonMaterialGetContactNormalSpeed(material);
+
+		//speed = NewtonMaterialGetContactNormalSpeed(material);
+		// play sound base of the contact speed.
+		//
+	}
+}
+
+static void UserContactRestitution(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
+{
+	// call  the basic call back
+	GenericContactProcess(contactJoint, timestep, threadIndex);
+
+	const NewtonBody* const body0 = NewtonJointGetBody0(contactJoint);
+	const NewtonBody* const body1 = NewtonJointGetBody1(contactJoint);
+
+	//now core 3.14 can have per collision user data
+	const NewtonCollision* const collision0 = NewtonBodyGetCollision(body0);
+	const NewtonCollision* const collision1 = NewtonBodyGetCollision(body1);
+
+	NewtonCollisionMaterial material0;
+	NewtonCollisionMaterial material1;
+	NewtonCollisionGetMaterial(collision0, &material0);
+	NewtonCollisionGetMaterial(collision1, &material1);
+	dAssert((material0.m_userId == 1) || (material1.m_userId == 1));
+	material0.m_userParam[0].m_float = 1;
+	dFloat restitution = dMax(material0.m_userParam[0].m_float, material1.m_userParam[0].m_float);
+
+	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+		NewtonMaterialSetContactElasticity(material, restitution);
+	}
+}
+
+static void UserContactFriction(const NewtonJoint* contactJoint, dFloat timestep, int threadIndex)
+{
+	// call  the basic call back
+	GenericContactProcess(contactJoint, timestep, threadIndex);
+
+	const NewtonBody* const body0 = NewtonJointGetBody0(contactJoint);
+	const NewtonBody* const body1 = NewtonJointGetBody1(contactJoint);
+
+	//now core 3.14 can have per rampCollision user data
+	const NewtonCollision* const collision0 = NewtonBodyGetCollision(body0);
+	const NewtonCollision* const collision1 = NewtonBodyGetCollision(body1);
+
+	NewtonCollisionMaterial material0;
+	NewtonCollisionMaterial material1;
+	NewtonCollisionGetMaterial(collision0, &material0);
+	NewtonCollisionGetMaterial(collision1, &material1);
+	dAssert((material0.m_userId == 1) || (material1.m_userId == 1));
+	dFloat frictionValue = dMax(material0.m_userParam[0].m_float, material1.m_userParam[0].m_float);
+
+	for (void* contact = NewtonContactJointGetFirstContact(contactJoint); contact; contact = NewtonContactJointGetNextContact(contactJoint, contact)) {
+		NewtonMaterial* const material = NewtonContactGetMaterial(contact);
+		NewtonMaterialSetContactFrictionCoef(material, frictionValue + 0.1f, frictionValue, 0);
+		NewtonMaterialSetContactFrictionCoef(material, frictionValue + 0.1f, frictionValue, 1);
 	}
 }
 
@@ -388,9 +477,17 @@ void GeomNewton::GenerateMesh()
 
 	  NewtonMaterialSetCallbackUserData(aManager->GetWorld(), material, material, this);
 	  NewtonMaterialSetDefaultElasticity(aManager->GetWorld(), material, material, 0.0f);
-	  NewtonMaterialSetDefaultFriction(aManager->GetWorld(), material, material, 0.9f, 0.9f);
-	  NewtonMaterialSetCollisionCallback(aManager->GetWorld(), material, material, NULL, HandleSoftContacts);
-	  
+	  NewtonMaterialSetDefaultFriction(aManager->GetWorld(), material, material, 1.0f, 0.9f);
+      NewtonMaterialSetCollisionCallback(aManager->GetWorld(), material, material, NULL, HandleSoftContacts);
+	  if (aMeshType == atSphere) {
+		  NewtonCollisionMaterial mat;
+		  NewtonCollisionGetMaterial(mColl, &mat);
+		  mat.m_userId = 1;
+		  // save restitution coefficient in param[0]
+		  mat.m_userParam[0].m_float = 0.001;
+		  NewtonCollisionSetMaterial(mColl, &mat);
+	  }
+	  //NewtonMaterialSetCollisionCallback(aManager->GetWorld(), material, material, NULL, UserContactRestitution);
 	  //
       aVerticeCount = NewtonMeshGetPointCount(nMesh);
 	  //

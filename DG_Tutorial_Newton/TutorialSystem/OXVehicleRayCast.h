@@ -41,6 +41,7 @@ public:
 	void DrawFrame(const dVector& posit, dFloat scale);
 	//virtual void DrawFrame(const dMatrix& matrix, dFloat scale);
 	int CreateLine();
+	void CreateDescreteContactFootCollision(NewtonBody* const footBody) const;
 	vector<dFloat> GetTrunkSagittalState();
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
@@ -58,7 +59,7 @@ private:
 	/// <RIGID ELEMENTS>
 	GeomNewton* box;
 	GeomNewton* Geomfloor;
-	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l","MPT", "UPT"};//  RIGID ELEMENTS OF THE MODEL
+	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l","MPT", "UPT", "Toe_r", "Toe_l"};//  RIGID ELEMENTS OF THE MODEL
 	//std::vector<std::string> body_keys = {  "LPT"};//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
@@ -99,11 +100,13 @@ private:
 	/// <JOINTS>
 	dCustomDoubleHinge* Hip_r;
 	dCustomHinge* Knee_r;
+	dCustomHinge* Toe_r;
 	//dCustomBallAndSocket* Ankle;
 	dCustomDoubleHinge* Ankle_r;
 
 	dCustomDoubleHinge* Hip_l;
 	dCustomHinge* Knee_l;
+	dCustomHinge* Toe_l;
 	//dCustomBallAndSocket* Ankle;
 	dCustomDoubleHinge* Ankle_l;
 
@@ -112,7 +115,7 @@ private:
 
 	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l"};
 	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2" };
+	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2", "Toe_r", "Toe_l"};
 	map<std::string, dCustomHinge*> JHinge;//  muscle as map: use muscle_keys as string
 	/// </JOINTS>
 
