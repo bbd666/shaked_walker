@@ -43,6 +43,9 @@ public:
 	int CreateLine();
 	void CreateDescreteContactFootCollision(NewtonBody* const footBody) const;
 	vector<dFloat> GetTrunkSagittalState();
+	vector<dFloat> GetTrunkCoronalState();
+	vector<dFloat> GetFootCoronalState(string body);
+	float ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref);
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
 	GeomNewton* Get_Floor();
@@ -52,20 +55,31 @@ public:
 	map<std::string, dCustomDoubleHinge*> Get_DoubleHingeJointList();
 	float GetLegLength();
 	ControlAlgorithm controller;
+	void AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2);
 
 private:
 	WindowMain* m_winManager;
+	void AssemblyCreation();
+	void TrunkCreation();
+	void LegCreation(string trunk, string thigh, string shank, string foot, string toes, string hip, string knee, string ankle, string toe_hinge);
+	void RigidBodyCreation(string body);
+	void HingeJoint(string jname, string body1, string body2, dVector pos, float minAng, float maxAng);
+	void DoubleHingeJoint(string jname, string body1, string body2, dVector pos, float minAng1, float maxAng1, float minAng2, float maxAng2);
+	
+	float LPT_A ,ThighR_A,ThighL_A,Shank_A ,Foot_A;
 
 	/// <RIGID ELEMENTS>
 	GeomNewton* box;
 	GeomNewton* Geomfloor;
 	std::vector<std::string> body_keys = { "LPT","Thigh_r","Shank_r", "Foot_r","Thigh_l","Shank_l", "Foot_l","MPT", "UPT", "Toe_r", "Toe_l"};//  RIGID ELEMENTS OF THE MODEL
-	//std::vector<std::string> body_keys = {  "LPT"};//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
 	map<std::string, dVector*> body_dim;// vector of body dimension
-	map<std::string, std::string> child_father;// bodies tree
+	map<std::string, std::string> child_father = { {"Thigh_r", "LPT"}, {"Shank_r", "Thigh_r"}, {"Foot_r", "Shank_r"},
+		{"Thigh_l", "LPT"}, {"Shank_l", "Thigh_l"}, {"Foot_l", "Shank_l"},
+		{"MPT", "LPT"}, {"UPT", "MPT"},
+		{"Toe_r", "Foot_r"}, {"Toe_l", "Foot_l"} };// list with body child and father relationship;// bodies tree
 	int COMXline_id;// id of line passing though com
 	int COMYline_id;// id of line passing though com
 	int COMZline_id;// id of line passing though com
@@ -75,7 +89,6 @@ private:
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
 	//std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l" };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
-	//std::vector<std::string> muscle_keys = {  };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle
@@ -98,24 +111,12 @@ private:
 	/// </MUSCLES>
 	
 	/// <JOINTS>
-	dCustomDoubleHinge* Hip_r;
-	dCustomHinge* Knee_r;
-	dCustomHinge* Toe_r;
-	//dCustomBallAndSocket* Ankle;
-	dCustomDoubleHinge* Ankle_r;
-
-	dCustomDoubleHinge* Hip_l;
-	dCustomHinge* Knee_l;
-	dCustomHinge* Toe_l;
-	//dCustomBallAndSocket* Ankle;
-	dCustomDoubleHinge* Ankle_l;
-
-	dCustomHinge* spine1;
-	dCustomHinge* spine2;
+	dCustomSlider* slider;
+	dCustomSlider* slider2;
 
 	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l"};
 	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2", "Toe_r", "Toe_l"};
+	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2", "Toe_hinge_r", "Toe_hinge_l"};
 	map<std::string, dCustomHinge*> JHinge;//  muscle as map: use muscle_keys as string
 	/// </JOINTS>
 
@@ -139,7 +140,7 @@ private:
 
 	float l_Hip,l_Up_Leg,l_Low_Leg,r_bones,l_foot,w_foot,l_toe,h_foot;
 	float scale_mass, scale_length;
-	float l_Clav,l_Up_Arm,l_Low_Arm,l_Hand,l_Head, r_Pad, h_sphere,l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j;
+	float l_Clav,l_Up_Arm,l_Low_Arm,l_Hand,l_Head, r_Pad, h_sphere,l_UPT, l_MPT, l_LPT, l_trunk, l_neck, l_delta, ankle_j, knee_j;
 
 	dVector  ContactFoot_L,NormalFoot_L,ContactGround_L;
 	dVector  ContactFoot,NormalFoot,ContactGround;

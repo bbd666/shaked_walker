@@ -9,6 +9,7 @@ class ControlAlgorithm
 public:
 	ControlAlgorithm();
 	~ControlAlgorithm();
+	float PD_controller(string dof, bool leading);
 	float MTU_excitation(Mtuname m_name,
 
  vector<bool> gait_state,
@@ -29,11 +30,16 @@ public:
 	float GetGain_P1(Mtuname NAME);
 	float GetGain_P2(Mtuname NAME);
 	vector<float> GetGain_HFLswing();
+	vector<float> GetGain_PD(string dof, bool lead);
+
+	float GetTrunkInclination();
 
 	void SetState(float position, float velocity, string dof);
 	void SetState0(float position, float velocity, string dof);
 	vector<float> GetState(string dof);
 	vector<float> GetState0(string dof);
+
+	float GetInitialVelocity();
 
 	void UpdateQueue(string muscle, map<string, list<float>> &queue, float value);
 	string MuscleName(Mtuname name, char lat);
@@ -48,7 +54,8 @@ private:
 	map<Mtuname, float> GPDd;// gain PD controller damper
 	map<Mtuname, float> GPDa;// gain PD controller angle
 	float cd, cv;
-
+	float trunk_a; // initial trunk forward inclination in rad
+	float Vel_initial; // initial force applied to lpt
 	map<Mtuname, float> GP1; // gain P controller hfl in swing 
 	map<Mtuname, float> GP2; // gain P controller hfl in swing 
 
@@ -65,6 +72,14 @@ private:
 
 	map<string, list<float>>f_ta_sol_l;// force values for TA depending on SOL
 
+	// PD controllers params
+	map<string, float> G1; // gain P 
+	map<string, float> G2; // gain D 
+	map<string, float> G3; // gain target angle 
+
+	map<string, float> G1lead; // gain P for leading leg
+	map<string, float> G2lead; // gain D  for leading leg
+	map<string, float> G3lead; // gain target angle  for leading leg
 	/// </Control parameters>
 
 	// State of each controlled dof
