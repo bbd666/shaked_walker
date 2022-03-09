@@ -45,6 +45,7 @@ public:
 	vector<dFloat> GetTrunkSagittalState();
 	vector<dFloat> GetTrunkCoronalState();
 	vector<dFloat> GetFootCoronalState(string body);
+	vector<dFloat> GetTrunkFrontalState();
 	float ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref);
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
@@ -56,6 +57,8 @@ public:
 	float GetLegLength();
 	ControlAlgorithm controller;
 	void AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2);
+	void SetSimulationCost(float cost);
+	float GetSimulationCost();
 
 private:
 	WindowMain* m_winManager;
@@ -145,6 +148,8 @@ private:
 	dVector  ContactFoot_L,NormalFoot_L,ContactGround_L;
 	dVector  ContactFoot,NormalFoot,ContactGround;
 	/// </GEOMETRIC AND INERTIA PARAMS>
+
+	float SimulationCost;
 };
 
 class DGVehicleRCManager: public dModelManager
@@ -158,7 +163,7 @@ public:
 	virtual void OnUpdateTransform(const dModelNode* const bone, const dMatrix& localMatrix) const;
 	virtual void OnDebug(dModelRootNode* const model, dCustomJoint::dDebugDisplay* const debugContext);
 	//
-	dModelRootNode* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
+	dRaycastVHModel* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
 	int GetContactPoints(NewtonBody* const body, dVector* const points) const;
 private:
 	WindowMain* m_winManager;

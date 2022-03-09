@@ -480,11 +480,6 @@ void WindowMain::ContextKeypress(int key, int scancode, int action, int mods)
 	}
 }
 
-void WindowMain::SetFootPos_L(string s)
-{
-	FootPos_L=s;
-}
-
 NewtonMousePick* WindowMain::GetMousePicking()
 {
 	return aMousePick;
@@ -575,51 +570,17 @@ MainCamera* WindowMain::GetCamera()
 	return Camera;
 }
 
+void WindowMain::SetSimulationTime(float time)
+{
+	Time = time;
+}
+
 void WindowMain::MainLoop(){
 	ImGui_ImplGlfwGL3_Init(contextGL, false);
-	//initialize excitation list
-	//std::vector<float> initExcitation = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	std::vector<float> initExcitation = { 0.0};
 
-	while (!glfwWindowShouldClose(contextGL))
+	while (!glfwWindowShouldClose(contextGL) && Time < 1.0)// stop simulation if window is closed or simulation time is 10 s
 	{
-		////create empty frame
-		//ImGui_ImplGlfwGL3_NewFrame();
-
-		//// populate frame with 16 Sliders: 8 for left, 8 for right
-		//{
-		//	ImGui::Text("Excitation");
-
-		//	ImGui::Columns(1);
-
-		//	ImGui::SliderFloat("HFL Left", &initExcitation[0], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("GLU Left", &initExcitation[1], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("HAM Left", &initExcitation[2], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("RF Left", &initExcitation[3], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("VAS Left", &initExcitation[4], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("SOL Left", &initExcitation[5], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("TA Left", &initExcitation[6], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("GAS Left", &initExcitation[7], 0.0f, 1.0f);
-
-		//	//ImGui::NextColumn();
-
-		//	//ImGui::SliderFloat("SOL Right", &initExcitation[8], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("TA Right", &initExcitation[9], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("GAS Right", &initExcitation[10], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("VAS Right", &initExcitation[11], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("HAM Right", &initExcitation[12], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("RF Right", &initExcitation[13], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("GLU Right", &initExcitation[14], 0.0f, 1.0f);
-		//	//ImGui::SliderFloat("HFL Right", &initExcitation[15], 0.0f, 1.0f);
-
-		//	//set excitation values if the ImGui box is clicked
-		//	//if not for this check, values of excitation are set redundantly at every frame
-		//	//if (ImGui::IsMouseHoveringWindow() && ImGui::IsMouseDown(0))
-		//	//	aManager->SetExcitationList(initExcitation);
-		//}
-
 		MainRender();
-		/*ImGui::Render();*/
 		glfwSwapBuffers(contextGL);
 		glfwPollEvents();
 	}
@@ -698,7 +659,7 @@ void WindowMain::MainRender()
 				//
 				if (delayerfps >= 1000) {
 					std::stringstream ss;
-					ss  << "left foot distance from the Ground : " << FootPos_L << " - Walking Humanoid - " << " [" << aManager->GetFps() << " :fps "<< aManager->GetPhysicTime() * 1000.0f <<" :ms]";
+					ss  <<" - Walking Humanoid - " << " [" << aManager->GetFps() << " :fps "<< aManager->GetPhysicTime() * 1000.0f <<" :ms]";
 					glfwSetWindowTitle(contextGL, ss.str().c_str());
 					delayerfps = 0;
 				}

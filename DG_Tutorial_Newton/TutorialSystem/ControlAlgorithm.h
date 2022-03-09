@@ -18,12 +18,19 @@ public:
 	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float contact);
 	void ControlSetHorizontalDistance(float d);
 
+	void SetGain_InitialCondition(float trunk_a, float trunx_vel);
+
+	vector<float> GetGain_InitialCondition();
+
+	void SetGain_Force_Feedback(Mtuname NAME, float val);
+
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);
 	float GetGain2_Length_Feedback(Mtuname NAME);
 	float GetGain_PDk(Mtuname NAME);
 	float GetGain_PDd(Mtuname NAME);
 	float GetGain_PDa(Mtuname NAME);
+	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
 	float GetGain_Lead1(Mtuname NAME);
 	float GetGain_Lead2(Mtuname NAME);
 	float GetGain_Lead3(Mtuname NAME);
@@ -43,6 +50,8 @@ public:
 
 	void UpdateQueue(string muscle, map<string, list<float>> &queue, float value);
 	string MuscleName(Mtuname name, char lat);
+
+	float SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, vector<float> Strunk, vector<float> Ftrunk);
 private:
 	float d; // horizontal distance between foot and player com
 	/// <Control parameters>
@@ -88,6 +97,8 @@ private:
 
 	map<string, float> State0_position;// initial angle
 	map<string, float> State0_velocity;// initial velocity
+
+	float cost; // creturn simulation cost
 };
 
 #endif // _CONTROL_ALGORITHM_H_

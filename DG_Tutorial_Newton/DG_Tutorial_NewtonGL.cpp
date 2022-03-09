@@ -34,9 +34,8 @@
 #include "biped.h"
 #include "OXVehicleRayCast.h"
 
-
 #if defined(_DEBUG)
-int main()
+int main(int argc, char *argv[])
 // if you like to use windows mode. 
 // Comment the main section here, And uncomment the winmain section.
 // Remember you to replace the console mode to windows mode in the preprossesor menu and in the system menu options.
@@ -56,11 +55,34 @@ int WINAPI wWinMain(
 	//	 
 		DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
 	dMatrix matrix(dGetIdentityMatrix());
-	aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
+	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
+#if defined(NDEBUG)
+	// Convert the wide character wchar_t string to a string
+	wchar_t** origin = __wargv;
+	vector<string> argv(__argc);
+	for (int i=0; i < __argc; ++i) {
+		wstring ws(origin[i]);
+		string str(ws.begin(), ws.end());
+		argv[i] = str;
+	}
+
+	if (__argc > 1) {
+		Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]));
+		Model->controller.SetGain_StanceLead(stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]));
+	}
+#else
+	if (argc > 1) {
+		Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]));
+		Model->controller.SetGain_StanceLead(stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]));
+	}
+#endif
+
+	float cost = 0;
 	if (ContextGL != NULL) {
 		ContextGL->MainLoop();
 
+		cost = Model->GetSimulationCost();
 		//
 		// delete context and newton manager and close tutorial.
 		//if (man) { delete(man); }
@@ -77,5 +99,5 @@ int WINAPI wWinMain(
 	// If I don't create the window the leak go away.
 	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
 #endif 
-	return 0;
+	return cost;
 }

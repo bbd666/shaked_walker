@@ -250,6 +250,7 @@ dRaycastVHModel::~dRaycastVHModel()
 dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName, const dMatrix& location, int linkMaterilID)
     : dModelRootNode(NULL, dGetIdentityMatrix())
     , m_winManager(winctx)
+    , SimulationCost(0.0f)
 
 {
     // create floor object zero mass
@@ -355,7 +356,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
 
     LPT_A = -controller.GetTrunkInclination();// theta see model notes figure 1
     ThighR_A = 40 * dDegreeToRad;// alpha right see model notes figure 1
-    ThighL_A = 0 * dDegreeToRad;// alpha left leg see model notes figure 1
+    ThighL_A = -5 * dDegreeToRad;// alpha left leg see model notes figure 1
     Shank_A = 10 * dDegreeToRad;// beta see model notes figure 1
     Foot_A = -10 * dDegreeToRad;// gamma see model notes figure 1
 
@@ -368,7 +369,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     controller.SetState0(-LPT_A, 0, "Strunk");
 
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
-    dVector _Pos0(dVector(0.0f,0.09+ (l_LPT / 2) + l_Up_Leg + l_Low_Leg + h_foot, -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
+    dVector _Pos0(dVector(0.0f,0.13+ (l_LPT / 2) + l_Up_Leg + l_Low_Leg + h_foot, -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
 
     dVector _Pos1(dVector(l_Hip / 2, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighR_A), (l_LPT / 2) * sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighR_A)));// Thigh_r
     dVector _Pos2(dVector(0.0f, -(l_Up_Leg / 2) * cos(ThighR_A) - (l_Low_Leg / 2) * cos(ThighR_A - Shank_A), -(l_Up_Leg / 2) * sin(ThighR_A) - (l_Low_Leg / 2) * sin(ThighR_A - Shank_A)));// Shank_r 
@@ -690,7 +691,7 @@ vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
     return { ang, omega0.m_x };
 }
 
-// Compute trunk orientation and rotation velocity in  medio-lateral
+// Compute trunk orientation and rotation velocity in  coronal plane
 vector<dFloat> dRaycastVHModel::GetTrunkCoronalState()
 {   
     dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
@@ -701,6 +702,18 @@ vector<dFloat> dRaycastVHModel::GetTrunkCoronalState()
     dVector omega0(0.0f);
     NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
     return { ang, omega0.m_z };
+}
+// Compute trunk orientation and rotation velocity in  frontal plane
+vector<dFloat> dRaycastVHModel::GetTrunkFrontalState()
+{
+    dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
+    dVector dir = dVector(mat.m_front.m_x, 0, mat.m_front.m_z, 1);
+    dFloat ang = ComputeAngleBWVectors(dir, dVector(0, 0, -1, 1), dVector(0, 1, 0, 1));
+
+    // save the current joint Omega
+    dVector omega0(0.0f);
+    NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
+    return { ang, omega0.m_y };
 }
 vector<dFloat> dRaycastVHModel::GetFootCoronalState(string body)
 {
@@ -955,9 +968,9 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     if (body == "Foot_r" || body == "Foot_l" || body == "Toe_l" || body == "Toe_r")
         rigid_element[body]->InitNewton(atBox, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z, 1.0f);
     else
-        rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z, 1.0f);
+        rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z*0.5f, 1.0f);// smaller length of capsule to remove fake force due to compenetration of collision
 
-    //if (body == "Foot_l")
+    //if (body == "Foot_r")
     //    NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
     //else
         NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
@@ -1012,6 +1025,14 @@ void dRaycastVHModel::AddActionReactionTorque(float Torque, dVector pin, GeomNew
         NewtonBodyAddTorque(b2->GetBody(), &pin.m_x);
     }
 }
+void dRaycastVHModel::SetSimulationCost(float cost)
+{
+    SimulationCost = cost;
+}
+float dRaycastVHModel::GetSimulationCost()
+{
+    return SimulationCost;
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
@@ -1021,7 +1042,7 @@ DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
     
 }
 
-dModelRootNode* DGVehicleRCManager::CreateWalkerPlayer(const char* const modelName, const dMatrix& location)
+dRaycastVHModel* DGVehicleRCManager::CreateWalkerPlayer(const char* const modelName, const dMatrix& location)
 {
     dRaycastVHModel* const controller = new dRaycastVHModel(m_winManager, modelName, location, 0);
 
@@ -1056,6 +1077,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 //pour VS<VS2017 supprimer ,int threadID
 {
     dRaycastVHModel* Model = (dRaycastVHModel*)model;
+
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
     map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
 
@@ -1140,8 +1162,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         }
 
         // update sagittal trunk angle and velocity
-        vector<float> state = Model->GetTrunkSagittalState();// trunk vertical vector projection on sagittal plane);
-        Model->controller.SetState(state[0], state[1], "Strunk");
+        vector<float> Strunk = Model->GetTrunkSagittalState();// trunk vertical vector projection on sagittal plane);
+        Model->controller.SetState(Strunk[0], Strunk[1], "Strunk");
 
         //scan all  Muscle Elements
         for (auto itr = m_winManager->aManager->vMuscleList.begin();
@@ -1272,11 +1294,13 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             // update for next force update
             Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE
 
-            //// stamp u of all muscles
-            //monFlux << u << "  ";// Use Test_excitations.m to see data
+            #if defined(_DEBUG)
+                //// stamp u of all muscles
+                //monFlux << u << "  ";// Use Test_excitations.m to see data
 
-            // stamp torque of all muscles 
-            monFlux << Ttemp.m_x << "  " << Ttemp.m_y << "  ";
+                // stamp torque of all muscles 
+                monFlux << Ttemp.m_x << "  " << Ttemp.m_y << "  ";
+            #endif
         }
         // Stuff for plots
         vector<float> statehipr = Model->controller.GetState("Ship_r");
@@ -1294,12 +1318,13 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         vector<float> state0ankler = Model->controller.GetState0("Sankle_r");
         vector<float> state0anklel = Model->controller.GetState0("Sankle_l");
 
-        // verify total torque on joints
-        monFlux << newTime << "  " << statehipr[0] << "  " << statekneer[0] << "  " << stateankler[0]
-            << "  " << statehipl[0] << "  " << statekneel[0] << "  " << stateanklel[0] << "  " << stateLPT[0] << "  " << stateLPT[1] <<
-            "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
-            "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << endl;
-
+        #if defined(_DEBUG)
+            // verify total torque on joints
+            monFlux << newTime << "  " << statehipr[0] << "  " << statekneer[0] << "  " << stateankler[0]
+                << "  " << statehipl[0] << "  " << statekneel[0] << "  " << stateanklel[0] << "  " << stateLPT[0] << "  " << stateLPT[1] <<
+                "  " << state_foot_r[0] << "  " << state_foot_r[1] << "  " << state_foot_r[2] << "  " << state_foot_r[3] <<
+                "  " << state_foot_l[0] << "  " << state_foot_l[1] << "  " << state_foot_l[2] << "  " << state_foot_l[3] << endl;
+        #endif
         //// verify excitations
         ////monFlux << newTime << "  " << state0hipr[0]+statehipr[0] << "  " << state0kneer[0]+statekneer[0] << "  " << state0kneer[0]+stateankler[0] <<
         ////    "  " << state0hipl[0]+statehipl[0] << "  " << state0kneel[0]+statekneel[0] << "  " << state0anklel[0]+stateanklel[0] <<
@@ -1316,7 +1341,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         if (1) {
             dVector pin(0.0, 0.0, 1.0);// pin for torque around Z axis
             // trunk vertical medio-lateral control: replaces pelvis horizontal 
-            state = Model->GetTrunkCoronalState();
+            vector<float> state = Model->GetTrunkCoronalState();
             Model->controller.SetState(state[0], state[1], "Ctrunk");
 
             float torque = Model->controller.PD_controller("Ctrunk" , lead == 'R');
@@ -1353,7 +1378,15 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             // END OF PD CONTROLLERS STUFF /////////////////////////////////////////
         }
     }
+    // COST FUNCTION COMPUTATION
+    vector<dFloat> Strunk = Model->GetTrunkSagittalState();
+    vector<dFloat> Ftrunk = Model->GetTrunkFrontalState();
+    dVector COM_vel = Model->ComputePlayerCOMvelocity();
+    float cost = Model->controller.SimulationReturnValue(com_Player.m_y, COM_vel, Strunk, Ftrunk);
+    Model->SetSimulationCost(cost);
+    
     newTime = newTime + timestep; // update time
+    m_winManager->SetSimulationTime(newTime);
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const

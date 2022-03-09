@@ -7,17 +7,21 @@
 
 ControlAlgorithm::ControlAlgorithm()
 {
+    // Initial condition
+    trunk_a = -5 * dDegreeToRad;// [rad] negative forward
+    Vel_initial = -1.0; // [m/s]// negative forward
+
     /// Control parameter initialization 
     Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 0.5},   {SOL, 1.2},     {GAS, 1.1} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.4} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 1.1},    {HAM, 0.0},   {TA, 0.255} };// list gain length 1 feedback
+    Glg = { {HFL, 1.1},    {HAM, 0.5},   {TA, 0.255} };// list gain length 1 feedback
     Glh = { {HFL, 0.65},    {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
-    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
+    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 0.5} };// list gain  PD controller spring
     GPDd = { {HFL, 0.2},    {GLU, 0.2},   {VAS, 0.2} };// list gain PD controller damper
     GPDa = { {HFL,160 * dDegreeToRad},    {GLU, 160 * dDegreeToRad},   {VAS, 150 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
-    cd = 0.0;// position/ coeff for  target angle hip SIMBICON
-    cv = 0.0; // velocity coeff for  target angle hip SIMBICON
+    cd = 0.5;// position coeff for  target angle hip SIMBICON
+    cv = 0.2; // velocity coeff for  target angle hip SIMBICON
     // PD for vas e hfl
     GP1 = { {HFL, 0.15}, {VAS, 2.0} };
     GP2 = { {HFL, 10 * dDegreeToRad}, {VAS, 25 * dDegreeToRad} };// CHECK ANGLE
@@ -25,9 +29,6 @@ ControlAlgorithm::ControlAlgorithm()
     Glead1 = { {HAM, 1.91},    {GLU, 1.91},   {HFL, 1.91} };
     Glead2 = { {HAM, -5 * dDegreeToRad},    {GLU, -5 * dDegreeToRad},   {HFL, -5 * dDegreeToRad} };
     Glead3 = { {HAM, 0.2},    {GLU, 0.2},   {HFL, 0.2} };
-    
-    trunk_a = -20 * dDegreeToRad;// [rad] negative forward
-    Vel_initial = -4.0; // [m/s]// negative forward
 
     // PD controllers OUT of Sagittal plane
     G1 = { {"Ctrunk", 1000}, {"Cfoot", 30}};
@@ -90,6 +91,7 @@ ControlAlgorithm::ControlAlgorithm()
     {"Strunk", 0}, {"Ctrunk", 0} ,
     {"Cfoot_r", 0}, {"Cfoot_l", 0} };
 
+    cost = 0; // cost value initialization
 }
 
 ControlAlgorithm::~ControlAlgorithm()
@@ -369,6 +371,21 @@ void ControlAlgorithm::ControlSetHorizontalDistance(float d1)
      d = d1;
 }
 
+void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float Tvel) {
+    trunk_a = -Tangle;// [rad] negative forward
+    Vel_initial = -Tvel; // [m/s]// negative forward
+}
+
+vector<float> ControlAlgorithm::GetGain_InitialCondition() {
+    vector<float> v = { trunk_a, Vel_initial };
+    return(v);
+}
+
+void ControlAlgorithm::SetGain_Force_Feedback(Mtuname NAME, float val) {
+    if (NAME == SOL || NAME == GAS || NAME == VAS || NAME == HAM || NAME == GLU)
+        Gf.find(NAME)->second = val;
+}
+
 float ControlAlgorithm::GetGain_Force_Feedback(Mtuname NAME) {
     float g = 0;
     if (NAME == SOL || NAME == GAS || NAME == VAS || NAME == HAM || NAME == GLU)
@@ -414,6 +431,21 @@ float ControlAlgorithm::GetGain_PDa(Mtuname NAME)
     if (NAME == VAS || NAME == GLU || NAME == HFL)
         g = GPDa.find(NAME)->second;
     return g;
+}
+
+void ControlAlgorithm::SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl)
+{
+    Glead1.find(HAM)->second = Pham;
+    Glead2.find(HAM)->second = -Aham;
+    Glead3.find(HAM)->second = Dham;
+
+    Glead1.find(GLU)->second = Pglu;
+    Glead2.find(GLU)->second = -Aglu;
+    Glead3.find(GLU)->second = Dglu;
+
+    Glead1.find(HFL)->second = Phfl;
+    Glead2.find(HFL)->second = -Ahfl;
+    Glead3.find(HFL)->second = Dhfl;
 }
 
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)
@@ -546,4 +578,34 @@ string ControlAlgorithm::MuscleName(Mtuname m_name, char lat)
         muscle = "rf_";muscle += lat;
     }
     return muscle;
+}
+
+float ControlAlgorithm::SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, vector<float> Strunk, vector<float> Ftrunk)
+{
+    float Kfail = 0, Kvel = 0, Ktorso = 0;
+    float target_velz = -(1.25 - 0.05); // target forward velocity in [m/s]
+    float target_height = 0.7; // target height in [m]
+    float target_pelvis_ang = 0 * dDegreeToRad; // target pelvis angle between the target direction and the global - Z direction in [rad]
+
+    // fail task term
+    if (COMY_pos < target_height)
+        Kfail = 100;
+
+    // velocity task term
+    if (abs(COM_vel.m_z - target_velz) > 0.05)// forward velocity
+        Kvel += (COM_vel.m_z - target_velz)*(COM_vel.m_z - target_velz);
+
+    if (abs(COM_vel.m_x) > 0.05)// lateral velocity
+        Kvel += (COM_vel.m_x) * (COM_vel.m_x);
+
+    // torso task term
+    if (abs(Ftrunk[0] - target_pelvis_ang) > 0.05)// pelvis front orientation
+        Ktorso += 0.01 * (Ftrunk[0] - target_pelvis_ang) * (Ftrunk[0] - target_pelvis_ang);
+
+    if (abs(Strunk[0]) > 0.1)// trunk sagittal orientation CHECK VALUE
+        Ktorso += 0.1 * (Strunk[0]) * (Strunk[0]);
+
+    cost += (Kfail + Kvel + Ktorso); // missing minimization of torque and head orientation and foot contact
+
+    return cost;
 }
