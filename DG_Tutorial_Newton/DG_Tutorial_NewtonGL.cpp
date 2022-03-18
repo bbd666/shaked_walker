@@ -57,26 +57,30 @@ int WINAPI wWinMain(
 	dMatrix matrix(dGetIdentityMatrix());
 	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
-#if defined(NDEBUG)
-	// Convert the wide character wchar_t string to a string
-	wchar_t** origin = __wargv;
-	vector<string> argv(__argc);
-	for (int i=0; i < __argc; ++i) {
-		wstring ws(origin[i]);
-		string str(ws.begin(), ws.end());
-		argv[i] = str;
-	}
+	#if defined(NDEBUG)
+		// Convert the wide character wchar_t string to a string
+		wchar_t** origin = __wargv;
+		vector<string> argv(__argc);
+		for (int i=0; i < __argc; ++i) {
+			wstring ws(origin[i]);
+			string str(ws.begin(), ws.end());
+			argv[i] = str;
+		}
 
-	if (__argc > 1) {
-		Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]));
-		Model->controller.SetGain_StanceLead(stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]));
-	}
-#else
-	if (argc > 1) {
-		Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]));
-		Model->controller.SetGain_StanceLead(stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]));
-	}
-#endif
+		if (__argc > 1) {
+			Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]), stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]));
+			Model->controller.SetGain_StanceLead(stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]));
+			Model->controller.SetGain_ForceFeedback(stof(argv[16]), stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]));
+			Model->controller.SetGain_LengthFeedback(stof(argv[22]), stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]));
+		}
+	#else
+		if (argc > 1) {
+			Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]), stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]));
+			Model->controller.SetGain_StanceLead(stof(argv[7]), stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]));
+			Model->controller.SetGain_ForceFeedback(stof(argv[16]), stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]));
+			Model->controller.SetGain_LengthFeedback(stof(argv[22]), stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]));
+		}
+	#endif
 
 	float cost = 0;
 	if (ContextGL != NULL) {
