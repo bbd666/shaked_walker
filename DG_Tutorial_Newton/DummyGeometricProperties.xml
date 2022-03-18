@@ -5,13 +5,13 @@
 	   <!--Scaling factor of length and mass-->
         <Scale length ="1.0" mass ="1.0"/>
 	   <!-- Lengths in m, Weight in kg, Masses in % of Weight, Inertia in Radius of gyration in % of Weight, COM in % (starting from proximal point of each segment) of length, Angles in degrees, Insertion Points' distances in m (starting from COM)  -->
-        <Lengths Head="0.203" UpArm="0.282" ForeArm="0.269" Hand="0.086" Trunk="0.532" Thigh="0.422" Shank="0.434" Foot="0.258" Toes="0.047" UPT="0.171" MPT="0.216" LPT="0.146" Hip="0.166" Shoulder="0.225" FootBreadth="0.15" AnkleHeight="0.0126" Neck="0.040" RadBones="0.035" RadSpheres="0.03"/>
+        <Lengths Head="0.203" UpArm="0.282" ForeArm="0.269" Hand="0.086" Trunk="0.532" Thigh="0.422" Shank="0.434" Foot="0.258" Toes="0.047" UPT="0.171" MPT="0.216" LPT="0.146" Hip="0.166" Shoulder="0.225" FootBreadth="0.10" AnkleHeight="0.0126" Neck="0.040" RadBones="0.035" RadSpheres="0.03"/>
 		<Weight value="73.0"/>
 		<Masses Head="0.069" UpArm="0.027" ForeArm="0.016" Hand="0.006" Trunk="0.435" Thigh="0.142" Shank="0.043" Foot="0.014" Toes="0.003" UPT="0.219" MPT="0.224" LPT="0.153"/>
 		<Inertia>
-			<Ixx Head="0.376" UpArm="0.269" ForeArm="0.265" Hand="0.513" Trunk="0.347" Thigh="0.329" Shank="0.255" Foot="0.245" Toes="1.432" UPT="0.454" MPT="0.383" LPT="0.551"/>
-			<Iyy Head="0.312" UpArm="0.158" ForeArm="0.121" Hand="0.401" Trunk="0.191" Thigh="0.149" Shank="0.103" Foot="0.124" Toes="0.021" UPT="0.454" MPT="0.383" LPT="0.551"/>
-			<Izz Head="0.362" UpArm="0.285" ForeArm="0.276" Hand="0.628" Trunk="0.372" Thigh="0.329" Shank="0.255" Foot="0.257" Toes="0.068" UPT="0.659" MPT="0.468" LPT="0.587"/>
+			<Ixx Head="0.376" UpArm="0.269" ForeArm="0.265" Hand="0.513" Trunk="0.347" Thigh="0.329" Shank="0.249" Foot="0.245" Toes="1.432" UPT="0.454" MPT="0.383" LPT="0.551"/>
+			<Iyy Head="0.312" UpArm="0.158" ForeArm="0.121" Hand="0.401" Trunk="0.191" Thigh="0.149" Shank="0.103" Foot="0.124" Toes="0.640" UPT="0.659" MPT="0.468" LPT="0.587"/>
+			<Izz Head="0.362" UpArm="0.285" ForeArm="0.276" Hand="0.628" Trunk="0.372" Thigh="0.329" Shank="0.255" Foot="0.257" Toes="0.453" UPT="0.716" MPT="0.482" LPT="0.615"/>
 		</Inertia>
 		<COM Head="0.600" UpArm="0.580" ForeArm="0.460" Hand="0.790" Trunk="0.450" Thigh="0.410" Shank="0.450" Foot="0.440" Toes="0.500" UPT="0.300" MPT="0.450" LPT="0.612"/>
 		<Angles Hip="0.0" Clav="0.0" />

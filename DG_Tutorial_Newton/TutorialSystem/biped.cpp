@@ -370,21 +370,21 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	{
 		 // GLU HAM
 		switch (m_name) {
-		case HFL: {T.m_x = T.m_x * (-1);break;}
-		case RF: {T.m_x = T.m_x * (-1);break;}}
+		case GLU: {T.m_x = T.m_x * (-1);break;}
+		case HAM: {T.m_x = T.m_x * (-1);break;}}
 		break;
 	}
 	case KNEE_R:
 	{
 		 // GAS 
-		if (m_name == VAS) // VAS
+		if (m_name == GAS) // VAS
 			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case ANKLE_R:
 	{
 		//  SOL
-		if (m_name == TA) // TA
+		if (m_name == SOL) // TA
 			T.m_x = T.m_x * (-1);
 		break;
 	}
@@ -392,22 +392,22 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	{
 		// GLU HAM
 		switch (m_name) {
-		case HFL: {T.m_x = T.m_x * (-1);break;}
-		case RF: {T.m_x = T.m_x * (-1);break;}
+		case GLU: {T.m_x = T.m_x * (-1);break;}
+		case HAM: {T.m_x = T.m_x * (-1);break;}
 		}
 		break;
 	}
 	case KNEE_L:
 	{
 		 // GAS 
-		if (m_name == VAS) // VAS
+		if (m_name == GAS) // VAS
 			T.m_x = T.m_x * (-1);
 		break;
 	}
 	case ANKLE_L:
 	{
 		 //  SOL
-		if (m_name == TA) // TA
+		if (m_name == SOL) // TA
 			T.m_x = T.m_x * (-1);
 		break;
 	}
@@ -426,7 +426,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case KNEE_R:
 	{
 		// HAM
-		if (m_name == RF) // RF
+		if (m_name == HAM) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}
@@ -438,7 +438,7 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case KNEE_L:
 	{
 		// HAM
-		if (m_name == RF) // RF
+		if (m_name == HAM) // RF
 			T.m_y = T.m_y * (-1);
 		break;
 	}

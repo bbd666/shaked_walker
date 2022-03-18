@@ -45,7 +45,7 @@ public:
 	vector<dFloat> GetTrunkSagittalState();
 	vector<dFloat> GetTrunkCoronalState();
 	vector<dFloat> GetFootCoronalState(string body);
-	vector<dFloat> GetTrunkFrontalState();
+	vector<dFloat> GetTrunkTransverseState();
 	float ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref);
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
@@ -59,6 +59,7 @@ public:
 	void AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2);
 	void SetSimulationCost(float cost);
 	float GetSimulationCost();
+	float GetHipLength();
 
 private:
 	WindowMain* m_winManager;

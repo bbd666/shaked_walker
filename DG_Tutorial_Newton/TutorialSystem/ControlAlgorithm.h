@@ -10,19 +10,21 @@ public:
 	ControlAlgorithm();
 	~ControlAlgorithm();
 	float PD_controller(string dof, bool leading);
-	float MTU_excitation(Mtuname m_name,
-
- vector<bool> gait_state,
+	float MTU_excitation(Mtuname m_name,vector<bool> gait_state,
 		char lead, char lat, float l_til, float f_norm, dVector com_Playervel);// the ouput is the excitation signal for muscle m_name
-	//
+	
 	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float contact);
-	void ControlSetHorizontalDistance(float d);
 
-	void SetGain_InitialCondition(float trunk_a, float trunx_vel);
-
-	vector<float> GetGain_InitialCondition();
-
+	void SetPlayerCOMvel(dVector COMvel);
+	void SetSagittalDistance(float d);
+	void SetCoronalDistance(float d1);
+	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float Tvel);
 	void SetGain_Force_Feedback(Mtuname NAME, float val);
+	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
+
+	void SetGain_ForceFeedback(float Gf_glu, float Gf_ham, float Gf_vas, float Gf_sol, float Gf_gas, float Gf_tasol);
+
+	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
 
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);
@@ -30,7 +32,6 @@ public:
 	float GetGain_PDk(Mtuname NAME);
 	float GetGain_PDd(Mtuname NAME);
 	float GetGain_PDa(Mtuname NAME);
-	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
 	float GetGain_Lead1(Mtuname NAME);
 	float GetGain_Lead2(Mtuname NAME);
 	float GetGain_Lead3(Mtuname NAME);
@@ -39,21 +40,23 @@ public:
 	vector<float> GetGain_HFLswing();
 	vector<float> GetGain_PD(string dof, bool lead);
 
-	float GetTrunkInclination();
+	vector<float>  GetInitialCondition();
 
 	void SetState(float position, float velocity, string dof);
 	void SetState0(float position, float velocity, string dof);
 	vector<float> GetState(string dof);
 	vector<float> GetState0(string dof);
 
-	float GetInitialVelocity();
-
 	void UpdateQueue(string muscle, map<string, list<float>> &queue, float value);
 	string MuscleName(Mtuname name, char lat);
 
 	float SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, vector<float> Strunk, vector<float> Ftrunk);
 private:
-	float d; // horizontal distance between foot and player com
+	dVector COMvel;
+	// SIMBICON target angle parameters and values
+	float cd, cv, cd1, cv1;
+	float dz; // sagittal distance between foot and player com
+	float dx; // coronal distance between foot and player com
 	/// <Control parameters>
 	map<Mtuname, float> Gf;// gain force feedback
 	map<Mtuname, float> Gf_TA_SOL;// gain force feedback fo TA depending on SOL
@@ -62,9 +65,7 @@ private:
 	map<Mtuname, float> GPDk;// gain PD controller stiffness
 	map<Mtuname, float> GPDd;// gain PD controller damper
 	map<Mtuname, float> GPDa;// gain PD controller angle
-	float cd, cv;
-	float trunk_a; // initial trunk forward inclination in rad
-	float Vel_initial; // initial force applied to lpt
+
 	map<Mtuname, float> GP1; // gain P controller hfl in swing 
 	map<Mtuname, float> GP2; // gain P controller hfl in swing 
 
@@ -90,6 +91,14 @@ private:
 	map<string, float> G2lead; // gain D  for leading leg
 	map<string, float> G3lead; // gain target angle  for leading leg
 	/// </Control parameters>
+
+	// initial conditions
+	float trunk_a; // initial trunk forward inclination in rad
+	float Vel_initial; // initial force applied to lpt
+	float AlphaR;
+	float AlphaL;
+	float Beta;
+	float Gamma;
 
 	// State of each controlled dof
 	map<string, float> State_position;// angle

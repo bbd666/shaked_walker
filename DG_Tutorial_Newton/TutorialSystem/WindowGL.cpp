@@ -578,7 +578,7 @@ void WindowMain::SetSimulationTime(float time)
 void WindowMain::MainLoop(){
 	ImGui_ImplGlfwGL3_Init(contextGL, false);
 
-	while (!glfwWindowShouldClose(contextGL) && Time < 1.0)// stop simulation if window is closed or simulation time is 10 s
+	while (!glfwWindowShouldClose(contextGL) && Time < 5.0f)// stop simulation if window is closed or simulation time is 10 s
 	{
 		MainRender();
 		glfwSwapBuffers(contextGL);

@@ -120,7 +120,7 @@ struct WindowMain
 	NewtonManager* aManager;
 	//
 	LineDebugManager* aLineManager;
-	void SetFootPos_L(string s);
+	void SetSimulationTime(float time);
 
 private:
 	NewtonMousePick* aMousePick;
@@ -139,7 +139,8 @@ private:
 	float mousescrlx;
 	float mousescrly;
 	int delayerfps;
-	string FootPos_L;
+	
+	float Time;
 };
 
 // WIP: unimplemented, I let's it present just to remember have I need to do later.
