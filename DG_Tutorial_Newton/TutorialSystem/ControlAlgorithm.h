@@ -18,7 +18,7 @@ public:
 	void SetPlayerCOMvel(dVector COMvel);
 	void SetSagittalDistance(float d);
 	void SetCoronalDistance(float d1);
-	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float Tvel);
+	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float Tvel, float elbow);
 	void SetGain_Force_Feedback(Mtuname NAME, float val);
 	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
 
@@ -26,6 +26,7 @@ public:
 
 	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
 
+	vector<float> GetShoulderTargetAngles(string state);
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);
 	float GetGain2_Length_Feedback(Mtuname NAME);
@@ -42,6 +43,8 @@ public:
 
 	vector<float>  GetInitialCondition();
 
+	vector<float> GetArmParams();
+
 	void SetState(float position, float velocity, string dof);
 	void SetState0(float position, float velocity, string dof);
 	vector<float> GetState(string dof);
@@ -57,6 +60,9 @@ private:
 	float cd, cv, cd1, cv1;
 	float dz; // sagittal distance between foot and player com
 	float dx; // coronal distance between foot and player com
+
+	// arm params
+	float alfa, beta, gamma;
 	/// <Control parameters>
 	map<Mtuname, float> Gf;// gain force feedback
 	map<Mtuname, float> Gf_TA_SOL;// gain force feedback fo TA depending on SOL
@@ -94,11 +100,12 @@ private:
 
 	// initial conditions
 	float trunk_a; // initial trunk forward inclination in rad
-	float Vel_initial; // initial force applied to lpt
+	float head_a; // initial force applied to lpt
 	float AlphaR;
 	float AlphaL;
 	float Beta;
 	float Gamma;
+	float elbow_a;
 
 	// State of each controlled dof
 	map<string, float> State_position;// angle

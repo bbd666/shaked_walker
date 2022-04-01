@@ -84,7 +84,7 @@ eval([char("plot(history.time,history.vas") lat char("_T/mass)")])
 eval([char("plot(history.time,history.gas") lat char("_T/mass)")])
 eval([char("plot(history.time,(history.ham") lat char("_T1+history.rf") ...
     lat char("_T1+history.vas") lat char("_T+history.gas") lat char("_T)/mass,'-r','LineWidth',3)")])
-ylabel('Knee flexion [Nm/kg]')
+ylabel('Knee extension [Nm/kg]')
 xlabel('Time [s]')
 legend('HAM','RF','VAS','GAS','total')
 ax3 = gca;
@@ -105,10 +105,10 @@ hold off
 
 subplot(3,2,6)
 hold on
-eval([char("plot(history.time,history.ta") lat char("_T/mass)")])
-eval([char("plot(history.time,history.sol") lat char("_T/mass)")])
-eval([char("plot(history.time,history.gas") lat char("_T1/mass)")])
-eval([char("plot(history.time,(history.ta") lat char("_T+history.sol") ...
+eval([char("plot(history.time,-history.ta") lat char("_T/mass)")])
+eval([char("plot(history.time,-history.sol") lat char("_T/mass)")])
+eval([char("plot(history.time,-history.gas") lat char("_T1/mass)")])
+eval([char("plot(history.time,-(history.ta") lat char("_T+history.sol") ...
     lat char("_T+history.gas") lat char("_T1)/mass,'-r','LineWidth',3)")])
 ylabel('Ankle plantarflexion [Nm/kg]')
 xlabel('Time [s]')

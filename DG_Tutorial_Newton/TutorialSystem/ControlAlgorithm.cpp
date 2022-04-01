@@ -7,47 +7,95 @@
 
 ControlAlgorithm::ControlAlgorithm()
 {
+    //// Initial condition
+    //trunk_a = -10 * dDegreeToRad;// [rad] negative forward
+    //AlphaR = 0 * dDegreeToRad;// alpha right see model notes figure 1
+    //AlphaL = 25* dDegreeToRad;// alpha left leg see model notes figure 1
+    //Beta = 10 * dDegreeToRad;// beta see model notes figure 1
+    //Gamma = 0 * dDegreeToRad;// gamma see model notes figure 1
+    //Vel_initial = -1.8f; // [m/s]// negative forward
+    State_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} ,
+    {"Cfoot_r", 0}, {"Cfoot_l", 0},
+    {"Ttrunk", 0},
+    {"Shead", 0},
+    {"Selbow_r", 0},
+    {"Sshoulder_r", 0} };
+
+    State_position = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} ,
+    {"Ttrunk", 0},
+    {"Cfoot_r", 0}, {"Cfoot_l", 0},
+    {"Shead", 0},
+    {"Selbow_r", 0},
+    {"Sshoulder_r", 0} };
+
+    State0_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} ,
+    {"Cfoot_r", 0}, {"Cfoot_l", 0},
+    {"Shead", 0} };
+    State0_position = { {"Sknee_r", 0},{"Sknee_l", 0},
+    {"Ship_r", 0},{"Ship_l", 0},
+    {"Sankle_r", 0},{"Sankle_l", 0} ,
+    {"Strunk", 0}, {"Ctrunk", 0} ,
+    {"Cfoot_r", 0}, {"Cfoot_l", 0},
+    {"Shead", 0} };
+
     // Initial condition
-    trunk_a = -10 * dDegreeToRad;// [rad] negative forward
-    AlphaR = -5 * dDegreeToRad;// alpha right see model notes figure 1
-    AlphaL = 25 * dDegreeToRad;// alpha left leg see model notes figure 1
-    Beta = 10 * dDegreeToRad;// beta see model notes figure 1
+    trunk_a = 0 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
+    AlphaR = 2 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
+    AlphaL = -18 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
+    Beta = 5 * dDegreeToRad;// beta see model notes figure 1
     Gamma = -10 * dDegreeToRad;// gamma see model notes figure 1
-    Vel_initial = -2.3f; // [m/s]// negative forward
+    head_a = -10 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
+    elbow_a = 80 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
+
+    vector<float> shoulder_a = GetShoulderTargetAngles("Initial");
 
     /// Control parameter initialization 
-    Gf = { {GLU, 0.1},    {HAM, 0.0},   {VAS, 1.2},   {SOL, 1.2},     {GAS, 2.0} };// list gain force feedback
-    Gf_TA_SOL = { {SOL, 0.4} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 4.5 },   {HAM, 0.5 },   {TA, 0.45 } };// list gain length 1 feedback
-    Glh = { {HFL, 1.0},   {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
+    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.2} };// list gain force feedback
+    Gf_TA_SOL = { {SOL, 0.3} };// gain force feedback for TA depending ofìn SOL
+    Glg = { {HFL, 1.0 },   {HAM, 1.0 },   {TA, 0.55 } };// list gain length 1 feedback
+    Glh = { {HFL, 0.65},   {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
-    GPDk = { {HFL, 0.5},    {GLU, 0.5},   {VAS, 0.5} };// list gain  PD controller spring
+    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
     GPDd = { {HFL, 0.1},    {GLU, 0.1},   {VAS, 0.1} };// list gain PD controller damper
-    GPDa = { {HFL, 160 * dDegreeToRad},   {GLU, 160 * dDegreeToRad},   {VAS, 150 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
+    GPDa = { {HFL, 160 * dDegreeToRad},   {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
 
-    cd = 0.2;// position coeff for  target angle hip SIMBICON
-    cv = 0.2; // velocity coeff for  target angle hip SIMBICON
+    cd = 0.2;// position coeff for  target angle sagittal hip SIMBICON
+    cv = 0.2; // velocity coeff for  target angle sagittal hip SIMBICON
 
     // stance hip control
-    Glead1 = { {HAM, 2.00},         {GLU, 2.00},        {HFL, 2.00} };
+    Glead1 = { {HAM, 1.90},         {GLU, 1.90},        {HFL, 1.90} };
     Glead2 = { {HAM, -5 * dDegreeToRad},      {GLU, -5 * dDegreeToRad},     {HFL, -5 * dDegreeToRad} };
     Glead3 = { {HAM, 0.2},          {GLU, 0.2},         {HFL, 0.2} };
 
     // PD for vas e hfl
-    GP1 = { {HFL, 2.0},                        {VAS, 2.0} };
+    GP1 = { {HFL, 1.0},                        {VAS, 2.0} };
     GP2 = { {HFL, Glead2.find(HFL)->second},    {VAS, 170 * dDegreeToRad} };// CHECK ANGLE
 
-    // PD controllers OUT of Sagittal plane
-    G1 = { {"Ctrunk", 220}, {"Cfoot", 30}, {"Ttrunk", 300}};
-    G2 = { {"Ctrunk", 10}, {"Cfoot", 3}, {"Ttrunk", 30} };
-    G3 = { {"Ctrunk", 0 * dDegreeToRad}, {"Cfoot", 0 * dDegreeToRad} , {"Ttrunk", 0 * dDegreeToRad} };
+    // PD controllers 
+    G1 = { {"Ctrunk", 200},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},                 {"Selbow_r", 30},       {"SshoulderR", 30} };
+    G2 = { {"Ctrunk", 10},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow_r", 3},        {"SshoulderR", 3} };
+    G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", 0 * dDegreeToRad},    {"Selbow_r", elbow_a},  {"SshoulderR", -shoulder_a[0]} };
 
-    G1lead = { {"Ctrunk", 1000}, {"Cfoot", 30} };
-    G2lead = { {"Ctrunk", 100}, {"Cfoot", 3} };
-    G3lead = { {"Ctrunk", 0 * dDegreeToRad}, {"Cfoot", 0 * dDegreeToRad} };
+    G1lead = { {"Ctrunk", 1000},            {"Cfoot", 200} };
+    G2lead = { {"Ctrunk", 100},             {"Cfoot", 30} };
+    G3lead = { {"Ctrunk", 0 * dDegreeToRad},{"Cfoot", 0 * dDegreeToRad} };
 
-    cd1 = 0.2;// position coeff for  target angle hip SIMBICON
-    cv1 = 0.2; // velocity coeff for  target angle hip SIMBICON
+    cd1 = 0.2;// position coeff for  target angle coronal hip SIMBICON
+    cv1 = 0.2; // velocity coeff for  target angle coronal hip SIMBICON
+
+    // arm parameters
+    beta = -13.0f / 48.0f;
+    gamma = -13.0f / 96.0f;
+    alfa = 0.25f;
     // 
     // excitation list initialization for each muscle
     list<float> l15(15, 0.0);// 5 ms delay
@@ -79,31 +127,9 @@ ControlAlgorithm::ControlAlgorithm()
 
     f_ta_sol_l = { {"sol_R", l60 },{"sol_L" , l60} };
 
-    State_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
-    {"Ship_r", 0},{"Ship_l", 0},
-    {"Sankle_r", 0},{"Sankle_l", 0} ,
-    {"Strunk", 0}, {"Ctrunk", 0} ,
-    {"Cfoot_r", 0}, {"Cfoot_l", 0},
-    {"Ttrunk", 0} };
-    State_position = { {"Sknee_r", 0},{"Sknee_l", 0},
-    {"Ship_r", 0},{"Ship_l", 0},
-    {"Sankle_r", 0},{"Sankle_l", 0} ,
-    {"Strunk", 0}, {"Ctrunk", 0} ,
-    {"Ttrunk", 0},
-    {"Cfoot_r", 0}, {"Cfoot_l", 0} };
 
-    State0_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
-    {"Ship_r", 0},{"Ship_l", 0},
-    {"Sankle_r", 0},{"Sankle_l", 0} ,
-    {"Strunk", 0}, {"Ctrunk", 0} ,
-    {"Cfoot_r", 0}, {"Cfoot_l", 0} };
-    State0_position = { {"Sknee_r", 0},{"Sknee_l", 0},
-    {"Ship_r", 0},{"Ship_l", 0},
-    {"Sankle_r", 0},{"Sankle_l", 0} ,
-    {"Strunk", 0}, {"Ctrunk", 0} ,
-    {"Cfoot_r", 0}, {"Cfoot_l", 0} };
 
-    cost = 0; // cost value initialization
+    //cost = 0; // cost value initialization
 }
 
 ControlAlgorithm::~ControlAlgorithm()
@@ -125,7 +151,7 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
             torque = -torque;
         return torque;
     }
-    if (dof.compare("Ttrunk") == 0)// transverse control of pelvis orientation
+    else if (dof.compare("Ttrunk") == 0)// transverse control of pelvis orientation
     {
         vector<float> gains = GetGain_PD(dof, leading);
         return torque = -(gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
@@ -134,6 +160,11 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
     {
         vector<float> gains = GetGain_PD("Cfoot", leading);
         return torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
+    }
+    else if (dof.compare("Shead") == 0 || dof.compare("Selbow_r") == 0)// sagittal control of head orientation
+    {
+        vector<float> gains = GetGain_PD(dof, false);
+        return torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
     }
 }
 //MTU control law based on Force feedback, Length feedback and PD controller
@@ -155,7 +186,7 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
     gP2 = GetGain_P2(m_name);
 
     float u = 0;
-    float p = 0.01, p1 = 0.05, p2 =0.08, s = 0.0, q = 0.01;// initial constant excitation
+    float p = 0.01, p1 = 0.05, p2 =0.5, s = 0.0, q = 0.01;// initial constant excitation
 
     string muscle = MuscleName(m_name, lat);
 
@@ -309,10 +340,10 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
             u = p;break;
         }
 
-        if (SI) { // || DS for walking? // s values from wang supplemental material section 5
+        if (SI || DS) { // || DS for walking? // s values from wang supplemental material section 5
             switch (m_name) {
             case VAS:
-                u = u - 1;break;
+                u = u - 0.3;break;
             case RF:
                 u = u + 0.01;break;
             case GLU:
@@ -373,6 +404,7 @@ vector<bool> ControlAlgorithm::Stance_Swing_Detection(dVector ankle, dVector com
     bool SP = false, SI = false, STANCE = false, SWING = false;
     float dsp(0.15), dsi(0.4);// wang supplemental material section 5
     float d = sqrt(pow(com.m_z - ankle.m_z,2)+pow(com.m_x - ankle.m_x,2)) / leg;// horizontal distance between body com and ankle 
+    //float d = abs(com.m_z - ankle.m_z) / leg;// horizontal distance between body com and ankle 
     if (contact >= 1)// check value
     {
         STANCE = true;
@@ -404,23 +436,42 @@ void ControlAlgorithm::SetCoronalDistance(float d1)
     dx = d1;
 }
 
-void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float Tvel) {
+void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float elbow) {
     trunk_a = Tangle;// [rad] negative forward
     AlphaR = alfaR;//
     AlphaL = alfaL;//
     Beta = beta;//
     Gamma = gamma;//
-    Vel_initial = Tvel; // [m/s]// negative forward
+    head_a = head; // [m/s]// negative forward
+    elbow_a = elbow;
 }
 
 vector<float> ControlAlgorithm::GetInitialCondition()
 {
-    vector<float> v = { trunk_a, AlphaR,    AlphaL,    Beta,    Gamma,    Vel_initial };
+    vector<float> v = { trunk_a, AlphaR,    AlphaL,    Beta,    Gamma,    head_a, elbow_a};
     return v;
 }
+
+vector<float> ControlAlgorithm::GetArmParams()
+{
+    vector<float> v = { alfa, beta, gamma};
+    return v;
+}
+
 void ControlAlgorithm::SetGain_Force_Feedback(Mtuname NAME, float val) {
     if (NAME == SOL || NAME == GAS || NAME == VAS || NAME == HAM || NAME == GLU)
         Gf.find(NAME)->second = val;
+}
+
+vector<float> ControlAlgorithm::GetShoulderTargetAngles(string state)
+{
+    float sagittal;
+    if (state == "Initial")
+        sagittal = alfa * (GetState0("Ship_l")[0] - GetState0("Ship_r")[0]) + beta * elbow_a;
+    else
+        sagittal = alfa * (GetState("Ship_l")[0] - GetState("Ship_r")[0]) + beta * elbow_a;
+    float transverse = gamma * elbow_a;
+    return vector<float>{sagittal, transverse};
 }
 
 float ControlAlgorithm::GetGain_Force_Feedback(Mtuname NAME) {
@@ -635,7 +686,7 @@ float ControlAlgorithm::SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, 
 {
     float Kfail = 0, Kvel = 0, Ktorso = 0;
     float target_velz = -(1.25 - 0.05); // target forward velocity in [m/s]
-    float target_height = 0.7; // target height in [m]
+    float target_height = 0.6; // target height in [m]
     float target_pelvis_ang = 0 * dDegreeToRad; // target pelvis angle between the target direction and the global - Z direction in [rad]
 
     // fail task term

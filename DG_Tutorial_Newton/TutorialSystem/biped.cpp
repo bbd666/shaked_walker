@@ -433,6 +433,8 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case ANKLE_R:
 	{
 		 // GAS
+		if (m_name == GAS)
+			T.m_y = T.m_y * (-1);
 		break;
 	}
 	case KNEE_L:
@@ -445,6 +447,8 @@ dVector Muscle::Compute_muscle_Torque(dFloat time)
 	case ANKLE_L:
 	{
 		 // GAS
+		if (m_name == GAS)
+			T.m_y = T.m_y * (-1);
 		break;
 	}
 	case NOjoint: {

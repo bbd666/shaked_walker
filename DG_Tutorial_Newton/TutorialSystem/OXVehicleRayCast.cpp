@@ -310,7 +310,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     l_Up_Leg = scale_length * lengths["Thigh"];  // thigh
     l_Low_Leg = scale_length * lengths["Shank"];  // shank
     l_foot = scale_length * lengths["Foot"];
-    l_toe = scale_length * lengths["Toes"];
+    l_toe = scale_length * lengths["Toe"];
     l_UPT = scale_length * lengths["UPT"];  // upper part trunk
     l_MPT = scale_length * lengths["MPT"]; // medium part trunk
     l_LPT = scale_length * lengths["LPT"]; // lower part trunk
@@ -359,6 +359,8 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     ThighL_A = IC_v[2];// alpha left leg see model notes figure 1
     Shank_A = IC_v[3];// beta see model notes figure 1
     Foot_A = IC_v[4];// gamma see model notes figure 1
+    Head_A = -IC_v[5];// 
+    Elbow_A = IC_v[6];// 
 
     controller.SetState0(180 * dDegreeToRad - Shank_A, 0, "Sknee_r");
     controller.SetState0(180 * dDegreeToRad - Shank_A, 0, "Sknee_l");
@@ -367,14 +369,18 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     controller.SetState0(90 * dDegreeToRad + Foot_A, 0, "Sankle_r");
     controller.SetState0(90 * dDegreeToRad + Foot_A, 0, "Sankle_l");
 
+    vector<float> shoulder_angles = controller.GetShoulderTargetAngles("Initial");
+    Shoulder_sagittal_L = shoulder_angles[0];
+    Shoulder_sagittal_R = -Shoulder_sagittal_L;
+    Shoulder_transverse = shoulder_angles[1];
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
-    dVector _Pos0(dVector(0.0f, -0.05 +0.125f + (l_LPT / 2) * cos(LPT_A) + l_Up_Leg * cos(ThighR_A) + (l_Low_Leg + h_foot) * cos(ThighR_A - Shank_A), -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
+    dVector _Pos0(dVector(0.0f, 0.125f + (l_LPT / 2) * cos(LPT_A) + l_Up_Leg * cos(ThighR_A) + (l_Low_Leg + h_foot) * cos(ThighR_A - Shank_A), -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
 
-    dVector _Pos1(dVector(l_Hip / 2, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighR_A), (l_LPT / 2) * sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighR_A)));// Thigh_r
+    dVector _Pos1(dVector(l_Hip, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighR_A), (l_LPT / 2) * sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighR_A)));// Thigh_r
     dVector _Pos2(dVector(0.0f, -(l_Up_Leg / 2) * cos(ThighR_A) - (l_Low_Leg / 2) * cos(ThighR_A - Shank_A), -(l_Up_Leg / 2) * sin(ThighR_A) - (l_Low_Leg / 2) * sin(ThighR_A - Shank_A)));// Shank_r 
     dVector _Pos3(dVector(0, -((l_Low_Leg + h_foot) / 2) * cos(ThighR_A - Shank_A) + (l_foot / 3) * sin(-Foot_A), -(l_foot / 3) * cos(-Foot_A) - (l_Low_Leg / 2) * sin(ThighR_A - Shank_A)));// Foot_r 
 
-    dVector _Pos4(dVector(-l_Hip / 2, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighL_A), (l_LPT / 2)* sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighL_A)));// Thigh_l
+    dVector _Pos4(dVector(-l_Hip, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighL_A), (l_LPT / 2)* sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighL_A)));// Thigh_l
     dVector _Pos5(dVector(0.0f, -(l_Up_Leg / 2) * cos(ThighL_A) - (l_Low_Leg / 2) * cos(ThighL_A - Shank_A), -(l_Up_Leg / 2) * sin(ThighL_A) - (l_Low_Leg / 2) * sin(ThighL_A - Shank_A)));// Shank_l
     dVector _Pos9(dVector(0, -((l_Low_Leg + h_foot) / 2) * cos(ThighL_A - Shank_A) + (l_foot / 3) * sin(-Foot_A), -(l_foot / 3) * cos(-Foot_A) - (l_Low_Leg / 2) * sin(ThighL_A - Shank_A)));// Foot_l
 
@@ -384,7 +390,17 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector _Pos8(dVector(0.0f, (l_foot + l_toe) / 2 * sin(- Foot_A + ThighR_A - Shank_A), -(l_foot + l_toe) / 2 * cos(-Foot_A + ThighR_A - Shank_A)));// toe r
     dVector _Pos10(dVector(0.0f, (l_foot + l_toe) / 2 * sin(-Foot_A + ThighL_A - Shank_A), -(l_foot + l_toe) / 2 * cos(-Foot_A + ThighL_A - Shank_A)));// toe l 
 
-    std::vector< dVector* > body_pos_vec = { &_Pos0, &_Pos1, &_Pos2, &_Pos3,&_Pos4, &_Pos5, &_Pos9, &_Pos6, &_Pos7, &_Pos8, &_Pos10 };// vector with coordinates of bodies' com
+    dVector _Pos11(dVector(l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_R), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_R)));// UpArm r
+    dVector _Pos12(dVector(-(l_Low_Arm / 2) * sin(-Shoulder_transverse), - (l_Up_Arm/2) * cos(Shoulder_sagittal_R) - (l_Low_Arm/ 2)*cos(Elbow_A - Shoulder_sagittal_R), (l_Up_Arm / 2) * sin(Shoulder_sagittal_R) - (l_Low_Arm / 2) * sin(Elbow_A- Shoulder_sagittal_R)* cos(-Shoulder_transverse)));// ForeArm r
+    dVector _Pos13(dVector(-(l_Low_Arm + l_Hand) / 2 * sin(-Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_R), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_R)) * cos(-Shoulder_transverse));// hand r
+
+    dVector _Pos14(dVector(-l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_L), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_L)));// UpArm l
+    dVector _Pos15(dVector(-(l_Low_Arm / 2) * sin(Shoulder_transverse), -(l_Up_Arm / 2) * cos(Shoulder_sagittal_L) - (l_Low_Arm / 2) * cos(Elbow_A - Shoulder_sagittal_L), (l_Up_Arm / 2) * sin(Shoulder_sagittal_L) - (l_Low_Arm / 2) * sin(Elbow_A - Shoulder_sagittal_L) * cos(Shoulder_transverse)));// ForeArm r
+    dVector _Pos16(dVector(-(l_Low_Arm + l_Hand) / 2 * sin(Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_L), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_L)) * cos(Shoulder_transverse));// hand l
+
+    dVector _Pos17(dVector(0.0f, (l_UPT / 2) * cos(LPT_A) + (l_Head / 2) * cos(Head_A), -(l_UPT / 2) * sin(LPT_A) - (l_Head / 2) * sin(Head_A)));// head
+
+    std::vector< dVector* > body_pos_vec = { &_Pos0, &_Pos1, &_Pos2, &_Pos3,&_Pos4, &_Pos5, &_Pos9, &_Pos6, &_Pos7, &_Pos8, &_Pos10, &_Pos11, &_Pos12, &_Pos13 , &_Pos14, &_Pos15, &_Pos16, &_Pos17 };// vector with coordinates of bodies' com
 
     dVector dim0(dVector(r_bones, r_bones, l_LPT));
     dVector dim1(dVector(r_bones, r_bones, l_Up_Leg));// Thigh_r and l
@@ -393,15 +409,22 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector dim4(dVector(r_bones, r_bones, l_MPT));// MPT
     dVector dim5(dVector(r_bones, r_bones, l_UPT));// UPT
     dVector dim6(dVector(h_foot, w_foot, l_toe));// toe l and r
+    dVector dim7(dVector(r_bones, r_bones, l_Up_Arm));// UpArm l UpArm r
+    dVector dim8(dVector(r_bones, r_bones, l_Low_Arm));// LArm lLArm r
+    dVector dim9(dVector(r_bones, r_bones, l_Hand));// LArm lLArm r
+    dVector dim10(dVector(r_bones, r_bones, l_Head));// head
 
-    std::vector< dVector* >body_dim_vec = { &dim0, &dim1, &dim2, &dim3, &dim1, &dim2, &dim3, &dim4, &dim5, &dim6, &dim6 };// vector with bodies' dimensions
+    std::vector< dVector* >body_dim_vec = { &dim0, &dim1, &dim2, &dim3, &dim1, &dim2, &dim3, &dim4, &dim5, &dim6, &dim6, &dim7, &dim8, &dim9 , &dim7, &dim8, &dim9, &dim10};// vector with bodies' dimensions
 
     // BODIES OF THE DUMMY DEFINITION
     std:vector<float> body_rot_ang_vect = { LPT_A * dRadToDegree ,
                                         -ThighR_A * dRadToDegree - LPT_A * dRadToDegree, (Shank_A)*dRadToDegree,Foot_A * dRadToDegree,// angles of each body LPT Thigh_r Shank_r Foot_r
                                         -ThighL_A * dRadToDegree - LPT_A * dRadToDegree, (Shank_A)*dRadToDegree,Foot_A * dRadToDegree,//Thigh_l Shank_l Foot_l
                                         0.0f, 0.0f,// MPT, UPT
-                                        0.0f, 0.0f };//toe l and r
+                                        0.0f, 0.0f,//toe l and r
+                                        Shoulder_sagittal_R* dRadToDegree, -Elbow_A* dRadToDegree, 0.0f,// UpArm r LoeArm r Hand r
+                                        Shoulder_sagittal_L* dRadToDegree, -Elbow_A* dRadToDegree, 0.0f,// UpArm l LoeArm l Hand l
+                                        Head_A* dRadToDegree-LPT_A* dRadToDegree };//head
     int aa = 0;
     for (std::vector<std::string>::iterator it = body_keys.begin(); it != body_keys.end(); it++)
     {
@@ -633,7 +656,7 @@ void dRaycastVHModel::CreateDescreteContactFootCollision(NewtonBody* const footB
     dFloat widthSeparation = w_foot/2- height;
     dFloat frontSeparation = l_foot/2- height;
 
-#if 0
+#if 1
     // tree points contacts
     subShapeLocation.m_posit.m_z = frontSeparation;
     subShapeLocation.m_posit.m_x = 0.0f;
@@ -675,16 +698,16 @@ void dRaycastVHModel::CreateDescreteContactFootCollision(NewtonBody* const footB
     NewtonDestroyCollision(sphereCollision);
     NewtonDestroyCollision(threePointCollision);
 }
-// Compute trunk orientation and rotation velocity in sagittal plane 
-vector<dFloat> dRaycastVHModel::GetTrunkSagittalState()
+// Compute trunk or head orientation and rotation velocity in sagittal plane 
+vector<dFloat> dRaycastVHModel::GetSagittalState(string body)
 {
-    dMatrix mat = rigid_element.find("LPT")->second->GetMatrix();
+    dMatrix mat = rigid_element.find(body)->second->GetMatrix();
     dVector dir = dVector(0, mat.m_front.m_y, mat.m_front.m_z, 1);
     dFloat ang = ComputeAngleBWVectors(dir, dVector(0, 1, 0, 1), dVector(1, 0, 0, 1));
 
     // save the current joint Omega
     dVector omega0(0.0f);
-    NewtonBodyGetOmega(rigid_element.find("LPT")->second->GetBody(), &omega0[0]);
+    NewtonBodyGetOmega(rigid_element.find(body)->second->GetBody(), &omega0[0]);
     return { ang, omega0.m_x };
 }
 
@@ -723,6 +746,22 @@ vector<dFloat> dRaycastVHModel::GetFootCoronalState(string body)
     NewtonBodyGetOmega(rigid_element.find(body)->second->GetBody(), &omega0[0]);
     return { ang, -omega0.m_z };
 }
+
+vector<dFloat> dRaycastVHModel::GetRelativeSagittalState(string body1, string body2)
+{
+    dMatrix mat = rigid_element.find(body2)->second->GetMatrix();
+    dVector dir = { 0.0, mat.m_front.m_y, mat.m_front.m_z, 1.0 };
+    mat = rigid_element.find(body1)->second->GetMatrix();
+    dVector ref = {0.0, mat.m_front.m_y, mat.m_front.m_z, 1.0 };
+    dFloat ang = ComputeAngleBWVectors(dir, ref, dVector(1, 0, 0, 1));
+
+    // save the current joint Omega
+    dVector omega0(0.0f);
+    NewtonBodyGetOmega(rigid_element.find(body2)->second->GetBody(), &omega0[0]);
+    cout << ang << ' ' << omega0.m_x << endl;
+    return { ang, omega0.m_x };
+}
+
 float dRaycastVHModel::ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref)
 {
     dVector cross = dir.CrossProduct(ref);
@@ -823,6 +862,47 @@ void dRaycastVHModel::AssemblyCreation()
     TrunkCreation();
     LegCreation("LPT","Thigh_r","Shank_r", "Foot_r","Toe_r", "Hip_r", "Knee_r", "Ankle_r", "Toe_hinge_r");
     LegCreation("LPT", "Thigh_l", "Shank_l", "Foot_l", "Toe_l", "Hip_l", "Knee_l", "Ankle_l", "Toe_hinge_l");
+
+    ArmCreation("UPT", "UpArm_r", "ForeArm_r", "Hand_r", "Shoulder_r", "Elbow_r", "Wrist_r");
+    ArmCreation("UPT", "UpArm_l", "ForeArm_l", "Hand_l", "Shoulder_l", "Elbow_l", "Wrist_l");
+
+    RigidBodyCreation("Head");
+    dVector pos;
+    pos = { 0.0f, (l_UPT / 2) * cos(LPT_A), -(l_UPT / 2) * sin(LPT_A) };// head
+    HingeJoint("Neck", "UPT", "Head", pos, -50 * dDegreeToRad, 80 * dDegreeToRad);
+}
+
+void dRaycastVHModel::ArmCreation(string trunk, string uparm, string farm, string hand, string shoulder, string elbow, string wrist)
+{
+    RigidBodyCreation(uparm);
+    RigidBodyCreation(farm);
+    RigidBodyCreation(hand);
+
+    float s=1, ang, Amin, Amax, ShoulderA;
+    if (uparm.back() == 'r') {
+       s = 1;
+    ////    ang = ThighR_A;
+        Amin = -90 * dDegreeToRad;//-90
+        Amax = 90 * dDegreeToRad;// 0
+        ShoulderA = Shoulder_sagittal_R;
+    }
+    else {
+       s = -1;
+    ////    ang = ThighL_A;
+        Amin = 90 * dDegreeToRad;//0
+        ShoulderA = Shoulder_sagittal_L;
+        Amax = -90 * dDegreeToRad;//-90
+   }
+
+    dVector pos;
+    pos = { s * l_Clav,  (l_UPT / 2) * cos(LPT_A), -(l_UPT / 2) * sin(LPT_A) };
+    DoubleHingeJoint(shoulder, trunk, uparm, pos, -90 * dDegreeToRad - ShoulderA, 45 * dDegreeToRad - ShoulderA, Amin, Amax);// shoulder
+
+    pos = { 0.0f,-(l_Up_Arm / 2) * cos(ShoulderA), (l_Up_Arm / 2) * sin(ShoulderA) };// elbow
+    HingeJoint(elbow, uparm, farm, pos, -170 * dDegreeToRad + Elbow_A, 0.0f +Elbow_A);
+
+    pos = { 0.0f, -((l_Low_Arm) / 2) * cos(Elbow_A - ShoulderA), -((l_Low_Arm) / 2) * sin(Elbow_A - ShoulderA) };
+    HingeJoint(wrist, farm, hand, pos, -0.01f, 0.01f);// wrist
 }
 
 void dRaycastVHModel::LegCreation(string trunk, string thigh, string shank, string foot, string toes, string hip, string knee, string ankle, string toe_hinge)
@@ -836,17 +916,17 @@ void dRaycastVHModel::LegCreation(string trunk, string thigh, string shank, stri
         s = 1;
         ang = ThighR_A;
         Amin = -35 * dDegreeToRad;//2
-        Amax = 35 * dDegreeToRad;// 35 wang
+        Amax = 2 * dDegreeToRad;// 35 wang
     }
     else {
         s = -1;
         ang = ThighL_A;
-        Amin = -35 * dDegreeToRad;
+        Amin = -2 * dDegreeToRad;
         Amax = 35 * dDegreeToRad;//35 2
     }
 
     dVector pos;
-    pos = { s*l_Hip / 2, -l_LPT / 2 * cos(LPT_A), +l_LPT / 2 * sin(LPT_A) };
+    pos = { s*l_Hip, -l_LPT / 2 * cos(LPT_A), l_LPT / 2 * sin(LPT_A) };
     DoubleHingeJoint(hip, trunk, thigh, pos, -90*dDegreeToRad + ang, 45 * dDegreeToRad + ang, -20 * dDegreeToRad, 20 * dDegreeToRad);// Hip
 
     pos = { 0.0f, -(l_Up_Leg / 2 - knee_j) * cos(ang), -(l_Up_Leg / 2 - knee_j) * sin(ang) };// Knee
@@ -893,7 +973,7 @@ void dRaycastVHModel::HingeJoint(string jname, string body1, string body2, dVect
         m_winManager->aManager->vJointNameList.push_back(KNEE_R);
         //JHinge[jname]->SetLimits(-0.01, 0.01);
     }
-    if (jname == "Toe_hinge_r" || jname == "Toe_hinge_l"){
+    if (jname == "Toe_hinge_r" || jname == "Toe_hinge_l" || jname == "Wrist_r" || jname == "Wrist_l"){
         JHinge[jname]->SetAsSpringDamper(true, 0.99, 0);} // max stiffness zero damping
 }
 
@@ -902,7 +982,8 @@ void dRaycastVHModel::DoubleHingeJoint(string jname, string body1, string body2,
     GeomNewton* b1 = rigid_element.find(body1)->second;
     GeomNewton* b2 = rigid_element.find(body2)->second;
     dMatrix matrix(dGetIdentityMatrix()); // define the pin
-    matrix = matrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+    if (jname != "Shoulder_r" || jname != "Shoulder_l") 
+        matrix = matrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
     matrix.m_posit = dVector(b1->GetPosition().m_x + pos.m_x, b1->GetPosition().m_y + pos.m_y, b1->GetPosition().m_z + pos.m_z, 1.0f);
     JDoubleHinge[jname] = new dCustomDoubleHinge(matrix, b1->GetBody(), b2->GetBody());
     JDoubleHinge[jname]->EnableLimits(true);
@@ -940,20 +1021,16 @@ void dRaycastVHModel::RigidBodyCreation(string body)
 {
     string tex("Textures//wood6.png");
     std::string mass_prop_key;
-    if (body == "Foot_r" || body == "Foot_l")
-        mass_prop_key = "Foot";
-    else if (body == "Shank_r" || body == "Shank_l")
-        mass_prop_key = "Shank";
-    else if (body == "Thigh_r" || body == "Thigh_l")
-        mass_prop_key = "Thigh";
-    else if (body == "LPT")
-        mass_prop_key = "LPT";
-    else if (body == "MPT")
-        mass_prop_key = "MPT";
-    else if (body == "UPT")
-        mass_prop_key = "UPT";
-    else if (body == "Toe_r" || body == "Toe_l")
-        mass_prop_key = "Toes";
+    if (body == "LPT" || body == "MPT" || body == "UPT" || body == "Head")
+        mass_prop_key = body;
+    else
+    {
+        string name = body;
+        name.pop_back();
+        name.pop_back();
+        mass_prop_key = name;
+    }
+    
     //else if (*it == altri corpi rigidi")
     //    mass_prop_key == "MPT";
 
@@ -968,6 +1045,10 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     if (body == "LPT")
         rigid_element[body]->SetRollAngle(90, false);
     rigid_element[body]->SetTurnAngle(body_rot_ang[body], false);
+    if (body == "UpArm_r")
+        rigid_element[body]->SetPitchAngle(-Shoulder_transverse*dRadToDegree, false);
+    else if (body == "UpArm_l")
+        rigid_element[body]->SetPitchAngle(Shoulder_transverse * dRadToDegree, false);
     rigid_element[body]->SetPosition(body_pos[body]->m_x, body_pos[body]->m_y, body_pos[body]->m_z);
 
     if (body == "Foot_r" || body == "Foot_l" || body == "Toe_l" || body == "Toe_r")
@@ -975,9 +1056,9 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     else
         rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z*0.5f, 1.0f);// smaller length of capsule to remove fake force due to compenetration of collision
 
-    //if (body == "Foot_r" || body == "Foot_l")
-    //    NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
-    //else
+    if (body == "LPT")
+        NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
+    else
         NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
     //// Missing: test de following lines to move center of mass
     //dVector com;
@@ -1086,24 +1167,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
     map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
 
-     //INITIAL CONDITION //
-    if (newTime == 0) {
-        vector<float> ICv = Model->controller.GetInitialCondition();
-        dVector LPTvel_init = { ICv[5]/4,0, ICv[5]};
-
-        GeomNewton* BODY = RE_list.find("LPT")->second;
-        NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-        BODY = RE_list.find("UPT")->second;
-        NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-
-        //LPTvel_init = LPTvel_init.Scale(3.0f);
-        //BODY = RE_list.find("Thigh_r")->second;
-        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-        //BODY = RE_list.find("Shank_r")->second;
-        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-
-    }
-
     /// MUSCLE STUFF /////////////////////////////////////////////////////////////////////////////////////////////
     // find ankle position
     dVector com_Player = Model->ComputePlayerCOM();
@@ -1178,7 +1241,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         }
 
         // update sagittal trunk angle and velocity
-        vector<float> Strunk = Model->GetTrunkSagittalState();// trunk vertical vector projection on sagittal plane);
+        vector<float> Strunk = Model->GetSagittalState("LPT");// trunk vertical vector projection on sagittal plane);
         Model->controller.SetState(Strunk[0], Strunk[1], "Strunk");
 
         vector<float> state0hipr = Model->controller.GetState0("Ship_r");
@@ -1354,24 +1417,24 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             float dx = 0;// compute horizontal distance between foot and com along x direction
 
             dVector pin(0.0, 0.0, 1.0);// pin for torque around Z axis
-            // trunk vertical coronal control
+            // trunk coronal control
             vector<float> state = Model->GetTrunkCoronalState();
             Model->controller.SetState(state[0], state[1], "Ctrunk");
 
             dx = (com_ankle_r.m_x - com_Player.m_x);
             if (dx > 0)
-                dx = dx -Model->GetHipLength() / 2;
+                dx = dx -Model->GetHipLength();
             else
-                dx = dx + Model->GetHipLength() / 2;
+                dx = dx + Model->GetHipLength();
             Model->controller.SetCoronalDistance(dx);
             float torque = Model->controller.PD_controller("Ctrunk" , lead == 'R');
             Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_r")->second);
 
             dx = (com_ankle_l.m_x - com_Player.m_x);
             if (dx > 0)
-                dx = dx - Model->GetHipLength() / 2;
+                dx = dx - Model->GetHipLength();
             else
-                dx = dx + Model->GetHipLength() / 2;
+                dx = dx + Model->GetHipLength();
             Model->controller.SetCoronalDistance(dx);
             torque = Model->controller.PD_controller("Ctrunk", lead == 'L');
             Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_l")->second);
@@ -1400,11 +1463,37 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, NULL);
             // end trunk transverse control
             // 
+            // head sagittal control
+            vector<float> Shead = Model->GetSagittalState("Head");// head vertical vector projection on sagittal plane);
+            Model->controller.SetState(Shead[0], Shead[1], "Shead");
+
+            pin = dVector(1.0, 0.0, 0.0);// pin for torque around X axis
+            torque = Model->controller.PD_controller("Shead", false);
+            Model->AddActionReactionTorque(torque, pin, RE_list.find("Head")->second, RE_list.find("UPT")->second);
+            // end head sagittal control
+            
+            // WIP: verificare che angolo relativo sia corretto in dinamica
+            // shoulder R sagittal control
+            //vector<float> SshoulderR = Model->GetRelativeSagittalState("UPT", "UpArm_r");// 
+            //Model->controller.SetState(SshoulderR[0], SshoulderR[1], "Sshoulder_r");
+
+            //pin = dVector(1.0, 0.0, 0.0);// pin for torque around X axis
+            //torque = Model->controller.PD_controller("SshoulderR", false);
+            //Model->AddActionReactionTorque(torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_r")->second);
+            // end head sagittal control
+
+            //// elbow sagittal control
+            //vector<float> Selbow = Model->GetRelativeSagittalState("UpArm_r", "ForeArm_r");// 
+            //Model->controller.SetState(Selbow[0], Selbow[1], "Selbow_r");
+
+            //torque = Model->controller.PD_controller("Selbow_r", false);
+            //Model->AddActionReactionTorque(-torque, pin, RE_list.find("UpArm_r")->second, RE_list.find("ForeArm_r")->second);
+            //// end elbow sagittal control
             // END OF PD CONTROLLERS STUFF /////////////////////////////////////////
         }
     }
     // COST FUNCTION COMPUTATION
-    vector<dFloat> Strunk = Model->GetTrunkSagittalState();
+    vector<dFloat> Strunk = Model->GetSagittalState("LPT");
     vector<dFloat> Ctrunk = Model->GetTrunkCoronalState();
     dVector COM_vel = Model->ComputePlayerCOMvelocity();
     float cost = Model->controller.SimulationReturnValue(com_Player.m_y, COM_vel, Strunk, Ctrunk);
@@ -1417,6 +1506,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     //dVector T;
     //NewtonBodyGetTorque(BODY0->GetBody(), &T.m_x);
     //cout << T.m_x << ' ' << T.m_y << ' ' << T.m_z << endl;
+
 }
 
 void DGVehicleRCManager::OnPostUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
