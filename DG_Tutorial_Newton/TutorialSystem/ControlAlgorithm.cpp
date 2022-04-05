@@ -22,7 +22,11 @@ ControlAlgorithm::ControlAlgorithm()
     {"Ttrunk", 0},
     {"Shead", 0},
     {"Selbow_r", 0},
-    {"Sshoulder_r", 0} };
+    {"Sshoulder_r", 0},
+    {"Tshoulder_r", 0},
+    {"Selbow_l", 0},
+    {"Sshoulder_l", 0},
+    {"Tshoulder_l", 0} };
 
     State_position = { {"Sknee_r", 0},{"Sknee_l", 0},
     {"Ship_r", 0},{"Ship_l", 0},
@@ -32,7 +36,11 @@ ControlAlgorithm::ControlAlgorithm()
     {"Cfoot_r", 0}, {"Cfoot_l", 0},
     {"Shead", 0},
     {"Selbow_r", 0},
-    {"Sshoulder_r", 0} };
+    {"Sshoulder_r", 0},
+    {"Tshoulder_r", 0},
+    {"Selbow_l", 0},
+    {"Sshoulder_l", 0},
+    {"Tshoulder_l", 0} };
 
     State0_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
     {"Ship_r", 0},{"Ship_l", 0},
@@ -48,15 +56,18 @@ ControlAlgorithm::ControlAlgorithm()
     {"Shead", 0} };
 
     // Initial condition
-    trunk_a = 0 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
+    trunk_a = -5 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
     AlphaR = 2 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
     AlphaL = -18 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
     Beta = 5 * dDegreeToRad;// beta see model notes figure 1
     Gamma = -10 * dDegreeToRad;// gamma see model notes figure 1
     head_a = -10 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
-    elbow_a = 80 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
+    elbow_a = 30 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
 
-    vector<float> shoulder_a = GetShoulderTargetAngles("Initial");
+    // arm parameters
+    beta = -13.0f / 48.0f;
+    gamma = -13.0f / 96.0f;
+    alfa = 0.25f;
 
     /// Control parameter initialization 
     Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.2} };// list gain force feedback
@@ -81,9 +92,9 @@ ControlAlgorithm::ControlAlgorithm()
     GP2 = { {HFL, Glead2.find(HFL)->second},    {VAS, 170 * dDegreeToRad} };// CHECK ANGLE
 
     // PD controllers 
-    G1 = { {"Ctrunk", 200},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},                 {"Selbow_r", 30},       {"SshoulderR", 30} };
-    G2 = { {"Ctrunk", 10},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow_r", 3},        {"SshoulderR", 3} };
-    G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", 0 * dDegreeToRad},    {"Selbow_r", elbow_a},  {"SshoulderR", -shoulder_a[0]} };
+    G1 = { {"Ctrunk", 200},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},                 {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
+    G2 = { {"Ctrunk", 10},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
+    G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", 0 * dDegreeToRad},    {"Selbow", elbow_a},  {"Sshoulder", 0.0f}, {"Tshoulder", 0.0f} };
 
     G1lead = { {"Ctrunk", 1000},            {"Cfoot", 200} };
     G2lead = { {"Ctrunk", 100},             {"Cfoot", 30} };
@@ -91,11 +102,6 @@ ControlAlgorithm::ControlAlgorithm()
 
     cd1 = 0.2;// position coeff for  target angle coronal hip SIMBICON
     cv1 = 0.2; // velocity coeff for  target angle coronal hip SIMBICON
-
-    // arm parameters
-    beta = -13.0f / 48.0f;
-    gamma = -13.0f / 96.0f;
-    alfa = 0.25f;
     // 
     // excitation list initialization for each muscle
     list<float> l15(15, 0.0);// 5 ms delay
@@ -161,9 +167,18 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
         vector<float> gains = GetGain_PD("Cfoot", leading);
         return torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
     }
-    else if (dof.compare("Shead") == 0 || dof.compare("Selbow_r") == 0)// sagittal control of head orientation
+    else if (dof.compare("Shead")==0)// sagittal control of head orientation
     {
         vector<float> gains = GetGain_PD(dof, false);
+        return torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
+    }
+    else if (dof.compare("Selbow_r") == 0 || dof.compare("Sshoulder_r") == 0 || dof.compare("Tshoulder_r") == 0 ||
+             dof.compare("Selbow_l") == 0 || dof.compare("Sshoulder_l") == 0 || dof.compare("Tshoulder_l") == 0)// arm
+    {
+        string dof2 = dof;
+        dof2.pop_back();
+        dof2.pop_back();
+        vector<float> gains = GetGain_PD(dof2, false);
         return torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
     }
 }
@@ -463,14 +478,20 @@ void ControlAlgorithm::SetGain_Force_Feedback(Mtuname NAME, float val) {
         Gf.find(NAME)->second = val;
 }
 
-vector<float> ControlAlgorithm::GetShoulderTargetAngles(string state)
+vector<float> ControlAlgorithm::GetShoulderTargetAngles(bool state0, char lat)
 {
     float sagittal;
-    if (state == "Initial")
-        sagittal = alfa * (GetState0("Ship_l")[0] - GetState0("Ship_r")[0]) + beta * elbow_a;
+    if (state0)
+        sagittal = alfa * (GetState0("Ship_l")[0] - GetState0("Ship_r")[0]);
     else
-        sagittal = alfa * (GetState("Ship_l")[0] - GetState("Ship_r")[0]) + beta * elbow_a;
+        sagittal = alfa * (GetState("Ship_l")[0]  - GetState("Ship_r")[0]);
     float transverse = gamma * elbow_a;
+    if (lat == 'r') {
+        sagittal = -sagittal;
+        transverse = -transverse;
+    }
+    sagittal = sagittal + beta * elbow_a;
+
     return vector<float>{sagittal, transverse};
 }
 
@@ -619,6 +640,11 @@ vector<float> ControlAlgorithm::GetGain_PD(string dof, bool lead)
     }
 
     return g;
+}
+
+void ControlAlgorithm::SetShoulderAngleGain(float gain, string dof)
+{
+    G3.find(dof)->second = gain;
 }
 
 void ControlAlgorithm::SetState(float position, float velocity, string dof)

@@ -26,7 +26,7 @@ public:
 
 	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
 
-	vector<float> GetShoulderTargetAngles(string state);
+	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);
 	float GetGain2_Length_Feedback(Mtuname NAME);
@@ -40,6 +40,8 @@ public:
 	float GetGain_P2(Mtuname NAME);
 	vector<float> GetGain_HFLswing();
 	vector<float> GetGain_PD(string dof, bool lead);
+
+	void SetShoulderAngleGain(float gain, string dof);
 
 	vector<float>  GetInitialCondition();
 

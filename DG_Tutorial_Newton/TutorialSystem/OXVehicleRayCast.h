@@ -47,6 +47,7 @@ public:
 	vector<dFloat> GetFootCoronalState(string body);
 	vector<dFloat> GetTrunkTransverseState();
 	vector<dFloat> GetRelativeSagittalState(string body1, string body2);
+	vector<dFloat>GetRelativeTransverseState(string body1, string body2);
 	float ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref);
 	dVector ComputePlayerCOM();
 	dVector ComputePlayerCOMvelocity();
@@ -77,14 +78,17 @@ private:
 	/// <RIGID ELEMENTS>
 	GeomNewton* box;
 	GeomNewton* Geomfloor;
+	
 	std::vector<std::string> body_keys = { "LPT",
-		"Thigh_r","Shank_r", "Foot_r",
-		"Thigh_l","Shank_l", "Foot_l",
-		"MPT", "UPT", 
-		"Toe_r", "Toe_l",
-		"UpArm_r", "ForeArm_r", "Hand_r",
-		"UpArm_l", "ForeArm_l", "Hand_l", 
-		"Head"};//  RIGID ELEMENTS OF THE MODEL
+	"Thigh_r","Shank_r", "Foot_r",
+	"Thigh_l","Shank_l", "Foot_l",
+	"MPT", "UPT",
+	"Toe_r", "Toe_l",
+	"UpArm_r", "ForeArm_r", "Hand_r",
+	"UpArm_l", "ForeArm_l", "Hand_l",
+	"Head" };//  RIGID ELEMENTS OF THE MODEL
+
+	//  RIGID ELEMENTS OF THE MODEL
 	map<std::string, GeomNewton*> rigid_element;//  geom newton as map: use mass_keys as string
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
@@ -104,8 +108,7 @@ private:
 	/// 
 	/// <MUSCLES>
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
-	//std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
-	std::vector<std::string> muscle_keys = { };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle

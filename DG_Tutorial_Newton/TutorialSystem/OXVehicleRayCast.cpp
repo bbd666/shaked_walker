@@ -369,10 +369,11 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     controller.SetState0(90 * dDegreeToRad + Foot_A, 0, "Sankle_r");
     controller.SetState0(90 * dDegreeToRad + Foot_A, 0, "Sankle_l");
 
-    vector<float> shoulder_angles = controller.GetShoulderTargetAngles("Initial");
+    vector<float> shoulder_angles = controller.GetShoulderTargetAngles(true,'l');
     Shoulder_sagittal_L = shoulder_angles[0];
-    Shoulder_sagittal_R = -Shoulder_sagittal_L;
     Shoulder_transverse = shoulder_angles[1];
+    shoulder_angles = controller.GetShoulderTargetAngles(true, 'r');
+    Shoulder_sagittal_R = shoulder_angles[0];
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
     dVector _Pos0(dVector(0.0f, 0.125f + (l_LPT / 2) * cos(LPT_A) + l_Up_Leg * cos(ThighR_A) + (l_Low_Leg + h_foot) * cos(ThighR_A - Shank_A), -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
 
@@ -391,12 +392,12 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector _Pos10(dVector(0.0f, (l_foot + l_toe) / 2 * sin(-Foot_A + ThighL_A - Shank_A), -(l_foot + l_toe) / 2 * cos(-Foot_A + ThighL_A - Shank_A)));// toe l 
 
     dVector _Pos11(dVector(l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_R), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_R)));// UpArm r
-    dVector _Pos12(dVector(-(l_Low_Arm / 2) * sin(-Shoulder_transverse), - (l_Up_Arm/2) * cos(Shoulder_sagittal_R) - (l_Low_Arm/ 2)*cos(Elbow_A - Shoulder_sagittal_R), (l_Up_Arm / 2) * sin(Shoulder_sagittal_R) - (l_Low_Arm / 2) * sin(Elbow_A- Shoulder_sagittal_R)* cos(-Shoulder_transverse)));// ForeArm r
-    dVector _Pos13(dVector(-(l_Low_Arm + l_Hand) / 2 * sin(-Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_R), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_R)) * cos(-Shoulder_transverse));// hand r
+    dVector _Pos12(dVector((l_Low_Arm / 2) * sin(Shoulder_transverse), - (l_Up_Arm/2) * cos(Shoulder_sagittal_R) - (l_Low_Arm/ 2)*cos(Elbow_A - Shoulder_sagittal_R), (l_Up_Arm / 2) * sin(Shoulder_sagittal_R) - (l_Low_Arm / 2) * sin(Elbow_A- Shoulder_sagittal_R)* cos(-Shoulder_transverse)));// ForeArm r
+    dVector _Pos13(dVector((l_Low_Arm + l_Hand) / 2 * sin(Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_R), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_R)) * cos(-Shoulder_transverse));// hand r
 
     dVector _Pos14(dVector(-l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_L), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_L)));// UpArm l
-    dVector _Pos15(dVector(-(l_Low_Arm / 2) * sin(Shoulder_transverse), -(l_Up_Arm / 2) * cos(Shoulder_sagittal_L) - (l_Low_Arm / 2) * cos(Elbow_A - Shoulder_sagittal_L), (l_Up_Arm / 2) * sin(Shoulder_sagittal_L) - (l_Low_Arm / 2) * sin(Elbow_A - Shoulder_sagittal_L) * cos(Shoulder_transverse)));// ForeArm r
-    dVector _Pos16(dVector(-(l_Low_Arm + l_Hand) / 2 * sin(Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_L), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_L)) * cos(Shoulder_transverse));// hand l
+    dVector _Pos15(dVector((l_Low_Arm / 2) * sin(-Shoulder_transverse), -(l_Up_Arm / 2) * cos(Shoulder_sagittal_L) - (l_Low_Arm / 2) * cos(Elbow_A - Shoulder_sagittal_L), (l_Up_Arm / 2) * sin(Shoulder_sagittal_L) - (l_Low_Arm / 2) * sin(Elbow_A - Shoulder_sagittal_L) * cos(Shoulder_transverse)));// ForeArm r
+    dVector _Pos16(dVector((l_Low_Arm + l_Hand) / 2 * sin(-Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_L), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_L)) * cos(Shoulder_transverse));// hand l
 
     dVector _Pos17(dVector(0.0f, (l_UPT / 2) * cos(LPT_A) + (l_Head / 2) * cos(Head_A), -(l_UPT / 2) * sin(LPT_A) - (l_Head / 2) * sin(Head_A)));// head
 
@@ -753,13 +754,26 @@ vector<dFloat> dRaycastVHModel::GetRelativeSagittalState(string body1, string bo
     dVector dir = { 0.0, mat.m_front.m_y, mat.m_front.m_z, 1.0 };
     mat = rigid_element.find(body1)->second->GetMatrix();
     dVector ref = {0.0, mat.m_front.m_y, mat.m_front.m_z, 1.0 };
-    dFloat ang = ComputeAngleBWVectors(dir, ref, dVector(1, 0, 0, 1));
+    dFloat ang = ComputeAngleBWVectors(dir, ref, mat.m_up);
 
     // save the current joint Omega
     dVector omega0(0.0f);
     NewtonBodyGetOmega(rigid_element.find(body2)->second->GetBody(), &omega0[0]);
-    cout << ang << ' ' << omega0.m_x << endl;
-    return { ang, omega0.m_x };
+    return { -ang, omega0.m_x };
+}
+
+vector<dFloat> dRaycastVHModel::GetRelativeTransverseState(string body1, string body2)
+{
+    dMatrix mat = rigid_element.find(body2)->second->GetMatrix();
+    dVector dir = { mat.m_right.m_x, 0.0, mat.m_right.m_z, 1.0 };
+    mat = rigid_element.find(body1)->second->GetMatrix();
+    dVector ref = { mat.m_right.m_x, 0.0, mat.m_right.m_z, 1.0 };
+    dFloat ang = ComputeAngleBWVectors(dir, ref, mat.m_front);
+
+    // save the current joint Omega
+    dVector omega0(0.0f);
+    NewtonBodyGetOmega(rigid_element.find(body2)->second->GetBody(), &omega0[0]);
+    return { -ang, omega0.m_y };
 }
 
 float dRaycastVHModel::ComputeAngleBWVectors(dVector const& dir, dVector const& ref, dVector const& crossref)
@@ -882,21 +896,21 @@ void dRaycastVHModel::ArmCreation(string trunk, string uparm, string farm, strin
     if (uparm.back() == 'r') {
        s = 1;
     ////    ang = ThighR_A;
-        Amin = -90 * dDegreeToRad;//-90
-        Amax = 90 * dDegreeToRad;// 0
+        Amin = -20 * dDegreeToRad;//-90
+        Amax = 20 * dDegreeToRad;// 0
         ShoulderA = Shoulder_sagittal_R;
     }
     else {
        s = -1;
     ////    ang = ThighL_A;
-        Amin = 90 * dDegreeToRad;//0
+        Amin = 20 * dDegreeToRad;//0
         ShoulderA = Shoulder_sagittal_L;
-        Amax = -90 * dDegreeToRad;//-90
+        Amax = -20 * dDegreeToRad;//-90
    }
 
     dVector pos;
     pos = { s * l_Clav,  (l_UPT / 2) * cos(LPT_A), -(l_UPT / 2) * sin(LPT_A) };
-    DoubleHingeJoint(shoulder, trunk, uparm, pos, -90 * dDegreeToRad - ShoulderA, 45 * dDegreeToRad - ShoulderA, Amin, Amax);// shoulder
+    DoubleHingeJoint(shoulder, trunk, uparm, pos, Amin, Amax, -90 * dDegreeToRad - ShoulderA, 45 * dDegreeToRad - ShoulderA);// shoulder
 
     pos = { 0.0f,-(l_Up_Arm / 2) * cos(ShoulderA), (l_Up_Arm / 2) * sin(ShoulderA) };// elbow
     HingeJoint(elbow, uparm, farm, pos, -170 * dDegreeToRad + Elbow_A, 0.0f +Elbow_A);
@@ -982,14 +996,23 @@ void dRaycastVHModel::DoubleHingeJoint(string jname, string body1, string body2,
     GeomNewton* b1 = rigid_element.find(body1)->second;
     GeomNewton* b2 = rigid_element.find(body2)->second;
     dMatrix matrix(dGetIdentityMatrix()); // define the pin
-    if (jname != "Shoulder_r" || jname != "Shoulder_l") 
+
+    if(jname != "Shoulder_r" || jname != "Shoulder_l")
         matrix = matrix * dPitchMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+
+    if (jname == "Shoulder_r" || jname == "Shoulder_l"){
+        matrix = matrix * dRollMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+        matrix = matrix * dYawMatrix(90.0f * dDegreeToRad); // DEFINE THE CORRECT DOF OF A DOUBLEHINGE (the second pin must be the one actuated by the muscle)
+    }
+
     matrix.m_posit = dVector(b1->GetPosition().m_x + pos.m_x, b1->GetPosition().m_y + pos.m_y, b1->GetPosition().m_z + pos.m_z, 1.0f);
     JDoubleHinge[jname] = new dCustomDoubleHinge(matrix, b1->GetBody(), b2->GetBody());
+
     JDoubleHinge[jname]->EnableLimits(true);
     JDoubleHinge[jname]->SetLimits(minAng1, maxAng1);
     JDoubleHinge[jname]->EnableLimits1(true);
     JDoubleHinge[jname]->SetLimits1(minAng2, maxAng2);
+   
     if (jname == "Ankle_r") {
         m_winManager->aManager->vJointList.push_back(JDoubleHinge[jname]);
         m_winManager->aManager->vJointNameList.push_back(ANKLE_R);
@@ -1056,9 +1079,9 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     else
         rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z*0.5f, 1.0f);// smaller length of capsule to remove fake force due to compenetration of collision
 
-    if (body == "LPT")
-        NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
-    else
+    //if (body == "LPT")
+    //    NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
+    //else
         NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
     //// Missing: test de following lines to move center of mass
     //dVector com;
@@ -1473,22 +1496,68 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             // end head sagittal control
             
             // WIP: verificare che angolo relativo sia corretto in dinamica
+            vector<float> shoulder_angles = Model->controller.GetShoulderTargetAngles(false,'r');
+
             // shoulder R sagittal control
-            //vector<float> SshoulderR = Model->GetRelativeSagittalState("UPT", "UpArm_r");// 
-            //Model->controller.SetState(SshoulderR[0], SshoulderR[1], "Sshoulder_r");
+            vector<float> SshoulderR = Model->GetRelativeSagittalState("UPT", "UpArm_r");// 
+            Model->controller.SetState(-SshoulderR[0], -SshoulderR[1], "Sshoulder_r");
+            Model->controller.SetShoulderAngleGain(shoulder_angles[0], "Sshoulder");
 
-            //pin = dVector(1.0, 0.0, 0.0);// pin for torque around X axis
-            //torque = Model->controller.PD_controller("SshoulderR", false);
-            //Model->AddActionReactionTorque(torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_r")->second);
-            // end head sagittal control
+            pin = dVector(1.0, 0.0, 0.0);// pin for torque around X axis
+            torque = Model->controller.PD_controller("Sshoulder_r", false);
+            Model->AddActionReactionTorque(torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_r")->second);
+            // end shoulder R sagittal control
 
-            //// elbow sagittal control
-            //vector<float> Selbow = Model->GetRelativeSagittalState("UpArm_r", "ForeArm_r");// 
-            //Model->controller.SetState(Selbow[0], Selbow[1], "Selbow_r");
+            // shoulder R transverse control
+            vector<float> TshoulderR = Model->GetRelativeTransverseState("UPT", "UpArm_r");// 
+            Model->controller.SetState(-TshoulderR[0], TshoulderR[1], "Tshoulder_r");
+            Model->controller.SetShoulderAngleGain(shoulder_angles[1], "Tshoulder");
 
-            //torque = Model->controller.PD_controller("Selbow_r", false);
-            //Model->AddActionReactionTorque(-torque, pin, RE_list.find("UpArm_r")->second, RE_list.find("ForeArm_r")->second);
-            //// end elbow sagittal control
+            pin = dVector(0.0, 1.0, 0.0);// pin for torque around Y axis
+            torque = Model->controller.PD_controller("Tshoulder_r", false);
+            Model->AddActionReactionTorque(-torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_r")->second);
+            // end shoulder R transverse control
+            
+            // elbow sagittal control
+            vector<float> Selbow = Model->GetRelativeSagittalState("UpArm_r", "ForeArm_r");// 
+            Model->controller.SetState(Selbow[0], Selbow[1], "Selbow_r");
+
+            pin = dVector(1.0, 0.0, 0.0);// pin for torque around Y axis
+            torque = Model->controller.PD_controller("Selbow_r", false);
+            Model->AddActionReactionTorque(-torque, pin, RE_list.find("UpArm_r")->second, RE_list.find("ForeArm_r")->second);
+            // end elbow sagittal control
+            // 
+            shoulder_angles = Model->controller.GetShoulderTargetAngles(false, 'l');
+
+            // shoulder L sagittal control
+            vector<float> SshoulderL = Model->GetRelativeSagittalState("UPT", "UpArm_l");// 
+            Model->controller.SetState(-SshoulderL[0], -SshoulderL[1], "Sshoulder_l");
+            Model->controller.SetShoulderAngleGain(shoulder_angles[0], "Sshoulder");
+
+            pin = dVector(1.0, 0.0, 0.0);// pin for torque around X axis
+            torque = Model->controller.PD_controller("Sshoulder_l", false);
+            Model->AddActionReactionTorque(torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_l")->second);
+            // end shoulder R sagittal control
+
+            // shoulder L transverse control
+            vector<float> TshoulderL = Model->GetRelativeTransverseState("UPT", "UpArm_l");// 
+            Model->controller.SetState(-TshoulderL[0], TshoulderL[1], "Tshoulder_l");
+            Model->controller.SetShoulderAngleGain(shoulder_angles[1], "Tshoulder");
+
+            pin = dVector(0.0, 1.0, 0.0);// pin for torque around Y axis
+            torque = Model->controller.PD_controller("Tshoulder_l", false);
+            Model->AddActionReactionTorque(-torque, pin, RE_list.find("UPT")->second, RE_list.find("UpArm_l")->second);
+            // end shoulder R transverse control
+
+            // elbow sagittal control
+            Selbow = Model->GetRelativeSagittalState("UpArm_l", "ForeArm_l");// 
+            Model->controller.SetState(Selbow[0], Selbow[1], "Selbow_l");
+
+            pin = dVector(1.0, 0.0, 0.0);// pin for torque around Y axis
+            torque = Model->controller.PD_controller("Selbow_l", false);
+            Model->AddActionReactionTorque(-torque, pin, RE_list.find("UpArm_l")->second, RE_list.find("ForeArm_l")->second);
+            // end elbow sagittal control
+            // 
             // END OF PD CONTROLLERS STUFF /////////////////////////////////////////
         }
     }
