@@ -93,6 +93,7 @@ private:
 	map<std::string, dModelNode*> nodes;// nodes as map: use mass_keys as string
 	map<std::string, dVector*> body_pos;// vector of body position
 	map<std::string, dVector*> body_dim;// vector of body dimension
+	map<std::string, dVector*> body_com;// vector of body relative position
 	map<std::string, std::string> child_father = { 
 		{"Thigh_r", "LPT"}, {"Shank_r", "Thigh_r"}, {"Foot_r", "Shank_r"},
 		{"Thigh_l", "LPT"}, {"Shank_l", "Thigh_l"}, {"Foot_l", "Shank_l"},
@@ -108,7 +109,8 @@ private:
 	/// 
 	/// <MUSCLES>
 	map<std::string, Muscle*> muscles;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	//std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l"};//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
+	std::vector<std::string> muscle_keys = { "ham_r","glu_r","hfl_r", "rf_r", "vas_r","sol_r", "ta_r", "gas_r", "ham_l","glu_l","hfl_l", "rf_l", "vas_l", "sol_l", "ta_l", "gas_l" };//  MTUs OF THE MODEL. SOL and HAM MUST be befor TA and HFL
 	map<std::string, std::string> m_body1;// body one of muscle
 	map<std::string, std::string> m_body2;// body 2 of muscle
 	map<std::string, std::string> m_body3;// body 3 of muscle

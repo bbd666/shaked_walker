@@ -56,13 +56,13 @@ ControlAlgorithm::ControlAlgorithm()
     {"Shead", 0} };
 
     // Initial condition
-    trunk_a = -5 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
-    AlphaR = 2 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
-    AlphaL = -18 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
-    Beta = 5 * dDegreeToRad;// beta see model notes figure 1
+    trunk_a = -20 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
+    AlphaR = -5 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
+    AlphaL = 30 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
+    Beta = 10 * dDegreeToRad;// beta see model notes figure 1
     Gamma = -10 * dDegreeToRad;// gamma see model notes figure 1
-    head_a = -10 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
-    elbow_a = 30 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
+    head_a = 0 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
+    elbow_a = 80 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
 
     // arm parameters
     beta = -13.0f / 48.0f;
@@ -72,7 +72,7 @@ ControlAlgorithm::ControlAlgorithm()
     /// Control parameter initialization 
     Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.2} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.3} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 1.0 },   {HAM, 1.0 },   {TA, 0.55 } };// list gain length 1 feedback
+    Glg = { {HFL, 4.5 },   {HAM, 1.0 },   {TA, 0.55 } };// list gain length 1 feedback
     Glh = { {HFL, 0.65},   {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
     GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
@@ -93,11 +93,11 @@ ControlAlgorithm::ControlAlgorithm()
 
     // PD controllers 
     G1 = { {"Ctrunk", 200},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},                 {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
-    G2 = { {"Ctrunk", 10},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
+    G2 = { {"Ctrunk", 20},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
     G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", 0 * dDegreeToRad},    {"Selbow", elbow_a},  {"Sshoulder", 0.0f}, {"Tshoulder", 0.0f} };
 
-    G1lead = { {"Ctrunk", 1000},            {"Cfoot", 200} };
-    G2lead = { {"Ctrunk", 100},             {"Cfoot", 30} };
+    G1lead = { {"Ctrunk", 1000},            {"Cfoot", 30} };
+    G2lead = { {"Ctrunk", 100},             {"Cfoot", 3} };
     G3lead = { {"Ctrunk", 0 * dDegreeToRad},{"Cfoot", 0 * dDegreeToRad} };
 
     cd1 = 0.2;// position coeff for  target angle coronal hip SIMBICON
@@ -133,9 +133,7 @@ ControlAlgorithm::ControlAlgorithm()
 
     f_ta_sol_l = { {"sol_R", l60 },{"sol_L" , l60} };
 
-
-
-    //cost = 0; // cost value initialization
+    cost = 0; // cost value initialization
 }
 
 ControlAlgorithm::~ControlAlgorithm()

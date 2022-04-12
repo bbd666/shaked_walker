@@ -391,17 +391,44 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector _Pos8(dVector(0.0f, (l_foot + l_toe) / 2 * sin(- Foot_A + ThighR_A - Shank_A), -(l_foot + l_toe) / 2 * cos(-Foot_A + ThighR_A - Shank_A)));// toe r
     dVector _Pos10(dVector(0.0f, (l_foot + l_toe) / 2 * sin(-Foot_A + ThighL_A - Shank_A), -(l_foot + l_toe) / 2 * cos(-Foot_A + ThighL_A - Shank_A)));// toe l 
 
-    dVector _Pos11(dVector(l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_R), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_R)));// UpArm r
-    dVector _Pos12(dVector((l_Low_Arm / 2) * sin(Shoulder_transverse), - (l_Up_Arm/2) * cos(Shoulder_sagittal_R) - (l_Low_Arm/ 2)*cos(Elbow_A - Shoulder_sagittal_R), (l_Up_Arm / 2) * sin(Shoulder_sagittal_R) - (l_Low_Arm / 2) * sin(Elbow_A- Shoulder_sagittal_R)* cos(-Shoulder_transverse)));// ForeArm r
-    dVector _Pos13(dVector((l_Low_Arm + l_Hand) / 2 * sin(Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_R), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_R)) * cos(-Shoulder_transverse));// hand r
+    dVector _Pos11(dVector(l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_R+LPT_A), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_R + LPT_A)));// UpArm r
+    dVector _Pos12(dVector((l_Low_Arm / 2) * sin(Shoulder_transverse), - (l_Up_Arm/2) * cos(Shoulder_sagittal_R + LPT_A) - (l_Low_Arm/ 2)*cos(Elbow_A - (Shoulder_sagittal_R + LPT_A)), (l_Up_Arm / 2) * sin(Shoulder_sagittal_R + LPT_A) - (l_Low_Arm / 2) * sin(Elbow_A - (Shoulder_sagittal_R + LPT_A))* cos(-Shoulder_transverse)));// ForeArm r
+    dVector _Pos13(dVector((l_Low_Arm + l_Hand) / 2 * sin(Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - (Shoulder_sagittal_R + LPT_A)), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - (Shoulder_sagittal_R + LPT_A)) * cos(-Shoulder_transverse)));// hand r
 
-    dVector _Pos14(dVector(-l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_L), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_L)));// UpArm l
-    dVector _Pos15(dVector((l_Low_Arm / 2) * sin(-Shoulder_transverse), -(l_Up_Arm / 2) * cos(Shoulder_sagittal_L) - (l_Low_Arm / 2) * cos(Elbow_A - Shoulder_sagittal_L), (l_Up_Arm / 2) * sin(Shoulder_sagittal_L) - (l_Low_Arm / 2) * sin(Elbow_A - Shoulder_sagittal_L) * cos(Shoulder_transverse)));// ForeArm r
-    dVector _Pos16(dVector((l_Low_Arm + l_Hand) / 2 * sin(-Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - Shoulder_sagittal_L), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - Shoulder_sagittal_L)) * cos(Shoulder_transverse));// hand l
+    dVector _Pos14(dVector(-l_Clav, (l_UPT / 2) * cos(LPT_A) - (l_Up_Arm / 2) * cos(Shoulder_sagittal_L + LPT_A), -(l_UPT / 2) * sin(LPT_A) + (l_Up_Arm / 2) * sin(Shoulder_sagittal_L + LPT_A)));// UpArm l
+    dVector _Pos15(dVector((l_Low_Arm / 2) * sin(-Shoulder_transverse), -(l_Up_Arm / 2) * cos(Shoulder_sagittal_L + LPT_A) - (l_Low_Arm / 2) * cos(Elbow_A - (Shoulder_sagittal_L + LPT_A)), (l_Up_Arm / 2) * sin(Shoulder_sagittal_L + LPT_A) - (l_Low_Arm / 2) * sin(Elbow_A - (Shoulder_sagittal_L + LPT_A)) * cos(Shoulder_transverse)));// ForeArm l
+    dVector _Pos16(dVector((l_Low_Arm + l_Hand) / 2 * sin(-Shoulder_transverse), -((l_Low_Arm + l_Hand) / 2) * cos(Elbow_A - (Shoulder_sagittal_L + LPT_A)), -((l_Low_Arm + l_Hand) / 2) * sin(Elbow_A - (Shoulder_sagittal_L + LPT_A)) * cos(Shoulder_transverse)));// hand l
 
     dVector _Pos17(dVector(0.0f, (l_UPT / 2) * cos(LPT_A) + (l_Head / 2) * cos(Head_A), -(l_UPT / 2) * sin(LPT_A) - (l_Head / 2) * sin(Head_A)));// head
 
-    std::vector< dVector* > body_pos_vec = { &_Pos0, &_Pos1, &_Pos2, &_Pos3,&_Pos4, &_Pos5, &_Pos9, &_Pos6, &_Pos7, &_Pos8, &_Pos10, &_Pos11, &_Pos12, &_Pos13 , &_Pos14, &_Pos15, &_Pos16, &_Pos17 };// vector with coordinates of bodies' com
+    std::vector< dVector* > body_pos_vec = { &_Pos0, &_Pos1, &_Pos2, &_Pos3,&_Pos4, &_Pos5, &_Pos9, &_Pos6, &_Pos7, &_Pos8, &_Pos10, &_Pos11, &_Pos12, &_Pos13 , &_Pos14, &_Pos15, &_Pos16, &_Pos17 };// vector with coordinates of bodies' geometric center
+
+    // COM RELATIVE POSITION in local coords for each body 
+    dVector _com0(dVector(delta_cm.find("LPT")->second * cos(LPT_A), 0.0f, delta_cm.find("LPT")->second * sin(LPT_A))); // LPT
+
+    dVector _com1(dVector(delta_cm.find("Thigh")->second * cos(ThighR_A), 0.0f, delta_cm.find("Thigh")->second * sin(ThighR_A)));// Thigh_r l
+    dVector _com2(dVector(delta_cm.find("Shank")->second * cos(ThighR_A - Shank_A), 0.0f, delta_cm.find("Shank")->second * sin(ThighR_A - Shank_A)));// Shank_r  l
+    dVector _com3(dVector(delta_cm.find("Foot")->second * sin(-Foot_A), 0.0f, delta_cm.find("Foot")->second * cos(-Foot_A) ));// Foot_r l
+
+    dVector _com4(dVector(delta_cm.find("MPT")->second * cos(LPT_A), 0.0f, delta_cm.find("MPT")->second * sin(LPT_A)));// MPT
+    dVector _com5(dVector(delta_cm.find("UPT")->second * cos(LPT_A), 0.0f, delta_cm.find("UPT")->second * sin(LPT_A)));// UPT
+
+    dVector _com6(dVector(0.0f, 0.0f, 0.0f));// toe r l
+
+    dVector _com7(dVector(delta_cm.find("UpArm")->second * cos(Shoulder_sagittal_R + LPT_A), 0.0f, delta_cm.find("UpArm")->second * sin(Shoulder_sagittal_R + LPT_A)));// UpArm r 
+    dVector _com8(dVector(delta_cm.find("ForeArm")->second * cos(Elbow_A - (Shoulder_sagittal_R + LPT_A)), delta_cm.find("ForeArm")->second * sin(Shoulder_transverse), delta_cm.find("ForeArm")->second * sin(Elbow_A - (Shoulder_sagittal_R + LPT_A)) * cos(-Shoulder_transverse)));// ForeArm r
+    dVector _com9(dVector(delta_cm.find("Hand")->second * cos(Elbow_A - (Shoulder_sagittal_R + LPT_A)), delta_cm.find("Hand")->second * sin(Shoulder_transverse), delta_cm.find("Hand")->second * sin(Elbow_A - (Shoulder_sagittal_R + LPT_A)) * cos(-Shoulder_transverse)));// hand r
+
+    dVector _com10(dVector(delta_cm.find("Head")->second * cos(Head_A), 0.0f, delta_cm.find("Head")->second * sin(Head_A)));// head
+
+    dVector _com11(dVector(delta_cm.find("Thigh")->second * cos(ThighL_A), 0.0f, delta_cm.find("Thigh")->second * sin(ThighL_A)));// Thigh_l
+    dVector _com12(dVector(delta_cm.find("Shank")->second * cos(ThighL_A - Shank_A), 0.0f, delta_cm.find("Shank")->second * sin(ThighL_A - Shank_A)));// Shank_l
+
+    dVector _com13(dVector(delta_cm.find("UpArm")->second * cos(Shoulder_sagittal_L + LPT_A), 0.0f, delta_cm.find("UpArm")->second * sin(Shoulder_sagittal_L + LPT_A)));// UpArm l
+    dVector _com14(dVector(delta_cm.find("ForeArm")->second * cos(Elbow_A - (Shoulder_sagittal_L + LPT_A)), delta_cm.find("ForeArm")->second * sin(-Shoulder_transverse), delta_cm.find("ForeArm")->second * sin(Elbow_A - (Shoulder_sagittal_L + LPT_A)) * cos(Shoulder_transverse)));// ForeArm l
+    dVector _com15(dVector(delta_cm.find("Hand")->second * cos(Elbow_A - (Shoulder_sagittal_L + LPT_A)), delta_cm.find("Hand")->second * sin(-Shoulder_transverse), delta_cm.find("Hand")->second * sin(Elbow_A - (Shoulder_sagittal_L + LPT_A)) * cos(Shoulder_transverse)));// hand l
+
+    std::vector< dVector* > body_com_vec = { &_com0, &_com1, &_com2, &_com3,&_com11, &_com12, &_com3, &_com4, &_com5, &_com6, &_com6, &_com7, &_com8, &_com9 , &_com13, &_com14, &_com15, &_com10 };// vector with relative coordinates of bodies' com
 
     dVector dim0(dVector(r_bones, r_bones, l_LPT));
     dVector dim1(dVector(r_bones, r_bones, l_Up_Leg));// Thigh_r and l
@@ -432,6 +459,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         body_rot_ang[*it] = body_rot_ang_vect[aa];
         body_pos[*it] = body_pos_vec[aa];
         body_dim[*it] = body_dim_vec[aa];
+        body_com[*it] = body_com_vec[aa];
         rigid_element[*it] = NULL;
         nodes[*it] = this;
         aa++;
@@ -440,7 +468,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     
     //////// MODEL DEFINITION //////////////////
     AssemblyCreation();
-    //// each plantar is made of three spheres
+    // each plantar is made of three spheres
     //CreateDescreteContactFootCollision(rigid_element["Foot_r"]->GetBody());
     //CreateDescreteContactFootCollision(rigid_element["Foot_l"]->GetBody());
     //// each toe is one sphere
@@ -912,10 +940,10 @@ void dRaycastVHModel::ArmCreation(string trunk, string uparm, string farm, strin
     pos = { s * l_Clav,  (l_UPT / 2) * cos(LPT_A), -(l_UPT / 2) * sin(LPT_A) };
     DoubleHingeJoint(shoulder, trunk, uparm, pos, Amin, Amax, -90 * dDegreeToRad - ShoulderA, 45 * dDegreeToRad - ShoulderA);// shoulder
 
-    pos = { 0.0f,-(l_Up_Arm / 2) * cos(ShoulderA), (l_Up_Arm / 2) * sin(ShoulderA) };// elbow
+    pos = { 0.0f,-(l_Up_Arm / 2) * cos(ShoulderA + LPT_A), (l_Up_Arm / 2) * sin(ShoulderA + LPT_A) };// elbow
     HingeJoint(elbow, uparm, farm, pos, -170 * dDegreeToRad + Elbow_A, 0.0f +Elbow_A);
 
-    pos = { 0.0f, -((l_Low_Arm) / 2) * cos(Elbow_A - ShoulderA), -((l_Low_Arm) / 2) * sin(Elbow_A - ShoulderA) };
+    pos = { (l_Low_Arm/2) * sin(s*Shoulder_transverse), -((l_Low_Arm) / 2) * cos(Elbow_A - (ShoulderA + LPT_A)), -((l_Low_Arm) / 2) * sin(Elbow_A - (ShoulderA + LPT_A)) * cos(s*Shoulder_transverse) };
     HingeJoint(wrist, farm, hand, pos, -0.01f, 0.01f);// wrist
 }
 
@@ -1079,15 +1107,14 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     else
         rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z*0.5f, 1.0f);// smaller length of capsule to remove fake force due to compenetration of collision
 
-    //if (body == "LPT")
+    //if (body == "LPT" || body == "Foot_r" || body == "Foot_l")
     //    NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
     //else
         NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
-    //// Missing: test de following lines to move center of mass
-    //dVector com;
-    //NewtonBodyGetCentreOfMass(rigid_element[body]->GetBody(), &com[0]);
-    //com.m_y += delta_cm[mass_prop_key];
-    //NewtonBodySetCentreOfMass(rigid_element[body]->GetBody(), &com[0]);
+    //to move center of mass
+    dVector com = body_com[body][0];
+    NewtonBodySetCentreOfMass(rigid_element[body]->GetBody(), &com[0]);
+
 
     if (body == "LPT"){
         m_body = rigid_element["LPT"]->GetBody();
@@ -1190,6 +1217,26 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
     map<std::string, GeomNewton*> RE_list = Model->Get_RigidElemetList();
 
+    //INITIAL CONDITION //
+    if (newTime == 0) {
+        /*vector<float> ICv = Model->controller.GetInitialCondition();*/
+        /*dVector LPTvel_init = { ICv[5] / 4,0, ICv[5] };*/
+        float vel = -2.0;
+        dVector LPTvel_init = { 0,0, vel };
+
+        GeomNewton* BODY = RE_list.find("LPT")->second;
+        NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+        BODY = RE_list.find("UPT")->second;
+        NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+
+        //LPTvel_init = LPTvel_init.Scale(3.0f);
+        //BODY = RE_list.find("Thigh_r")->second;
+        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+        //BODY = RE_list.find("Shank_r")->second;
+        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
+
+    }
+
     /// MUSCLE STUFF /////////////////////////////////////////////////////////////////////////////////////////////
     // find ankle position
     dVector com_Player = Model->ComputePlayerCOM();
@@ -1229,8 +1276,11 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         // Model com visualization
         Model->DrawFrame(com_Player, 1.0); // comment this line to check single body com position and use following lines
         //// Check for body com position! change manually the name of the body 
-        //dMatrix mat = list_RE.find("Thigh_r")->second->GetMatrix();;
-        //Model->DrawFrame(mat.m_posit, 1.0);
+        //NewtonBody* body = RE_list.find("Hand_l")->second->GetBody();
+        //dVector com;
+        //NewtonBodyGetCentreOfMass(body, &com[0]);
+        //com = Rel2AbsPoint(body, &com[0]);
+        //Model->DrawFrame(com, 1.0);
 
         // leading leg: the one that is in heel strike (z coordinate of ankle is smaller than z coordinate of player com)
         char lead = 'L';
