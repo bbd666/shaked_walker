@@ -7,13 +7,6 @@
 
 ControlAlgorithm::ControlAlgorithm()
 {
-    //// Initial condition
-    //trunk_a = -10 * dDegreeToRad;// [rad] negative forward
-    //AlphaR = 0 * dDegreeToRad;// alpha right see model notes figure 1
-    //AlphaL = 25* dDegreeToRad;// alpha left leg see model notes figure 1
-    //Beta = 10 * dDegreeToRad;// beta see model notes figure 1
-    //Gamma = 0 * dDegreeToRad;// gamma see model notes figure 1
-    //Vel_initial = -1.8f; // [m/s]// negative forward
     State_velocity = { {"Sknee_r", 0},{"Sknee_l", 0},
     {"Ship_r", 0},{"Ship_l", 0},
     {"Sankle_r", 0},{"Sankle_l", 0} ,
@@ -56,31 +49,32 @@ ControlAlgorithm::ControlAlgorithm()
     {"Shead", 0} };
 
     // Initial condition
-    trunk_a = -20 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
+    trunk_a = -5 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
     AlphaR = -5 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
     AlphaL = 30 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
     Beta = 10 * dDegreeToRad;// beta see model notes figure 1
-    Gamma = -10 * dDegreeToRad;// gamma see model notes figure 1
+    Gamma = -6 * dDegreeToRad;// gamma see model notes figure 1
     head_a = 0 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
-    elbow_a = 80 * dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
+    Vel_initial = -3.2f; // [m/s]// negative forward
 
     // arm parameters
     beta = -13.0f / 48.0f;
     gamma = -13.0f / 96.0f;
     alfa = 0.25f;
+    elbow_a = 10*dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
 
     /// Control parameter initialization 
-    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.2} };// list gain force feedback
+    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.5} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.3} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 4.5 },   {HAM, 1.0 },   {TA, 0.55 } };// list gain length 1 feedback
+    Glg = { {HFL, 4.5 },   {HAM, 1.0 },   {TA, 0.9 } };// list gain length 1 feedback
     Glh = { {HFL, 0.65},   {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
-    GPDk = { {HFL, 1.0},    {GLU, 1.0},   {VAS, 1.0} };// list gain  PD controller spring
+    GPDk = { {HFL, 0.7},    {GLU, 0.7},   {VAS, 0.7} };// list gain  PD controller spring
     GPDd = { {HFL, 0.1},    {GLU, 0.1},   {VAS, 0.1} };// list gain PD controller damper
     GPDa = { {HFL, 160 * dDegreeToRad},   {GLU, 160 * dDegreeToRad},   {VAS, 170 * dDegreeToRad} };//list gain PD controller ang in rad. CHECK
 
-    cd = 0.2;// position coeff for  target angle sagittal hip SIMBICON
-    cv = 0.2; // velocity coeff for  target angle sagittal hip SIMBICON
+    cd = 0.5f;// position coeff for  target angle sagittal hip SIMBICON
+    cv = 0.2f; // velocity coeff for  target angle sagittal hip SIMBICON
 
     // stance hip control
     Glead1 = { {HAM, 1.90},         {GLU, 1.90},        {HFL, 1.90} };
@@ -92,16 +86,16 @@ ControlAlgorithm::ControlAlgorithm()
     GP2 = { {HFL, Glead2.find(HFL)->second},    {VAS, 170 * dDegreeToRad} };// CHECK ANGLE
 
     // PD controllers 
-    G1 = { {"Ctrunk", 200},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},                 {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
-    G2 = { {"Ctrunk", 20},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},                  {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
-    G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", 0 * dDegreeToRad},    {"Selbow", elbow_a},  {"Sshoulder", 0.0f}, {"Tshoulder", 0.0f} };
+    G1 = { {"Ctrunk", 150},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},         {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
+    G2 = { {"Ctrunk", 15},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},          {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
+    G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", head_a},      {"Selbow", elbow_a},  {"Sshoulder", 0.0f}, {"Tshoulder", 0.0f} };
 
-    G1lead = { {"Ctrunk", 1000},            {"Cfoot", 30} };
-    G2lead = { {"Ctrunk", 100},             {"Cfoot", 3} };
+    G1lead = { {"Ctrunk", 2000},            {"Cfoot", 300} };
+    G2lead = { {"Ctrunk", 200},             {"Cfoot", 30} };
     G3lead = { {"Ctrunk", 0 * dDegreeToRad},{"Cfoot", 0 * dDegreeToRad} };
 
-    cd1 = 0.2;// position coeff for  target angle coronal hip SIMBICON
-    cv1 = 0.2; // velocity coeff for  target angle coronal hip SIMBICON
+    cd1 = 0.2f;// position coeff for  target swing angle coronal hip SIMBICON
+    cv1 = 0.2f; // velocity coeff for  target swing angle coronal hip SIMBICON
     // 
     // excitation list initialization for each muscle
     list<float> l15(15, 0.0);// 5 ms delay
@@ -133,7 +127,7 @@ ControlAlgorithm::ControlAlgorithm()
 
     f_ta_sol_l = { {"sol_R", l60 },{"sol_L" , l60} };
 
-    cost = 0; // cost value initialization
+    TaskCost = 0,TorqueMuscleCost = 0,TorquePDCost = 0;
 }
 
 ControlAlgorithm::~ControlAlgorithm()
@@ -149,26 +143,34 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
     if (dof.compare("Ctrunk")==0)// coronal control of pelvis orientation
     {
         vector<float> gains = GetGain_PD(dof, leading);
-        float target_angle = gains[2] + cd1 * dx + cv1 * (COMvel.m_x);// SIMBICON target angle
-        torque = gains[0] * (State_position.find(dof)->second - target_angle) + gains[1] * State_velocity.find(dof)->second;
-        if (!leading)
-            torque = -torque;
-        return torque;
+        float target_angle;
+        
+        if (!leading) // if swing
+        {
+            target_angle = gains[2] + cd1 * dx + cv1 * (COMvel.m_x);// SIMBICON target angle
+            torque = -(gains[0] * (State_position.find(dof)->second - target_angle) + gains[1] * State_velocity.find(dof)->second);
+        }
+        else
+        {
+            torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
+        }
     }
     else if (dof.compare("Ttrunk") == 0)// transverse control of pelvis orientation
     {
         vector<float> gains = GetGain_PD(dof, leading);
-        return torque = -(gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
+        torque = -(gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
     }
     else if (dof.compare("Cfoot_r") == 0 || dof.compare("Cfoot_l") == 0)// coronal control of foot orientation
     {
         vector<float> gains = GetGain_PD("Cfoot", leading);
-        return torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
+        torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
+        //if (!leading) // if swing
+        //    torque = 0;
     }
     else if (dof.compare("Shead")==0)// sagittal control of head orientation
     {
         vector<float> gains = GetGain_PD(dof, false);
-        return torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
+        torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
     }
     else if (dof.compare("Selbow_r") == 0 || dof.compare("Sshoulder_r") == 0 || dof.compare("Tshoulder_r") == 0 ||
              dof.compare("Selbow_l") == 0 || dof.compare("Sshoulder_l") == 0 || dof.compare("Tshoulder_l") == 0)// arm
@@ -177,8 +179,11 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
         dof2.pop_back();
         dof2.pop_back();
         vector<float> gains = GetGain_PD(dof2, false);
-        return torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
+        torque = (gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second);
     }
+
+    TorquePDCost += abs(torque);
+    return torque;
 }
 //MTU control law based on Force feedback, Length feedback and PD controller
 //The output is the excitation signal for muscle m_name. 
@@ -353,7 +358,7 @@ float ControlAlgorithm::MTU_excitation(Mtuname m_name,vector<bool> gait_state,ch
             u = p;break;
         }
 
-        if (SI || DS) { // || DS for walking? // s values from wang supplemental material section 5
+        if (SI || DS) { // s values from wang supplemental material section 5
             switch (m_name) {
             case VAS:
                 u = u - 0.3;break;
@@ -449,19 +454,19 @@ void ControlAlgorithm::SetCoronalDistance(float d1)
     dx = d1;
 }
 
-void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float elbow) {
+void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel) {
     trunk_a = Tangle;// [rad] negative forward
     AlphaR = alfaR;//
     AlphaL = alfaL;//
     Beta = beta;//
     Gamma = gamma;//
     head_a = head; // [m/s]// negative forward
-    elbow_a = elbow;
+    Vel_initial = vel;
 }
 
 vector<float> ControlAlgorithm::GetInitialCondition()
 {
-    vector<float> v = { trunk_a, AlphaR,    AlphaL,    Beta,    Gamma,    head_a, elbow_a};
+    vector<float> v = { trunk_a, AlphaR,    AlphaL,    Beta,    Gamma,    head_a, Vel_initial, elbow_a };
     return v;
 }
 
@@ -480,9 +485,9 @@ vector<float> ControlAlgorithm::GetShoulderTargetAngles(bool state0, char lat)
 {
     float sagittal;
     if (state0)
-        sagittal = alfa * (GetState0("Ship_l")[0] - GetState0("Ship_r")[0]);
+        sagittal = alfa * (GetState0("Ship_r")[0] - GetState0("Ship_l")[0]);// inverse of wang
     else
-        sagittal = alfa * (GetState("Ship_l")[0]  - GetState("Ship_r")[0]);
+        sagittal = alfa * (GetState("Ship_r")[0]  - GetState("Ship_l")[0]);
     float transverse = gamma * elbow_a;
     if (lat == 'r') {
         sagittal = -sagittal;
@@ -574,6 +579,15 @@ void ControlAlgorithm::SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, floa
     Glh.find(HFL)->second = Glh_hfl;
     Glh.find(HAM)->second = Glh_ham;
     Glh.find(TA)->second = Glh_ta;
+}
+
+void ControlAlgorithm::SetGain_Coronal(float trunk_p, float trunk_v, float foot_p, float foot_v)
+{
+    G1lead.find("Ctrunk")->second = trunk_p;
+    G2lead.find("Ctrunk")->second = trunk_v;
+
+    G1lead.find("Cfoot")->second = foot_p;
+    G2lead.find("Cfoot")->second = foot_v;
 }
 
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)
@@ -706,12 +720,12 @@ string ControlAlgorithm::MuscleName(Mtuname m_name, char lat)
     return muscle;
 }
 
-float ControlAlgorithm::SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, vector<float> Strunk, vector<float> Ftrunk)
+void ControlAlgorithm::UpdateTaskReward(dFloat COMY_pos, dVector COM_vel, float Strunk, float Ftrunk)
 {
     float Kfail = 0, Kvel = 0, Ktorso = 0;
-    float target_velz = -(1.25 - 0.05); // target forward velocity in [m/s]
-    float target_height = 0.6; // target height in [m]
-    float target_pelvis_ang = 0 * dDegreeToRad; // target pelvis angle between the target direction and the global - Z direction in [rad]
+    float target_velz = -(1.25f - 0.05f); // target forward velocity in [m/s]
+    float target_height = 0.6f; // target height in [m]
+    float target_pelvis_ang = 0.0f * dDegreeToRad; // target pelvis angle between the target direction and the global - Z direction in [rad]
 
     // fail task term
     if (COMY_pos < target_height)
@@ -725,13 +739,21 @@ float ControlAlgorithm::SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, 
         Kvel += (COM_vel.m_x) * (COM_vel.m_x);
 
     // torso task term
-    if (abs(Ftrunk[0] - target_pelvis_ang) > 0.05)// pelvis front orientation
-        Ktorso += 0.01 * (Ftrunk[0] - target_pelvis_ang) * (Ftrunk[0] - target_pelvis_ang);
+    if (abs(Ftrunk - target_pelvis_ang) > 0.05)// pelvis front orientation
+        Ktorso += 0.01 * (Ftrunk - target_pelvis_ang) * (Ftrunk - target_pelvis_ang);
 
-    if (abs(Strunk[0]) > 0.1)// trunk sagittal orientation CHECK VALUE
-        Ktorso += 0.1 * (Strunk[0]) * (Strunk[0]);
+    if (abs(Strunk) > 0.1)// trunk sagittal orientation CHECK VALUE
+        Ktorso += 0.1 * (Strunk) * (Strunk);
 
-    cost += (Kfail + Kvel + Ktorso); // missing minimization of torque and head orientation and foot contact
+    TaskCost += (Kfail + Kvel + Ktorso); // missing minimization of torque and head orientation and foot contact
+}
 
-    return cost;
+void ControlAlgorithm::UpdateMuscleReward(float value)
+{
+    TorqueMuscleCost += value;
+}
+
+vector<float> ControlAlgorithm::GetRewardValues()
+{
+    return vector<float>{TaskCost, TorqueMuscleCost, TorquePDCost};
 }

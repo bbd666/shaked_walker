@@ -18,13 +18,15 @@ public:
 	void SetPlayerCOMvel(dVector COMvel);
 	void SetSagittalDistance(float d);
 	void SetCoronalDistance(float d1);
-	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float Tvel, float elbow);
+	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel);
 	void SetGain_Force_Feedback(Mtuname NAME, float val);
 	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
 
 	void SetGain_ForceFeedback(float Gf_glu, float Gf_ham, float Gf_vas, float Gf_sol, float Gf_gas, float Gf_tasol);
 
 	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
+
+	void SetGain_Coronal(float trunk_p, float trunk_v, float foot_p, float foot_v);
 
 	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);
@@ -55,7 +57,9 @@ public:
 	void UpdateQueue(string muscle, map<string, list<float>> &queue, float value);
 	string MuscleName(Mtuname name, char lat);
 
-	float SimulationReturnValue(dFloat COMY_pos, dVector COM_vel, vector<float> Strunk, vector<float> Ftrunk);
+	void UpdateTaskReward(dFloat COMY_pos, dVector COM_vel, float Strunk, float Ftrunk);
+	void UpdateMuscleReward(float value);
+	vector<float> GetRewardValues();
 private:
 	dVector COMvel;
 	// SIMBICON target angle parameters and values
@@ -101,13 +105,7 @@ private:
 	/// </Control parameters>
 
 	// initial conditions
-	float trunk_a; // initial trunk forward inclination in rad
-	float head_a; // initial force applied to lpt
-	float AlphaR;
-	float AlphaL;
-	float Beta;
-	float Gamma;
-	float elbow_a;
+	float trunk_a, head_a, AlphaR, AlphaL, Beta,Gamma, elbow_a, Vel_initial;
 
 	// State of each controlled dof
 	map<string, float> State_position;// angle
@@ -116,7 +114,9 @@ private:
 	map<string, float> State0_position;// initial angle
 	map<string, float> State0_velocity;// initial velocity
 
-	float cost; // creturn simulation cost
+	float TaskCost; // Task simulation cost
+	float TorqueMuscleCost; // Muscle Torque simulation cost
+	float TorquePDCost; // PD Torque simulation cost
 };
 
 #endif // _CONTROL_ALGORITHM_H_

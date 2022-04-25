@@ -59,9 +59,8 @@ public:
 	float GetLegLength();
 	ControlAlgorithm controller;
 	void AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2);
-	void SetSimulationCost(float cost);
-	float GetSimulationCost();
 	float GetHipLength();
+	float GetModelMass();
 
 private:
 	WindowMain* m_winManager;
@@ -73,7 +72,7 @@ private:
 	void HingeJoint(string jname, string body1, string body2, dVector pos, float minAng, float maxAng);
 	void DoubleHingeJoint(string jname, string body1, string body2, dVector pos, float minAng1, float maxAng1, float minAng2, float maxAng2);
 	
-	float LPT_A ,ThighR_A,ThighL_A,Shank_A ,Foot_A, Head_A, Elbow_A;
+	float LPT_A ,ThighR_A,ThighL_A,Shank_A ,Foot_A, Head_A, Elbow_A, Model_Mass;
 
 	/// <RIGID ELEMENTS>
 	GeomNewton* box;

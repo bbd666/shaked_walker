@@ -72,6 +72,7 @@ int WINAPI wWinMain(
 			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
 			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
 			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
+			Model->controller.SetGain_Coronal(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
 		}
 	#else
 		if (argc > 1) {
@@ -79,14 +80,17 @@ int WINAPI wWinMain(
 			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
 			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
 			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
+			Model->controller.SetGain_Coronal(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
 		}
 	#endif
 
-	float cost = 0;
+	float cost = 0, mass = 0;
+	vector<float> reward;
 	if (ContextGL != NULL) {
 		ContextGL->MainLoop();
 
-		cost = Model->GetSimulationCost();
+		reward = Model->controller.GetRewardValues();
+		mass = Model->GetModelMass();
 		//
 		// delete context and newton manager and close tutorial.
 		//if (man) { delete(man); }
@@ -103,5 +107,11 @@ int WINAPI wWinMain(
 	// If I don't create the window the leak go away.
 	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
 #endif 
+	float we = 0.004 / mass; // weight for torques
+	float wm = 100;// weight for Muscles torques
+	float wpd = 1; // weight for PD torques
+	float T = 3000 * 5; // 3000 Hz * simulation time (5s) number of iterations CHECK!
+
+	cost = reward[0] + we/T*(wm*reward[1]+wpd*reward[2]);
 	return cost;
 }

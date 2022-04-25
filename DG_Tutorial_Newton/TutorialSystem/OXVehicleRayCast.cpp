@@ -4,7 +4,7 @@
 
 
 dFloat newTime = 0;
-ofstream monFlux("history.txt");
+//ofstream monFlux("history.txt");
 // ----------------------------------------------------------------------
 // STDOUT dump and indenting utility functions
 // ----------------------------------------------------------------------
@@ -327,10 +327,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     ankle_j = scale_length * lengths["AnkleHeight"]; // de leva table 2
     knee_j = scale_length * 0.035; // de leva table 2
     // MASS DATA in kg
-    float tot_w = scale_mass * v_total_weight[0];
+    Model_Mass = scale_mass * v_total_weight[0];
     for (map<std::string, float>::iterator it = mass_distrib.begin(); it != mass_distrib.end(); it++)
     {
-        it->second = it->second * tot_w;
+        it->second = it->second * Model_Mass;
     };
     //INERTIA DATA in kg*m^2
     for (map<std::string, float>::iterator it = Ixx.begin(); it != Ixx.end(); it++)
@@ -360,7 +360,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Shank_A = IC_v[3];// beta see model notes figure 1
     Foot_A = IC_v[4];// gamma see model notes figure 1
     Head_A = -IC_v[5];// 
-    Elbow_A = IC_v[6];// 
+    Elbow_A = IC_v[7];// 
 
     controller.SetState0(180 * dDegreeToRad - Shank_A, 0, "Sknee_r");
     controller.SetState0(180 * dDegreeToRad - Shank_A, 0, "Sknee_l");
@@ -375,7 +375,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     shoulder_angles = controller.GetShoulderTargetAngles(true, 'r');
     Shoulder_sagittal_R = shoulder_angles[0];
     // INITIAL POSITION  OF THE DUMMY IN THE SCENE X (lateral, + left) Y(vertical, + sky) Z(front, + back)
-    dVector _Pos0(dVector(0.0f, 0.125f + (l_LPT / 2) * cos(LPT_A) + l_Up_Leg * cos(ThighR_A) + (l_Low_Leg + h_foot) * cos(ThighR_A - Shank_A), -0.1f - (l_LPT / 2) * sin(LPT_A))); // LPT
+    dVector _Pos0(dVector(3* l_Hip,0.115f+(l_LPT / 2) * cos(LPT_A) + l_Up_Leg * cos(ThighR_A) + (l_Low_Leg + h_foot) * cos(ThighR_A - Shank_A), -0.2f - (l_LPT / 2) * sin(LPT_A))); // LPT
 
     dVector _Pos1(dVector(l_Hip, -(l_LPT / 2) * cos(LPT_A) - (l_Up_Leg / 2) * cos(ThighR_A), (l_LPT / 2) * sin(LPT_A) - (l_Up_Leg / 2) * sin(ThighR_A)));// Thigh_r
     dVector _Pos2(dVector(0.0f, -(l_Up_Leg / 2) * cos(ThighR_A) - (l_Low_Leg / 2) * cos(ThighR_A - Shank_A), -(l_Up_Leg / 2) * sin(ThighR_A) - (l_Low_Leg / 2) * sin(ThighR_A - Shank_A)));// Shank_r 
@@ -439,7 +439,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     dVector dim6(dVector(h_foot, w_foot, l_toe));// toe l and r
     dVector dim7(dVector(r_bones, r_bones, l_Up_Arm));// UpArm l UpArm r
     dVector dim8(dVector(r_bones, r_bones, l_Low_Arm));// LArm lLArm r
-    dVector dim9(dVector(r_bones, r_bones, l_Hand));// LArm lLArm r
+    dVector dim9(dVector(r_bones/2, r_bones/2, l_Hand));// LArm lLArm r
     dVector dim10(dVector(r_bones, r_bones, l_Head));// head
 
     std::vector< dVector* >body_dim_vec = { &dim0, &dim1, &dim2, &dim3, &dim1, &dim2, &dim3, &dim4, &dim5, &dim6, &dim6, &dim7, &dim8, &dim9 , &dim7, &dim8, &dim9, &dim10};// vector with bodies' dimensions
@@ -468,7 +468,7 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     
     //////// MODEL DEFINITION //////////////////
     AssemblyCreation();
-    // each plantar is made of three spheres
+    //// each plantar is made of three spheres
     //CreateDescreteContactFootCollision(rigid_element["Foot_r"]->GetBody());
     //CreateDescreteContactFootCollision(rigid_element["Foot_l"]->GetBody());
     //// each toe is one sphere
@@ -504,10 +504,10 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         {"sol_r", ""},          {"sol_l", ""},
         {"ta_r", ""},           {"ta_l", ""},
         {"gas_r", "Foot_r"},    {"gas_l", "Foot_l"} };// list muscle bodies 3
-    m_point1 = { {"hfl_r", dVector(-l_LPT / 2, -l_Hip/2, -4 * r_bones)},    {"hfl_l", dVector(-l_LPT / 2, l_Hip / 2, -4 * r_bones)},
-        {"glu_r", dVector(-l_LPT / 2, -l_Hip / 2, 4 * r_bones)},            {"glu_l", dVector(-l_LPT / 2, l_Hip / 2, 4 * r_bones)},
-        {"ham_r",dVector(-l_LPT / 2, -l_Hip / 2, 4 * r_bones)},             {"ham_l",dVector(-l_LPT / 2,  l_Hip / 2, 4 * r_bones)},
-        {"rf_r",dVector(-l_LPT / 2, -l_Hip / 2, -4 * r_bones)},             {"rf_l",dVector(-l_LPT / 2,   l_Hip / 2, -4 * r_bones)},
+    m_point1 = { {"hfl_r", dVector(-l_LPT / 2, -l_Hip, -4 * r_bones)},    {"hfl_l", dVector(-l_LPT / 2, l_Hip, -4 * r_bones)},
+        {"glu_r", dVector(-l_LPT / 2, -l_Hip, 4 * r_bones)},            {"glu_l", dVector(-l_LPT / 2, l_Hip, 4 * r_bones)},
+        {"ham_r",dVector(-l_LPT / 2, -l_Hip, 4 * r_bones)},             {"ham_l",dVector(-l_LPT / 2,  l_Hip, 4 * r_bones)},
+        {"rf_r",dVector(-l_LPT / 2, -l_Hip, -4 * r_bones)},             {"rf_l",dVector(-l_LPT / 2,   l_Hip, -4 * r_bones)},
         {"vas_r",dVector(-l_Up_Leg / 2, 0, -4 * r_bones)},                  {"vas_l",dVector(-l_Up_Leg / 2, 0, -4 * r_bones)},
         {"sol_r",dVector(0, 0, 0)},                                         {"sol_l",dVector(0, 0, 0)},
         {"ta_r",dVector(0, 0, 0)},                                          {"ta_l",dVector(0, 0, 0)},                
@@ -957,14 +957,14 @@ void dRaycastVHModel::LegCreation(string trunk, string thigh, string shank, stri
     if (thigh.back() == 'r') {
         s = 1;
         ang = ThighR_A;
-        Amin = -35 * dDegreeToRad;//2
-        Amax = 2 * dDegreeToRad;// 35 wang
+        Amin = -5 * dDegreeToRad;//-35
+        Amax = 5 * dDegreeToRad;// 2 wang
     }
     else {
         s = -1;
         ang = ThighL_A;
-        Amin = -2 * dDegreeToRad;
-        Amax = 35 * dDegreeToRad;//35 2
+        Amin = -5 * dDegreeToRad; //-2
+        Amax = 5* dDegreeToRad;//35 
     }
 
     dVector pos;
@@ -1068,6 +1068,11 @@ float dRaycastVHModel::GetHipLength()
     return l_Hip;
 }
 
+float dRaycastVHModel::GetModelMass()
+{
+    return Model_Mass;
+}
+
 void dRaycastVHModel::RigidBodyCreation(string body)
 {
     string tex("Textures//wood6.png");
@@ -1082,9 +1087,6 @@ void dRaycastVHModel::RigidBodyCreation(string body)
         mass_prop_key = name;
     }
     
-    //else if (*it == altri corpi rigidi")
-    //    mass_prop_key == "MPT";
-
     rigid_element[body] = new GeomNewton(m_winManager->aManager);
     rigid_element[body]->SetBodyType(adtDynamic);
     if (body != "LPT")
@@ -1107,7 +1109,7 @@ void dRaycastVHModel::RigidBodyCreation(string body)
     else
         rigid_element[body]->InitNewton(atCapsule, body_dim[body]->m_x, body_dim[body]->m_y, body_dim[body]->m_z*0.5f, 1.0f);// smaller length of capsule to remove fake force due to compenetration of collision
 
-    //if (body == "LPT" || body == "Foot_r" || body == "Foot_l")
+    //if (body == "Thigh_l")// body == "LPT"|| body == "Foot_r" || body == "Foot_l"
     //    NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), 0, Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
     //else
         NewtonBodySetMassMatrix(rigid_element[body]->GetBody(), mass_distrib[mass_prop_key], Ixx[mass_prop_key], Iyy[mass_prop_key], Izz[mass_prop_key]);
@@ -1161,14 +1163,6 @@ void dRaycastVHModel::AddActionReactionTorque(float Torque, dVector pin, GeomNew
         NewtonBodyAddTorque(b2->GetBody(), &pin.m_x);
     }
 }
-void dRaycastVHModel::SetSimulationCost(float cost)
-{
-    SimulationCost = cost;
-}
-float dRaycastVHModel::GetSimulationCost()
-{
-    return SimulationCost;
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
@@ -1219,21 +1213,13 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
     //INITIAL CONDITION //
     if (newTime == 0) {
-        /*vector<float> ICv = Model->controller.GetInitialCondition();*/
-        /*dVector LPTvel_init = { ICv[5] / 4,0, ICv[5] };*/
-        float vel = -2.0;
-        dVector LPTvel_init = { 0,0, vel };
+        vector<float> ICv = Model->controller.GetInitialCondition();
+        dVector LPTvel_init = { ICv[6] / 2.5f,0.0f, ICv[6] };
 
         GeomNewton* BODY = RE_list.find("LPT")->second;
         NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
         BODY = RE_list.find("UPT")->second;
         NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-
-        //LPTvel_init = LPTvel_init.Scale(3.0f);
-        //BODY = RE_list.find("Thigh_r")->second;
-        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
-        //BODY = RE_list.find("Shank_r")->second;
-        //NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
 
     }
 
@@ -1444,7 +1430,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             Mobj->SetActivation(u);
 
             dVector Ttemp = Mobj->Compute_muscle_Torque(timestep);
-            //cout << newTime << ' ' << Ttemp.m_x << endl;
 
             Model->AddActionReactionTorque(Ttemp.m_x, pin, Mobj->body1, Mobj->body2);
             if (Mobj->body3 != NULL)
@@ -1452,6 +1437,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
 
             // update for next force update
             Mobj->SetLCE(Mobj->GetLCE() + Mobj->GetDelta_l()); // update lCE
+            Model->controller.UpdateMuscleReward(abs(Ttemp.m_x) + abs(Ttemp.m_y));// update torque reward
 
             #if defined(_DEBUG)
                 //// stamp u of all muscles
@@ -1468,7 +1454,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         vector<float> statekneel = Model->controller.GetState("Sknee_l");
         vector<float> stateankler = Model->controller.GetState("Sankle_r");
         vector<float> stateanklel = Model->controller.GetState("Sankle_l");
-        vector<float> stateLPT = Model->controller.GetState("Strunk");
+        vector<float> stateLPT = Model->controller.GetState("Ctrunk");
 
         #if defined(_DEBUG)
             // verify total torque on joints
@@ -1488,31 +1474,31 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
          // PD CONTROLLERS STUFF /////////////////////////////////////////////
         if (1) {
             float dx = 0;// compute horizontal distance between foot and com along x direction
-
+            float torque;
             dVector pin(0.0, 0.0, 1.0);// pin for torque around Z axis
             // trunk coronal control
             vector<float> state = Model->GetTrunkCoronalState();
             Model->controller.SetState(state[0], state[1], "Ctrunk");
 
+            dVector T;
             dx = (com_ankle_r.m_x - com_Player.m_x);
-            if (dx > 0)
-                dx = dx -Model->GetHipLength();
-            else
-                dx = dx + Model->GetHipLength();
-            Model->controller.SetCoronalDistance(dx);
-            float torque = Model->controller.PD_controller("Ctrunk" , lead == 'R');
-            Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_r")->second);
+            //if (dx > 0.0f) {
+                dx = -(dx - Model->GetHipLength());
+                Model->controller.SetCoronalDistance(dx);
+                torque = Model->controller.PD_controller("Ctrunk", lead == 'R');
+                Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_r")->second);
+            //}
 
-            dx = (com_ankle_l.m_x - com_Player.m_x);
-            if (dx > 0)
+            dx = (com_Player.m_x - com_ankle_l.m_x);
+            //if (dx > 0.0f) {
                 dx = dx - Model->GetHipLength();
-            else
-                dx = dx + Model->GetHipLength();
-            Model->controller.SetCoronalDistance(dx);
-            torque = Model->controller.PD_controller("Ctrunk", lead == 'L');
-            Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_l")->second);
-            // end trunk coronal control
+                Model->controller.SetCoronalDistance(dx);
+                torque = Model->controller.PD_controller("Ctrunk", lead == 'L');
+                Model->AddActionReactionTorque(torque, pin, RE_list.find("LPT")->second, RE_list.find("Thigh_l")->second);
+            //}
+            //// end trunk coronal control
 
+            //cout << lead << endl;
             // RIGHT FOOT ORIENTATION CONTROL 
             state = Model->GetFootCoronalState("Foot_r");
             Model->controller.SetState(state[0], state[1], "Cfoot_r");
@@ -1523,6 +1509,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             //// LEFT FOOT ORIENTATION CONTROL 
             state = Model->GetFootCoronalState("Foot_l");
             Model->controller.SetState(state[0], state[1], "Cfoot_l");
+
+            NewtonBodyGetTorque(RE_list.find("Shank_l")->second->GetBody(), &T.m_x);
 
             torque = Model->controller.PD_controller("Cfoot_l", lead == 'L');
             Model->AddActionReactionTorque(torque, pin, RE_list.find("Shank_l")->second, RE_list.find("Foot_l")->second);
@@ -1615,8 +1603,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     vector<dFloat> Strunk = Model->GetSagittalState("LPT");
     vector<dFloat> Ctrunk = Model->GetTrunkCoronalState();
     dVector COM_vel = Model->ComputePlayerCOMvelocity();
-    float cost = Model->controller.SimulationReturnValue(com_Player.m_y, COM_vel, Strunk, Ctrunk);
-    Model->SetSimulationCost(cost);
+    Model->controller.UpdateTaskReward(com_Player.m_y, COM_vel, Strunk[0], Ctrunk[0]);
     
     newTime = newTime + timestep; // update time
     m_winManager->SetSimulationTime(newTime);
