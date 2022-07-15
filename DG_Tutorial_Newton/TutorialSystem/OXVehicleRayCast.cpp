@@ -4,7 +4,9 @@
 
 
 dFloat newTime = 0;
-//ofstream monFlux("history.txt");
+#if defined(_DEBUG)
+    ofstream monFlux("history.txt");
+#endif
 // ----------------------------------------------------------------------
 // STDOUT dump and indenting utility functions
 // ----------------------------------------------------------------------
@@ -39,10 +41,11 @@ int dRaycastVHModel::dump_attribs_to_stdout(TiXmlElement* pElement, std::vector<
     int ival;
     double dval;
     const char* pIndent = getIndent(indent);
-    printf("\n");
+    //printf("\n");
     while (pAttrib)
     {
-        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
+        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) 
+            //printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
         
         vector.push_back(dval);
         i++;
@@ -60,10 +63,11 @@ int dRaycastVHModel::dump_attribs_to_stdout2(TiXmlElement* pElement, std::map<st
     int ival;
     double dval;
     const char* pIndent = getIndent(indent);
-    printf("\n");
+    //printf("\n");
     while (pAttrib)
     {
-        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
+        if (pAttrib->QueryDoubleValue(&dval) == TIXML_SUCCESS) 
+            //printf("%s%s: value=[%1.4f] \n", pIndent, pAttrib->Name(), dval);
 
         l.find(pAttrib->Name())->second = dval;
         i++;
@@ -79,18 +83,18 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
     TiXmlNode* pChild;
     TiXmlText* pText;
     int t = pParent->Type();
-    printf("%s", getIndent(indent));
+    //printf("%s", getIndent(indent));
     int num=0;
 
     switch (t)
     {
     case TiXmlNode::DOCUMENT:
-        printf("Document");
+        //printf("Document");
         break;
 
     case TiXmlNode::ELEMENT:
     {
-        printf("Element [%s]", pParent->Value());
+        //printf("Element [%s]", pParent->Value());
         TIXML_STRING sParameter = pParent->ValueTStr();
 
         if (sParameter == "Scale")
@@ -187,51 +191,57 @@ void dRaycastVHModel::dump_to_stdout(TiXmlNode* pParent, unsigned int indent)
         }
         else
         {
-            printf("No attributes \n");
+            //printf("No attributes \n");
         }
 
         switch (num)
         {
         case 0:  break;
-        case 1:  printf("%s1 attribute \n", getIndentAlt(indent)); break;
-        default: printf("%s%d attributes \n", getIndentAlt(indent), num); break;
+        case 1:
+        {//printf("%s1 attribute \n", getIndentAlt(indent)); 
+            break;
+        }
+        default:
+        {//printf("%s%d attributes \n", getIndentAlt(indent), num); 
+            break;
+        }
         }
         break;
     }
-    case TiXmlNode::COMMENT:
-        printf("Comment: [%s]", pParent->Value());
+    case TiXmlNode::COMMENT: {
+        //printf("Comment: [%s]", pParent->Value());
         break;
-
-    case TiXmlNode::UNKNOWN:
-        printf("Unknown");
+    }
+    case TiXmlNode::UNKNOWN: {
+        //printf("Unknown");
         break;
-
-    case TiXmlNode::TEXT:
+    }
+    case TiXmlNode::TEXT: {
         pText = pParent->ToText();
-        printf("Text: [%s]", pText->Value());
+        //printf("Text: [%s]", pText->Value());
         break;
-
-    case TiXmlNode::DECLARATION:
-        printf("Declaration");
-        break;
+    }
+    case TiXmlNode::DECLARATION: {
+        //printf("Declaration");
+        break;}
     default:
         break;
     }
-    printf("\n");
+    //printf("\n");
     for (pChild = pParent->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
     {
         dump_to_stdout(pChild, indent + 1);
     }
 }
 
-// load the named file and dump its structure to STDOUT
+// load the named file and dump its structure to STDOUT, recursive function
 void dRaycastVHModel::dump_to_stdout(const char* pFilename)
 {
     TiXmlDocument doc(pFilename);
     bool loadOkay = doc.LoadFile();
     if (loadOkay)
     {
-        //printf("\n%s:\n", pFilename);
+        printf("\n%s:\n", pFilename);
         dump_to_stdout(&doc); 
     }
     else
@@ -294,7 +304,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     (dump_to_stdout(&doc)); //parse the xml and load parameters
     if (v_scale.size() != 2 || lengths.size() != 19 || v_total_weight.size() != 1 || mass_distrib.size() != 12 ||
         Ixx.size() != 12 || Iyy.size() != 12 || Izz.size() != 12 || delta_cm.size() != 12 || v_angles.size() != 2)
-        std::cout << "ERROR IN XML" << std::endl;
+        cout << "ERROR IN XML" << endl;
+    else
+        cout << "Data Model Loaded!" << endl;
     // Saving data in the program//
 
     // Scale factor for length and mass
@@ -468,9 +480,9 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     
     //////// MODEL DEFINITION //////////////////
     AssemblyCreation();
-    //// each plantar is made of three spheres
-    //CreateDescreteContactFootCollision(rigid_element["Foot_r"]->GetBody());
-    //CreateDescreteContactFootCollision(rigid_element["Foot_l"]->GetBody());
+    // each plantar is made of three spheres
+    CreateDescreteContactFootCollision(rigid_element["Foot_r"]->GetBody());
+    CreateDescreteContactFootCollision(rigid_element["Foot_l"]->GetBody());
     //// each toe is one sphere
     //NewtonWorld* const world = NewtonBodyGetWorld(rigid_element["Toe_r"]->GetBody());
     //NewtonCollision* const sphereCollision = NewtonCreateSphere(world, 0.05f, 0, NULL);
@@ -957,14 +969,14 @@ void dRaycastVHModel::LegCreation(string trunk, string thigh, string shank, stri
     if (thigh.back() == 'r') {
         s = 1;
         ang = ThighR_A;
-        Amin = -5 * dDegreeToRad;//-35
-        Amax = 5 * dDegreeToRad;// 2 wang
+        Amin = 2 * dDegreeToRad;//-35
+        Amax = -35 * dDegreeToRad;// 2 wang
     }
     else {
         s = -1;
         ang = ThighL_A;
-        Amin = -5 * dDegreeToRad; //-2
-        Amax = 5* dDegreeToRad;//35 
+        Amin = 35 * dDegreeToRad; //-2
+        Amax = -2 * dDegreeToRad;//35 
     }
 
     dVector pos;
@@ -1249,14 +1261,14 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         dVector supportPolygon[32];
         int count = 0;
         count += GetContactPoints(BODY0->GetBody(), &supportPolygon[count]);
-        BODY0 = RE_list.find("Toe_r")->second;
-        count += GetContactPoints(BODY0->GetBody(), &supportPolygon[count]);
+        //BODY0 = RE_list.find("Toe_r")->second;
+        //count += GetContactPoints(BODY0->GetBody(), &supportPolygon[count]);
         vector<bool> state_foot_r = Model->controller.Stance_Swing_Detection(com_ankle_r, com_Player, Model->GetLegLength(), count);
 
         count = 0;
         count += GetContactPoints(BODY1->GetBody(), &supportPolygon[count]);
-        BODY1 = RE_list.find("Toe_l")->second;
-        count += GetContactPoints(BODY1->GetBody(), &supportPolygon[count]);
+        //BODY1 = RE_list.find("Toe_l")->second;
+        //count += GetContactPoints(BODY1->GetBody(), &supportPolygon[count]);
         vector<bool> state_foot_l = Model->controller.Stance_Swing_Detection(com_ankle_l, com_Player, Model->GetLegLength(), count);
 
         // Model com visualization
@@ -1285,6 +1297,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             lead = 'L';
         else
             lead = 'N';// feet are both in air
+
+        if (newTime < 0.1f) // initial condition
+            lead = 'L';
 
         state_foot_l.push_back(DS); // add double stance state
         state_foot_r.push_back(DS); // add double stance state
@@ -1607,11 +1622,6 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     
     newTime = newTime + timestep; // update time
     m_winManager->SetSimulationTime(newTime);
-
-    //GeomNewton* BODY0 = RE_list.find("LPT")->second;
-    //dVector T;
-    //NewtonBodyGetTorque(BODY0->GetBody(), &T.m_x);
-    //cout << T.m_x << ' ' << T.m_y << ' ' << T.m_z << endl;
 
 }
 
