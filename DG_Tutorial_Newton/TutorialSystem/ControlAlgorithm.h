@@ -26,7 +26,9 @@ public:
 
 	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
 
-	void SetGain_Coronal(float trunk_p, float trunk_v, float foot_p, float foot_v);
+	void SetGain_Coronal_lead(float trunk_p, float trunk_v, float foot_p, float foot_v);
+
+	void SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foot_p, float foot_v, float Ttrunk_p, float Ttrunk_v);
 
 	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);

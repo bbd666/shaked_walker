@@ -51,22 +51,22 @@ ControlAlgorithm::ControlAlgorithm()
     // Initial condition
     trunk_a = -5 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
     AlphaR = -5 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
-    AlphaL = 30 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
-    Beta = 10 * dDegreeToRad;// beta see model notes figure 1
-    Gamma = -6 * dDegreeToRad;// gamma see model notes figure 1
+    AlphaL = 10 * dDegreeToRad;// alpha left leg see model notes figure 1  (wih respect to vertical axis)
+    Beta = 5 * dDegreeToRad;// beta see model notes figure 1
+    Gamma = -5 * dDegreeToRad;// gamma see model notes figure 1
     head_a = 0 * dDegreeToRad; // [rad]// head angle negative forward (wih respect to vertical axis)
-    Vel_initial = -3.2f; // [m/s]// negative forward
+    Vel_initial = -1.8f; // [m/s]// negative forward
 
     // arm parameters
     beta = -13.0f / 48.0f;
     gamma = -13.0f / 96.0f;
     alfa = 0.25f;
-    elbow_a = 10*dDegreeToRad; // [rad]//elbow angle, value from 0 to 90°
+    elbow_a = 10*dDegreeToRad; // [rad] elbow angle, value from 0 to 90°
 
     /// Control parameter initialization 
-    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.5} };// list gain force feedback
+    Gf = { {GLU, 0.5},    {HAM, 0.5},   {VAS, 1.0},   {SOL, 1.2},     {GAS, 1.4} };// list gain force feedback
     Gf_TA_SOL = { {SOL, 0.3} };// gain force feedback for TA depending ofìn SOL
-    Glg = { {HFL, 4.5 },   {HAM, 1.0 },   {TA, 0.9 } };// list gain length 1 feedback
+    Glg = { {HFL, 4.5 },   {HAM, 1.0 },   {TA, 0.63 } };// list gain length 1 feedback
     Glh = { {HFL, 0.65},   {HAM, 0.85},   {TA, 0.72} };// list gain length 2 feedback
     // stance preparation
     GPDk = { {HFL, 0.7},    {GLU, 0.7},   {VAS, 0.7} };// list gain  PD controller spring
@@ -86,16 +86,16 @@ ControlAlgorithm::ControlAlgorithm()
     GP2 = { {HFL, Glead2.find(HFL)->second},    {VAS, 170 * dDegreeToRad} };// CHECK ANGLE
 
     // PD controllers 
-    G1 = { {"Ctrunk", 150},                 {"Cfoot", 30},                  {"Ttrunk", 300},                {"Shead", 100},         {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
-    G2 = { {"Ctrunk", 15},                  {"Cfoot", 3},                   {"Ttrunk", 30},                 {"Shead", 10},          {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
+    G1 = { {"Ctrunk", 150},                 {"Cfoot", 30},                  {"Ttrunk", 200},                {"Shead", 100},         {"Selbow", 30},       {"Sshoulder", 30},   {"Tshoulder", 30} };
+    G2 = { {"Ctrunk", 10},                  {"Cfoot", 3},                   {"Ttrunk", 10},                 {"Shead", 10},          {"Selbow", 3},        {"Sshoulder", 3},    {"Tshoulder", 3} };
     G3 = { {"Ctrunk", 0 * dDegreeToRad},    {"Cfoot", 0 * dDegreeToRad} ,   {"Ttrunk", 0 * dDegreeToRad},   {"Shead", head_a},      {"Selbow", elbow_a},  {"Sshoulder", 0.0f}, {"Tshoulder", 0.0f} };
 
-    G1lead = { {"Ctrunk", 2000},            {"Cfoot", 300} };
-    G2lead = { {"Ctrunk", 200},             {"Cfoot", 30} };
+    G1lead = { {"Ctrunk", 1200},            {"Cfoot", 120} };
+    G2lead = { {"Ctrunk", 100},             {"Cfoot", 10} };
     G3lead = { {"Ctrunk", 0 * dDegreeToRad},{"Cfoot", 0 * dDegreeToRad} };
 
-    cd1 = 0.2f;// position coeff for  target swing angle coronal hip SIMBICON
-    cv1 = 0.2f; // velocity coeff for  target swing angle coronal hip SIMBICON
+    cd1 = 0.0f;// position coeff for  target swing angle coronal hip SIMBICON
+    cv1 = 0.0f; // velocity coeff for  target swing angle coronal hip SIMBICON
     // 
     // excitation list initialization for each muscle
     list<float> l15(15, 0.0);// 5 ms delay
@@ -153,6 +153,7 @@ float ControlAlgorithm::PD_controller(string dof, bool leading) {
         else
         {
             torque = gains[0] * (State_position.find(dof)->second - gains[2]) + gains[1] * State_velocity.find(dof)->second;
+            //cout << State_position.find(dof)->second << endl;
         }
     }
     else if (dof.compare("Ttrunk") == 0)// transverse control of pelvis orientation
@@ -454,16 +455,6 @@ void ControlAlgorithm::SetCoronalDistance(float d1)
     dx = d1;
 }
 
-void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel) {
-    trunk_a = Tangle;// [rad] negative forward
-    AlphaR = alfaR;//
-    AlphaL = alfaL;//
-    Beta = beta;//
-    Gamma = gamma;//
-    head_a = head; // [m/s]// negative forward
-    Vel_initial = vel;
-}
-
 vector<float> ControlAlgorithm::GetInitialCondition()
 {
     vector<float> v = { trunk_a, AlphaR,    AlphaL,    Beta,    Gamma,    head_a, Vel_initial, elbow_a };
@@ -545,49 +536,79 @@ float ControlAlgorithm::GetGain_PDa(Mtuname NAME)
     return g;
 }
 
+void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel) {
+    // the input coming from optimization are all positive, the sign is changed according to geometry of problem
+    // DE-  scaling as X = X_SCALED * (max - min) + min
+    trunk_a = -(Tangle * (20*dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);// [rad] negative forward
+    AlphaR = -(alfaR * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
+    AlphaL = (alfaL * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
+    Beta = (beta * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
+    Gamma = -(gamma * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
+    head_a = -(head * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);// negative forward
+    Vel_initial = -(vel * (3 - 0) + 0);
+}
+
 void ControlAlgorithm::SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl)
+// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Glead1.find(HAM)->second = Pham;
-    Glead2.find(HAM)->second = -Aham;
-    Glead3.find(HAM)->second = Dham;
+    Glead1.find(HAM)->second = (Pham * (22 - 1.78) + 1.78);
+    Glead2.find(HAM)->second = -(Aham * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad) ;
+    Glead3.find(HAM)->second = (Dham * (0.5 - 0.1) +0.1);
 
-    Glead1.find(GLU)->second = Pglu;
-    Glead2.find(GLU)->second = -Aglu;
-    Glead3.find(GLU)->second = Dglu;
+    Glead1.find(GLU)->second = (Pglu * (22 - 1.78) + 1.78);
+    Glead2.find(GLU)->second = -(Aglu * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad);
+    Glead3.find(GLU)->second = (Dglu * (0.5 - 0.1) + 0.1);
 
-    Glead1.find(HFL)->second = Phfl;
-    Glead2.find(HFL)->second = -Ahfl;
-    Glead3.find(HFL)->second = Dhfl;
+    Glead1.find(HFL)->second = (Phfl * (22 - 1.78)  + 1.78);
+    Glead2.find(HFL)->second = -(Ahfl * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad);
+    Glead3.find(HFL)->second = (Dhfl * (0.5 - 0.1) + 0.1);
 }
 
 void ControlAlgorithm::SetGain_ForceFeedback(float Gf_glu, float Gf_ham, float Gf_vas, float Gf_sol, float Gf_gas, float Gf_tasol)
+// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Gf.find(GLU)->second = Gf_glu;
-    Gf.find(HAM)->second = Gf_ham;
-    Gf.find(VAS)->second = Gf_vas;
-    Gf.find(SOL)->second = Gf_sol;
-    Gf.find(GAS)->second = Gf_gas;
-    Gf_TA_SOL.find(SOL)->second = Gf_tasol; 
+    Gf.find(GLU)->second = (Gf_glu * (0.52 - 0.0) + 0.0);
+    Gf.find(HAM)->second = (Gf_ham * (0.67 - 0.0) + 0.0);
+    Gf.find(VAS)->second = (Gf_vas * (13.5 - 0.82) + 0.82);
+    Gf.find(SOL)->second = (Gf_sol * (2.17 - 0.97) + 0.97);
+    Gf.find(GAS)->second = (Gf_gas * (10 - 0.0) + 0.0);
+    Gf_TA_SOL.find(SOL)->second = (Gf_tasol * (10 - 0.0) + 0.0);
 }
 
 void ControlAlgorithm::SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta)
+// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Glg.find(HFL)->second = Glg_hfl;
-    Glg.find(HAM)->second = Glg_ham;
-    Glg.find(TA)->second = Glg_ta;
+    Glg.find(HFL)->second = (Glg_hfl * (5 - 0.17) + 0.17);// CAMBIATO MAX DA 3
+    Glg.find(HAM)->second = (Glg_ham * (100 - 0.0) + 0.0);
+    Glg.find(TA)->second = (Glg_ta * (3.2 - 0.55) + 0.55);
 
-    Glh.find(HFL)->second = Glh_hfl;
-    Glh.find(HAM)->second = Glh_ham;
-    Glh.find(TA)->second = Glh_ta;
+    Glh.find(HFL)->second = (Glh_hfl * (0.67 - 0.0) + 0.0);
+    Glh.find(HAM)->second = (Glh_ham * (10 - 0.6) + 0.6);
+    Glh.find(TA)->second = (Glh_ta * (0.8 - 0.59) + 0.59);
 }
 
-void ControlAlgorithm::SetGain_Coronal(float trunk_p, float trunk_v, float foot_p, float foot_v)
+void ControlAlgorithm::SetGain_Coronal_lead(float trunk_p, float trunk_v, float foot_p, float foot_v)
+// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    G1lead.find("Ctrunk")->second = trunk_p;
-    G2lead.find("Ctrunk")->second = trunk_v;
+    G1lead.find("Ctrunk")->second = (trunk_p * (3000 - 100) + 100);
+    G2lead.find("Ctrunk")->second = (trunk_v * (300 - 10)  + 10);
 
-    G1lead.find("Cfoot")->second = foot_p;
-    G2lead.find("Cfoot")->second = foot_v;
+    G1lead.find("Cfoot")->second = (foot_p * (300 - 10)  + 10);
+    G2lead.find("Cfoot")->second = (foot_v * (30 - 1) + 1);
+}
+
+void ControlAlgorithm::SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foot_p, float foot_v, float Ttrunk_p, float Ttrunk_v)
+// DE-  scaling as X = X_SCALED * (max - min) + min
+{
+    G1.find("Ctrunk")->second = (Ctrunk_p * (200 - 100) + 100);
+    G2.find("Ctrunk")->second = (Ctrunk_v * (30 - 0) + 0);
+
+    G1.find("Cfoot")->second = (foot_p * (100 - 1) + 1);
+    G2.find("Cfoot")->second = (foot_v * (10 - 0) + 0);
+
+    G1.find("Ttrunk")->second = (Ttrunk_p * (500 - 50) + 50);
+    G2.find("Ttrunk")->second = (Ttrunk_v * (50 - 0) + 0);
+
 }
 
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)
@@ -733,10 +754,10 @@ void ControlAlgorithm::UpdateTaskReward(dFloat COMY_pos, dVector COM_vel, float 
 
     // velocity task term
     if (abs(COM_vel.m_z - target_velz) > 0.05)// forward velocity
-        Kvel += (COM_vel.m_z - target_velz)*(COM_vel.m_z - target_velz);
+        Kvel += 10 * (COM_vel.m_z - target_velz)*(COM_vel.m_z - target_velz);
 
     if (abs(COM_vel.m_x) > 0.05)// lateral velocity
-        Kvel += (COM_vel.m_x) * (COM_vel.m_x);
+        Kvel += 10* (COM_vel.m_x) * (COM_vel.m_x);
 
     // torso task term
     if (abs(Ftrunk - target_pelvis_ang) > 0.05)// pelvis front orientation
@@ -745,7 +766,7 @@ void ControlAlgorithm::UpdateTaskReward(dFloat COMY_pos, dVector COM_vel, float 
     if (abs(Strunk) > 0.1)// trunk sagittal orientation CHECK VALUE
         Ktorso += 0.1 * (Strunk) * (Strunk);
 
-    TaskCost += (Kfail + Kvel + Ktorso); // missing minimization of torque and head orientation and foot contact
+    TaskCost += (Kfail + Kvel + Ktorso); // missing minimization of head orientation and foot contact
 }
 
 void ControlAlgorithm::UpdateMuscleReward(float value)

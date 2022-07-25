@@ -965,23 +965,27 @@ void dRaycastVHModel::LegCreation(string trunk, string thigh, string shank, stri
     RigidBodyCreation(shank);
     RigidBodyCreation(foot);
     RigidBodyCreation(toes);
-    float s, ang, Amin, Amax;
+    float s, ang, Amin, Amax, Aminh, Amaxh;
     if (thigh.back() == 'r') {
         s = 1;
         ang = ThighR_A;
-        Amin = 2 * dDegreeToRad;//-35
-        Amax = -35 * dDegreeToRad;// 2 wang
+        Amin = 2 * dDegreeToRad;
+        Amax = -35 * dDegreeToRad;
+        Aminh = -20 * dDegreeToRad;
+        Amaxh = 10 * dDegreeToRad;//5
     }
     else {
         s = -1;
         ang = ThighL_A;
-        Amin = 35 * dDegreeToRad; //-2
-        Amax = -2 * dDegreeToRad;//35 
+        Amin = 35 * dDegreeToRad; 
+        Amax = -2 * dDegreeToRad;
+        Aminh = -10 * dDegreeToRad;//-5
+        Amaxh = 20 * dDegreeToRad;
     }
 
     dVector pos;
     pos = { s*l_Hip, -l_LPT / 2 * cos(LPT_A), l_LPT / 2 * sin(LPT_A) };
-    DoubleHingeJoint(hip, trunk, thigh, pos, -90*dDegreeToRad + ang, 45 * dDegreeToRad + ang, -20 * dDegreeToRad, 20 * dDegreeToRad);// Hip
+    DoubleHingeJoint(hip, trunk, thigh, pos, -90*dDegreeToRad + ang, 45 * dDegreeToRad + ang, Aminh, Amaxh);// Hip
 
     pos = { 0.0f, -(l_Up_Leg / 2 - knee_j) * cos(ang), -(l_Up_Leg / 2 - knee_j) * sin(ang) };// Knee
     HingeJoint(knee, thigh, shank, pos, -Shank_A, 160*dDegreeToRad - Shank_A);
@@ -1226,7 +1230,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     //INITIAL CONDITION //
     if (newTime == 0) {
         vector<float> ICv = Model->controller.GetInitialCondition();
-        dVector LPTvel_init = { ICv[6] / 2.5f,0.0f, ICv[6] };
+        dVector LPTvel_init = { 0.0f,0.0f, ICv[6] };
 
         GeomNewton* BODY = RE_list.find("LPT")->second;
         NewtonBodySetVelocity(BODY->GetBody(), &LPTvel_init[0]);
