@@ -72,7 +72,9 @@ int WINAPI wWinMain(
 			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
 			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
 			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
-			Model->controller.SetGain_Coronal(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
+			Model->controller.SetGain_Coronal_lead(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
+			Model->controller.SetGain_Coronal(stof(argv[33]), stof(argv[34]), stof(argv[35]), stof(argv[36]), stof(argv[37]), stof(argv[38]));
+			Model->controller.SetGain_Arm(stof(argv[39]), stof(argv[40]));
 		}
 	#else
 		if (argc > 1) {
@@ -80,7 +82,9 @@ int WINAPI wWinMain(
 			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
 			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
 			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
-			Model->controller.SetGain_Coronal(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
+			Model->controller.SetGain_Coronal_lead(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
+			Model->controller.SetGain_Coronal(stof(argv[33]), stof(argv[34]), stof(argv[35]), stof(argv[36]), stof(argv[37]), stof(argv[38]));
+			Model->controller.SetGain_Arm(stof(argv[39]), stof(argv[40]));
 		}
 	#endif
 

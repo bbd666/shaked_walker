@@ -30,6 +30,8 @@ public:
 
 	void SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foot_p, float foot_v, float Ttrunk_p, float Ttrunk_v);
 
+	void SetGain_Arm(float a, float e);
+
 	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);

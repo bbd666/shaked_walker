@@ -611,6 +611,14 @@ void ControlAlgorithm::SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foo
 
 }
 
+void ControlAlgorithm::SetGain_Arm(float a, float e)
+// DE-  scaling as X = X_SCALED * (max - min) + min
+{
+    alfa = (a * (1 - 0) + 0);
+    elbow_a = (e * (90 * dDegreeToRad - 0.0f) + 0.0f);
+
+}
+
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)
 {
     float g = 0;
