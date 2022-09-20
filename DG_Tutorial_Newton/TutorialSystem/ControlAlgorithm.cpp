@@ -535,88 +535,78 @@ float ControlAlgorithm::GetGain_PDa(Mtuname NAME)
         g = GPDa.find(NAME)->second;
     return g;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel) {
-    // the input coming from optimization are all positive, the sign is changed according to geometry of problem
-    // DE-  scaling as X = X_SCALED * (max - min) + min
-    trunk_a = -(Tangle * (20*dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);// [rad] negative forward
-    AlphaR = -(alfaR * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
-    AlphaL = (alfaL * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
-    Beta = (beta * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
-    Gamma = -(gamma * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);//
-    head_a = -(head * (20 * dDegreeToRad - 0 * dDegreeToRad) + 0 * dDegreeToRad);// negative forward
-    Vel_initial = -(vel * (3 - 0) + 0);
+    trunk_a = -Tangle;// [rad] negative forward
+    AlphaR = -alfaR;//
+    AlphaL = alfaL;//
+    Beta = beta;//
+    Gamma = -gamma;//
+    head_a = -head;// negative forward
+    Vel_initial = -vel;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Glead1.find(HAM)->second = (Pham * (22 - 1.78) + 1.78);
-    Glead2.find(HAM)->second = -(Aham * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad) ;
-    Glead3.find(HAM)->second = (Dham * (0.5 - 0.1) +0.1);
+    Glead1.find(HAM)->second = Pham;
+    Glead2.find(HAM)->second = -Aham;
+    Glead3.find(HAM)->second = Dham;
 
-    Glead1.find(GLU)->second = (Pglu * (22 - 1.78) + 1.78);
-    Glead2.find(GLU)->second = -(Aglu * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad);
-    Glead3.find(GLU)->second = (Dglu * (0.5 - 0.1) + 0.1);
+    Glead1.find(GLU)->second = Pglu;
+    Glead2.find(GLU)->second = -Aglu;
+    Glead3.find(GLU)->second = Dglu;
 
-    Glead1.find(HFL)->second = (Phfl * (22 - 1.78)  + 1.78);
-    Glead2.find(HFL)->second = -(Ahfl * (6.3 * dDegreeToRad - 0.97 * dDegreeToRad) + 0.97 * dDegreeToRad);
-    Glead3.find(HFL)->second = (Dhfl * (0.5 - 0.1) + 0.1);
+    Glead1.find(HFL)->second = Phfl;
+    Glead2.find(HFL)->second = -Ahfl;
+    Glead3.find(HFL)->second = Dhfl;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_ForceFeedback(float Gf_glu, float Gf_ham, float Gf_vas, float Gf_sol, float Gf_gas, float Gf_tasol)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Gf.find(GLU)->second = (Gf_glu * (0.52 - 0.0) + 0.0);
-    Gf.find(HAM)->second = (Gf_ham * (0.67 - 0.0) + 0.0);
-    Gf.find(VAS)->second = (Gf_vas * (13.5 - 0.82) + 0.82);
-    Gf.find(SOL)->second = (Gf_sol * (2.17 - 0.97) + 0.97);
-    Gf.find(GAS)->second = (Gf_gas * (10 - 0.0) + 0.0);
-    Gf_TA_SOL.find(SOL)->second = (Gf_tasol * (10 - 0.0) + 0.0);
+    Gf.find(GLU)->second = Gf_glu;
+    Gf.find(HAM)->second = Gf_ham;
+    Gf.find(VAS)->second = Gf_vas;
+    Gf.find(SOL)->second = Gf_sol;
+    Gf.find(GAS)->second = Gf_gas;
+    Gf_TA_SOL.find(SOL)->second = Gf_tasol;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    Glg.find(HFL)->second = (Glg_hfl * (5 - 0.17) + 0.17);// CAMBIATO MAX DA 3
-    Glg.find(HAM)->second = (Glg_ham * (100 - 0.0) + 0.0);
-    Glg.find(TA)->second = (Glg_ta * (3.2 - 0.55) + 0.55);
+    Glg.find(HFL)->second = Glg_hfl;
+    Glg.find(HAM)->second = Glg_ham;
+    Glg.find(TA)->second = Glg_ta;
 
-    Glh.find(HFL)->second = (Glh_hfl * (0.67 - 0.0) + 0.0);
-    Glh.find(HAM)->second = (Glh_ham * (10 - 0.6) + 0.6);
-    Glh.find(TA)->second = (Glh_ta * (0.8 - 0.59) + 0.59);
+    Glh.find(HFL)->second = Glh_hfl;
+    Glh.find(HAM)->second = Glh_ham ;
+    Glh.find(TA)->second = Glh_ta;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_Coronal_lead(float trunk_p, float trunk_v, float foot_p, float foot_v)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    G1lead.find("Ctrunk")->second = (trunk_p * (3000 - 100) + 100);
-    G2lead.find("Ctrunk")->second = (trunk_v * (300 - 10)  + 10);
-
-    G1lead.find("Cfoot")->second = (foot_p * (300 - 10)  + 10);
-    G2lead.find("Cfoot")->second = (foot_v * (30 - 1) + 1);
+    G1lead.find("Ctrunk")->second = trunk_p;
+    G2lead.find("Ctrunk")->second = trunk_v;
+    G1lead.find("Cfoot")->second = foot_p;
+    G2lead.find("Cfoot")->second = foot_v;
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foot_p, float foot_v, float Ttrunk_p, float Ttrunk_v)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    G1.find("Ctrunk")->second = (Ctrunk_p * (200 - 100) + 100);
-    G2.find("Ctrunk")->second = (Ctrunk_v * (30 - 0) + 0);
+    G1.find("Ctrunk")->second = Ctrunk_p;
+    G2.find("Ctrunk")->second = Ctrunk_v;
 
-    G1.find("Cfoot")->second = (foot_p * (100 - 1) + 1);
-    G2.find("Cfoot")->second = (foot_v * (10 - 0) + 0);
+    G1.find("Cfoot")->second = foot_p;
+    G2.find("Cfoot")->second = foot_v;
 
-    G1.find("Ttrunk")->second = (Ttrunk_p * (500 - 50) + 50);
-    G2.find("Ttrunk")->second = (Ttrunk_v * (50 - 0) + 0);
+    G1.find("Ttrunk")->second = Ttrunk_p;
+    G2.find("Ttrunk")->second = Ttrunk_v;
 
 }
-
+// the input coming from optimization are all positive, the sign is changed according to geometry of problem
 void ControlAlgorithm::SetGain_Arm(float a, float e)
-// DE-  scaling as X = X_SCALED * (max - min) + min
 {
-    alfa = (a * (1 - 0) + 0);
-    elbow_a = (e * (90 * dDegreeToRad - 0.0f) + 0.0f);
-
+    alfa = a;
+    elbow_a = e;
 }
 
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)

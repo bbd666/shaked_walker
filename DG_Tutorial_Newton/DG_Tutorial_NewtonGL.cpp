@@ -28,11 +28,13 @@
   Have Fun...
   Dave Gravel.
 */
+
 #include "pch.h"
 #include "WindowGL.h"
 #include "GeomGL.h"
 #include "biped.h"
 #include "OXVehicleRayCast.h"
+#include "LoadXML.h"
 
 #if defined(_DEBUG)
 int main(int argc, char *argv[])
@@ -47,6 +49,19 @@ int WINAPI wWinMain(
 	int         nCmdShow)
 #endif
 {	
+	ModelParams params;
+	bool flag_xml = params.load("OptimizationParameters.xml");// params are normalized here
+	if (flag_xml == 1)
+	{
+		cout << "Error in loading model parameters from ModelParameters.xml file" << endl;
+		return 0;
+	}
+	params.ScaleParameters(); //parameter scaled for optimization
+
+	// CALL CMAES // TO DO
+
+	params.RemoveScaling();//not scaled params
+
 	WindowMain* ContextGL = new WindowMain();
 	//
 	//
@@ -57,36 +72,13 @@ int WINAPI wWinMain(
 	dMatrix matrix(dGetIdentityMatrix());
 	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
-	#if defined(NDEBUG)
-		// Convert the wide character wchar_t string to a string
-		wchar_t** origin = __wargv;
-		vector<string> argv(__argc);
-		for (int i=0; i < __argc; ++i) {
-			wstring ws(origin[i]);
-			string str(ws.begin(), ws.end());
-			argv[i] = str;
-		}
-
-		if (__argc > 1) {
-			Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]), stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]));
-			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
-			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
-			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
-			Model->controller.SetGain_Coronal_lead(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
-			Model->controller.SetGain_Coronal(stof(argv[33]), stof(argv[34]), stof(argv[35]), stof(argv[36]), stof(argv[37]), stof(argv[38]));
-			Model->controller.SetGain_Arm(stof(argv[39]), stof(argv[40]));
-		}
-	#else
-		if (argc > 1) {
-			Model->controller.SetGain_InitialCondition(stof(argv[1]), stof(argv[2]), stof(argv[3]), stof(argv[4]), stof(argv[5]), stof(argv[6]), stof(argv[7]));
-			Model->controller.SetGain_StanceLead(stof(argv[8]), stof(argv[9]), stof(argv[10]), stof(argv[11]), stof(argv[12]), stof(argv[13]), stof(argv[14]), stof(argv[15]), stof(argv[16]));
-			Model->controller.SetGain_ForceFeedback(stof(argv[17]), stof(argv[18]), stof(argv[19]), stof(argv[20]), stof(argv[21]), stof(argv[22]));
-			Model->controller.SetGain_LengthFeedback(stof(argv[23]), stof(argv[24]), stof(argv[25]), stof(argv[26]), stof(argv[27]), stof(argv[28]));
-			Model->controller.SetGain_Coronal_lead(stof(argv[29]), stof(argv[30]), stof(argv[31]), stof(argv[32]));
-			Model->controller.SetGain_Coronal(stof(argv[33]), stof(argv[34]), stof(argv[35]), stof(argv[36]), stof(argv[37]), stof(argv[38]));
-			Model->controller.SetGain_Arm(stof(argv[39]), stof(argv[40]));
-		}
-	#endif
+	Model->controller.SetGain_InitialCondition(params.InitialCondition[0], params.InitialCondition[1],params.InitialCondition[2], params.InitialCondition[3], params.InitialCondition[4], params.InitialCondition[5], params.InitialCondition[6]);
+	Model->controller.SetGain_StanceLead(params.StanceLead[0], params.StanceLead[1], params.StanceLead[2], params.StanceLead[3], params.StanceLead[4], params.StanceLead[5], params.StanceLead[6], params.StanceLead[7], params.StanceLead[8]);
+	Model->controller.SetGain_ForceFeedback(params.ForceFeedback[0], params.ForceFeedback[1], params.ForceFeedback[2], params.ForceFeedback[3], params.ForceFeedback[4], params.ForceFeedback[5]);
+	Model->controller.SetGain_LengthFeedback(params.LengthFeedback[0], params.LengthFeedback[1], params.LengthFeedback[2], params.LengthFeedback[3], params.LengthFeedback[4], params.LengthFeedback[5]);
+	Model->controller.SetGain_Coronal_lead(params.Coronal_lead[0], params.Coronal_lead[1], params.Coronal_lead[2], params.Coronal_lead[3]);
+	Model->controller.SetGain_Coronal(params.Coronal[0], params.Coronal[1], params.Coronal[2], params.Coronal[3], params.Coronal[4], params.Coronal[5]);
+	Model->controller.SetGain_Arm(params.Arm[0], params.Arm[1]);
 
 	float cost = 0, mass = 0;
 	vector<float> reward;

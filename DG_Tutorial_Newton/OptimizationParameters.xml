@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<Params>
+    <!-- values Params -->
+    <Set> 
+        <InitialCondition trunk="0.2578" alfaR="0.2578" alfaL="0.5063" beta="0.2578" gamma="0.2578" head="0.0" vel="1.8" />
+				<StanceLead hamP="1.9" hamA="0.2578" hamD="0.2" gluP="1.9" gluA="0.2578" gluD="0.2" hflP="1.9" hflA="0.2578" hflD="0.2"/>
+				<ForceFeedback glu="0.5" ham="0.5" vas="1.0" sol="1.2" gas="1.4" tasol="0.3"/>
+				<LengthFeedback hflG="4.5" hamG="1.0" taG="0.63" hflH="0.65" hamH="0.85" taH="0.72"/>
+				<Coronal_lead trunkP="1200" trunkV="100" footP="120" footV="10"/>
+				<Coronal trunkP="150" trunkV="10" footP="30" footV="3" TtrunkP="200" TtrunkV="10"/>/>
+				<Arm alpha="0.25" elbow="0.5063"/>
+    </Set>
+</Params>
