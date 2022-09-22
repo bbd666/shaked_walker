@@ -122,6 +122,12 @@ struct WindowMain
 	LineDebugManager* aLineManager;
 	void SetSimulationTime(float time);
 
+	float GetSimulationTime();
+
+	void SetMaxSimulationTime(float time);
+
+	float GetMaxSimulationTime();
+
 private:
 	NewtonMousePick* aMousePick;
 	GLFWwindow* contextGL;
@@ -141,6 +147,7 @@ private:
 	int delayerfps;
 	
 	float Time;
+	float Max_Time;
 };
 
 // WIP: unimplemented, I let's it present just to remember have I need to do later.

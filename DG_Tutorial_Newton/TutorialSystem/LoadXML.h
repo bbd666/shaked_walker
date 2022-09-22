@@ -5,8 +5,8 @@
 class ModelParams
 {
 public:
-	std::vector<float> InitialCondition, StanceLead, ForceFeedback, LengthFeedback, Coronal_lead, Coronal, Arm;
-	std::vector<float> IC_min, IC_max, SL_min, SL_max, FF_min, FF_max, LF_min, LF_max, CL_min, CL_max, C_min, C_max, A_min, A_max;
+	std::vector<float> InitialCondition, StanceLead, ForceFeedback, LengthFeedback, Coronal_lead, Coronal, Arm, ParamList;
+	std::vector<float> IC_min, IC_max, SL_min, SL_max, FF_min, FF_max, LF_min, LF_max, CL_min, CL_max, C_min, C_max, A_min, A_max, min_v, max_v;
 	void save(const char* pFilename) {};
 
 	bool load(const char* pFilename) {
@@ -34,6 +34,7 @@ public:
 			Coronal_lead.clear();
 			Coronal.clear();
 			Arm.clear();
+			ParamList.clear();
 
 			char IC_arr[7][6] = { {"trunk"}, {"alfaR"}, {"alfaL"}, {"beta"}, {"gamma" }, { "head" }, { "vel" } }; // names of each attribute of Initial Condition in XML file.
 			IC_min = { 0, 0, 0, 0, 0, 0, 0 }; // minima for initial condition params
@@ -57,6 +58,23 @@ public:
 			A_min = { 0, 0 };
 			A_max = { 1, 90*dDegreeToRad };
 
+			min_v.insert(min_v.end(), IC_min.begin(), IC_min.end());
+			min_v.insert(min_v.end(), SL_min.begin(), SL_min.end());
+			min_v.insert(min_v.end(), FF_min.begin(), FF_min.end());
+			min_v.insert(min_v.end(), LF_min.begin(), LF_min.end());
+			min_v.insert(min_v.end(), CL_min.begin(), CL_min.end());
+			min_v.insert(min_v.end(), C_min.begin(), C_min.end());
+			min_v.insert(min_v.end(), A_min.begin(), A_min.end());
+
+
+			max_v.insert(max_v.end(), IC_max.begin(), IC_max.end());
+			max_v.insert(max_v.end(), SL_max.begin(), SL_max.end());
+			max_v.insert(max_v.end(), FF_max.begin(), FF_max.end());
+			max_v.insert(max_v.end(), LF_max.begin(), LF_max.end());
+			max_v.insert(max_v.end(), CL_max.begin(), CL_max.end());
+			max_v.insert(max_v.end(), C_max.begin(), C_max.end());
+			max_v.insert(max_v.end(), A_max.begin(), A_max.end());
+
 			TiXmlElement* pWindowNode = hRoot.FirstChild("Set").FirstChild().Element();
 			
 			// loop all sets of params
@@ -69,7 +87,8 @@ public:
 					{
 						float value = -1;// initialization
 						pWindowNode->QueryFloatAttribute(&IC_arr[ii][0], &value);
-						InitialCondition.push_back(value);// NORMALIZATION BEFORE OPTIMIZATION
+						InitialCondition.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -81,6 +100,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&SL_arr[ii][0], &value);
 						StanceLead.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -92,6 +112,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&FF_arr[ii][0], &value);
 						ForceFeedback.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -103,6 +124,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&LF_arr[ii][0], &value);
 						LengthFeedback.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -114,6 +136,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&CL_arr[ii][0], &value);
 						Coronal_lead.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -125,6 +148,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&C_arr[ii][0], &value);
 						Coronal.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -136,6 +160,7 @@ public:
 						float value = -1;
 						pWindowNode->QueryFloatAttribute(&A_arr[ii][0], &value);
 						Arm.push_back(value);
+						ParamList.push_back(value);
 						if (value == -1)
 							flag_error_xml = 1;
 					}
@@ -151,53 +176,65 @@ public:
 	}
 
 	//remove scaling of params, X_SCALED * (max - min) + min
-	void RemoveScaling()
+	vector<float> RemoveScaling(double const* scaled_params)
 	{
-		for (int ii = 0; ii < 7; ++ii)
-			InitialCondition[ii] = InitialCondition[ii]*(IC_max[ii]-IC_min[ii]) + IC_min[ii];
+		//for (int ii = 0; ii < 7; ++ii)
+		//	InitialCondition[ii] = InitialCondition[ii]*(IC_max[ii]-IC_min[ii]) + IC_min[ii];
 
-		for (int ii = 0; ii < 9; ++ii)
-			StanceLead[ii] = StanceLead[ii] * (SL_max[ii] - SL_min[ii]) + SL_min[ii];
+		//for (int ii = 0; ii < 9; ++ii)
+		//	StanceLead[ii] = StanceLead[ii] * (SL_max[ii] - SL_min[ii]) + SL_min[ii];
 
-		for (int ii = 0; ii < 6; ++ii)
-			ForceFeedback[ii] = ForceFeedback[ii] * (FF_max[ii] - FF_min[ii]) + FF_min[ii];
+		//for (int ii = 0; ii < 6; ++ii)
+		//	ForceFeedback[ii] = ForceFeedback[ii] * (FF_max[ii] - FF_min[ii]) + FF_min[ii];
 
-		for (int ii = 0; ii < 6; ++ii)
-			LengthFeedback[ii] = LengthFeedback[ii] * (LF_max[ii] - LF_min[ii]) + LF_min[ii];
+		//for (int ii = 0; ii < 6; ++ii)
+		//	LengthFeedback[ii] = LengthFeedback[ii] * (LF_max[ii] - LF_min[ii]) + LF_min[ii];
 
-		for (int ii = 0; ii < 4; ++ii)
-			Coronal_lead[ii] = Coronal_lead[ii] * (CL_max[ii] - CL_min[ii]) + CL_min[ii];
+		//for (int ii = 0; ii < 4; ++ii)
+		//	Coronal_lead[ii] = Coronal_lead[ii] * (CL_max[ii] - CL_min[ii]) + CL_min[ii];
 
-		for (int ii = 0; ii < 6; ++ii)
-			Coronal[ii] = Coronal[ii] * (C_max[ii] - C_min[ii]) + C_min[ii];
+		//for (int ii = 0; ii < 6; ++ii)
+		//	Coronal[ii] = Coronal[ii] * (C_max[ii] - C_min[ii]) + C_min[ii];
 
-		for (int ii = 0; ii < 2; ++ii)
-			Arm[ii] = Arm[ii] * (A_max[ii] - A_min[ii]) + A_min[ii];
+		//for (int ii = 0; ii < 2; ++ii)
+		//	Arm[ii] = Arm[ii] * (A_max[ii] - A_min[ii]) + A_min[ii];
+
+		//for(int ii = 0; ii < ParamList.size(); ii++)
+		//	ParamList[ii] = ParamList[ii] * (max_v[ii] - min_v[ii]) + min_v[ii];
+		vector<float> params(40,0);
+		for(int ii = 0; ii < 40; ii++)
+			params[ii] = scaled_params[ii] * (max_v[ii] - min_v[ii]) + min_v[ii];
+		return params;
 	}
 
 	//scaling of params, (X - min) / (max - min) 
-	void ScaleParameters()
+	vector<float> ScaleParameters()
 	{
-		for (int ii = 0; ii < 7; ++ii)
-			InitialCondition[ii] = (InitialCondition[ii] - IC_min[ii]) / (IC_max[ii] - IC_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		vector<float> parameters_scaled(40,0);
+		//for (int ii = 0; ii < 7; ++ii)
+		//	InitialCondition[ii] = (InitialCondition[ii] - IC_min[ii]) / (IC_max[ii] - IC_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 9; ++ii)
-			StanceLead[ii] = (StanceLead[ii] - SL_min[ii]) / (SL_max[ii] - SL_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 9; ++ii)
+		//	StanceLead[ii] = (StanceLead[ii] - SL_min[ii]) / (SL_max[ii] - SL_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 6; ++ii)
-			ForceFeedback[ii] = (ForceFeedback[ii] - FF_min[ii]) / (FF_max[ii] - FF_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 6; ++ii)
+		//	ForceFeedback[ii] = (ForceFeedback[ii] - FF_min[ii]) / (FF_max[ii] - FF_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 6; ++ii)
-			LengthFeedback[ii] = (LengthFeedback[ii] - LF_min[ii]) / (LF_max[ii] - LF_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 6; ++ii)
+		//	LengthFeedback[ii] = (LengthFeedback[ii] - LF_min[ii]) / (LF_max[ii] - LF_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 4; ++ii)
-			Coronal_lead[ii] = (Coronal_lead[ii] - CL_min[ii]) / (CL_max[ii] - CL_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 4; ++ii)
+		//	Coronal_lead[ii] = (Coronal_lead[ii] - CL_min[ii]) / (CL_max[ii] - CL_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 6; ++ii)
-			Coronal[ii] = (Coronal[ii] - C_min[ii]) / (C_max[ii] - C_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 6; ++ii)
+		//	Coronal[ii] = (Coronal[ii] - C_min[ii]) / (C_max[ii] - C_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
 
-		for (int ii = 0; ii < 2; ++ii)
-			Arm[ii] = (Arm[ii] - A_min[ii]) / (A_max[ii] - A_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		//for (int ii = 0; ii < 2; ++ii)
+		//	Arm[ii] = (Arm[ii] - A_min[ii]) / (A_max[ii] - A_min[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+
+		for (int ii = 0; ii < ParamList.size(); ii++)
+			parameters_scaled[ii] = (ParamList[ii] - min_v[ii]) / (max_v[ii] - min_v[ii]);// NORMALIZATION BEFORE OPTIMIZATION
+		return parameters_scaled;
 	}
 
 	//ModelParams(std::vector<float> IC, std::vector<float> SL, std::vector<float> FF, std::vector<float> LF, std::vector<float> CL, std::vector<float> C, std::vector<float> A)

@@ -32,6 +32,8 @@ public:
 
 	void SetGain_Arm(float a, float e);
 
+	void SetOptimizationParam(vector<float> parameters);
+
 	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);
 	float GetGain1_Length_Feedback(Mtuname NAME);

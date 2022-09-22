@@ -575,10 +575,25 @@ void WindowMain::SetSimulationTime(float time)
 	Time = time;
 }
 
+float WindowMain::GetSimulationTime()
+{
+	return Time;
+}
+
+void WindowMain::SetMaxSimulationTime(float time)
+{
+	Max_Time = time;
+}
+
+float WindowMain::GetMaxSimulationTime()
+{
+	return Max_Time;
+}
+
 void WindowMain::MainLoop(){
 	ImGui_ImplGlfwGL3_Init(contextGL, false);
 
-	while (!glfwWindowShouldClose(contextGL) && Time < 5.0f)//&& Time < 5.0f stop simulation if window is closed or simulation time is 10 s
+	while (!glfwWindowShouldClose(contextGL) && Time < Max_Time)//&& Time < 5.0f stop simulation if window is closed or simulation time is 10 s
 	{
 		MainRender();
 		glfwSwapBuffers(contextGL);

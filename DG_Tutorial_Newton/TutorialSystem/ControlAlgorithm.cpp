@@ -609,6 +609,62 @@ void ControlAlgorithm::SetGain_Arm(float a, float e)
     elbow_a = e;
 }
 
+void ControlAlgorithm::SetOptimizationParam(vector<float> parameters)
+{
+    // initial condition
+    trunk_a = -parameters[0];// [rad] negative forward
+    AlphaR = -parameters[1];//
+    AlphaL = parameters[2];//
+    Beta = parameters[3];//
+    Gamma = -parameters[4];//
+    head_a = -parameters[5];// negative forward
+    Vel_initial = -parameters[6];
+    // StanceLead
+    Glead1.find(HAM)->second = parameters[7];
+    Glead2.find(HAM)->second = -parameters[8];
+    Glead3.find(HAM)->second = parameters[9];
+
+    Glead1.find(GLU)->second = parameters[10];
+    Glead2.find(GLU)->second = -parameters[11];
+    Glead3.find(GLU)->second = parameters[12];
+
+    Glead1.find(HFL)->second = parameters[13];
+    Glead2.find(HFL)->second = -parameters[14];
+    Glead3.find(HFL)->second = parameters[15];
+    // ForceFeedback
+    Gf.find(GLU)->second = parameters[16];
+    Gf.find(HAM)->second = parameters[17];
+    Gf.find(VAS)->second = parameters[18];
+    Gf.find(SOL)->second = parameters[19];
+    Gf.find(GAS)->second = parameters[20];
+    Gf_TA_SOL.find(SOL)->second = parameters[21];
+    // LengthFeedback
+    Glg.find(HFL)->second = parameters[22];
+    Glg.find(HAM)->second = parameters[23];
+    Glg.find(TA)->second = parameters[24];
+
+    Glh.find(HFL)->second = parameters[25];
+    Glh.find(HAM)->second = parameters[26];
+    Glh.find(TA)->second = parameters[27];
+    //Coronal_lead
+    G1lead.find("Ctrunk")->second = parameters[28];
+    G2lead.find("Ctrunk")->second = parameters[29];
+    G1lead.find("Cfoot")->second = parameters[30];
+    G2lead.find("Cfoot")->second = parameters[31];
+    // Coronal
+    G1.find("Ctrunk")->second = parameters[32];
+    G2.find("Ctrunk")->second = parameters[33];
+
+    G1.find("Cfoot")->second = parameters[34];
+    G2.find("Cfoot")->second = parameters[35];
+
+    G1.find("Ttrunk")->second = parameters[36];
+    G2.find("Ttrunk")->second = parameters[37];
+    // Arm
+    alfa = parameters[38];
+    elbow_a = parameters[39];
+}
+
 float ControlAlgorithm::GetGain_Lead1(Mtuname NAME)
 {
     float g = 0;

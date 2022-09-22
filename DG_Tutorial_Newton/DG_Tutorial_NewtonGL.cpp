@@ -35,7 +35,20 @@
 #include "biped.h"
 #include "OXVehicleRayCast.h"
 #include "LoadXML.h"
+#include <iostream>
+#include "cmaes.h"
 
+float CallNewton(ModelParams params);// for simulation
+float CallNewton(vector<float> params); // overload for optimization
+int call_cmaes(ModelParams params);
+// boundary condition for parameters. Parameters must be positive or 0
+bool is_feasible(double* p) {
+	bool flag = true;
+	for (int ii = 0; ii<40; ii++)
+		if (p[ii] < 0)
+			flag = false;
+	return flag;
+}
 #if defined(_DEBUG)
 int main(int argc, char *argv[])
 // if you like to use windows mode. 
@@ -48,31 +61,62 @@ int WINAPI wWinMain(
 	PWSTR       lpCmdLine,
 	int         nCmdShow)
 #endif
-{	
+{
+	int operation = 0; //"To run simulation enter 1, to run optimization enter 2:", else nothing.
+	// take inputs
+	#if defined(NDEBUG)
+		// Convert the wide character wchar_t string to a string
+		wchar_t** origin = __wargv;
+		vector<string> argv(__argc);
+		for (int i = 0; i < __argc; ++i) {
+			wstring ws(origin[i]);
+			string str(ws.begin(), ws.end());
+			argv[i] = str;
+		}
+
+		if (__argc > 1) {
+			operation = stof(argv[1]);
+		}
+	#else
+		if (argc > 1) {
+			operation = stof(argv[1]);
+		}
+	#endif
+
+	// load optimization parameters form xml
 	ModelParams params;
-	bool flag_xml = params.load("OptimizationParameters.xml");// params are normalized here
+	bool flag_xml = params.load("OptimizationParameters.xml");
 	if (flag_xml == 1)
 	{
 		cout << "Error in loading model parameters from ModelParameters.xml file" << endl;
 		return 0;
 	}
-	params.ScaleParameters(); //parameter scaled for optimization
 
-	// CALL CMAES // TO DO
+	// run simulation/optimization
+	int cost = 0;
+	if (operation == 1)// run simulation
+		cost = CallNewton(params);
+	else if (operation == 2) // run optimization 
+		call_cmaes(params);
+	else
+		return(0);
 
-	params.RemoveScaling();//not scaled params
-
+	return cost;
+}
+// function used for simulation call. To be deleted in next commit
+float CallNewton(ModelParams params)
+{
 	WindowMain* ContextGL = new WindowMain();
 	//
 	//
 	ContextGL->SetUseMouseViewRotation(true);
 	//
 	//	 
-		DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
 	dMatrix matrix(dGetIdentityMatrix());
 	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
 
-	Model->controller.SetGain_InitialCondition(params.InitialCondition[0], params.InitialCondition[1],params.InitialCondition[2], params.InitialCondition[3], params.InitialCondition[4], params.InitialCondition[5], params.InitialCondition[6]);
+	Model->controller.SetGain_InitialCondition(params.InitialCondition[0], params.InitialCondition[1], params.InitialCondition[2], params.InitialCondition[3], params.InitialCondition[4], params.InitialCondition[5], params.InitialCondition[6]);
 	Model->controller.SetGain_StanceLead(params.StanceLead[0], params.StanceLead[1], params.StanceLead[2], params.StanceLead[3], params.StanceLead[4], params.StanceLead[5], params.StanceLead[6], params.StanceLead[7], params.StanceLead[8]);
 	Model->controller.SetGain_ForceFeedback(params.ForceFeedback[0], params.ForceFeedback[1], params.ForceFeedback[2], params.ForceFeedback[3], params.ForceFeedback[4], params.ForceFeedback[5]);
 	Model->controller.SetGain_LengthFeedback(params.LengthFeedback[0], params.LengthFeedback[1], params.LengthFeedback[2], params.LengthFeedback[3], params.LengthFeedback[4], params.LengthFeedback[5]);
@@ -83,6 +127,8 @@ int WINAPI wWinMain(
 	float cost = 0, mass = 0;
 	vector<float> reward;
 	if (ContextGL != NULL) {
+		ContextGL->SetSimulationTime(0.0);// [s]
+		ContextGL->SetMaxSimulationTime(5.0); //set max 5 s of simulation
 		ContextGL->MainLoop();
 
 		reward = Model->controller.GetRewardValues();
@@ -108,6 +154,123 @@ int WINAPI wWinMain(
 	float wpd = 1; // weight for PD torques
 	float T = 3000 * 5; // 3000 Hz * simulation time (5s) number of iterations CHECK!
 
-	cost = reward[0] + we/T*(wm*reward[1]+wpd*reward[2]);
+	cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
 	return cost;
+}
+// function use for optimization call
+float CallNewton(vector<float> params)
+{
+	WindowMain* ContextGL = new WindowMain();
+	//
+	//
+	ContextGL->SetUseMouseViewRotation(true);
+	//
+	//	 
+	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+	dMatrix matrix(dGetIdentityMatrix());
+	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
+
+	Model->controller.SetOptimizationParam(params);
+
+	float cost = 0, mass = 0;
+	vector<float> reward;
+	if (ContextGL != NULL) {
+		ContextGL->SetSimulationTime(0.0);// [s]
+		ContextGL->SetMaxSimulationTime(5.0); //set max 5 s of simulation
+		ContextGL->MainLoop();
+
+		reward = Model->controller.GetRewardValues();
+		mass = Model->GetModelMass();
+		//
+		// delete context and newton manager and close tutorial.
+		//if (man) { delete(man); }
+		//if (m1) { delete(m1); }
+		delete ContextGL;
+		//
+	}
+#if defined(_DEBUG)
+	// The tutorial report some leaks but this leaks seen to come from the window create gl.
+	// I have try to break on the number but it do nothing.
+	// When a real leak happen from the tutorial object class I can break on the report number.
+	// I need to test more about it later but the leak is always the same and it don't seen to grow more.
+	// I have test to create the window gl only without the manager or any object and the leak is present.
+	// If I don't create the window the leak go away.
+	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
+#endif 
+	float we = 0.004 / mass; // weight for torques
+	float wm = 100;// weight for Muscles torques
+	float wpd = 1; // weight for PD torques
+	float T = 3000 * ContextGL->GetMaxSimulationTime(); // 3000 Hz * simulation time (5s) 
+
+	cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
+	return cost;
+}
+
+double fitfun(double const* x, int N, ModelParams P)// cambia in call newton. 
+{
+	vector<float> parameters = P.RemoveScaling(x);//not scaled params
+	double sum = CallNewton(parameters);
+	return sum;
+}
+
+int call_cmaes(ModelParams params)
+{
+
+	CMAES<double> evo;
+	double* arFunvals, * const* pop, * xfinal;
+
+	vector<float> params_scaled = params.ScaleParameters(); //parameter scaled for optimization
+
+	// Initialize everything
+	const int dim = 40;
+	double xstart[dim];
+	for (int i = 0; i < dim; i++) xstart[i] = params_scaled[i];
+	double stddev[dim];
+	for (int i = 0; i < dim; i++) stddev[i] = 0.005; // as WANG
+	Parameters<double> parameters;
+	// TODO Adjust parameters here
+	parameters.init(dim, xstart, stddev);
+	parameters.stopTolX = 1e-11;
+	parameters.stopMaxFunEvals = 1;
+	arFunvals = evo.init(parameters);
+
+	std::cout << evo.sayHello() << std::endl;
+
+	// Iterate until stop criterion holds
+	while (!evo.testForTermination())
+	{
+		// Generate lambda new search points, sample population
+		pop = evo.samplePopulation(); // Do not change content of pop
+
+		/* Here you may resample each solution point pop[i] until it
+		   becomes feasible, e.g. for box constraints (variable
+		   boundaries). function is_feasible(...) needs to be
+		   user-defined.
+		   Assumptions: the feasible domain is convex, the optimum is
+		   not on (or very close to) the domain boundary, initialX is
+		   feasible and initialStandardDeviations are sufficiently small
+		   to prevent quasi-infinite looping.
+		*/
+		 for (int i = 0; i < evo.get(CMAES<double>::PopSize); ++i)
+			 while (!is_feasible(pop[i]))// just positive values
+			   evo.reSampleSingle(i);
+		
+
+		// evaluate the new search points using fitfun from above
+		for (int i = 0; i < evo.get(CMAES<double>::Lambda); ++i)
+			arFunvals[i] = fitfun(pop[i], (int)evo.get(CMAES<double>::Dimension), params);
+
+		// update the search distribution used for sampleDistribution()
+		evo.updateDistribution(arFunvals);
+	}
+	std::cout << "Stop:" << std::endl << evo.getStopMessage();
+	evo.writeToFile(CMAES<double>::WKResume, "resumeevo1.dat"); // write resumable state of CMA-ES
+
+	// get best estimator for the optimum, xmean
+	xfinal = evo.getNew(CMAES<double>::XMean); // "XBestEver" might be used as well
+
+	// do something with final solution and finally release memory
+	delete[] xfinal;
+
+	return 0;
 }

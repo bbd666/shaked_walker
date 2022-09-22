@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "OXVehicleRayCast.h"
 
-
-dFloat newTime = 0;
 #if defined(_DEBUG)
     ofstream monFlux("history.txt");
 #endif
@@ -1221,6 +1219,7 @@ int DGVehicleRCManager::GetContactPoints(NewtonBody* const body, dVector* const 
 void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
 //pour VS<VS2017 supprimer ,int threadID
 {
+    dFloat newTime = m_winManager->GetSimulationTime();
     dRaycastVHModel* Model = (dRaycastVHModel*)model;
 
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
