@@ -251,7 +251,7 @@ void dRaycastVHModel::dump_to_stdout(const char* pFilename)
 // ----------------------------------------------------------------------
 dRaycastVHModel::~dRaycastVHModel()
 {
-     
+    delete[]  Geomfloor;
 }
 
 dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName, const dMatrix& location, int linkMaterilID)
@@ -267,9 +267,15 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     Geomfloor->SetTexTileV(3.0f);
     Geomfloor->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
     Geomfloor->SetDiffuseColor(0.45f, 0.45f, 0.45f);
-    Geomfloor->InitNewton(atBox, 25.0f, 0.25f, 25.0f);
-
-    ////// MECHANIDAL DATA /////////////////
+    Geomfloor->InitNewton(atBox, 25.0f, 0.25f, 25.0f, 1000.0f); // CHANGE
+    // create hinge actuator to impose ROLL WBV
+    dMatrix matrix;
+    NewtonBodyGetMatrix(Geomfloor->GetBody(), &matrix[0][0]);
+    matrix = matrix * dYawMatrix(90.0f * dDegreeToRad);
+    FloorAct = new dCustomHingeActuator(matrix, Geomfloor->GetBody());
+    //FloorAct->SetAngularRate(0.5f); // ?? meaning ??
+    // 
+    ////// MECHANICAL DATA /////////////////
     //key initialization of the maps 'lengths', 'mass_distrib', 'Ixx', 'Iyy' and 'Izz'
     for (std::vector<std::string>::iterator it = lengths_keys.begin(); it != lengths_keys.end(); it++)
     {
@@ -1031,6 +1037,11 @@ void dRaycastVHModel::HingeJoint(string jname, string body1, string body2, dVect
     if (jname == "Toe_hinge_r" || jname == "Toe_hinge_l" || jname == "Wrist_r" || jname == "Wrist_l"){
         JHinge[jname]->SetAsSpringDamper(true, 0.99, 0);} // max stiffness zero damping
 }
+// apply titling motion to the floor. Input is the desired angle in rad at each timestep
+void dRaycastVHModel::ApplyTilting(float angle)
+{
+    FloorAct->SetTargetAngle(angle);
+}
 
 void dRaycastVHModel::DoubleHingeJoint(string jname, string body1, string body2, dVector pos, float minAng1, float maxAng1, float minAng2, float maxAng2)
 {
@@ -1622,6 +1633,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     dVector COM_vel = Model->ComputePlayerCOMvelocity();
     Model->controller.UpdateTaskReward(com_Player.m_y, COM_vel, Strunk[0], Ctrunk[0]);
     
+    // ADD WBV
+    Model->ApplyTilting(8 * dDegreeToRad * sin(0.5 * 2 * M_PI * newTime)); // roll 8° 0.5 Hz
+
     newTime = newTime + timestep; // update time
     m_winManager->SetSimulationTime(newTime);
 

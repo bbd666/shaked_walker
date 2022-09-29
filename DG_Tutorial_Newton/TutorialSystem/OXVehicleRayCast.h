@@ -61,6 +61,7 @@ public:
 	void AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2);
 	float GetHipLength();
 	float GetModelMass();
+	void ApplyTilting(float angle);
 
 private:
 	WindowMain* m_winManager;
@@ -73,6 +74,8 @@ private:
 	void DoubleHingeJoint(string jname, string body1, string body2, dVector pos, float minAng1, float maxAng1, float minAng2, float maxAng2);
 	
 	float LPT_A ,ThighR_A,ThighL_A,Shank_A ,Foot_A, Head_A, Elbow_A, Model_Mass;
+
+	dCustomHingeActuator* FloorAct; // floor actuator
 
 	/// <RIGID ELEMENTS>
 	GeomNewton* box;
@@ -137,7 +140,7 @@ private:
 
 	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l","Shoulder_r","Shoulder_l"};
 	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
-	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2", "Toe_hinge_r", "Toe_hinge_l", "Elbow_r", "Wrist_r", "Elbow_l", "Wrist_l","Neck" };
+	std::vector<std::string> Hjoint_keys = {"Knee_r", "Knee_l", "Spine1","Spine2", "Toe_hinge_r", "Toe_hinge_l", "Elbow_r", "Wrist_r", "Elbow_l", "Wrist_l","Neck"};
 	map<std::string, dCustomHinge*> JHinge;//  muscle as map: use muscle_keys as string
 	/// </JOINTS>
 

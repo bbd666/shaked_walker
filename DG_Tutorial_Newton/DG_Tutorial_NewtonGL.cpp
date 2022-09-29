@@ -38,8 +38,7 @@
 #include <iostream>
 #include "cmaes.h"
 
-float CallNewton(ModelParams params);// for simulation
-float CallNewton(vector<float> params); // overload for optimization
+float CallNewton(double* params); // overload for optimization
 int call_cmaes(ModelParams params);
 // boundary condition for parameters. Parameters must be positive or 0
 bool is_feasible(double* p) {
@@ -62,7 +61,7 @@ int WINAPI wWinMain(
 	int         nCmdShow)
 #endif
 {
-	int operation = 0; //"To run simulation enter 1, to run optimization enter 2:", else nothing.
+	int operation = 1; //"To run simulation enter 1, to run optimization enter 2:", else nothing.
 	// take inputs
 	#if defined(NDEBUG)
 		// Convert the wide character wchar_t string to a string
@@ -93,78 +92,23 @@ int WINAPI wWinMain(
 	}
 
 	// run simulation/optimization
-	int cost = 0;
+	int cost = 1;
 	if (operation == 1)// run simulation
-		cost = CallNewton(params);
+		cost = CallNewton(params.params_pointer());
 	else if (operation == 2) // run optimization 
-		call_cmaes(params);
+		cost = call_cmaes(params);
 	else
 		return(0);
 
 	return cost;
 }
-// function used for simulation call. To be deleted in next commit
-float CallNewton(ModelParams params)
+
+// Creates the window and shows the simulation. The output is the simulation cost.
+float CallNewton(double* params)
 {
 	WindowMain* ContextGL = new WindowMain();
 	//
-	//
 	ContextGL->SetUseMouseViewRotation(true);
-	//
-	//	 
-	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
-	dMatrix matrix(dGetIdentityMatrix());
-	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
-
-	Model->controller.SetGain_InitialCondition(params.InitialCondition[0], params.InitialCondition[1], params.InitialCondition[2], params.InitialCondition[3], params.InitialCondition[4], params.InitialCondition[5], params.InitialCondition[6]);
-	Model->controller.SetGain_StanceLead(params.StanceLead[0], params.StanceLead[1], params.StanceLead[2], params.StanceLead[3], params.StanceLead[4], params.StanceLead[5], params.StanceLead[6], params.StanceLead[7], params.StanceLead[8]);
-	Model->controller.SetGain_ForceFeedback(params.ForceFeedback[0], params.ForceFeedback[1], params.ForceFeedback[2], params.ForceFeedback[3], params.ForceFeedback[4], params.ForceFeedback[5]);
-	Model->controller.SetGain_LengthFeedback(params.LengthFeedback[0], params.LengthFeedback[1], params.LengthFeedback[2], params.LengthFeedback[3], params.LengthFeedback[4], params.LengthFeedback[5]);
-	Model->controller.SetGain_Coronal_lead(params.Coronal_lead[0], params.Coronal_lead[1], params.Coronal_lead[2], params.Coronal_lead[3]);
-	Model->controller.SetGain_Coronal(params.Coronal[0], params.Coronal[1], params.Coronal[2], params.Coronal[3], params.Coronal[4], params.Coronal[5]);
-	Model->controller.SetGain_Arm(params.Arm[0], params.Arm[1]);
-
-	float cost = 0, mass = 0;
-	vector<float> reward;
-	if (ContextGL != NULL) {
-		ContextGL->SetSimulationTime(0.0);// [s]
-		ContextGL->SetMaxSimulationTime(5.0); //set max 5 s of simulation
-		ContextGL->MainLoop();
-
-		reward = Model->controller.GetRewardValues();
-		mass = Model->GetModelMass();
-		//
-		// delete context and newton manager and close tutorial.
-		//if (man) { delete(man); }
-		//if (m1) { delete(m1); }
-		delete ContextGL;
-		//
-	}
-#if defined(_DEBUG)
-	// The tutorial report some leaks but this leaks seen to come from the window create gl.
-	// I have try to break on the number but it do nothing.
-	// When a real leak happen from the tutorial object class I can break on the report number.
-	// I need to test more about it later but the leak is always the same and it don't seen to grow more.
-	// I have test to create the window gl only without the manager or any object and the leak is present.
-	// If I don't create the window the leak go away.
-	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
-#endif 
-	float we = 0.004 / mass; // weight for torques
-	float wm = 100;// weight for Muscles torques
-	float wpd = 1; // weight for PD torques
-	float T = 3000 * 5; // 3000 Hz * simulation time (5s) number of iterations CHECK!
-
-	cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
-	return cost;
-}
-// function use for optimization call
-float CallNewton(vector<float> params)
-{
-	WindowMain* ContextGL = new WindowMain();
-	//
-	//
-	ContextGL->SetUseMouseViewRotation(true);
-	//
 	//	 
 	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
 	dMatrix matrix(dGetIdentityMatrix());
@@ -181,57 +125,48 @@ float CallNewton(vector<float> params)
 
 		reward = Model->controller.GetRewardValues();
 		mass = Model->GetModelMass();
-		//
+		float we = 0.004 / mass; // weight for torques
+		float wm = 100;// weight for Muscles torques
+		float wpd = 1; // weight for PD torques
+		float T = 3000 * ContextGL->GetMaxSimulationTime(); // 3000 Hz * simulation time (5s) 
+		cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
 		// delete context and newton manager and close tutorial.
-		//if (man) { delete(man); }
-		//if (m1) { delete(m1); }
+		if (Model) { delete(Model); }
 		delete ContextGL;
 		//
 	}
-#if defined(_DEBUG)
-	// The tutorial report some leaks but this leaks seen to come from the window create gl.
-	// I have try to break on the number but it do nothing.
-	// When a real leak happen from the tutorial object class I can break on the report number.
-	// I need to test more about it later but the leak is always the same and it don't seen to grow more.
-	// I have test to create the window gl only without the manager or any object and the leak is present.
-	// If I don't create the window the leak go away.
-	// You can find the break option in the class creation WindowMain::WindowMain(int dwidth, int dheight)
-#endif 
-	float we = 0.004 / mass; // weight for torques
-	float wm = 100;// weight for Muscles torques
-	float wpd = 1; // weight for PD torques
-	float T = 3000 * ContextGL->GetMaxSimulationTime(); // 3000 Hz * simulation time (5s) 
-
-	cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
 	return cost;
 }
 
+// is the fitness function for CMAES algorithm
 double fitfun(double const* x, int N, ModelParams P)// cambia in call newton. 
 {
-	vector<float> parameters = P.RemoveScaling(x);//not scaled params
+	double* parameters = P.RemoveScaling(x);//not scaled params
 	double sum = CallNewton(parameters);
 	return sum;
 }
 
+// calls CMAES class. At the end writes a XML file with optimized parapeters
 int call_cmaes(ModelParams params)
 {
 
 	CMAES<double> evo;
 	double* arFunvals, * const* pop, * xfinal;
 
-	vector<float> params_scaled = params.ScaleParameters(); //parameter scaled for optimization
+	double* params_scaled = params.ScaleParameters(); //parameter scaled for optimization
 
 	// Initialize everything
-	const int dim = 40;
+	const int dim = 40; // change according to optimization parameters in XML file
 	double xstart[dim];
 	for (int i = 0; i < dim; i++) xstart[i] = params_scaled[i];
-	double stddev[dim];
-	for (int i = 0; i < dim; i++) stddev[i] = 0.005; // as WANG
+	double stddev[dim]; // assign sigma to each parameter
+	for (int i = 0; i < dim; i++) stddev[i] = 0.005; /// between 0.1 and 0.001
 	Parameters<double> parameters;
 	// TODO Adjust parameters here
 	parameters.init(dim, xstart, stddev);
 	parameters.stopTolX = 1e-11;
-	parameters.stopMaxFunEvals = 1;
+	parameters.stopMaxIter = 100; // max 3000
+	parameters.lambda = 50; // 50  Wang or 4 + (int)(3.0 * log((double)dim))
 	arFunvals = evo.init(parameters);
 
 	std::cout << evo.sayHello() << std::endl;
@@ -264,13 +199,16 @@ int call_cmaes(ModelParams params)
 		evo.updateDistribution(arFunvals);
 	}
 	std::cout << "Stop:" << std::endl << evo.getStopMessage();
-	evo.writeToFile(CMAES<double>::WKResume, "resumeevo1.dat"); // write resumable state of CMA-ES
+	evo.writeToFile(CMAES<double>::WKAll, "resumeevo1.dat"); // write resumable state of CMA-ES
 
 	// get best estimator for the optimum, xmean
-	xfinal = evo.getNew(CMAES<double>::XMean); // "XBestEver" might be used as well
+	//xfinal = evo.getNew(CMAES<double>::XMean); // "XBestEver" might be used as well
+	xfinal = evo.getNew(CMAES<double>::XBestEver); 
 
+	xfinal = params.RemoveScaling(xfinal);
+	params.write_optimized_params_doc(xfinal);
 	// do something with final solution and finally release memory
-	delete[] xfinal;
+	//delete[] xfinal; error, why?
 
 	return 0;
 }
