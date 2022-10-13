@@ -251,7 +251,6 @@ void dRaycastVHModel::dump_to_stdout(const char* pFilename)
 // ----------------------------------------------------------------------
 dRaycastVHModel::~dRaycastVHModel()
 {
-    delete[]  Geomfloor;
 }
 
 dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName, const dMatrix& location, int linkMaterilID)
@@ -1634,7 +1633,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     Model->controller.UpdateTaskReward(com_Player.m_y, COM_vel, Strunk[0], Ctrunk[0]);
     
     // ADD WBV
-    Model->ApplyTilting(8 * dDegreeToRad * sin(0.5 * 2 * M_PI * newTime)); // roll 8° 0.5 Hz
+    Model->ApplyTilting(m_winManager->GetWVBAmp() * dDegreeToRad * sin(m_winManager->GetWVBFreq() * 2 * M_PI * newTime)); // roll 
 
     newTime = newTime + timestep; // update time
     m_winManager->SetSimulationTime(newTime);

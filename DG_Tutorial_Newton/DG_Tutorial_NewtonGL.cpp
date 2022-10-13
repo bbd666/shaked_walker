@@ -37,9 +37,11 @@
 #include "LoadXML.h"
 #include <iostream>
 #include "cmaes.h"
+//#include "dHighResolutionTimer.h"
 
-float CallNewton(double* params); // overload for optimization
-int call_cmaes(ModelParams params);
+float CallNewton(double* params, int operation); 
+float CallNewton(double* params, int operation, int iteration_max, int current_iteration, int popsize);// overload for optimization
+int call_cmaes(ModelParams params, int iteration_max, int popsize, int operation);
 // boundary condition for parameters. Parameters must be positive or 0
 bool is_feasible(double* p) {
 	bool flag = true;
@@ -92,11 +94,16 @@ int WINAPI wWinMain(
 	}
 
 	// run simulation/optimization
+	string operation_name;
 	int cost = 1;
 	if (operation == 1)// run simulation
-		cost = CallNewton(params.params_pointer());
+		cost = CallNewton(params.params_pointer(), operation);
 	else if (operation == 2) // run optimization 
-		cost = call_cmaes(params);
+	{
+		int iteration_number = 750;
+		int population_size = 50;
+		cost = call_cmaes(params, iteration_number, population_size, operation);
+	}
 	else
 		return(0);
 
@@ -104,7 +111,7 @@ int WINAPI wWinMain(
 }
 
 // Creates the window and shows the simulation. The output is the simulation cost.
-float CallNewton(double* params)
+float CallNewton(double* params, int operation)
 {
 	WindowMain* ContextGL = new WindowMain();
 	//
@@ -121,6 +128,7 @@ float CallNewton(double* params)
 	if (ContextGL != NULL) {
 		ContextGL->SetSimulationTime(0.0);// [s]
 		ContextGL->SetMaxSimulationTime(5.0); //set max 5 s of simulation
+		ContextGL->SetSimulationInfo(operation,0,0,0, "None",8,0.5); // SET WBV info
 		ContextGL->MainLoop();
 
 		reward = Model->controller.GetRewardValues();
@@ -138,16 +146,80 @@ float CallNewton(double* params)
 	return cost;
 }
 
+// Overload for cmaes: Creates the window and shows the simulation. The output is the simulation cost.
+float CallNewton(double* params, int operation, int iteration_max, int current_iteration, int popsize)
+{
+	// NEXT VERSION without call to GL
+//	NewtonManager* aManager = new NewtonManager();
+//	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+//	dMatrix matrix(dGetIdentityMatrix());
+//	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
+//
+//Model->controller.SetOptimizationParam(params);
+//	float Time = 0;
+//	while (Time < 5)//&& Time < 5.0f stop simulation if window is closed or simulation time is 10 s
+//	{
+//		dFloat timestep = dGetElapsedSeconds();
+//		aManager->UpdateNewton(timestep);
+//		//
+//		aManager->CalculateFPS(timestep);
+//		Time = Time + timestep; /// AAAAAAAAA verifica valore
+//	}
+//
+//	if (aManager) {
+//		aManager->IsTerminated = true;
+//	}
+//	if (aManager) {
+//		delete aManager;
+//	}
+//	dAssert(NewtonGetMemoryUsed() == 0);
+	// END NEXT VERSION
+
+	WindowMain* ContextGL = new WindowMain();
+	//
+	ContextGL->SetUseMouseViewRotation(true);
+	//	 
+	DGVehicleRCManager* aWalkerManager = new DGVehicleRCManager(ContextGL);
+	dMatrix matrix(dGetIdentityMatrix());
+	dRaycastVHModel* const Model = aWalkerManager->CreateWalkerPlayer("WALKER", matrix);
+
+	Model->controller.SetOptimizationParam(params);
+
+	float cost = 0, mass = 0;
+	vector<float> reward;
+	if (ContextGL != NULL) {
+		ContextGL->SetSimulationTime(0.0);// [s]
+		ContextGL->SetMaxSimulationTime(5.0); //set max 5 s of simulation
+		int remaining_time = (iteration_max - current_iteration) * ContextGL->GetMaxSimulationTime() * popsize; // wrong, simulation speed is better
+		ContextGL->SetSimulationInfo(operation, current_iteration, iteration_max, remaining_time,"None",0.0,0.0); // SET WBV info
+		ContextGL->MainLoop();
+
+		reward = Model->controller.GetRewardValues();
+		mass = Model->GetModelMass();
+		float we = 0.004 / mass; // weight for torques
+		float wm = 100;// weight for Muscles torques
+		float wpd = 1; // weight for PD torques
+		float T = 3000 * ContextGL->GetMaxSimulationTime(); // 3000 Hz * simulation time (5s) 
+		cost = reward[0] + we / T * (wm * reward[1] + wpd * reward[2]);
+		// delete context and newton manager and close tutorial.
+		if (Model) { delete(Model); }
+		delete ContextGL;
+		//
+	}
+
+	return cost;
+}
+
 // is the fitness function for CMAES algorithm
-double fitfun(double const* x, int N, ModelParams P)// cambia in call newton. 
+double fitfun(double const* x, int N, ModelParams P, int operation, int iteration_max, int current_it, int popsize)// cambia in call newton. 
 {
 	double* parameters = P.RemoveScaling(x);//not scaled params
-	double sum = CallNewton(parameters);
+	double sum = CallNewton(parameters, operation, iteration_max, current_it, popsize);
 	return sum;
 }
 
 // calls CMAES class. At the end writes a XML file with optimized parapeters
-int call_cmaes(ModelParams params)
+int call_cmaes(ModelParams params, int iteration_max, int popsize, int operation)
 {
 
 	CMAES<double> evo;
@@ -165,8 +237,8 @@ int call_cmaes(ModelParams params)
 	// TODO Adjust parameters here
 	parameters.init(dim, xstart, stddev);
 	parameters.stopTolX = 1e-11;
-	parameters.stopMaxIter = 100; // max 3000
-	parameters.lambda = 50; // 50  Wang or 4 + (int)(3.0 * log((double)dim))
+	parameters.stopMaxIter = iteration_max; // max 3000
+	parameters.lambda = 4 + (int)(3.0 * log((double)dim)); // 50  Wang or 4 + (int)(3.0 * log((double)dim))
 	arFunvals = evo.init(parameters);
 
 	std::cout << evo.sayHello() << std::endl;
@@ -190,16 +262,16 @@ int call_cmaes(ModelParams params)
 			 while (!is_feasible(pop[i]))// just positive values
 			   evo.reSampleSingle(i);
 		
-
+		 int aa = (int)evo.get(CMAES<double>::Generation);
 		// evaluate the new search points using fitfun from above
 		for (int i = 0; i < evo.get(CMAES<double>::Lambda); ++i)
-			arFunvals[i] = fitfun(pop[i], (int)evo.get(CMAES<double>::Dimension), params);
+			arFunvals[i] = fitfun(pop[i], (int)evo.get(CMAES<double>::Dimension), params, operation, iteration_max, (int)evo.get(CMAES<double>::Generation), popsize);
 
 		// update the search distribution used for sampleDistribution()
 		evo.updateDistribution(arFunvals);
 	}
 	std::cout << "Stop:" << std::endl << evo.getStopMessage();
-	evo.writeToFile(CMAES<double>::WKAll, "resumeevo1.dat"); // write resumable state of CMA-ES
+	evo.writeToFile(CMAES<double>::WKAll, "resumeevo.dat"); // write resumable state of CMA-ES
 
 	// get best estimator for the optimum, xmean
 	//xfinal = evo.getNew(CMAES<double>::XMean); // "XBestEver" might be used as well

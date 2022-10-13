@@ -99,10 +99,11 @@ struct WindowMain
 {   // public
 	WindowMain(int dwidth = 1024, int dheight = 768);
 	virtual ~WindowMain();
+
 	//
 	void MainLoop();
 	void InitGLRender();
-	void MainRender();
+	void MainRender(string info, int iteration, int max_iteration, int remaining_time);
 	void ContextResize(int cw, int ch);
 	void ContextKeypress(int key, int scancode, int action, int mods);
 	void ContextMouseButton(int button, int action, int mods);
@@ -128,6 +129,9 @@ struct WindowMain
 
 	float GetMaxSimulationTime();
 
+	void SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq);
+	float GetWVBFreq();
+	float GetWVBAmp();
 private:
 	NewtonMousePick* aMousePick;
 	GLFWwindow* contextGL;
@@ -148,6 +152,9 @@ private:
 	
 	float Time;
 	float Max_Time;
+	int operation, iteration, max_iteration, remaining_time;
+	string wbvinfo;
+	float WBV_amp, WBV_freq;
 };
 
 // WIP: unimplemented, I let's it present just to remember have I need to do later.

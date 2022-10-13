@@ -379,23 +379,32 @@ void LineDebugManager::RenderLine(double steptime)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 WindowMain::WindowMain(int dwidth, int dheight)
-	:MainShader(NULL), 
+	:MainShader(NULL),
 	contextcolor(glm::vec4(0.125f, 0.125f, 0.125f, 1.0f)),
 	Camera(NULL),
 	mainwidth(dwidth),
 	mainheight(dheight),
-    mousebutton(0),
-    mousebuttonaction(0),
-    mousebuttonmods(0),
+	mousebutton(0),
+	mousebuttonaction(0),
+	mousebuttonmods(0),
 	aMousePick(NULL),
 	mouvemovex(0.0),
-    mouvemovey(0.0),
+	mouvemovey(0.0),
 	usemouserotate(false),
-    mousescrlx(0.0f),
-    mousescrly(0.0f),
+	mousescrlx(0.0f),
+	mousescrly(0.0f),
 	aManager(NULL),
 	aLineManager(NULL),
-	delayerfps(0)
+	delayerfps(0),
+	Max_Time(0),
+	Time(0),
+	operation(0),
+	iteration(0),
+	max_iteration(0),
+	remaining_time(0),
+	wbvinfo("none"),
+	WBV_amp(0),
+	WBV_freq(0)
 {
 #if defined(_DEBUG) && defined(_MSC_VER)
 	// Track all memory leaks at the operating system level.
@@ -589,15 +598,43 @@ float WindowMain::GetMaxSimulationTime()
 {
 	return Max_Time;
 }
+// Set simulation info: 
+// 1. operation (0, do nothing, 1 simulation, 2 optimization, 
+// 2. current iteration in case of optimization, 
+// 3. max iteration in case of optimization, 
+// 4. remaining time in s
+// 5. string WBV sinusoidal direction
+// 6. WBV amplitude in [°]
+// 7. WBV frequency in [Hz]
+void WindowMain::SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq)
+{
+	operation = operation_;
+	iteration = iteration_;
+	max_iteration = max_iteration_;
+	remaining_time = remaining_time_;
+	wbvinfo = info_wbv;
+	WBV_amp = Amp;
+	WBV_freq = freq;
+}
 
-void WindowMain::MainLoop(){
-	ImGui_ImplGlfwGL3_Init(contextGL, false);
+float WindowMain::GetWVBAmp()
+{
+	return WBV_amp;
+}
 
+float WindowMain::GetWVBFreq()
+{
+	return WBV_freq;
+}
+
+void WindowMain::MainLoop()
+{
 	while (!glfwWindowShouldClose(contextGL) && Time < Max_Time)//&& Time < 5.0f stop simulation if window is closed or simulation time is 10 s
 	{
-		MainRender();
+		MainRender(wbvinfo, iteration, max_iteration, remaining_time);// model simulation
 		glfwSwapBuffers(contextGL);
 		glfwPollEvents();
+
 	}
 }
 
@@ -642,7 +679,7 @@ void WindowMain::InitGLRender()
 	aLineManager->InitBufferGL();
 }
 
-void WindowMain::MainRender()
+void WindowMain::MainRender(string info, int iteration, int max_iteration, int remaining_time)
 {
 	//
 	// prepare the main rendering loop.
@@ -674,7 +711,7 @@ void WindowMain::MainRender()
 				//
 				if (delayerfps >= 1000) {
 					std::stringstream ss;
-					ss  <<" - Walking Humanoid - " << " [" << aManager->GetFps() << " :fps "<< aManager->GetPhysicTime() * 1000.0f <<" :ms]";
+					ss  <<"Shaked walker:" <<  " WBV " << info << ", Current iteration " << iteration << " of " << max_iteration <<", Remaining time " << remaining_time/60 << " minutes.";
 					glfwSetWindowTitle(contextGL, ss.str().c_str());
 					delayerfps = 0;
 				}
@@ -730,4 +767,5 @@ WindowMain::~WindowMain()
   if (aLineManager) {
 	  delete aLineManager;
   }
+  dAssert(NewtonGetMemoryUsed() == 0);
 }

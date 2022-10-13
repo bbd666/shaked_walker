@@ -11,28 +11,15 @@ public:
 	~ControlAlgorithm();
 	float PD_controller(string dof, bool leading);
 	float MTU_excitation(Mtuname m_name,vector<bool> gait_state,
-		char lead, char lat, float l_til, float f_norm, dVector com_Playervel);// the ouput is the excitation signal for muscle m_name
+	char lead, char lat, float l_til, float f_norm, dVector com_Playervel);// the ouput is the excitation signal for muscle m_name
 	
 	vector<bool> Stance_Swing_Detection(dVector foot, dVector com, float leg, float contact);
 
 	void SetPlayerCOMvel(dVector COMvel);
 	void SetSagittalDistance(float d);
 	void SetCoronalDistance(float d1);
-	void SetGain_InitialCondition(float Tangle, float alfaR, float alfaL, float beta, float gamma, float head, float vel);
-	void SetGain_Force_Feedback(Mtuname NAME, float val);
-	void SetGain_StanceLead(float Pham, float Aham, float Dham, float Pglu, float Aglu, float Dglu, float Phfl, float Ahfl, float Dhfl);
 
-	void SetGain_ForceFeedback(float Gf_glu, float Gf_ham, float Gf_vas, float Gf_sol, float Gf_gas, float Gf_tasol);
-
-	void SetGain_LengthFeedback(float Glg_hfl, float Glg_ham, float Glg_ta, float Glh_hfl, float Glh_ham, float Glh_ta);
-
-	void SetGain_Coronal_lead(float trunk_p, float trunk_v, float foot_p, float foot_v);
-
-	void SetGain_Coronal(float Ctrunk_p, float Ctrunk_v, float foot_p, float foot_v, float Ttrunk_p, float Ttrunk_v);
-
-	void SetGain_Arm(float a, float e);
-
-	void SetOptimizationParam(vector<float> parameters);
+	void SetOptimizationParam(double* parameters);
 
 	vector<float> GetShoulderTargetAngles(bool state0, char lat);
 	float GetGain_Force_Feedback(Mtuname NAME);

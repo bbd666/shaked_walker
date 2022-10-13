@@ -57,11 +57,14 @@ Muscle::~Muscle() {
 	if (!m_Manager->IsTerminated)
 		for (auto itr = m_Manager->vMuscleList.begin();
 			itr != m_Manager->vMuscleList.end(); itr++) {
-		if ((Muscle*)*itr == this) {
-			m_Manager->vMuscleList.erase(itr);
-			break;
+			if ((Muscle*)*itr == this) {
+				m_Manager->vMuscleList.erase(itr);
+				break;
+			}
+			delete body1;
+			delete body2;
+			delete body3;
 		}
-	}
 }
 
 Mtuname Muscle::GetMuscleName() {
