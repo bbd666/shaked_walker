@@ -395,16 +395,16 @@ WindowMain::WindowMain(int dwidth, int dheight)
 	mousescrly(0.0f),
 	aManager(NULL),
 	aLineManager(NULL),
-	delayerfps(0),
-	Max_Time(0),
-	Time(0),
-	operation(0),
-	iteration(0),
-	max_iteration(0),
-	remaining_time(0),
-	wbvinfo("none"),
-	WBV_amp(0),
-	WBV_freq(0)
+	delayerfps(0)
+	//Max_Time(0),
+	//Time(0),
+	//operation(0),
+	//iteration(0),
+	//max_iteration(0),
+	//remaining_time(0),
+	//wbvinfo("none"),
+	//WBV_amp(0),
+	//WBV_freq(0)
 {
 #if defined(_DEBUG) && defined(_MSC_VER)
 	// Track all memory leaks at the operating system level.
@@ -579,53 +579,53 @@ MainCamera* WindowMain::GetCamera()
 	return Camera;
 }
 
-void WindowMain::SetSimulationTime(float time)
-{
-	Time = time;
-}
-
-float WindowMain::GetSimulationTime()
-{
-	return Time;
-}
-
-void WindowMain::SetMaxSimulationTime(float time)
-{
-	Max_Time = time;
-}
-
-float WindowMain::GetMaxSimulationTime()
-{
-	return Max_Time;
-}
-// Set simulation info: 
-// 1. operation (0, do nothing, 1 simulation, 2 optimization, 
-// 2. current iteration in case of optimization, 
-// 3. max iteration in case of optimization, 
-// 4. remaining time in s
-// 5. string WBV sinusoidal direction
-// 6. WBV amplitude in [°]
-// 7. WBV frequency in [Hz]
-void WindowMain::SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq)
-{
-	operation = operation_;
-	iteration = iteration_;
-	max_iteration = max_iteration_;
-	remaining_time = remaining_time_;
-	wbvinfo = info_wbv;
-	WBV_amp = Amp;
-	WBV_freq = freq;
-}
-
-float WindowMain::GetWVBAmp()
-{
-	return WBV_amp;
-}
-
-float WindowMain::GetWVBFreq()
-{
-	return WBV_freq;
-}
+//void WindowMain::SetSimulationTime(float time)
+//{
+//	Time = time;
+//}
+//
+//float WindowMain::GetSimulationTime()
+//{
+//	return Time;
+//}
+//
+//void WindowMain::SetMaxSimulationTime(float time)
+//{
+//	Max_Time = time;
+//}
+//
+//float WindowMain::GetMaxSimulationTime()
+//{
+//	return Max_Time;
+//}
+//// Set simulation info: 
+//// 1. operation (0, do nothing, 1 simulation, 2 optimization, 
+//// 2. current iteration in case of optimization, 
+//// 3. max iteration in case of optimization, 
+//// 4. remaining time in s
+//// 5. string WBV sinusoidal direction
+//// 6. WBV amplitude in [°]
+//// 7. WBV frequency in [Hz]
+//void WindowMain::SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq)
+//{
+//	operation = operation_;
+//	iteration = iteration_;
+//	max_iteration = max_iteration_;
+//	remaining_time = remaining_time_;
+//	wbvinfo = info_wbv;
+//	WBV_amp = Amp;
+//	WBV_freq = freq;
+//}
+//
+//float WindowMain::GetWVBAmp()
+//{
+//	return WBV_amp;
+//}
+//
+//float WindowMain::GetWVBFreq()
+//{
+//	return WBV_freq;
+//}
 
 void WindowMain::MainLoop()
 {

@@ -253,18 +253,18 @@ dRaycastVHModel::~dRaycastVHModel()
 {
 }
 
-dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName, const dMatrix& location, int linkMaterilID)
+dRaycastVHModel::dRaycastVHModel(NewtonManager* aman, const char* const modelName, const dMatrix& location, int linkMaterilID)
     : dModelRootNode(NULL, dGetIdentityMatrix())
-    , m_winManager(winctx)
+    , a_manager(aman)
     , SimulationCost(0.0f)
 
 {
     // create floor object zero mass
-    Geomfloor = new GeomNewton(m_winManager->aManager);
+    Geomfloor = new GeomNewton(a_manager);
     Geomfloor->SetBodyType(adtDynamic);
     Geomfloor->SetTexTileU(3.0f);
     Geomfloor->SetTexTileV(3.0f);
-    Geomfloor->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
+    //Geomfloor->SetTexture0("Textures//MRAMOR6X6.jpg", "Tex0");
     Geomfloor->SetDiffuseColor(0.45f, 0.45f, 0.45f);
     Geomfloor->InitNewton(atBox, 25.0f, 0.25f, 25.0f, 1000.0f); // CHANGE
     // create hinge actuator to impose ROLL WBV
@@ -623,13 +623,13 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
         else
             b3 = NULL;
 
-        muscles[*it] = new Muscle(m_winManager->aLineManager, m_winManager->aManager, b1, b2, b3,
+        muscles[*it] = new Muscle(NULL, a_manager, b1, b2, b3,
             m_point1.find(muscle_keys[index])->second, m_point2.find(muscle_keys[index])->second,
             m_joint1.find(muscle_keys[index])->second, m_joint_type1.find(muscle_keys[index])->second,
             m_joint2.find(muscle_keys[index])->second, m_joint_type2.find(muscle_keys[index])->second,
             m_muscle_name.find(muscle_keys[index])->second);
         muscles[*it]->GenerateMesh();
-        m_winManager->aManager->vMuscleList.push_back(muscles[*it]);
+        a_manager->vMuscleList.push_back(muscles[*it]);
         muscles[*it]->SetThetazero(m_theta0.find(muscle_keys[index])->second); // initial joint angle
 
         if (muscle_keys[index] == "ham_r" || muscle_keys[index] == "ham_l" || muscle_keys[index] == "rf_r" || muscle_keys[index] == "rf_l" ||
@@ -668,23 +668,23 @@ dRaycastVHModel::dRaycastVHModel(WindowMain* winctx, const char* const modelName
     //////// END of MUSCLE DEFINITION //////////////////
 
     // Check for body com position!
-    COMXline_id = CreateLine();
-    COMYline_id = CreateLine(); 
-    COMZline_id = CreateLine(); 
+    //COMXline_id = CreateLine(); // removed to avoid OpenGL
+    //COMYline_id = CreateLine(); 
+    //COMZline_id = CreateLine(); 
     
 }
-
-int dRaycastVHModel::CreateLine() {
-glm::vec3 linepos1;
-glm::vec3 linepos2;
-glm::vec3 linecolor;
-
-linepos1.x = 0; linepos1.y = 0; linepos1.z = 0;
-linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
-linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
-
-return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
-}
+// removed to avoid OpenGL
+//int dRaycastVHModel::CreateLine() {
+//glm::vec3 linepos1;
+//glm::vec3 linepos2;
+//glm::vec3 linecolor;
+//
+//linepos1.x = 0; linepos1.y = 0; linepos1.z = 0;
+//linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
+//linecolor.x = 0.0f; linecolor.y = 1.0f; linecolor.z = 0.f;
+//
+//return m_winManager->aLineManager->AddLine(linepos1, linepos2, linecolor);
+//}
 // create 3 point collision for the foot. Same method of BalancingBibep.cpp in DemoSandBox 
 void dRaycastVHModel::CreateDescreteContactFootCollision(NewtonBody* const footBody) const
 {
@@ -1024,13 +1024,13 @@ void dRaycastVHModel::HingeJoint(string jname, string body1, string body2, dVect
     JHinge[jname]->EnableLimits(true);
     JHinge[jname]->SetLimits(minAng, maxAng);
     if (jname == "Knee_l") {
-        m_winManager->aManager->vJointList.push_back(JHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(KNEE_L);
+        a_manager->vJointList.push_back(JHinge[jname]);
+        a_manager->vJointNameList.push_back(KNEE_L);
         //JHinge[jname]->SetLimits(-0.01, 0.01);
     }
     if (jname == "Knee_r") {
-        m_winManager->aManager->vJointList.push_back(JHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(KNEE_R);
+        a_manager->vJointList.push_back(JHinge[jname]);
+        a_manager->vJointNameList.push_back(KNEE_R);
         //JHinge[jname]->SetLimits(-0.01, 0.01);
     }
     if (jname == "Toe_hinge_r" || jname == "Toe_hinge_l" || jname == "Wrist_r" || jname == "Wrist_l"){
@@ -1065,23 +1065,23 @@ void dRaycastVHModel::DoubleHingeJoint(string jname, string body1, string body2,
     JDoubleHinge[jname]->SetLimits1(minAng2, maxAng2);
    
     if (jname == "Ankle_r") {
-        m_winManager->aManager->vJointList.push_back(JDoubleHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(ANKLE_R);
+        a_manager->vJointList.push_back(JDoubleHinge[jname]);
+        a_manager->vJointNameList.push_back(ANKLE_R);
         //JDoubleHinge[jname]->SetLimits(-0.01, 0.01);
     }
     if (jname == "Ankle_l") {
-        m_winManager->aManager->vJointList.push_back(JDoubleHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(ANKLE_L);
+        a_manager->vJointList.push_back(JDoubleHinge[jname]);
+        a_manager->vJointNameList.push_back(ANKLE_L);
         //JDoubleHinge[jname]->SetLimits(-0.01, 0.01);
     }
     if (jname == "Hip_r") {
-        m_winManager->aManager->vJointList.push_back(JDoubleHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(HIP_R);
+        a_manager->vJointList.push_back(JDoubleHinge[jname]);
+        a_manager->vJointNameList.push_back(HIP_R);
         //JDoubleHinge[jname]->SetLimits(-0.01, 0.01);
     }
     if (jname == "Hip_l") {
-        m_winManager->aManager->vJointList.push_back(JDoubleHinge[jname]);
-        m_winManager->aManager->vJointNameList.push_back(HIP_L);
+        a_manager->vJointList.push_back(JDoubleHinge[jname]);
+        a_manager->vJointNameList.push_back(HIP_L);
         //JDoubleHinge[jname]->SetLimits(-0.01, 0.01);
     }
 }
@@ -1110,12 +1110,12 @@ void dRaycastVHModel::RigidBodyCreation(string body)
         mass_prop_key = name;
     }
     
-    rigid_element[body] = new GeomNewton(m_winManager->aManager);
+    rigid_element[body] = new GeomNewton(a_manager);
     rigid_element[body]->SetBodyType(adtDynamic);
     if (body != "LPT")
         rigid_element[body]->SetParent(rigid_element[child_father.find(body)->second]);
 
-    rigid_element[body]->SetTexture0(&tex[0], "Tex0");
+    //rigid_element[body]->SetTexture0(&tex[0], "Tex0");
     rigid_element[body]->SetDiffuseColor(1.0f, 1.0f, 1.0f);
 
     if (body == "LPT")
@@ -1149,29 +1149,30 @@ void dRaycastVHModel::RigidBodyCreation(string body)
         nodes[body] = new dModelNode(rigid_element[body]->GetBody(), dGetIdentityMatrix(), nodes[child_father.find(body)->second]);}
 }
 
-//Draw three lines parallel to global x y and z respectively. The origin of all lines is the input position vector. Use a the second input to set line length
-void dRaycastVHModel::DrawFrame(const dVector& posit, dFloat scale)
-{
-    int Xindex = COMXline_id;
-    int Yindex = COMYline_id;
-    int Zindex = COMZline_id;
-    vector <int> ind = { Xindex,Yindex,Zindex };
-    float val1 = 0, val2 = 0, val3 = 0;
-    for (int n = 0; n<3; ++n)
-    {
-        if (n == 0) { val1 = 0.2*scale; val2 = 0; val3 = 0; }
-        else if (n == 1) { val1 = 0; val2 = 0.2 * scale; val3 = 0; }
-        else if (n == 2) { val1 = 0; val2 = 0; val3 = 0.2 * scale; }
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.x = posit[0];
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.y = posit[1];
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.z = posit[2];
-        //aLineBuffer[LineIndex].color = newlinecolor;
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.x = posit[0] + val1;
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.y = posit[1] + val2;
-        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.z = posit[2] + val3;
-    }
-
-}
+// removed to avoid OpenGL
+////Draw three lines parallel to global x y and z respectively. The origin of all lines is the input position vector. Use a the second input to set line length
+//void dRaycastVHModel::DrawFrame(const dVector& posit, dFloat scale)
+//{
+//    int Xindex = COMXline_id;
+//    int Yindex = COMYline_id;
+//    int Zindex = COMZline_id;
+//    vector <int> ind = { Xindex,Yindex,Zindex };
+//    float val1 = 0, val2 = 0, val3 = 0;
+//    for (int n = 0; n<3; ++n)
+//    {
+//        if (n == 0) { val1 = 0.2*scale; val2 = 0; val3 = 0; }
+//        else if (n == 1) { val1 = 0; val2 = 0.2 * scale; val3 = 0; }
+//        else if (n == 2) { val1 = 0; val2 = 0; val3 = 0.2 * scale; }
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.x = posit[0];
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.y = posit[1];
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 1].posit.z = posit[2];
+//        //aLineBuffer[LineIndex].color = newlinecolor;
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.x = posit[0] + val1;
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.y = posit[1] + val2;
+//        m_winManager->aLineManager->aLineBuffer[ind[n] - 2].posit.z = posit[2] + val3;
+//    }
+//
+//}
 
 void dRaycastVHModel::AddActionReactionTorque(float Torque, dVector pin, GeomNewton* b1, GeomNewton* b2)
 {
@@ -1188,16 +1189,16 @@ void dRaycastVHModel::AddActionReactionTorque(float Torque, dVector pin, GeomNew
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DGVehicleRCManager::DGVehicleRCManager(WindowMain* winctx)
-: dModelManager(winctx->aManager->GetWorld()),
-  m_winManager(winctx)
+DGVehicleRCManager::DGVehicleRCManager(NewtonManager* aman)
+: dModelManager(aman->GetWorld()),
+  a_manager(aman)
 {
     
 }
 
 dRaycastVHModel* DGVehicleRCManager::CreateWalkerPlayer(const char* const modelName, const dMatrix& location)
 {
-    dRaycastVHModel* const controller = new dRaycastVHModel(m_winManager, modelName, location, 0);
+    dRaycastVHModel* const controller = new dRaycastVHModel(a_manager, modelName, location, 0);
 
     // set the model to calculate the local transformation
     controller->SetTransformMode(true);
@@ -1229,7 +1230,7 @@ int DGVehicleRCManager::GetContactPoints(NewtonBody* const body, dVector* const 
 void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const
 //pour VS<VS2017 supprimer ,int threadID
 {
-    dFloat newTime = m_winManager->GetSimulationTime();
+    dFloat newTime = a_manager->GetSimulationTime();
     dRaycastVHModel* Model = (dRaycastVHModel*)model;
 
     ////cout << "DGVehicleRCManager OnP reUpdate \n";
@@ -1283,8 +1284,9 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         //count += GetContactPoints(BODY1->GetBody(), &supportPolygon[count]);
         vector<bool> state_foot_l = Model->controller.Stance_Swing_Detection(com_ankle_l, com_Player, Model->GetLegLength(), count);
 
-        // Model com visualization
-        Model->DrawFrame(com_Player, 1.0); // comment this line to check single body com position and use following lines
+        // Model com visualization removed to avoid OpenGL
+        //Model->DrawFrame(com_Player, 1.0); // comment this line to check single body com position and use following lines
+        
         //// Check for body com position! change manually the name of the body 
         //NewtonBody* body = RE_list.find("Hand_l")->second->GetBody();
         //dVector com;
@@ -1338,8 +1340,8 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
         vector<float> state0anklel = Model->controller.GetState0("Sankle_l");
 
         //scan all  Muscle Elements
-        for (auto itr = m_winManager->aManager->vMuscleList.begin();
-            itr != m_winManager->aManager->vMuscleList.end(); itr++)
+        for (auto itr = a_manager->vMuscleList.begin();
+            itr != a_manager->vMuscleList.end(); itr++)
         {
             dVector pin; // needed to apply the torque along the joint pin
             dVector pin1; // needed to apply the torque along the joint 1 pin
@@ -1350,7 +1352,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
             for (auto itr1 = 0; itr1 <= 1; itr1++)
             {
                 // Read the joint name list and find the joint name of the Mobj
-                std::vector<JointName> list = m_winManager->aManager->vJointNameList;
+                std::vector<JointName> list = a_manager->vJointNameList;
                 int j_index;
                 JointType type;
                 if (itr1 == 0)
@@ -1367,7 +1369,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 switch (type) {
                 case Hinge:
                 {
-                    dCustomHinge* joint = (dCustomHinge*)m_winManager->aManager->vJointList[j_index]; // joint from jointlist
+                    dCustomHinge* joint = (dCustomHinge*)a_manager->vJointList[j_index]; // joint from jointlist
                     if (itr1 == 0)
                     {
                         Mobj->SetAngle(joint->GetJointAngle()); // joint angle
@@ -1406,7 +1408,7 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
                 //}
                 case DoubleHinge:
                 {
-                    dCustomDoubleHinge* joint = (dCustomDoubleHinge*)m_winManager->aManager->vJointList[j_index];
+                    dCustomDoubleHinge* joint = (dCustomDoubleHinge*)a_manager->vJointList[j_index];
                     if (itr1 == 0)
                     {
                         Mobj->SetAngle(joint->GetJointAngle());
@@ -1633,10 +1635,10 @@ void DGVehicleRCManager::OnPreUpdate(dModelRootNode* const model, dFloat timeste
     Model->controller.UpdateTaskReward(com_Player.m_y, COM_vel, Strunk[0], Ctrunk[0]);
     
     // ADD WBV
-    Model->ApplyTilting(m_winManager->GetWVBAmp() * dDegreeToRad * sin(m_winManager->GetWVBFreq() * 2 * M_PI * newTime)); // roll 
+    Model->ApplyTilting(a_manager->GetWVBAmp() * dDegreeToRad * sin(a_manager->GetWVBFreq() * 2 * M_PI * newTime)); // roll 
 
     newTime = newTime + timestep; // update time
-    m_winManager->SetSimulationTime(newTime);
+    a_manager->SetSimulationTime(newTime);
 
 }
 

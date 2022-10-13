@@ -64,6 +64,18 @@ struct NewtonManager
 	static void PhysicsApplyGravityForce(const NewtonBody* body, dFloat timestep, int threadIndex);
 	static void PhysicsApplyControlForce(const NewtonBody* body1, bool action, dFloat timestep, int threadIndex);
 	static void TransformCallback(const NewtonBody* body, const dFloat* matrix, int threadIndex);
+
+	void SetSimulationTime(float time);
+
+	float GetSimulationTime();
+
+	void SetMaxSimulationTime(float time);
+
+	float GetMaxSimulationTime();
+
+	void SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq);
+	float GetWVBFreq();
+	float GetWVBAmp();
 private:
 	int aLastpluginnewton; 
 	int aCurrentPluginID;
@@ -81,6 +93,12 @@ private:
 	unsigned64 aMicrosecunds;
 	NewtonWorld* nWorld;
 	dVector nGravity;
+
+	float Time;
+	float Max_Time;
+	int operation, iteration, max_iteration, remaining_time;
+	string wbvinfo;
+	float WBV_amp, WBV_freq;
 };
 
 

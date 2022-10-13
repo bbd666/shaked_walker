@@ -563,55 +563,55 @@ void GeomNewton::GenerateMesh()
 	  mColl = NULL;
 	}
 	//
-	if (!aBufferInited) {
-		glGenVertexArrays(1, &aVao);
-		if (aVao) {
-			glBindVertexArray(aVao);
-			glGenBuffers(1, &aVbo);
-			if (aVbo) {
-				glBindBuffer(GL_ARRAY_BUFFER, aVbo);
-				//
-				glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPTN) * aVerticeCount, aVtx, GL_STATIC_DRAW);
-				//
-				glEnableVertexAttribArray(0);
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)0);
-				//
-				glEnableVertexAttribArray(1);
-				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)(offsetof(MainVertexPTN, MainVertexPTN::uv)));
-				//
-				glEnableVertexAttribArray(2);
-				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)(offsetof(MainVertexPTN, MainVertexPTN::normal)));
-				//
-			}
-			//
-			// If you use 2 textures or 3 textures in the newton mapping remember to loop here other indice buffers.
-			// Something like this:
-			//glGenBuffers(3, &aIbos);
-			// or
-			//glGenBuffers(1, &aIbo[i]);
-			//if (aIbo[i]) {
-			//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, aIbo[i]);
-			//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * aIndiceCount[i], aIndices[i], GL_STATIC_DRAW);
-			//}
-			// The render don't need any modification if you add more indices buffer.
-			// You only need to render the VAO, It already containting all buffers.
-			// 
-			glGenBuffers(1, &aIbo);
-			if (aIbo) {
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, aIbo);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * aIndiceCount, aIndices, GL_STATIC_DRAW);
-			}
-			//
-			glDisableVertexAttribArray(2);
-			glDisableVertexAttribArray(1);
-			glDisableVertexAttribArray(0);
-	        //
-			glBindVertexArray(0);
-			
-			aBufferInited = true;
-		}
-    }
-	//
+	//if (!aBufferInited) {
+	//	glGenVertexArrays(1, &aVao);
+	//	if (aVao) {
+	//		glBindVertexArray(aVao);
+	//		glGenBuffers(1, &aVbo);
+	//		if (aVbo) {
+	//			glBindBuffer(GL_ARRAY_BUFFER, aVbo);
+	//			//
+	//			glBufferData(GL_ARRAY_BUFFER, sizeof(MainVertexPTN) * aVerticeCount, aVtx, GL_STATIC_DRAW);
+	//			//
+	//			glEnableVertexAttribArray(0);
+	//			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)0);
+	//			//
+	//			glEnableVertexAttribArray(1);
+	//			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)(offsetof(MainVertexPTN, MainVertexPTN::uv)));
+	//			//
+	//			glEnableVertexAttribArray(2);
+	//			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(MainVertexPTN), (void*)(offsetof(MainVertexPTN, MainVertexPTN::normal)));
+	//			//
+	//		}
+	//		//
+	//		// If you use 2 textures or 3 textures in the newton mapping remember to loop here other indice buffers.
+	//		// Something like this:
+	//		//glGenBuffers(3, &aIbos);
+	//		// or
+	//		//glGenBuffers(1, &aIbo[i]);
+	//		//if (aIbo[i]) {
+	//		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, aIbo[i]);
+	//		//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * aIndiceCount[i], aIndices[i], GL_STATIC_DRAW);
+	//		//}
+	//		// The render don't need any modification if you add more indices buffer.
+	//		// You only need to render the VAO, It already containting all buffers.
+	//		// 
+	//		glGenBuffers(1, &aIbo);
+	//		if (aIbo) {
+	//			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, aIbo);
+	//			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * aIndiceCount, aIndices, GL_STATIC_DRAW);
+	//		}
+	//		//
+	//		glDisableVertexAttribArray(2);
+	//		glDisableVertexAttribArray(1);
+	//		glDisableVertexAttribArray(0);
+	//        //
+	//		glBindVertexArray(0);
+	//		
+	//		aBufferInited = true;
+	//	}
+ //   }
+	////
 }
 
 void GeomNewton::InitNewton(GeomType cGeomtype, float cSx, float cSy, float cSz, float cMass)

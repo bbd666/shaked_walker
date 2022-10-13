@@ -162,7 +162,16 @@ NewtonManager::NewtonManager()
 	 aCurrentPluginID(-1),
 	 aCurrentPlugin("N/A"),
 	 IsTerminated(false),
-	 aFramesCount(0)
+	 aFramesCount(0),
+	Max_Time(0),
+	Time(0),
+	operation(0),
+	iteration(0),
+	max_iteration(0),
+	remaining_time(0),
+	wbvinfo("none"),
+	WBV_amp(0),
+	WBV_freq(0)
 {   
 	//
 	NewtonSetMemorySystem(PhysicsAlloc, PhysicsFree);
@@ -336,6 +345,54 @@ void NewtonManager::Render(Shader* cshd, dFloat steptime)
 	for (auto itr = vMuscleList.begin(); itr != vMuscleList.end(); itr++) {
 		((Muscle*)*itr)->UpdateLineCoord(cshd, steptime);
 	}
+}
+
+void NewtonManager::SetSimulationTime(float time)
+{
+	Time = time;
+}
+
+float NewtonManager::GetSimulationTime()
+{
+	return Time;
+}
+
+void NewtonManager::SetMaxSimulationTime(float time)
+{
+	Max_Time = time;
+}
+
+float NewtonManager::GetMaxSimulationTime()
+{
+	return Max_Time;
+}
+// Set simulation info: 
+// 1. operation (0, do nothing, 1 simulation, 2 optimization, 
+// 2. current iteration in case of optimization, 
+// 3. max iteration in case of optimization, 
+// 4. remaining time in s
+// 5. string WBV sinusoidal direction
+// 6. WBV amplitude in [°]
+// 7. WBV frequency in [Hz]
+void NewtonManager::SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq)
+{
+	operation = operation_;
+	iteration = iteration_;
+	max_iteration = max_iteration_;
+	remaining_time = remaining_time_;
+	wbvinfo = info_wbv;
+	WBV_amp = Amp;
+	WBV_freq = freq;
+}
+
+float NewtonManager::GetWVBAmp()
+{
+	return WBV_amp;
+}
+
+float NewtonManager::GetWVBFreq()
+{
+	return WBV_freq;
 }
 
 NewtonManager::~NewtonManager()
