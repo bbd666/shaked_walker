@@ -78,7 +78,7 @@ public:
 			max_v.insert(max_v.end(), C_max.begin(), C_max.end());
 			max_v.insert(max_v.end(), A_max.begin(), A_max.end());
 
-			TiXmlElement* pWindowNode = hRoot.FirstChild("Set").FirstChild().Element();
+			TiXmlElement* pWindowNode = hRoot.FirstChild().Element();
 			
 			// loop all sets of params
 			for (pWindowNode; pWindowNode != NULL; pWindowNode = pWindowNode->NextSiblingElement())

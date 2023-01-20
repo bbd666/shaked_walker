@@ -121,17 +121,17 @@ struct WindowMain
 	NewtonManager* aManager;
 	//
 	LineDebugManager* aLineManager;
-	//void SetSimulationTime(float time);
+	void SetSimulationTime(float time);
 
-	//float GetSimulationTime();
+	float GetSimulationTime();
 
-	//void SetMaxSimulationTime(float time);
+	void SetMaxSimulationTime(float time);
 
-	//float GetMaxSimulationTime();
+	float GetMaxSimulationTime();
 
-	//void SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq);
-	//float GetWVBFreq();
-	//float GetWVBAmp();
+	void SetSimulationInfo(int operation_, int iteration_, int max_iteration_, int remaining_time_, string info_wbv, float Amp, float freq);
+	float GetWVBFreq();
+	float GetWVBAmp();
 private:
 	NewtonMousePick* aMousePick;
 	GLFWwindow* contextGL;

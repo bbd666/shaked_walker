@@ -35,7 +35,7 @@
 class dRaycastVHModel: public dModelRootNode
 {
 public:
-	dRaycastVHModel(NewtonManager* const aman, const char* const modelName, const dMatrix& location, int linkMaterilID);
+	dRaycastVHModel(WindowMain* const winctx, const char* const modelName, const dMatrix& location, int linkMaterilID);
 	~dRaycastVHModel();
 
 	void DrawFrame(const dVector& posit, dFloat scale);
@@ -64,7 +64,7 @@ public:
 	void ApplyTilting(float angle);
 
 private:
-	NewtonManager* a_manager;
+	WindowMain* m_winManager;
 	void AssemblyCreation();
 	void TrunkCreation();
 	void LegCreation(string trunk, string thigh, string shank, string foot, string toes, string hip, string knee, string ankle, string toe_hinge);
@@ -135,8 +135,6 @@ private:
 	/// </MUSCLES>
 	
 	/// <JOINTS>
-	dCustomSlider* slider;
-	dCustomSlider* slider2;
 
 	std::vector<std::string> DHjoint_keys = { "Hip_r", "Ankle_r","Hip_l", "Ankle_l","Shoulder_r","Shoulder_l"};
 	map<std::string, dCustomDoubleHinge*> JDoubleHinge;//  muscle as map: use muscle_keys as string
@@ -176,7 +174,7 @@ private:
 class DGVehicleRCManager: public dModelManager
 {
 public:
-	DGVehicleRCManager(NewtonManager* aman);
+	DGVehicleRCManager(WindowMain* winctx);
 	virtual ~DGVehicleRCManager();
 	//
 	virtual void OnPreUpdate(dModelRootNode* const model, dFloat timestep, int threadID) const;
@@ -187,7 +185,7 @@ public:
 	dRaycastVHModel* CreateWalkerPlayer(const char* const modelName, const dMatrix& location);
 	int GetContactPoints(NewtonBody* const body, dVector* const points) const;
 private:
-	NewtonManager* a_manager;
+	WindowMain* m_winManager;
 };
 
 

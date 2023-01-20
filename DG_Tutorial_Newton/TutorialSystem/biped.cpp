@@ -54,17 +54,20 @@ Muscle::Muscle(LineDebugManager* LManager, NewtonManager* wMain, GeomNewton* ins
 }
 
 Muscle::~Muscle() {
-	if (!m_Manager->IsTerminated)
-		for (auto itr = m_Manager->vMuscleList.begin();
-			itr != m_Manager->vMuscleList.end(); itr++) {
-			if ((Muscle*)*itr == this) {
-				m_Manager->vMuscleList.erase(itr);
-				break;
-			}
-			delete body1;
-			delete body2;
-			delete body3;
-		}
+	//if (!m_Manager->IsTerminated)
+	//	for (auto itr = m_Manager->vMuscleList.begin();
+	//		itr != m_Manager->vMuscleList.end(); itr++) {
+	//		if ((Muscle*)*itr == this) {
+	//			m_Manager->vMuscleList.erase(itr);
+	//			break;
+	//		}
+	//		delete body1;
+	//		delete body2;
+	//		delete body3;
+	//	}
+	// 
+	Muscle* aobj = this;
+	aobj = NULL;
 }
 
 Mtuname Muscle::GetMuscleName() {
@@ -141,23 +144,20 @@ void Muscle::GenerateMesh() {
 		linepos2.x = 2.0f; linepos2.y = 2.0f; linepos2.z = 2.0f;
 		lineColor.x = 1.0f; lineColor.y = 0.f; lineColor.z = 0.f;
 
-		if (LDebug_Manager != nullptr)
-			LineIndex=LDebug_Manager->AddLine(linepos1, linepos2, lineColor);
+		LineIndex=LDebug_Manager->AddLine(linepos1, linepos2, lineColor);
 		
 }
 
 void Muscle::UpdateLineCoord(Shader* cshd, dFloat steptime)
 {
-	if (LDebug_Manager != nullptr) {
-		LDebug_Manager->aLineBuffer[LineIndex - 1].posit.x = this->GetInsert1_GlobalRef().m_x;
-		LDebug_Manager->aLineBuffer[LineIndex - 1].posit.y = this->GetInsert1_GlobalRef().m_y;
-		LDebug_Manager->aLineBuffer[LineIndex - 1].posit.z = this->GetInsert1_GlobalRef().m_z;
-		LDebug_Manager->aLineBuffer[LineIndex - 1].color = lineColor;
-		LDebug_Manager->aLineBuffer[LineIndex - 2].posit.x = this->GetInsert2_GlobalRef().m_x;
-		LDebug_Manager->aLineBuffer[LineIndex - 2].posit.y = this->GetInsert2_GlobalRef().m_y;
-		LDebug_Manager->aLineBuffer[LineIndex - 2].posit.z = this->GetInsert2_GlobalRef().m_z;
-		LDebug_Manager->aLineBuffer[LineIndex - 2].color = lineColor;
-	}
+	LDebug_Manager->aLineBuffer[LineIndex-1].posit.x = this->GetInsert1_GlobalRef().m_x;
+	LDebug_Manager->aLineBuffer[LineIndex-1].posit.y = this->GetInsert1_GlobalRef().m_y;
+	LDebug_Manager->aLineBuffer[LineIndex-1].posit.z = this->GetInsert1_GlobalRef().m_z;
+	LDebug_Manager->aLineBuffer[LineIndex - 1].color = lineColor;
+	LDebug_Manager->aLineBuffer[LineIndex-2].posit.x = this->GetInsert2_GlobalRef().m_x;
+	LDebug_Manager->aLineBuffer[LineIndex-2].posit.y = this->GetInsert2_GlobalRef().m_y;
+	LDebug_Manager->aLineBuffer[LineIndex-2].posit.z = this->GetInsert2_GlobalRef().m_z;
+	LDebug_Manager->aLineBuffer[LineIndex - 2].color = lineColor;
 }
 
 float Muscle::dresidu(const float l, const float t) {

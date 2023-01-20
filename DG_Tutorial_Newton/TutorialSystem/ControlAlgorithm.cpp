@@ -48,6 +48,8 @@ ControlAlgorithm::ControlAlgorithm()
     {"Cfoot_r", 0}, {"Cfoot_l", 0},
     {"Shead", 0} };
 
+    // Pre stimulation not here. just in muscle class
+    
     // Initial condition
     trunk_a = -5 * dDegreeToRad;// [rad] negative forward  (wih respect to vertical axis)
     AlphaR = -5 * dDegreeToRad;// alpha right see model notes figure 1  (wih respect to vertical axis)
