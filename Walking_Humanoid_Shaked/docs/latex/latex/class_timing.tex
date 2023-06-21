@@ -1,0 +1,55 @@
+\hypertarget{class_timing}{}\doxysection{Timing Class Reference}
+\label{class_timing}\index{Timing@{Timing}}
+
+
+{\ttfamily \#include $<$timings.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_timing_a5110c4f7949fbd326ee071c82473b611}\label{class_timing_a5110c4f7949fbd326ee071c82473b611}} 
+void {\bfseries start} ()
+\item 
+double \mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}} ()
+\item 
+\mbox{\Hypertarget{class_timing_ac7c5f73d8c5595cb6a2f02f9df913851}\label{class_timing_ac7c5f73d8c5595cb6a2f02f9df913851}} 
+void {\bfseries tic} ()
+\item 
+\mbox{\Hypertarget{class_timing_a173ec27a4c1feb364370a920d28ec23b}\label{class_timing_a173ec27a4c1feb364370a920d28ec23b}} 
+double {\bfseries toc} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_timing_acbd8393d5e1bd7d78e6e6f26cf1850c3}\label{class_timing_acbd8393d5e1bd7d78e6e6f26cf1850c3}} 
+double {\bfseries totaltime}
+\item 
+\mbox{\Hypertarget{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}\label{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}} 
+double {\bfseries totaltotaltime}
+\begin{DoxyCompactList}\small\item\em zeroed by re-\/calling timings\+\_\+start \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_timing_adfb11a76f87914807cdfe39bcef0a0af}\label{class_timing_adfb11a76f87914807cdfe39bcef0a0af}} 
+double {\bfseries tictoctime}
+\item 
+\mbox{\Hypertarget{class_timing_adb0ea765c4ceb5a8d3f1a81661b45a93}\label{class_timing_adb0ea765c4ceb5a8d3f1a81661b45a93}} 
+double {\bfseries lasttictoctime}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class for time measurements of the eigen decomposition. \mbox{\hyperlink{class_timing}{Timing}} measures overall time and times between calls of tic and toc. For small time spans (up to 1000 seconds) CPU time via clock() is used. For large time spans the fall-\/back to elapsed time from time() is used. timings\+\_\+update() must be called often enough to prevent the fallback. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_timing_a9973978adb63702db5affd6f77b98fc5}\label{class_timing_a9973978adb63702db5affd6f77b98fc5}} 
+\index{Timing@{Timing}!update@{update}}
+\index{update@{update}!Timing@{Timing}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily double Timing\+::update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+time between last call of timings\+\_\+$\ast$() and now 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/timings.\+h\end{DoxyCompactItemize}

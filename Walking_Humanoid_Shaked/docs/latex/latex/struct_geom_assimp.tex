@@ -1,0 +1,82 @@
+\hypertarget{struct_geom_assimp}{}\doxysection{Geom\+Assimp Struct Reference}
+\label{struct_geom_assimp}\index{GeomAssimp@{GeomAssimp}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_acd8265dc4406618b5470ee79b48e62ac}\label{struct_geom_assimp_acd8265dc4406618b5470ee79b48e62ac}} 
+{\bfseries Geom\+Assimp} (\mbox{\hyperlink{struct_newton_manager}{Newton\+Manager}} $\ast$a\+Man)
+\item 
+virtual \mbox{\hyperlink{struct_geom_assimp_af0cc4b0c91a1afa017df543186d0a76c}{$\sim$\+Geom\+Assimp}} ()
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a9e2d1009964f818ab0d095575af4796a}\label{struct_geom_assimp_a9e2d1009964f818ab0d095575af4796a}} 
+void {\bfseries Set\+Matrix} (d\+Matrix val)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_ae34f3a88db558b39cafb78831d080834}\label{struct_geom_assimp_ae34f3a88db558b39cafb78831d080834}} 
+d\+Matrix {\bfseries Get\+Matrix} ()
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a667b92ec9ff189b5839c14178f4d2914}\label{struct_geom_assimp_a667b92ec9ff189b5839c14178f4d2914}} 
+void {\bfseries Import\+Mesh\+File} (const char $\ast$mfile)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a873806ab0050ee21c8f626afdd41b3a2}\label{struct_geom_assimp_a873806ab0050ee21c8f626afdd41b3a2}} 
+void {\bfseries Fill\+Buffer\+GL} (ai\+Mesh $\ast$a\+Import\+Mesh, \mbox{\hyperlink{struct_geom_assimp_mesh}{Geom\+Assimp\+Mesh}} \&g\+Mesh)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_aeb343dff1b9ac2f5bf5a951f17a55a87}\label{struct_geom_assimp_aeb343dff1b9ac2f5bf5a951f17a55a87}} 
+void {\bfseries Render\+Meshes} (\mbox{\hyperlink{struct_shader}{Shader}} $\ast$cshd, d\+Float steptime)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a43f8bec9d665ab0f03a7c6db570481ac}\label{struct_geom_assimp_a43f8bec9d665ab0f03a7c6db570481ac}} 
+void {\bfseries Set\+Position} (float px, float py, float pz)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a4e3ed499de8d2a5d5ff2513af15b9b3e}\label{struct_geom_assimp_a4e3ed499de8d2a5d5ff2513af15b9b3e}} 
+void {\bfseries Set\+Transform\+Matrix} (float $\ast$p\+Matrix)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_aad3813094624a7b4015796265eff4898}\label{struct_geom_assimp_aad3813094624a7b4015796265eff4898}} 
+void {\bfseries Set\+Texture\+Mesh\+ID} (int m\+ID, const char $\ast$texfile, const char $\ast$texname)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a88f284ab9a3a8f2d531fe29e2f2e0fe1}\label{struct_geom_assimp_a88f284ab9a3a8f2d531fe29e2f2e0fe1}} 
+void {\bfseries Set\+Body\+Type} (Geom\+Body\+Type ctype)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_aafeefa56e654bf11e1f0881b149dd73d}\label{struct_geom_assimp_aafeefa56e654bf11e1f0881b149dd73d}} 
+void {\bfseries Set\+Mesh\+Scale} (float sx, float sy, float sz)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a09c0a548777615f31d9a2be4ca91fea5}\label{struct_geom_assimp_a09c0a548777615f31d9a2be4ca91fea5}} 
+void {\bfseries Init\+Newton} (Geom\+Mesh\+Type c\+Geom\+Meshtype, float c\+Hulltolerance=0.\+01f, float c\+Mass=0.\+0f)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a80f1dcc380705aca5923421a438625ae}\label{struct_geom_assimp_a80f1dcc380705aca5923421a438625ae}} 
+void {\bfseries Set\+Turn\+Angle} (float r\+Angle, bool rno\+Local=false)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a13d76c2312cbfbe51278dfd5c4c620bf}\label{struct_geom_assimp_a13d76c2312cbfbe51278dfd5c4c620bf}} 
+void {\bfseries Set\+Roll\+Angle} (float r\+Angle, bool rno\+Local=false)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_ade7a513bc4e50f985545820c16dd1f87}\label{struct_geom_assimp_ade7a513bc4e50f985545820c16dd1f87}} 
+void {\bfseries Set\+Pitch\+Angle} (float r\+Angle, bool rno\+Local=false)
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a8a169639c9ff308b85a4e95aa9be2fa6}\label{struct_geom_assimp_a8a169639c9ff308b85a4e95aa9be2fa6}} 
+float {\bfseries Get\+Turn\+Angle} ()
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_ab3b75e371957d158397849e973910c7e}\label{struct_geom_assimp_ab3b75e371957d158397849e973910c7e}} 
+float {\bfseries Get\+Roll\+Angle} ()
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_a71fd23159715dfb59a8282d900d4421a}\label{struct_geom_assimp_a71fd23159715dfb59a8282d900d4421a}} 
+float {\bfseries Get\+Pitch\+Angle} ()
+\item 
+\mbox{\Hypertarget{struct_geom_assimp_ac2efb9610342a193ac885205265f85a9}\label{struct_geom_assimp_ac2efb9610342a193ac885205265f85a9}} 
+Newton\+Body $\ast$ {\bfseries Get\+Body} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_geom_assimp_af0cc4b0c91a1afa017df543186d0a76c}\label{struct_geom_assimp_af0cc4b0c91a1afa017df543186d0a76c}} 
+\index{GeomAssimp@{GeomAssimp}!````~GeomAssimp@{$\sim$GeomAssimp}}
+\index{````~GeomAssimp@{$\sim$GeomAssimp}!GeomAssimp@{GeomAssimp}}
+\doxysubsubsection{\texorpdfstring{$\sim$GeomAssimp()}{~GeomAssimp()}}
+{\footnotesize\ttfamily Geom\+Assimp\+::$\sim$\+Geom\+Assimp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Geom\+GL.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Geom\+GL.\+cpp\end{DoxyCompactItemize}

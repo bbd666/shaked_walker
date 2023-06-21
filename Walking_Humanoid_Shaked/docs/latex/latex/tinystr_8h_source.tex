@@ -1,0 +1,325 @@
+\hypertarget{tinystr_8h_source}{}\doxysection{tinystr.\+h}
+\label{tinystr_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/tinystr.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/tinystr.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{www.sourceforge.net/projects/tinyxml}}
+\DoxyCodeLine{00003\ \textcolor{comment}{Original\ file\ by\ Yves\ Berquin.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{}}
+\DoxyCodeLine{00005\ \textcolor{comment}{This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00006\ \textcolor{comment}{warranty.\ In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any}}
+\DoxyCodeLine{00007\ \textcolor{comment}{damages\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00008\ \textcolor{comment}{}}
+\DoxyCodeLine{00009\ \textcolor{comment}{Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any}}
+\DoxyCodeLine{00010\ \textcolor{comment}{purpose,\ including\ commercial\ applications,\ and\ to\ alter\ it\ and}}
+\DoxyCodeLine{00011\ \textcolor{comment}{redistribute\ it\ freely,\ subject\ to\ the\ following\ restrictions:}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must}}
+\DoxyCodeLine{00014\ \textcolor{comment}{not\ claim\ that\ you\ wrote\ the\ original\ software.\ If\ you\ use\ this}}
+\DoxyCodeLine{00015\ \textcolor{comment}{software\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation}}
+\DoxyCodeLine{00016\ \textcolor{comment}{would\ be\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and}}
+\DoxyCodeLine{00019\ \textcolor{comment}{must\ not\ be\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source}}
+\DoxyCodeLine{00022\ \textcolor{comment}{distribution.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ *\ THIS\ FILE\ WAS\ ALTERED\ BY\ Tyge\ Lovset,\ 7.\ April\ 2005.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ -\/\ completely\ rewritten.\ compact,\ clean,\ and\ fast\ implementation.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ -\/\ sizeof(TiXmlString)\ =\ pointer\ size\ (4\ bytes\ on\ 32-\/bit\ systems)}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ -\/\ fixed\ reserve()\ to\ work\ as\ per\ specification.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *\ -\/\ fixed\ buggy\ compares\ operator==(),\ operator<(),\ and\ operator>()}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ *\ -\/\ fixed\ operator+=()\ to\ take\ a\ const\ ref\ argument,\ following\ spec.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ *\ -\/\ added\ "{}copy"{}\ constructor\ with\ length,\ and\ most\ compare\ operators.}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ *\ -\/\ added\ swap(),\ clear(),\ size(),\ capacity(),\ operator+().}}
+\DoxyCodeLine{00035\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#ifndef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#ifndef\ TIXML\_STRING\_INCLUDED}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ TIXML\_STRING\_INCLUDED}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ <assert.h>}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{/*\ \ The\ support\ for\ explicit\ isn't\ that\ universal,\ and\ it\ isn't\ really}}
+\DoxyCodeLine{00046\ \textcolor{comment}{\ \ \ \ required\ -\/\ it\ is\ used\ to\ check\ that\ the\ TiXmlString\ class\ isn't\ incorrectly}}
+\DoxyCodeLine{00047\ \textcolor{comment}{\ \ \ \ used.\ Be\ nice\ to\ old\ compilers\ and\ macro\ it\ here:}}
+\DoxyCodeLine{00048\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)\ \&\&\ (\_MSC\_VER\ >=\ 1200\ )}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Microsoft\ visual\ studio,\ version\ 6\ and\ higher.}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\ \ \ \ \#define\ TIXML\_EXPLICIT\ explicit}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ \&\&\ (\_\_GNUC\_\_\ >=\ 3\ )}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{comment}{//\ GCC\ version\ 3\ and\ higher.s}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \ \#define\ TIXML\_EXPLICIT\ explicit}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ \#define\ TIXML\_EXPLICIT}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ \ \ TiXmlString\ is\ an\ emulation\ of\ a\ subset\ of\ the\ std::string\ template.}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ Its\ purpose\ is\ to\ allow\ compiling\ TinyXML\ on\ compilers\ with\ no\ or\ poor\ STL\ support.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ Only\ the\ member\ functions\ relevant\ to\ the\ TinyXML\ project\ have\ been\ implemented.}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ The\ buffer\ allocation\ is\ made\ by\ a\ simplistic\ power\ of\ 2\ like\ mechanism\ :\ if\ we\ increase}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ a\ string\ and\ there's\ no\ more\ room,\ we\ allocate\ a\ buffer\ twice\ as\ big\ as\ we\ need.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00067\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}}
+\DoxyCodeLine{00068\ \{}
+\DoxyCodeLine{00069\ \ \ public\ :}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ The\ size\ type\ used}}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{size\_t}\ size\_type;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ Error\ value\ for\ find\ primitive}}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ size\_type\ npos;\ \textcolor{comment}{//\ =\ -\/1;}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{//\ TiXmlString\ empty\ constructor}}
+\DoxyCodeLine{00078\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ ()\ :\ rep\_(\&nullrep\_)}
+\DoxyCodeLine{00079\ \ \ \ \ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ TiXmlString\ copy\ constructor}}
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ (\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ copy)\ :\ rep\_(0)}
+\DoxyCodeLine{00084\ \ \ \ \ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ init(copy.length());}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ memcpy(start(),\ copy.data(),\ length());}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ TiXmlString\ constructor,\ based\ on\ a\ string}}
+\DoxyCodeLine{00090\ \ \ \ \ TIXML\_EXPLICIT\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ (\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ copy)\ :\ rep\_(0)}
+\DoxyCodeLine{00091\ \ \ \ \ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ init(\ \textcolor{keyword}{static\_cast<}size\_type\textcolor{keyword}{>}(\ strlen(copy)\ ));}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ memcpy(start(),\ copy,\ length());}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ TiXmlString\ constructor,\ based\ on\ a\ string}}
+\DoxyCodeLine{00097\ \ \ \ \ TIXML\_EXPLICIT\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ (\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ str,\ size\_type\ len)\ :\ rep\_(0)}
+\DoxyCodeLine{00098\ \ \ \ \ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ init(len);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ memcpy(start(),\ str,\ len);}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ TiXmlString\ destructor}}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{\string~TiXmlString}}\ ()}
+\DoxyCodeLine{00105\ \ \ \ \ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ quit();}
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ =\ operator}}
+\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ copy)}
+\DoxyCodeLine{00111\ \ \ \ \ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ assign(\ copy,\ (size\_type)strlen(copy));}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//\ =\ operator}}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ copy)}
+\DoxyCodeLine{00117\ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ assign(copy.start(),\ copy.length());}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ +=\ operator.\ Maps\ to\ append}}
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ operator\ +=\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ suffix)}
+\DoxyCodeLine{00124\ \ \ \ \ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ append(suffix,\ \textcolor{keyword}{static\_cast<}size\_type\textcolor{keyword}{>}(\ strlen(suffix)\ ));}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{//\ +=\ operator.\ Maps\ to\ append}}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ operator\ +=\ (\textcolor{keywordtype}{char}\ single)}
+\DoxyCodeLine{00130\ \ \ \ \ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ append(\&single,\ 1);}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//\ +=\ operator.\ Maps\ to\ append}}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ operator\ +=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ suffix)}
+\DoxyCodeLine{00136\ \ \ \ \ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ append(suffix.data(),\ suffix.length());}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{comment}{//\ Convert\ a\ TiXmlString\ into\ a\ null-\/terminated\ char\ *}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ c\_str\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>str;\ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{comment}{//\ Convert\ a\ TiXmlString\ into\ a\ char\ *\ (need\ not\ be\ null\ terminated).}}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ data\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>str;\ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ length\ of\ a\ TiXmlString}}
+\DoxyCodeLine{00148\ \ \ \ \ size\_type\ length\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>size;\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{comment}{//\ Alias\ for\ length()}}
+\DoxyCodeLine{00151\ \ \ \ \ size\_type\ size\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>size;\ \}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{comment}{//\ Checks\ if\ a\ TiXmlString\ is\ empty}}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{bool}\ empty\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>size\ ==\ 0;\ \}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{comment}{//\ Return\ capacity\ of\ string}}
+\DoxyCodeLine{00157\ \ \ \ \ size\_type\ capacity\ ()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>capacity;\ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{comment}{//\ single\ char\ extraction}}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\&\ at\ (size\_type\ index)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00162\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ assert(\ index\ <\ length()\ );}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ rep\_-\/>str[\ index\ ];}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{//\ []\ operator}}
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{char}\&\ operator\ []\ (size\_type\ index)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00169\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ assert(\ index\ <\ length()\ );}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ rep\_-\/>str[\ index\ ];}
+\DoxyCodeLine{00172\ \ \ \ \ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{//\ find\ a\ char\ in\ a\ string.\ Return\ TiXmlString::npos\ if\ not\ found}}
+\DoxyCodeLine{00175\ \ \ \ \ size\_type\ find\ (\textcolor{keywordtype}{char}\ lookup)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00176\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ find(lookup,\ 0);}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{comment}{//\ find\ a\ char\ in\ a\ string\ from\ an\ offset.\ Return\ TiXmlString::npos\ if\ not\ found}}
+\DoxyCodeLine{00181\ \ \ \ \ size\_type\ find\ (\textcolor{keywordtype}{char}\ tofind,\ size\_type\ offset)\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00182\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (offset\ >=\ length())\ \textcolor{keywordflow}{return}\ npos;}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p\ =\ c\_str()\ +\ offset;\ *p\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ ++p)}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*p\ ==\ tofind)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\ size\_type\ \textcolor{keyword}{>}(\ p\ -\/\ c\_str()\ );}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ npos;}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ clear\ ()}
+\DoxyCodeLine{00193\ \ \ \ \ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Lee:}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{comment}{//The\ original\ was\ just\ too\ strange,\ though\ correct:}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ TiXmlString().swap(*this);}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Instead\ use\ the\ quit\ \&\ re-\/init:}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ quit();}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ init(0,0);}
+\DoxyCodeLine{00200\ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{comment}{/*\ \ Function\ to\ reserve\ a\ big\ amount\ of\ data\ when\ we\ know\ we'll\ need\ it.\ Be\ aware\ that\ this}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ \ \ \ function\ DOES\ NOT\ clear\ the\ content\ of\ the\ TiXmlString\ if\ any\ exists.}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ reserve\ (size\_type\ cap);}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ assign\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ str,\ size\_type\ len);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ append\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ str,\ size\_type\ len);}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{void}\ swap\ (\mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\&\ other)}
+\DoxyCodeLine{00212\ \ \ \ \ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ Rep*\ r\ =\ rep\_;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ rep\_\ =\ other.rep\_;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ other.rep\_\ =\ r;}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keywordtype}{void}\ init(size\_type\ sz)\ \{\ init(sz,\ sz);\ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_size(size\_type\ sz)\ \{\ rep\_-\/>str[\ rep\_-\/>size\ =\ sz\ ]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};\ \}}
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{char}*\ start()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>str;\ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{char}*\ finish()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rep\_-\/>str\ +\ rep\_-\/>size;\ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{struct\ }Rep}
+\DoxyCodeLine{00226\ \ \ \ \ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ size\_type\ size,\ capacity;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ str[1];}
+\DoxyCodeLine{00229\ \ \ \ \ \};}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keywordtype}{void}\ init(size\_type\ sz,\ size\_type\ cap)}
+\DoxyCodeLine{00232\ \ \ \ \ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cap)}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lee:\ the\ original\ form:}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ rep\_\ =\ static\_cast<Rep*>(operator\ new(sizeof(Rep)\ +\ cap));}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ doesn't\ work\ in\ some\ cases\ of\ new\ being\ overloaded.\ Switching}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ to\ the\ normal\ allocation,\ although\ use\ an\ 'int'\ for\ systems}}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ that\ are\ overly\ picky\ about\ structure\ alignment.}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ size\_type\ bytesNeeded\ =\ \textcolor{keyword}{sizeof}(Rep)\ +\ cap;}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ size\_type\ intsNeeded\ =\ (\ bytesNeeded\ +\ \textcolor{keyword}{sizeof}(int)\ -\/\ 1\ )\ /\ \textcolor{keyword}{sizeof}(\ int\ );\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ rep\_\ =\ \textcolor{keyword}{reinterpret\_cast<}Rep*\textcolor{keyword}{>}(\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{int}[\ intsNeeded\ ]\ );}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ rep\_-\/>str[\ rep\_-\/>size\ =\ sz\ ]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ rep\_-\/>capacity\ =\ cap;}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ rep\_\ =\ \&nullrep\_;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{void}\ quit()}
+\DoxyCodeLine{00254\ \ \ \ \ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (rep\_\ !=\ \&nullrep\_)}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ rep\_\ is\ really\ an\ array\ of\ ints.\ (see\ the\ allocator,\ above).}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Cast\ it\ back\ before\ delete,\ so\ the\ compiler\ won't\ incorrectly\ call\ destructors.}}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ []\ (\ \textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{int}*\textcolor{keyword}{>}(\ rep\_\ )\ );}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ Rep\ *\ rep\_;}
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keyword}{static}\ Rep\ nullrep\_;}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \}\ ;}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ ==\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)}
+\DoxyCodeLine{00270\ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordflow}{return}\ \ \ \ (\ a.length()\ ==\ b.length()\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ optimization\ on\ some\ platforms}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \&\&\ (\ strcmp(a.c\_str(),\ b.c\_str())\ ==\ 0\ );\ \ \ \ \textcolor{comment}{//\ actual\ compare}}
+\DoxyCodeLine{00273\ \}}
+\DoxyCodeLine{00274\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ <\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)}
+\DoxyCodeLine{00275\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordflow}{return}\ strcmp(a.c\_str(),\ b.c\_str())\ <\ 0;}
+\DoxyCodeLine{00277\ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ !=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ !(a\ ==\ b);\ \}}
+\DoxyCodeLine{00280\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ >\ \ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ b\ <\ a;\ \}}
+\DoxyCodeLine{00281\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ <=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ !(b\ <\ a);\ \}}
+\DoxyCodeLine{00282\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ >=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ !(a\ <\ b);\ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ ==\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ b)\ \{\ \textcolor{keywordflow}{return}\ strcmp(a.c\_str(),\ b)\ ==\ 0;\ \}}
+\DoxyCodeLine{00285\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ ==\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ b\ ==\ a;\ \}}
+\DoxyCodeLine{00286\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ !=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ b)\ \{\ \textcolor{keywordflow}{return}\ !(a\ ==\ b);\ \}}
+\DoxyCodeLine{00287\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ !=\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b)\ \{\ \textcolor{keywordflow}{return}\ !(b\ ==\ a);\ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ operator\ +\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b);}
+\DoxyCodeLine{00290\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ operator\ +\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ a,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ b);}
+\DoxyCodeLine{00291\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ operator\ +\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ a,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ b);}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ TiXmlOutStream\ is\ an\ emulation\ of\ std::ostream.\ It\ is\ based\ on\ TiXmlString.}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ Only\ the\ operators\ that\ we\ need\ for\ TinyXML\ have\ been\ developped.}}
+\DoxyCodeLine{00297\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00298\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_out_stream}{TiXmlOutStream}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}}
+\DoxyCodeLine{00299\ \{}
+\DoxyCodeLine{00300\ public\ :}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{//\ TiXmlOutStream\ <<\ operator.}}
+\DoxyCodeLine{00303\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_out_stream}{TiXmlOutStream}}\ \&\ operator\ <<\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_string}{TiXmlString}}\ \&\ in)}
+\DoxyCodeLine{00304\ \ \ \ \ \{}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ +=\ in;}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00307\ \ \ \ \ \}}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{comment}{//\ TiXmlOutStream\ <<\ operator.}}
+\DoxyCodeLine{00310\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_out_stream}{TiXmlOutStream}}\ \&\ operator\ <<\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ in)}
+\DoxyCodeLine{00311\ \ \ \ \ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ *\textcolor{keyword}{this}\ +=\ in;}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00314\ \ \ \ \ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \}\ ;}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ TIXML\_STRING\_INCLUDED}}
+\DoxyCodeLine{00319\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ TIXML\_USE\_STL}}
+
+\end{DoxyCode}

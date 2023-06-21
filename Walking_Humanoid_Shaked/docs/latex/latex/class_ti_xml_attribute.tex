@@ -1,0 +1,253 @@
+\hypertarget{class_ti_xml_attribute}{}\doxysection{Ti\+Xml\+Attribute Class Reference}
+\label{class_ti_xml_attribute}\index{TiXmlAttribute@{TiXmlAttribute}}
+
+
+{\ttfamily \#include $<$tinyxml.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a9cfa3c8179873fd485d83003b114f8e1}\label{class_ti_xml_attribute_a9cfa3c8179873fd485d83003b114f8e1}} 
+{\bfseries Ti\+Xml\+Attribute} ()
+\begin{DoxyCompactList}\small\item\em Construct an empty attribute. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a759d0b76fb8fcf765ecab243bc14f05e}\label{class_ti_xml_attribute_a759d0b76fb8fcf765ecab243bc14f05e}} 
+{\bfseries Ti\+Xml\+Attribute} (const char $\ast$\+\_\+name, const char $\ast$\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Construct an attribute with a name and value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a83798ef3113c3522154c3fc37b4db85b}\label{class_ti_xml_attribute_a83798ef3113c3522154c3fc37b4db85b}} 
+const char $\ast$ {\bfseries Name} () const
+\begin{DoxyCompactList}\small\item\em Return the name of this attribute. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a0da84344b585308878ec68605f1cbb20}\label{class_ti_xml_attribute_a0da84344b585308878ec68605f1cbb20}} 
+const char $\ast$ {\bfseries Value} () const
+\begin{DoxyCompactList}\small\item\em Return the value of this attribute. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_ac8501370b065df31a35003c81d87cef2}\label{class_ti_xml_attribute_ac8501370b065df31a35003c81d87cef2}} 
+int {\bfseries Int\+Value} () const
+\begin{DoxyCompactList}\small\item\em Return the value of this attribute, converted to an integer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a8cca240fb2a7130c87b0fc6156e8b34f}\label{class_ti_xml_attribute_a8cca240fb2a7130c87b0fc6156e8b34f}} 
+double {\bfseries Double\+Value} () const
+\begin{DoxyCompactList}\small\item\em Return the value of this attribute, converted to a double. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a3250b043f2593312a99b4ae8d14f9805}\label{class_ti_xml_attribute_a3250b043f2593312a99b4ae8d14f9805}} 
+const TIXML\+\_\+\+STRING \& {\bfseries Name\+TStr} () const
+\item 
+int \mbox{\hyperlink{class_ti_xml_attribute_a6caa8090d2fbb7966700a16e45ed33de}{Query\+Int\+Value}} (int $\ast$\+\_\+value) const
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a6fa41b710c1b79de37a97004aa600c06}\label{class_ti_xml_attribute_a6fa41b710c1b79de37a97004aa600c06}} 
+int {\bfseries Query\+Double\+Value} (double $\ast$\+\_\+value) const
+\begin{DoxyCompactList}\small\item\em Query\+Double\+Value examines the value string. See \mbox{\hyperlink{class_ti_xml_attribute_a6caa8090d2fbb7966700a16e45ed33de}{Query\+Int\+Value()}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_ab7fa3d21ff8d7c5764cf9af15b667a99}\label{class_ti_xml_attribute_ab7fa3d21ff8d7c5764cf9af15b667a99}} 
+void {\bfseries Set\+Name} (const char $\ast$\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Set the name of this attribute. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a2dae44178f668b3cb48101be4f2236a0}\label{class_ti_xml_attribute_a2dae44178f668b3cb48101be4f2236a0}} 
+void {\bfseries Set\+Value} (const char $\ast$\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Set the value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a7e065df640116a62ea4f4b7da5449cc8}\label{class_ti_xml_attribute_a7e065df640116a62ea4f4b7da5449cc8}} 
+void {\bfseries Set\+Int\+Value} (int \+\_\+value)
+\begin{DoxyCompactList}\small\item\em Set the value from an integer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a0316da31373496c4368ad549bf711394}\label{class_ti_xml_attribute_a0316da31373496c4368ad549bf711394}} 
+void {\bfseries Set\+Double\+Value} (double \+\_\+value)
+\begin{DoxyCompactList}\small\item\em Set the value from a double. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_af2e78f1ba9ed56a26ddc80614ed1c393}\label{class_ti_xml_attribute_af2e78f1ba9ed56a26ddc80614ed1c393}} 
+const \mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} $\ast$ {\bfseries Next} () const
+\begin{DoxyCompactList}\small\item\em Get the next sibling attribute in the DOM. Returns null at end. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a83f8f06bba60c32335bc7bc11d5b2168}\label{class_ti_xml_attribute_a83f8f06bba60c32335bc7bc11d5b2168}} 
+\mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} $\ast$ {\bfseries Next} ()
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_afc7bbfdf83d59fbc4ff5e283d27b5d7d}\label{class_ti_xml_attribute_afc7bbfdf83d59fbc4ff5e283d27b5d7d}} 
+const \mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} $\ast$ {\bfseries Previous} () const
+\begin{DoxyCompactList}\small\item\em Get the previous sibling attribute in the DOM. Returns null at beginning. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a184fd6cfbd6ab05a23bc5b9bdce66334}\label{class_ti_xml_attribute_a184fd6cfbd6ab05a23bc5b9bdce66334}} 
+\mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} $\ast$ {\bfseries Previous} ()
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a51eef33c2cdd55831447af46be0baf8b}\label{class_ti_xml_attribute_a51eef33c2cdd55831447af46be0baf8b}} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} \&rhs) const
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a80dcb758cc5ab27ce9865301e2da1335}\label{class_ti_xml_attribute_a80dcb758cc5ab27ce9865301e2da1335}} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} \&rhs) const
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a697c2dde7ac60fccaa7049cee906eb3e}\label{class_ti_xml_attribute_a697c2dde7ac60fccaa7049cee906eb3e}} 
+bool {\bfseries operator$>$} (const \mbox{\hyperlink{class_ti_xml_attribute}{Ti\+Xml\+Attribute}} \&rhs) const
+\item 
+virtual const char $\ast$ \mbox{\hyperlink{class_ti_xml_attribute_ad62774421b814894b995af3b5d231dda}{Parse}} (const char $\ast$p, \mbox{\hyperlink{class_ti_xml_parsing_data}{Ti\+Xml\+Parsing\+Data}} $\ast$data, Ti\+Xml\+Encoding encoding)
+\item 
+virtual void \mbox{\hyperlink{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}{Print}} (FILE $\ast$cfile, int depth) const
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a5c8f72a7d1a49972434d45f4c2889e0e}\label{class_ti_xml_attribute_a5c8f72a7d1a49972434d45f4c2889e0e}} 
+void {\bfseries Print} (FILE $\ast$cfile, int depth, TIXML\+\_\+\+STRING $\ast$str) const
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_ac12a94d4548302afb12f488ba101f7d1}\label{class_ti_xml_attribute_ac12a94d4548302afb12f488ba101f7d1}} 
+void {\bfseries Set\+Document} (\mbox{\hyperlink{class_ti_xml_document}{Ti\+Xml\+Document}} $\ast$doc)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_ti_xml_base_a0de56b3f2ef14c65091a3b916437b512}{Print}} (FILE $\ast$cfile, int depth) const =0
+\item 
+int \mbox{\hyperlink{class_ti_xml_base_ad0cacca5d76d156b26511f46080b442e}{Row}} () const
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ad283b95d9858d5d78c334f4a61b07bb4}\label{class_ti_xml_base_ad283b95d9858d5d78c334f4a61b07bb4}} 
+int {\bfseries Column} () const
+\begin{DoxyCompactList}\small\item\em See \mbox{\hyperlink{class_ti_xml_base_ad0cacca5d76d156b26511f46080b442e}{Row()}} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_base_ac6b3e0f790930d4970ec30764e937b5d}\label{class_ti_xml_base_ac6b3e0f790930d4970ec30764e937b5d}} 
+void {\bfseries Set\+User\+Data} (void $\ast$user)
+\begin{DoxyCompactList}\small\item\em Set a pointer to arbitrary user data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_base_a436b80c865d437835d370a9eada6f9f5}\label{class_ti_xml_base_a436b80c865d437835d370a9eada6f9f5}} 
+void $\ast$ {\bfseries Get\+User\+Data} ()
+\begin{DoxyCompactList}\small\item\em Get a pointer to arbitrary user data. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_ti_xml_base_aa44896ae7cc0e9b1007429b150a81d92}\label{class_ti_xml_base_aa44896ae7cc0e9b1007429b150a81d92}} 
+const void $\ast$ {\bfseries Get\+User\+Data} () const
+\begin{DoxyCompactList}\small\item\em Get a pointer to arbitrary user data. \end{DoxyCompactList}\item 
+virtual const char $\ast$ \mbox{\hyperlink{class_ti_xml_base_a70f7afb95ad04e61f45a3325cb8382f3}{Parse}} (const char $\ast$p, \mbox{\hyperlink{class_ti_xml_parsing_data}{Ti\+Xml\+Parsing\+Data}} $\ast$data, Ti\+Xml\+Encoding encoding)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ti_xml_attribute_a35a7b7f89f708527677d5078d41ce0bf}\label{class_ti_xml_attribute_a35a7b7f89f708527677d5078d41ce0bf}} 
+class {\bfseries Ti\+Xml\+Attribute\+Set}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Public Types inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ab2a63382b57720e98cde066122a88f18}\label{class_ti_xml_base_ab2a63382b57720e98cde066122a88f18}} 
+enum \{ \newline
+{\bfseries TIXML\+\_\+\+NO\+\_\+\+ERROR} = 0
+, {\bfseries TIXML\+\_\+\+ERROR}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+OPENING\+\_\+\+FILE}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+OUT\+\_\+\+OF\+\_\+\+MEMORY}
+, \newline
+{\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+ELEMENT}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+FAILED\+\_\+\+TO\+\_\+\+READ\+\_\+\+ELEMENT\+\_\+\+NAME}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+READING\+\_\+\+ELEMENT\+\_\+\+VALUE}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+READING\+\_\+\+ATTRIBUTES}
+, \newline
+{\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+EMPTY}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+READING\+\_\+\+END\+\_\+\+TAG}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+UNKNOWN}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+COMMENT}
+, \newline
+{\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+DECLARATION}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+DOCUMENT\+\_\+\+EMPTY}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+EMBEDDED\+\_\+\+NULL}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+PARSING\+\_\+\+CDATA}
+, \newline
+{\bfseries TIXML\+\_\+\+ERROR\+\_\+\+DOCUMENT\+\_\+\+TOP\+\_\+\+ONLY}
+, {\bfseries TIXML\+\_\+\+ERROR\+\_\+\+STRING\+\_\+\+COUNT}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_ti_xml_base_a0f799ec645bfb8d8a969e83478f379c1}{Set\+Condense\+White\+Space}} (bool condense)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ad4b1472531c647a25b1840a87ae42438}\label{class_ti_xml_base_ad4b1472531c647a25b1840a87ae42438}} 
+static bool {\bfseries Is\+White\+Space\+Condensed} ()
+\begin{DoxyCompactList}\small\item\em Return the current white space setting. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_ti_xml_base_a32ed202562b58de64c7d799ca3c9db98}{Encode\+String}} (const TIXML\+\_\+\+STRING \&str, TIXML\+\_\+\+STRING $\ast$out)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static const int \mbox{\hyperlink{class_ti_xml_base_ac8c86058137bdb4b413c3eca58f2d467}{utf8\+Byte\+Table}} \mbox{[}256\mbox{]}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Member Functions inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ac0c3d66d8a9e6996a1fa016275e16875}\label{class_ti_xml_base_ac0c3d66d8a9e6996a1fa016275e16875}} 
+static const char $\ast$ {\bfseries Skip\+White\+Space} (const char $\ast$, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_af56296d561c0bab4bc8e198cdcf5c48e}\label{class_ti_xml_base_af56296d561c0bab4bc8e198cdcf5c48e}} 
+static bool {\bfseries Is\+White\+Space} (char c)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a3de391ea9f4c4a8aa10d04480b048795}\label{class_ti_xml_base_a3de391ea9f4c4a8aa10d04480b048795}} 
+static bool {\bfseries Is\+White\+Space} (int c)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a1c21a6ab5f7b503acd91f35f183734b3}\label{class_ti_xml_base_a1c21a6ab5f7b503acd91f35f183734b3}} 
+static const char $\ast$ {\bfseries Read\+Name} (const char $\ast$p, TIXML\+\_\+\+STRING $\ast$name, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_aa646c74921aa33156968b802bbf5566e}\label{class_ti_xml_base_aa646c74921aa33156968b802bbf5566e}} 
+static const char $\ast$ {\bfseries Read\+Text} (const char $\ast$in, TIXML\+\_\+\+STRING $\ast$text, bool ignore\+White\+Space, const char $\ast$end\+Tag, bool ignore\+Case, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ac5c08bf3deffcda0bf8ce2958372b584}\label{class_ti_xml_base_ac5c08bf3deffcda0bf8ce2958372b584}} 
+static const char $\ast$ {\bfseries Get\+Entity} (const char $\ast$in, char $\ast$value, int $\ast$length, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a5c309eba97f91f719e7834f6a7ddaf22}\label{class_ti_xml_base_a5c309eba97f91f719e7834f6a7ddaf22}} 
+static const char $\ast$ {\bfseries Get\+Char} (const char $\ast$p, char $\ast$\+\_\+value, int $\ast$length, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a51631e6986179558b9e5850723ed165a}\label{class_ti_xml_base_a51631e6986179558b9e5850723ed165a}} 
+static bool {\bfseries String\+Equal} (const char $\ast$p, const char $\ast$end\+Tag, bool ignore\+Case, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ae22522b2e8e1ac43102d16394f639fc8}\label{class_ti_xml_base_ae22522b2e8e1ac43102d16394f639fc8}} 
+static int {\bfseries Is\+Alpha} (unsigned char any\+Byte, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a321919055c115c78ded17f85a793f368}\label{class_ti_xml_base_a321919055c115c78ded17f85a793f368}} 
+static int {\bfseries Is\+Alpha\+Num} (unsigned char any\+Byte, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a799f17405a86a5c2029618e85f11a097}\label{class_ti_xml_base_a799f17405a86a5c2029618e85f11a097}} 
+static int {\bfseries To\+Lower} (int v, Ti\+Xml\+Encoding encoding)
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a07c765e3a7f979d343e646ea797b180b}\label{class_ti_xml_base_a07c765e3a7f979d343e646ea797b180b}} 
+static void {\bfseries Convert\+UTF32\+To\+UTF8} (unsigned long input, char $\ast$output, int $\ast$length)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_a0d992580f3bc264909f898e942677a3c}\label{class_ti_xml_base_a0d992580f3bc264909f898e942677a3c}} 
+\mbox{\hyperlink{struct_ti_xml_cursor}{Ti\+Xml\+Cursor}} {\bfseries location}
+\item 
+\mbox{\Hypertarget{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}\label{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}} 
+void $\ast$ {\bfseries user\+Data}
+\begin{DoxyCompactList}\small\item\em Field containing a generic user pointer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Protected Attributes inherited from \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}}
+\begin{DoxyCompactItemize}
+\item 
+static const char $\ast$ \mbox{\hyperlink{class_ti_xml_base_a7ac8feec4100e446b3d78e1ac0659700}{error\+String}} \mbox{[}TIXML\+\_\+\+ERROR\+\_\+\+STRING\+\_\+\+COUNT\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An attribute is a name-\/value pair. Elements have an arbitrary number of attributes, each with a unique name.
+
+\begin{DoxyNote}{Note}
+The attributes are not Ti\+Xml\+Nodes, since they are not part of the tiny\+XML document object model. There are other suggested ways to look at this problem. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_ti_xml_attribute_ad62774421b814894b995af3b5d231dda}\label{class_ti_xml_attribute_ad62774421b814894b995af3b5d231dda}} 
+\index{TiXmlAttribute@{TiXmlAttribute}!Parse@{Parse}}
+\index{Parse@{Parse}!TiXmlAttribute@{TiXmlAttribute}}
+\doxysubsubsection{\texorpdfstring{Parse()}{Parse()}}
+{\footnotesize\ttfamily const char $\ast$ Ti\+Xml\+Attribute\+::\+Parse (\begin{DoxyParamCaption}\item[{const char $\ast$}]{p,  }\item[{\mbox{\hyperlink{class_ti_xml_parsing_data}{Ti\+Xml\+Parsing\+Data}} $\ast$}]{data,  }\item[{Ti\+Xml\+Encoding}]{encoding }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_ti_xml_base}{Ti\+Xml\+Base}}.
+
+\mbox{\Hypertarget{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}\label{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}} 
+\index{TiXmlAttribute@{TiXmlAttribute}!Print@{Print}}
+\index{Print@{Print}!TiXmlAttribute@{TiXmlAttribute}}
+\doxysubsubsection{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily virtual void Ti\+Xml\+Attribute\+::\+Print (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{cfile,  }\item[{int}]{depth }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+All Tiny\+Xml classes can print themselves to a filestream or the string class (\mbox{\hyperlink{class_ti_xml_string}{Ti\+Xml\+String}} in non-\/\+STL mode, std\+::string in STL mode.) Either or both cfile and str can be null.
+
+This is a formatted print, and will insert tabs and newlines.
+
+(For an unformatted stream, use the \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} operator.) 
+
+Implements \mbox{\hyperlink{class_ti_xml_base_a0de56b3f2ef14c65091a3b916437b512}{Ti\+Xml\+Base}}.
+
+\mbox{\Hypertarget{class_ti_xml_attribute_a6caa8090d2fbb7966700a16e45ed33de}\label{class_ti_xml_attribute_a6caa8090d2fbb7966700a16e45ed33de}} 
+\index{TiXmlAttribute@{TiXmlAttribute}!QueryIntValue@{QueryIntValue}}
+\index{QueryIntValue@{QueryIntValue}!TiXmlAttribute@{TiXmlAttribute}}
+\doxysubsubsection{\texorpdfstring{QueryIntValue()}{QueryIntValue()}}
+{\footnotesize\ttfamily int Ti\+Xml\+Attribute\+::\+Query\+Int\+Value (\begin{DoxyParamCaption}\item[{int $\ast$}]{\+\_\+value }\end{DoxyParamCaption}) const}
+
+Query\+Int\+Value examines the value string. It is an alternative to the \mbox{\hyperlink{class_ti_xml_attribute_ac8501370b065df31a35003c81d87cef2}{Int\+Value()}} method with richer error checking. If the value is an integer, it is stored in \textquotesingle{}value\textquotesingle{} and the call returns TIXML\+\_\+\+SUCCESS. If it is not an integer, it returns TIXML\+\_\+\+WRONG\+\_\+\+TYPE.
+
+A specialized but useful call. Note that for success it returns 0, which is the opposite of almost all other Tiny\+Xml calls. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/tinyxml.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/tinyxml.\+cpp\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/tinyxmlparser.\+cpp\end{DoxyCompactItemize}

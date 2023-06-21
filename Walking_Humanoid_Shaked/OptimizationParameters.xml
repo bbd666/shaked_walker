@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Params version="1.0">
+   <InitialCondition alfaL="0.83286" alfaR="0" beta="0" gamma="0.18791" head="0.37611" trunk="0.23683" vel="1"/>
+   <StanceLead gluA="0" gluD="1" gluP="0" hamA="0.53689" hamD="0.14771" hamP="0.78421" hflA="1" hflD="0.42667" hflP="0.97877"/>
+   <ForceFeedback gas="1" glu="0.66835" ham="1" sol="0.83449" tasol="0" vas="0.61909"/>
+   <LengthFeedback hamG="0.37909" hamH="1" hflG="1" hflH="0.59585" taG="0.41907" taH="0.11813"/>
+   <Coronal_lead footP="0.75055" footV="0.33277" trunkP="0.10543" trunkV="0.63207"/>
+   <Coronal TtrunkP="0.78351" TtrunkV="0.015091" footP="0.23356" footV="0" trunkP="0.28148" trunkV="0.98865"/>
+   <Arm alpha="0.50842" elbow="0.62338"/>
+   <PreSI glu="0.21483" hfl="0" rf="0.79423" vas="0.60532"/>
+   <PreSTANCE hip="0.42543" vas="0.81551"/>
+   <StancePrep gluA="0.95525" gluD="0.070461" gluK="1" hflA="0.62209" hflD="0" hflK="0.7908" vasA="1" vasD="0.14944" vasK="0"/>
+   <Simbicon cd="0.32907" cd1="0.42376" cv="0" cv1="0.93382"/>
+   <Additional hflK="0.70396" vasA="0.56927" vasK="0"/>
+</Params>

@@ -1,0 +1,36 @@
+This application simulates a walking humanoid in a 3D real-\/physics environment. The floor can oscillate in roll or pitch direction with a sinusoidal wave. The software includes\+: the Physics Engine (Newton Dynamics) provided by Dave Gravel; the humanoid model composed of\+: rigid bodies, musculo-\/tendon units, PD regulators, and gait control logic; optimization routine based on Covariance Matrix Adaptation Evolutionary Strategy (\mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}) by Nikolaus Hansen, ported to C++ by Alexander Fabisch.
+
+Copyright of the Walking Humanoid implementation by Stefano Marelli (e-\/mail\+: \href{mailto:ste.marelli@alice.it}{\texttt{ }}.\hypertarget{index_lgpl}{}\doxysection{License}\label{index_lgpl}
+Copyright 2019-\/2023 Marelli Stefano
+
+This software is provided \textquotesingle{}as-\/is\textquotesingle{}, without any express or implied warranty.\+In no event will the authors be held liable for any damages arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions \+:
+
+
+\begin{DoxyEnumerate}
+\item The origin of this software must not be misrepresented; you must not claim that you wrote the original software.\+If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+\item Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+\item This notice may not be removed or altered from any source distribution.
+\end{DoxyEnumerate}\hypertarget{index_purpose}{}\doxysection{General Purpose}\label{index_purpose}
+The software should be used to simulate working environments where whole-\/body vibration is a risk factor for human health. Thhanks to the siumulation, it is possible to measure gait parameters change due to \mbox{\hyperlink{class_w_b_v}{WBV}}. ~\newline
+\hypertarget{index_application}{}\doxysection{Application Remark}\label{index_application}
+In this version, \mbox{\hyperlink{class_w_b_v}{WBV}} can be selected as sinusoidal waveform along roll or pitch direction. Further release should be include WVB along all the 6 axes.
+
+The window can crash on exit. In this case it is necessary to force stop the app. \hypertarget{index_links}{}\doxysection{Links}\label{index_links}
+\hypertarget{index_tut}{}\doxysection{Tutorial}\label{index_tut}
+Run \char`\"{}\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked.\+exe\char`\"{} the to see the simulation. The .exe file returns the \char`\"{}cost\char`\"{} of the simulation, which is a numeric value that quantifies the quality of the simulation (low value -\/\texorpdfstring{$>$}{>} the model walks, high value-\/\texorpdfstring{$>$}{>} the model falls). Details on how the \char`\"{}cost\char`\"{} is computed in Info section.
+
+The .exe takes data from three files\+:
+
+
+\begin{DoxyEnumerate}
+\item Configuration.\+xml the settings are\+: . \char`\"{}\+Simulation\+Time\char`\"{} is the simulation length in seconds, . \char`\"{}\+Optimization\char`\"{} activates the optimization routine based on \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}} genetic algorithm. This setting can be \char`\"{}no\char`\"{} or \char`\"{}yes\char`\"{}, . \char`\"{}\+Iterations\+Number\char`\"{} is the number of iterations of the \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}} algorithm, . \char`\"{}\+Output\char`\"{} writes simulation data to a .txt file (Gait\+\_\+timeseries.\+txt). This setting can be \char`\"{}no\char`\"{} or \char`\"{}yes\char`\"{}, . \char`\"{}\+Active\char`\"{} is related to Whole-\/\+Body Vibration\+: if \char`\"{}yes\char`\"{} the floor oscillates, if \char`\"{}no\char`\"{} the floor does not move, . \char`\"{}\+Direction\char`\"{} is the direction of sinusoidal \mbox{\hyperlink{class_w_b_v}{WBV}} (roll or pitch), . \char`\"{}\+Amplitude\char`\"{} is the amplitude in degrees of the \mbox{\hyperlink{class_w_b_v}{WBV}} wave, . \char`\"{}\+Frequency\char`\"{} is the frequency of the \mbox{\hyperlink{class_w_b_v}{WBV}} wave in Hz.
+\item Optimization\+Parameters.\+xml
+
+This file contains the parameter of the model that could change in presence of \mbox{\hyperlink{class_w_b_v}{WBV}}. At the end of an optimization routine, the file will contain two sets of parameters, the initial and optimized.
+\item Dummy\+Geometric\+Properties.\+xml
+
+This file contains the humanoid parameters that are not optimized.
+\end{DoxyEnumerate}\hypertarget{index_references}{}\doxysection{References}\label{index_references}
+Marelli Stefano (2023)\+: \char`\"{}\+Modelling and experiments on the effects of whole-\/body vibration while walking\char`\"{}, PhD thesis in Mechanical Engineering, Politecnico di Milano, Italy. 

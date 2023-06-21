@@ -1,0 +1,424 @@
+\hypertarget{class_c_m_a_e_s}{}\doxysection{CMAES\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_c_m_a_e_s}\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+
+
+{\ttfamily \#include $<$cmaes.\+h$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{Get\+Scalar}} \{ \newline
+{\bfseries No\+Scalar} = 0
+, {\bfseries Axis\+Ratio} = 1
+, {\bfseries Eval} = 2
+, {\bfseries Evaluations} = 2
+, \newline
+{\bfseries Fct\+Value} = 3
+, {\bfseries Func\+Value} = 3
+, {\bfseries Fun\+Value} = 3
+, {\bfseries Fitness} = 3
+, \newline
+{\bfseries FBest\+Ever} = 4
+, {\bfseries Generation} = 5
+, {\bfseries Iteration} = 5
+, {\bfseries Max\+Eval} = 6
+, \newline
+{\bfseries Max\+Fun\+Evals} = 6
+, {\bfseries Stop\+Max\+Fun\+Evals} = 6
+, {\bfseries Max\+Gen} = 7
+, {\bfseries Max\+Iter} = 7
+, \newline
+{\bfseries Stop\+Max\+Iter} = 7
+, {\bfseries Max\+Axis\+Length} = 8
+, {\bfseries Min\+Axis\+Length} = 9
+, {\bfseries Max\+Std\+Dev} = 10
+, \newline
+{\bfseries Min\+Std\+Dev} = 11
+, {\bfseries Dim} = 12
+, {\bfseries Dimension} = 12
+, {\bfseries Lambda} = 13
+, \newline
+{\bfseries Sample\+Size} = 13
+, {\bfseries Pop\+Size} = 13
+, {\bfseries Sigma} = 14
+ \}
+\item 
+enum \mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}} \{ \newline
+{\bfseries No\+Vector} = 0
+, {\bfseries DiagC} = 1
+, {\bfseries DiagD} = 2
+, {\bfseries Std\+Dev} = 3
+, \newline
+{\bfseries XBest\+Ever} = 4
+, {\bfseries XBest} = 5
+, {\bfseries XMean} = 6
+ \}
+\item 
+enum \mbox{\hyperlink{class_c_m_a_e_s_ae9f81c1f7041cad8e768ecd6d30aaed5}{Write\+Key}} \{ \newline
+{\bfseries WCNone} = 0
+, {\bfseries WKResume} = 1
+, {\bfseries WKXMean} = 2
+, {\bfseries WKC} = 4
+, \newline
+{\bfseries WKAll} = 8
+, {\bfseries WKFew\+Info} = 16
+, {\bfseries WKFew} = 32
+, {\bfseries WKEval} = 64
+, \newline
+{\bfseries WKFitness} = 128
+, {\bfseries WKFBest\+Ever} = 256
+, {\bfseries WKCGeneration} = 512
+, {\bfseries WKSigma} = 1024
+, \newline
+{\bfseries WKLambda} = 2048
+, {\bfseries WKB} = 4096
+, {\bfseries WKXBest} = 8192
+, {\bfseries WKClock} = 16384
+, \newline
+{\bfseries WKDim} = 32768
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_m_a_e_s_a1dafd6714642367224020c2b8bd6573a}{$\sim$\+CMAES}} ()
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}{init}} (const \mbox{\hyperlink{class_parameters}{Parameters}}$<$ T $>$ \&parameters)
+\item 
+std\+::string \mbox{\hyperlink{class_c_m_a_e_s_a514dd76a8dd20a33a3c52f0cc6af74d2}{say\+Hello}} ()
+\item 
+void \mbox{\hyperlink{class_c_m_a_e_s_a6fb584672adf0a856b638cadbe2e3b84}{resume\+Distribution}} (const std\+::string \&filename)
+\item 
+T $\ast$const $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population}} ()
+\item 
+T $\ast$const $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_a145951d7af563f43e19cfb34839aa7e9}{re\+Sample\+Single}} (int i)
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_ac25ffa90f349fc509ab81905bafaf261}{sample\+Single\+Into}} (T $\ast$x)
+\item 
+T const $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_aa29db4c6da98609862bee80acd448e1b}{re\+Sample\+Single\+Old}} (T $\ast$x)
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_a8719ce412e59e3d59786f88702c5a2ae}{perturb\+Solution\+Into}} (T $\ast$x, T const $\ast$pxmean, T eps)
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_a6a7a70199907d648c27b55e3cedfa14d}{update\+Distribution}} (const T $\ast$fitness\+Values)
+\item 
+T \mbox{\hyperlink{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}{get}} (\mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{Get\+Scalar}} key)
+\item 
+const T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}{get\+Ptr}} (\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}} key)
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_a63365a17f3579447a8f04d5d50962b77}{get\+New}} (\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}} key)
+\item 
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_af8ee064aa8deffeb737bd4be42a06f18}{get\+Into}} (\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}} key, T $\ast$res)
+\item 
+bool \mbox{\hyperlink{class_c_m_a_e_s_a5d3fb0bbff460e5901ef0e8a2bb2f839}{test\+For\+Termination}} ()
+\item 
+std\+::string \mbox{\hyperlink{class_c_m_a_e_s_a3a09215b6efefde35c9faa5c2201c7a7}{get\+Stop\+Message}} ()
+\item 
+void \mbox{\hyperlink{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}{write\+To\+File}} (int key, const std\+::string \&filename)
+\item 
+void \mbox{\hyperlink{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}{update\+Eigensystem}} (bool force)
+\item 
+T const $\ast$ \mbox{\hyperlink{class_c_m_a_e_s_af4ab1f3748edd5980124fd18d8eda3d2}{set\+Mean}} (const T $\ast$newxmean)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}\label{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}} 
+T {\bfseries countevals}
+\begin{DoxyCompactList}\small\item\em objective function evaluations \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_m_a_e_s_a3ee3b115e387f80b409e94e1127a77dd}\label{class_c_m_a_e_s_a3ee3b115e387f80b409e94e1127a77dd}} 
+\mbox{\hyperlink{class_timing}{Timing}} {\bfseries eigen\+Timings}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class CMAES$<$ T $>$}
+Evolution Strategies with Covariance Matrix Adaptation. The public interface of the optimization algorithm. 
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}\label{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!GetScalar@{GetScalar}}
+\index{GetScalar@{GetScalar}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetScalar}{GetScalar}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+enum \mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{CMAES\+::\+Get\+Scalar}}}
+
+Keys for \mbox{\hyperlink{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}{get()}}. \mbox{\Hypertarget{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}\label{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!GetVector@{GetVector}}
+\index{GetVector@{GetVector}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetVector}{GetVector}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+enum \mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{CMAES\+::\+Get\+Vector}}}
+
+Keys for \mbox{\hyperlink{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}{get\+Ptr()}}. \mbox{\Hypertarget{class_c_m_a_e_s_ae9f81c1f7041cad8e768ecd6d30aaed5}\label{class_c_m_a_e_s_ae9f81c1f7041cad8e768ecd6d30aaed5}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!WriteKey@{WriteKey}}
+\index{WriteKey@{WriteKey}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WriteKey}{WriteKey}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+enum \mbox{\hyperlink{class_c_m_a_e_s_ae9f81c1f7041cad8e768ecd6d30aaed5}{CMAES\+::\+Write\+Key}}}
+
+Keys for \mbox{\hyperlink{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}{write\+To\+File()}}. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_m_a_e_s_a1dafd6714642367224020c2b8bd6573a}\label{class_c_m_a_e_s_a1dafd6714642367224020c2b8bd6573a}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!````~CMAES@{$\sim$CMAES}}
+\index{````~CMAES@{$\sim$CMAES}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$CMAES()}{~CMAES()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_c_m_a_e_s}{CMAES}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Releases the dynamically allocated memory, including that of the return value of \mbox{\hyperlink{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}{init()}}. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}\label{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!get@{get}}
+\index{get@{get}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{Get\+Scalar}}}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Request a scalar parameter from CMA-\/\+ES. 
+\begin{DoxyParams}{Parameters}
+{\em key} & Key of the requested scalar. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The desired value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_af8ee064aa8deffeb737bd4be42a06f18}\label{class_c_m_a_e_s_af8ee064aa8deffeb737bd4be42a06f18}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!getInto@{getInto}}
+\index{getInto@{getInto}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{getInto()}{getInto()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::get\+Into (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}}}]{key,  }\item[{T $\ast$}]{res }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Request a vector parameter from CMA-\/\+ES. 
+\begin{DoxyParams}{Parameters}
+{\em key} & Key of the requested vector. \\
+\hline
+{\em res} & Memory of size N == dimension, where the desired values are written into. For mem == NULL new memory is allocated as with calling \mbox{\hyperlink{class_c_m_a_e_s_a63365a17f3579447a8f04d5d50962b77}{get\+New()}} and must be released by the user at some point. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_m_a_e_s_a63365a17f3579447a8f04d5d50962b77}\label{class_c_m_a_e_s_a63365a17f3579447a8f04d5d50962b77}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!getNew@{getNew}}
+\index{getNew@{getNew}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{getNew()}{getNew()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::get\+New (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}}}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Request a vector parameter from CMA-\/\+ES. 
+\begin{DoxyParams}{Parameters}
+{\em key} & Key of the requested vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the desired value array with unlimited reading and writing access to its elements. The memory must be explicitly released using delete\mbox{[}\mbox{]}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}\label{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!getPtr@{getPtr}}
+\index{getPtr@{getPtr}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{getPtr()}{getPtr()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+const T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::get\+Ptr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{Get\+Vector}}}]{key }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Request a vector parameter from CMA-\/\+ES. 
+\begin{DoxyParams}{Parameters}
+{\em key} & Key of the requested vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the desired value array. Its content might be overwritten during the next call to any member functions other than \mbox{\hyperlink{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}{get()}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a3a09215b6efefde35c9faa5c2201c7a7}\label{class_c_m_a_e_s_a3a09215b6efefde35c9faa5c2201c7a7}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!getStopMessage@{getStopMessage}}
+\index{getStopMessage@{getStopMessage}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{getStopMessage()}{getStopMessage()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::get\+Stop\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+A message that contains a detailed description of the matched stop criteria. \mbox{\Hypertarget{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}\label{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!init@{init}}
+\index{init@{init}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_parameters}{Parameters}}$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Initializes the CMA-\/\+ES algorithm. 
+\begin{DoxyParams}{Parameters}
+{\em parameters} & The CMA-\/\+ES parameters. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array of size lambda that can be used to assign fitness values and pass them to \mbox{\hyperlink{class_c_m_a_e_s_a6a7a70199907d648c27b55e3cedfa14d}{update\+Distribution()}}. Not that after the desctructor was called, the array is deleted. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a8719ce412e59e3d59786f88702c5a2ae}\label{class_c_m_a_e_s_a8719ce412e59e3d59786f88702c5a2ae}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!perturbSolutionInto@{perturbSolutionInto}}
+\index{perturbSolutionInto@{perturbSolutionInto}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{perturbSolutionInto()}{perturbSolutionInto()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::perturb\+Solution\+Into (\begin{DoxyParamCaption}\item[{T $\ast$}]{x,  }\item[{T const $\ast$}]{pxmean,  }\item[{T}]{eps }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Used to reevaluate a slightly disturbed solution for an uncertaintly measurement. In case if x == NULL on input, the memory of the returned x must be released. 
+\begin{DoxyParams}{Parameters}
+{\em x} & Solution vector that gets sampled a new value. If x == NULL new memory is allocated and must be released by the user using delete\mbox{[}\mbox{]} x. \\
+\hline
+{\em pxmean} & Mean vector $\mu$ for perturbation. \\
+\hline
+{\em eps} & Scale factor $\epsilon$ for perturbation\+: $x \sim \mu + \epsilon \sigma N(0,C)$. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the perturbed solution vector, equals input x for x != NULL. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a145951d7af563f43e19cfb34839aa7e9}\label{class_c_m_a_e_s_a145951d7af563f43e19cfb34839aa7e9}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!reSampleSingle@{reSampleSingle}}
+\index{reSampleSingle@{reSampleSingle}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{reSampleSingle()}{reSampleSingle()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$const  $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::re\+Sample\+Single (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Can be called after \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}} to resample single solutions of the population as often as desired. Useful to implement a box constraints (boundary) handling. 
+\begin{DoxyParams}{Parameters}
+{\em i} & Index to an element of the returned value of \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}}. population\mbox{[}index\mbox{]} will be resampled where $0\leq i<\lambda$ must hold. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the resampled \char`\"{}population\char`\"{}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_aa29db4c6da98609862bee80acd448e1b}\label{class_c_m_a_e_s_aa29db4c6da98609862bee80acd448e1b}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!reSampleSingleOld@{reSampleSingleOld}}
+\index{reSampleSingleOld@{reSampleSingleOld}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{reSampleSingleOld()}{reSampleSingleOld()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T const  $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::re\+Sample\+Single\+Old (\begin{DoxyParamCaption}\item[{T $\ast$}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Can be called after \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}} to resample single solutions. In general, the function can be used to sample as many independent mean+sigma$\ast$\+Normal(0,C) distributed vectors as desired. 
+\begin{DoxyParams}{Parameters}
+{\em x} & Element of the return value of \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}}, that is pop\mbox{[}0.. $\lambda$\mbox{]}. This solution vector of the population gets sampled a new value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the resampled \char`\"{}population\char`\"{} member. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a6fb584672adf0a856b638cadbe2e3b84}\label{class_c_m_a_e_s_a6fb584672adf0a856b638cadbe2e3b84}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!resumeDistribution@{resumeDistribution}}
+\index{resumeDistribution@{resumeDistribution}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{resumeDistribution()}{resumeDistribution()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::resume\+Distribution (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Allows to restart with saved internal state (distribution) variables (use \mbox{\hyperlink{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}{write\+To\+File()}} for saving). Keyword \char`\"{}resume\char`\"{} followed by a filename in initials.\+par invokes this function during initialization. Searches in filename for the last occurrence of word \char`\"{}resume\char`\"{}, followed by a dimension number, and reads the subsequent values for xmean, evolution paths ps and pc, sigma and covariance matrix. Note that \mbox{\hyperlink{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}{init()}} needs to be called before calling resume\+\_\+distribution() explicitely. In the former all the remaining (strategy-\/)parameters are set. It can be useful to edit the written parameters, in particular to increase sigma, before resume.
+
+Not all internal state parameters are recovered. In particular generation number and xbestever are not restored. For covariance matrices with large condition numbers the writing precision of 6 digits is not sufficient and resume will lead to poor result. 
+\begin{DoxyParams}{Parameters}
+{\em filename} & A file, that was written presumably by \mbox{\hyperlink{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}{write\+To\+File()}}. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}\label{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!samplePopulation@{samplePopulation}}
+\index{samplePopulation@{samplePopulation}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{samplePopulation()}{samplePopulation()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$const  $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::sample\+Population (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+The search space vectors have a special form\+: they are arrays with N+1 entries. Entry number -\/1 is the dimension of the search space N. \begin{DoxyReturn}{Returns}
+A pointer to a \char`\"{}population\char`\"{} of lambda N-\/dimensional multivariate normally distributed samples. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_ac25ffa90f349fc509ab81905bafaf261}\label{class_c_m_a_e_s_ac25ffa90f349fc509ab81905bafaf261}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!sampleSingleInto@{sampleSingleInto}}
+\index{sampleSingleInto@{sampleSingleInto}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sampleSingleInto()}{sampleSingleInto()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::sample\+Single\+Into (\begin{DoxyParamCaption}\item[{T $\ast$}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Can be called after \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}} to resample single solutions. In general, the function can be used to sample as many independent mean+sigma$\ast$\+Normal(0,C) distributed vectors as desired.
+
+Input x can be a pointer to an element of the vector returned by \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}} but this is inconsistent with the const qualifier of the returned value and therefore rather \mbox{\hyperlink{class_c_m_a_e_s_a145951d7af563f43e19cfb34839aa7e9}{re\+Sample\+Single()}} should be used. 
+\begin{DoxyParams}{Parameters}
+{\em x} & Solution vector that gets sampled a new value. If x == NULL new memory is allocated and must be released by the user using delete\mbox{[}\mbox{]}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the resampled solution vector, equals input x for x != NULL on input. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a514dd76a8dd20a33a3c52f0cc6af74d2}\label{class_c_m_a_e_s_a514dd76a8dd20a33a3c52f0cc6af74d2}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!sayHello@{sayHello}}
+\index{sayHello@{sayHello}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sayHello()}{sayHello()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::say\+Hello (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Well, says hello. \begin{DoxyReturn}{Returns}
+eg. \char`\"{}(5,10)-\/\+CMA-\/\+ES(mu\+\_\+eff=3.\+4), Ver=\char`\"{}1.\+0alpha\char`\"{}, dimension=9\char`\"{} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_af4ab1f3748edd5980124fd18d8eda3d2}\label{class_c_m_a_e_s_af4ab1f3748edd5980124fd18d8eda3d2}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!setMean@{setMean}}
+\index{setMean@{setMean}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setMean()}{setMean()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T const  $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::set\+Mean (\begin{DoxyParamCaption}\item[{const T $\ast$}]{newxmean }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Distribution mean could be changed before \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{sample\+Population()}}. This might lead to unexpected behaviour if done repeatedly. 
+\begin{DoxyParams}{Parameters}
+{\em newxmean} & new mean, if it is NULL, it will be set to the current mean \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new mean 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a5d3fb0bbff460e5901ef0e8a2bb2f839}\label{class_c_m_a_e_s_a5d3fb0bbff460e5901ef0e8a2bb2f839}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!testForTermination@{testForTermination}}
+\index{testForTermination@{testForTermination}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{testForTermination()}{testForTermination()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::test\+For\+Termination (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Some stopping criteria can be set in initials.\+par, with names starting with stop... Internal stopping criteria include a maximal condition number of about 10$^\wedge$15 for the covariance matrix and situations where the numerical discretisation error in x-\/space becomes noticeably. You can get a message that contains the matched stop criteria via \mbox{\hyperlink{class_c_m_a_e_s_a3a09215b6efefde35c9faa5c2201c7a7}{get\+Stop\+Message()}}. \begin{DoxyReturn}{Returns}
+Does any stop criterion match? 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_a6a7a70199907d648c27b55e3cedfa14d}\label{class_c_m_a_e_s_a6a7a70199907d648c27b55e3cedfa14d}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!updateDistribution@{updateDistribution}}
+\index{updateDistribution@{updateDistribution}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{updateDistribution()}{updateDistribution()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T $\ast$ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::update\+Distribution (\begin{DoxyParamCaption}\item[{const T $\ast$}]{fitness\+Values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Core procedure of the CMA-\/\+ES algorithm. Sets a new mean value and estimates the new covariance matrix and a new step size for the normal search distribution. 
+\begin{DoxyParams}{Parameters}
+{\em fitness\+Values} & An array of $\lambda$ function values. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mean value of the new distribution. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}\label{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!updateEigensystem@{updateEigensystem}}
+\index{updateEigensystem@{updateEigensystem}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{updateEigensystem()}{updateEigensystem()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::update\+Eigensystem (\begin{DoxyParamCaption}\item[{bool}]{force }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Conducts the eigendecomposition of C into B and D such that $C = B \cdot D \cdot D \cdot B^T$ and $B \cdot B^T = I$ and D diagonal and positive. 
+\begin{DoxyParams}{Parameters}
+{\em force} & For force == true the eigendecomposion is conducted even if eigenvector and values seem to be up to date. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}\label{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}} 
+\index{CMAES$<$ T $>$@{CMAES$<$ T $>$}!writeToFile@{writeToFile}}
+\index{writeToFile@{writeToFile}!CMAES$<$ T $>$@{CMAES$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{writeToFile()}{writeToFile()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}$<$ T $>$\+::write\+To\+File (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Output file name. \\
+\hline
+{\em key} & Key of type Write\+Key that indicates the content that should be written. You can combine multiple keys with $\vert$. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/\mbox{\hyperlink{cmaes_8h}{cmaes.\+h}}\end{DoxyCompactItemize}

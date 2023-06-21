@@ -1,0 +1,247 @@
+\hypertarget{_humanoid_8h_source}{}\doxysection{Humanoid.\+h}
+\label{_humanoid_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Humanoid.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Humanoid.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2020\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#ifndef\ \_HUMANOID\_\_H\_}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ \_HUMANOID\_\_H\_}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}dCustomJoint.h"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}NewtonManager.h"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}WindowGL.h"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}tinyxml.h"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}Muscle.h"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}NewtonUtil.h"{}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ "{}ControlAlgorithm.h"{}}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}Params.h"{}}}
+\DoxyCodeLine{00039\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classd_walker_model}{dWalkerModel}}:\ \textcolor{keyword}{public}\ dModelRootNode}
+\DoxyCodeLine{00040\ \{}
+\DoxyCodeLine{00041\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classd_walker_model}{dWalkerModel}}(\mbox{\hyperlink{struct_window_main}{WindowMain}}*\ \textcolor{keyword}{const}\ winctx,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ modelName,\ \textcolor{keyword}{const}\ dMatrix\&\ location,\ \textcolor{keywordtype}{int}\ linkMaterilID,\ \textcolor{keywordtype}{double}*\ params,\ \mbox{\hyperlink{class_w_b_v}{WBV}}\ wbv);}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classd_walker_model}{\string~dWalkerModel}}();}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classd_walker_model_a1b32bbfaf04d4a92f747a88c0cffab36}{DrawFrame}}(\textcolor{keyword}{const}\ dVector\&\ posit,\ dFloat\ scale);}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//virtual\ void\ DrawFrame(const\ dMatrix\&\ matrix,\ dFloat\ scale);}}
+\DoxyCodeLine{00055\ \textcolor{comment}{}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classd_walker_model_aa40873322d31a95005897ed92cd6db36}{CreateLine}}();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classd_walker_model_ae643960da45959b984f542931698d6cc}{CreateDescreteContactFootCollision}}(NewtonBody*\ \textcolor{keyword}{const}\ footBody)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00066\ \ \ \ \ vector<dFloat>\ \mbox{\hyperlink{classd_walker_model_afc21abeede03d15e3928b19d9abbe5c8}{GetSagittalState}}(\textcolor{keywordtype}{string}\ body);}
+\DoxyCodeLine{00071\ \ \ \ \ vector<dFloat>\ \mbox{\hyperlink{classd_walker_model_a80d52bee876d766e2c20ea41998f123e}{GetTrunkCoronalState}}();}
+\DoxyCodeLine{00077\ \ \ \ \ vector<dFloat>\ \mbox{\hyperlink{classd_walker_model_af2c6c09732296507bbacb9cfec50b163}{GetFootCoronalState}}(\textcolor{keywordtype}{string}\ body);}
+\DoxyCodeLine{00082\ \ \ \ \ vector<dFloat>\ \mbox{\hyperlink{classd_walker_model_a7724783f1c569f1e20da894dca410e9e}{GetTrunkTransverseState}}();}
+\DoxyCodeLine{00089\ \ \ \ \ vector<dFloat>\ \mbox{\hyperlink{classd_walker_model_a34af99445b0470899efc611029893464}{GetRelativeSagittalState}}(\textcolor{keywordtype}{string}\ body1,\ \textcolor{keywordtype}{string}\ body2);}
+\DoxyCodeLine{00096\ \ \ \ \ vector<dFloat>\mbox{\hyperlink{classd_walker_model_abdc68a253fe161faa7794f67503be712}{GetRelativeTransverseState}}(\textcolor{keywordtype}{string}\ body1,\ \textcolor{keywordtype}{string}\ body2);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classd_walker_model_a3fe7d624ed2b28cb05630b6b466bcdec}{ComputeAngleBWVectors}}(dVector\ \textcolor{keyword}{const}\&\ dir,\ dVector\ \textcolor{keyword}{const}\&\ ref,\ dVector\ \textcolor{keyword}{const}\&\ crossref);}
+\DoxyCodeLine{00109\ \ \ \ \ dVector\ \mbox{\hyperlink{classd_walker_model_a08d8ba212d0f678aea105b887ea79822}{ComputeWalkerCOM}}();}
+\DoxyCodeLine{00114\ \ \ \ \ dVector\ \mbox{\hyperlink{classd_walker_model_a0a5d253eed4f66a731488832abd0fb47}{ComputeWalkerCOMvelocity}}();}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ \mbox{\hyperlink{classd_walker_model_a2c734c46291389e7a2d597453387952e}{Get\_Floor}}();}
+\DoxyCodeLine{00122\ \ \ \ \ map<std::string,\ GeomNewton*>\ \mbox{\hyperlink{classd_walker_model_a8e9cb12a051670e60a098bfb355f6d3d}{Get\_RigidElemetList}}();}
+\DoxyCodeLine{00126\ \ \ \ \ map<std::string,\ dCustomHinge*>\ \mbox{\hyperlink{classd_walker_model_a5e9f1cd328bd4663f6b99bcb94d113ea}{Get\_HingeJointList}}();}
+\DoxyCodeLine{00130\ \ \ \ \ map<std::string,\ dCustomDoubleHinge*>\ \mbox{\hyperlink{classd_walker_model_a8f75d258579afae57f829dcd97d22d39}{Get\_DoubleHingeJointList}}();}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classd_walker_model_a4d95e9b77c23698ec7804bd3eadd085c}{GetLegLength}}();}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{class_control_algorithm}{ControlAlgorithm}}\ controller;}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classd_walker_model_a82452b04257ef45a4cfd145f2272ae9f}{AddActionReactionTorque}}(\textcolor{keywordtype}{float}\ Torque,\ dVector\ pin,\ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ b1,\ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ b2);}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classd_walker_model_a6d95e11db33f5918e16db149181b4ac7}{GetHipLength}}();}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classd_walker_model_a8d99b088c2c15805f9df2ebde20d5627}{GetModelMass}}();}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classd_walker_model_a03de5ee367b1edac431149d3d34e66c9}{ApplyTilting}}(\textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{int}\ write\_txt;}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{comment}{//\ vectors\ to\ output\ data}}
+\DoxyCodeLine{00159\ \ \ \ \ vector<float>\ time\_v;}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ vector<float>\ HFLr\_T1;}
+\DoxyCodeLine{00162\ \ \ \ \ vector<float>\ HFLl\_T1;}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ vector<float>\ HAMr\_T1;}
+\DoxyCodeLine{00165\ \ \ \ \ vector<float>\ HAMr\_T2;}
+\DoxyCodeLine{00166\ \ \ \ \ vector<float>\ HAMl\_T1;}
+\DoxyCodeLine{00167\ \ \ \ \ vector<float>\ HAMl\_T2;}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ vector<float>\ GLUr\_T1;}
+\DoxyCodeLine{00170\ \ \ \ \ vector<float>\ GLUl\_T1;}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ vector<float>\ VASr\_T1;}
+\DoxyCodeLine{00173\ \ \ \ \ vector<float>\ VASl\_T1;}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ vector<float>\ GASr\_T1;}
+\DoxyCodeLine{00176\ \ \ \ \ vector<float>\ GASr\_T2;}
+\DoxyCodeLine{00177\ \ \ \ \ vector<float>\ GASl\_T1;}
+\DoxyCodeLine{00178\ \ \ \ \ vector<float>\ GASl\_T2;}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ vector<float>\ SOLr\_T1;}
+\DoxyCodeLine{00181\ \ \ \ \ vector<float>\ SOLl\_T1;}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ vector<float>\ TAr\_T1;}
+\DoxyCodeLine{00184\ \ \ \ \ vector<float>\ TAl\_T1;}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ vector<float>\ RFr\_T1;}
+\DoxyCodeLine{00187\ \ \ \ \ vector<float>\ RFr\_T2;}
+\DoxyCodeLine{00188\ \ \ \ \ vector<float>\ RFl\_T1;}
+\DoxyCodeLine{00189\ \ \ \ \ vector<float>\ RFl\_T2;}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ vector<float>\ HipRAng;}
+\DoxyCodeLine{00192\ \ \ \ \ vector<float>\ HipLAng;}
+\DoxyCodeLine{00193\ \ \ \ \ vector<float>\ KneeRAng;}
+\DoxyCodeLine{00194\ \ \ \ \ vector<float>\ KneeLAng;}
+\DoxyCodeLine{00195\ \ \ \ \ vector<float>\ AnkleRAng;}
+\DoxyCodeLine{00196\ \ \ \ \ vector<float>\ AnkleLAng;}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ vector<float>\ COMPos\_X;}
+\DoxyCodeLine{00199\ \ \ \ \ vector<float>\ COMPos\_Y;}
+\DoxyCodeLine{00200\ \ \ \ \ vector<float>\ COMPos\_Z;}
+\DoxyCodeLine{00201\ \ \ \ \ vector<float>\ COMVel\_X;}
+\DoxyCodeLine{00202\ \ \ \ \ vector<float>\ COMVel\_Y;}
+\DoxyCodeLine{00203\ \ \ \ \ vector<float>\ COMVel\_Z;}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ vector<float>\ FootRPos\_X;}
+\DoxyCodeLine{00206\ \ \ \ \ vector<float>\ FootRPos\_Y;}
+\DoxyCodeLine{00207\ \ \ \ \ vector<float>\ FootRPos\_Z;}
+\DoxyCodeLine{00208\ \ \ \ \ vector<float>\ FootLPos\_X;}
+\DoxyCodeLine{00209\ \ \ \ \ vector<float>\ FootLPos\_Y;}
+\DoxyCodeLine{00210\ \ \ \ \ vector<float>\ FootLPos\_Z;}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ vector<float>\ StanceR;}
+\DoxyCodeLine{00213\ \ \ \ \ vector<float>\ StanceL;}
+\DoxyCodeLine{00214\ \ \ \ \ vector<float>\ SPR;}
+\DoxyCodeLine{00215\ \ \ \ \ vector<float>\ SPL;}
+\DoxyCodeLine{00216\ \ \ \ \ vector<float>\ SwingR;}
+\DoxyCodeLine{00217\ \ \ \ \ vector<float>\ SwingL;}
+\DoxyCodeLine{00218\ \ \ \ \ vector<float>\ SIR;}
+\DoxyCodeLine{00219\ \ \ \ \ vector<float>\ SIL;}
+\DoxyCodeLine{00220\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{struct_window_main}{WindowMain}}*\ m\_winManager;}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ AssemblyCreation();}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordtype}{void}\ TrunkCreation();}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordtype}{void}\ LegCreation(\textcolor{keywordtype}{string}\ trunk,\ \textcolor{keywordtype}{string}\ thigh,\ \textcolor{keywordtype}{string}\ shank,\ \textcolor{keywordtype}{string}\ foot,\ \textcolor{keywordtype}{string}\ toes,\ \textcolor{keywordtype}{string}\ hip,\ \textcolor{keywordtype}{string}\ knee,\ \textcolor{keywordtype}{string}\ ankle,\ \textcolor{keywordtype}{string}\ toe\_hinge);}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{void}\ ArmCreation(\textcolor{keywordtype}{string}\ trunk,\ \textcolor{keywordtype}{string}\ uarm,\ \textcolor{keywordtype}{string}\ larm,\ \textcolor{keywordtype}{string}\ hand,\ \textcolor{keywordtype}{string}\ shoulder,\ \textcolor{keywordtype}{string}\ elbow,\ \textcolor{keywordtype}{string}\ wrist);}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{void}\ RigidBodyCreation(\textcolor{keywordtype}{string}\ body);}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{void}\ HingeJoint(\textcolor{keywordtype}{string}\ jname,\ \textcolor{keywordtype}{string}\ body1,\ \textcolor{keywordtype}{string}\ body2,\ dVector\ pos,\ \textcolor{keywordtype}{float}\ minAng,\ \textcolor{keywordtype}{float}\ maxAng);}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{void}\ DoubleHingeJoint(\textcolor{keywordtype}{string}\ jname,\ \textcolor{keywordtype}{string}\ body1,\ \textcolor{keywordtype}{string}\ body2,\ dVector\ pos,\ \textcolor{keywordtype}{float}\ minAng1,\ \textcolor{keywordtype}{float}\ maxAng1,\ \textcolor{keywordtype}{float}\ minAng2,\ \textcolor{keywordtype}{float}\ maxAng2);}
+\DoxyCodeLine{00281\ \ \ \ \ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{float}\ LPT\_A\ ,ThighR\_A,ThighL\_A,Shank\_A\ ,Foot\_A,\ Head\_A,\ Elbow\_A,\ Model\_Mass;}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \ \ dCustomHingeActuator*\ FloorAct;\ \textcolor{comment}{//\ floor\ actuator}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00287\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ box;}
+\DoxyCodeLine{00288\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ Geomfloor;}
+\DoxyCodeLine{00289\ \ \ \ \ }
+\DoxyCodeLine{00290\ \ \ \ \ std::vector<std::string>\ body\_keys\ =\ \{\ \textcolor{stringliteral}{"{}LPT"{}},}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{stringliteral}{"{}Thigh\_r"{}},\textcolor{stringliteral}{"{}Shank\_r"{}},\ \textcolor{stringliteral}{"{}Foot\_r"{}},}
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{stringliteral}{"{}Thigh\_l"{}},\textcolor{stringliteral}{"{}Shank\_l"{}},\ \textcolor{stringliteral}{"{}Foot\_l"{}},}
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{stringliteral}{"{}MPT"{}},\ \textcolor{stringliteral}{"{}UPT"{}},}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{stringliteral}{"{}Toe\_r"{}},\ \textcolor{stringliteral}{"{}Toe\_l"{}},}
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{stringliteral}{"{}UpArm\_r"{}},\ \textcolor{stringliteral}{"{}ForeArm\_r"{}},\ \textcolor{stringliteral}{"{}Hand\_r"{}},}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{stringliteral}{"{}UpArm\_l"{}},\ \textcolor{stringliteral}{"{}ForeArm\_l"{}},\ \textcolor{stringliteral}{"{}Hand\_l"{}},}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{stringliteral}{"{}Head"{}}\ \};\textcolor{comment}{//\ \ RIGID\ ELEMENTS\ OF\ THE\ MODEL}}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ \ RIGID\ ELEMENTS\ OF\ THE\ MODEL}}
+\DoxyCodeLine{00300\ \ \ \ \ map<std::string,\ GeomNewton*>\ rigid\_element;\textcolor{comment}{//\ \ geom\ newton\ as\ map:\ use\ mass\_keys\ as\ string}}
+\DoxyCodeLine{00301\ \ \ \ \ map<std::string,\ dModelNode*>\ nodes;\textcolor{comment}{//\ nodes\ as\ map:\ use\ mass\_keys\ as\ string}}
+\DoxyCodeLine{00302\ \ \ \ \ map<std::string,\ dVector*>\ body\_pos;\textcolor{comment}{//\ vector\ of\ body\ position}}
+\DoxyCodeLine{00303\ \ \ \ \ map<std::string,\ dVector*>\ body\_dim;\textcolor{comment}{//\ vector\ of\ body\ dimension}}
+\DoxyCodeLine{00304\ \ \ \ \ map<std::string,\ dVector*>\ body\_com;\textcolor{comment}{//\ vector\ of\ body\ relative\ position}}
+\DoxyCodeLine{00305\ \ \ \ \ map<std::string,\ std::string>\ child\_father\ =\ \{\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Thigh\_r"{}},\ \textcolor{stringliteral}{"{}LPT"{}}\},\ \{\textcolor{stringliteral}{"{}Shank\_r"{}},\ \textcolor{stringliteral}{"{}Thigh\_r"{}}\},\ \{\textcolor{stringliteral}{"{}Foot\_r"{}},\ \textcolor{stringliteral}{"{}Shank\_r"{}}\},}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Thigh\_l"{}},\ \textcolor{stringliteral}{"{}LPT"{}}\},\ \{\textcolor{stringliteral}{"{}Shank\_l"{}},\ \textcolor{stringliteral}{"{}Thigh\_l"{}}\},\ \{\textcolor{stringliteral}{"{}Foot\_l"{}},\ \textcolor{stringliteral}{"{}Shank\_l"{}}\},}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}MPT"{}},\ \textcolor{stringliteral}{"{}LPT"{}}\},\ \{\textcolor{stringliteral}{"{}UPT"{}},\ \textcolor{stringliteral}{"{}MPT"{}}\},}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Toe\_r"{}},\ \textcolor{stringliteral}{"{}Foot\_r"{}}\},\ \{\textcolor{stringliteral}{"{}Toe\_l"{}},\ \textcolor{stringliteral}{"{}Foot\_l"{}}\},}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}UpArm\_r"{}},\ \textcolor{stringliteral}{"{}UPT"{}}\},\ \{\textcolor{stringliteral}{"{}ForeArm\_r"{}},\ \textcolor{stringliteral}{"{}UpArm\_r"{}}\},\ \{\textcolor{stringliteral}{"{}Hand\_r"{}},\ \textcolor{stringliteral}{"{}ForeArm\_r"{}}\},}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}UpArm\_l"{}},\ \textcolor{stringliteral}{"{}UPT"{}}\},\ \{\textcolor{stringliteral}{"{}ForeArm\_l"{}},\ \textcolor{stringliteral}{"{}UpArm\_l"{}}\},\ \{\textcolor{stringliteral}{"{}Hand\_l"{}},\ \textcolor{stringliteral}{"{}ForeArm\_l"{}}\},}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}Head"{}},\ \textcolor{stringliteral}{"{}UPT"{}}\}\ \};\textcolor{comment}{//\ list\ with\ body\ child\ and\ father\ relationship;//\ bodies\ tree}}
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{keywordtype}{int}\ COMXline\_id;\textcolor{comment}{//\ id\ of\ line\ passing\ though\ com}}
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordtype}{int}\ COMYline\_id;\textcolor{comment}{//\ id\ of\ line\ passing\ though\ com}}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{int}\ COMZline\_id;\textcolor{comment}{//\ id\ of\ line\ passing\ though\ com}}
+\DoxyCodeLine{00319\ \textcolor{comment}{}\ \ \ \ map<std::string,\ Muscle*>\ muscles;\textcolor{comment}{//\ \ muscle\ as\ map:\ use\ muscle\_keys\ as\ string}}
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{comment}{//std::vector<std::string>\ muscle\_keys\ =\ \{\ "{}ham\_r"{},"{}glu\_r"{},"{}hfl\_r"{},\ "{}rf\_r"{},\ "{}vas\_r"{},"{}sol\_r"{},\ "{}ta\_r"{},\ "{}gas\_r"{},\ "{}ham\_l"{},"{}glu\_l"{},"{}hfl\_l"{},\ "{}rf\_l"{},\ "{}vas\_l"{},\ "{}sol\_l"{},\ "{}ta\_l"{},\ "{}gas\_l"{}\};//\ \ MTUs\ OF\ THE\ MODEL.\ SOL\ and\ HAM\ MUST\ be\ befor\ TA\ and\ HFL}}
+\DoxyCodeLine{00321\ \ \ \ \ std::vector<std::string>\ muscle\_keys\ =\ \{\ \textcolor{stringliteral}{"{}ham\_r"{}},\textcolor{stringliteral}{"{}glu\_r"{}},\textcolor{stringliteral}{"{}hfl\_r"{}},\ \textcolor{stringliteral}{"{}rf\_r"{}},\ \textcolor{stringliteral}{"{}vas\_r"{}},\textcolor{stringliteral}{"{}sol\_r"{}},\ \textcolor{stringliteral}{"{}ta\_r"{}},\ \textcolor{stringliteral}{"{}gas\_r"{}},\ \textcolor{stringliteral}{"{}ham\_l"{}},\textcolor{stringliteral}{"{}glu\_l"{}},\textcolor{stringliteral}{"{}hfl\_l"{}},\ \textcolor{stringliteral}{"{}rf\_l"{}},\ \textcolor{stringliteral}{"{}vas\_l"{}},\ \textcolor{stringliteral}{"{}sol\_l"{}},\ \textcolor{stringliteral}{"{}ta\_l"{}},\ \textcolor{stringliteral}{"{}gas\_l"{}}\ \};\textcolor{comment}{//\ \ MTUs\ OF\ THE\ MODEL.\ SOL\ and\ HAM\ MUST\ be\ befor\ TA\ and\ HFL}}
+\DoxyCodeLine{00322\ \ \ \ \ map<std::string,\ std::string>\ m\_body1;\textcolor{comment}{//\ body\ one\ of\ muscle}}
+\DoxyCodeLine{00323\ \ \ \ \ map<std::string,\ std::string>\ m\_body2;\textcolor{comment}{//\ body\ 2\ of\ muscle}}
+\DoxyCodeLine{00324\ \ \ \ \ map<std::string,\ std::string>\ m\_body3;\textcolor{comment}{//\ body\ 3\ of\ muscle}}
+\DoxyCodeLine{00325\ \ \ \ \ map<std::string,\ dVector>\ m\_point1;\textcolor{comment}{//\ point\ 1\ line\ muscle}}
+\DoxyCodeLine{00326\ \ \ \ \ map<std::string,\ dVector>\ m\_point2;\textcolor{comment}{//\ point\ 2\ line\ muscle}}
+\DoxyCodeLine{00327\ \ \ \ \ map<std::string,\ JointName>\ m\_joint1;\textcolor{comment}{//\ joint\ 1\ muscle}}
+\DoxyCodeLine{00328\ \ \ \ \ map<std::string,\ JointName>\ m\_joint2;\textcolor{comment}{//\ joint\ 2\ muscle}}
+\DoxyCodeLine{00329\ \ \ \ \ map<std::string,\ JointType>\ m\_joint\_type1;\textcolor{comment}{//\ joint\ type\ 1\ muscle}}
+\DoxyCodeLine{00330\ \ \ \ \ map<std::string,\ JointType>\ m\_joint\_type2;\textcolor{comment}{//\ joint\ type\ 2\ muscle}}
+\DoxyCodeLine{00331\ \ \ \ \ map<std::string,\ Mtuname>\ m\_muscle\_name;\textcolor{comment}{//\ name\ of\ muscle}}
+\DoxyCodeLine{00332\ \ \ \ \ map<std::string,\ map<std::string,\ float>>\ m\_list\_prop;\textcolor{comment}{//\ list\ containing\ the\ list\ of\ muscle\ properties\ (crazy\ ;))}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ map<std::string,\ float>\ m\_theta0;\textcolor{comment}{//\ initial\ angle\ 1\ of\ muscle}}
+\DoxyCodeLine{00335\ \ \ \ \ map<std::string,\ float>\ m\_theta10;\textcolor{comment}{//\ initial\ angle\ 2\ of\ muscle}}
+\DoxyCodeLine{00336\ \ \ \ \ map<std::string,\ float>\ m\_lim1;\textcolor{comment}{//\ limit\ angle\ 1\ of\ muscle\ }}
+\DoxyCodeLine{00337\ \ \ \ \ map<std::string,\ float>\ m\_lim2;\textcolor{comment}{//\ limit\ angle\ 2\ of\ muscle\ }}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ std::vector<std::string>\ muscle\_p\_keys\ =\ \{\ \textcolor{stringliteral}{"{}Fmax"{}},\ \textcolor{stringliteral}{"{}v\_max"{}},\ \textcolor{stringliteral}{"{}lopt"{}},\textcolor{stringliteral}{"{}lslk"{}},\ \textcolor{stringliteral}{"{}rho"{}},\ \textcolor{stringliteral}{"{}r"{}},\ \textcolor{stringliteral}{"{}r1"{}},\ \textcolor{stringliteral}{"{}phiM"{}},\ \textcolor{stringliteral}{"{}phiR"{}},\ \textcolor{stringliteral}{"{}phi1M"{}},\ \textcolor{stringliteral}{"{}phi1R"{}}\ \};\textcolor{comment}{//\ MTU's\ PROPERTIES}}
+\DoxyCodeLine{00340\ \ \ \ \ map<std::string,\ float>\ sol,\ ta,\ gas,\ vas,\ hfl,\ glu,\ ham,\ rf;}
+\DoxyCodeLine{00342\ \ \ \ \ }
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ std::vector<std::string>\ DHjoint\_keys\ =\ \{\ \textcolor{stringliteral}{"{}Hip\_r"{}},\ \textcolor{stringliteral}{"{}Ankle\_r"{}},\textcolor{stringliteral}{"{}Hip\_l"{}},\ \textcolor{stringliteral}{"{}Ankle\_l"{}},\textcolor{stringliteral}{"{}Shoulder\_r"{}},\textcolor{stringliteral}{"{}Shoulder\_l"{}}\};}
+\DoxyCodeLine{00346\ \ \ \ \ map<std::string,\ dCustomDoubleHinge*>\ JDoubleHinge;\textcolor{comment}{//\ \ muscle\ as\ map:\ use\ muscle\_keys\ as\ string}}
+\DoxyCodeLine{00347\ \ \ \ \ std::vector<std::string>\ Hjoint\_keys\ =\ \{\textcolor{stringliteral}{"{}Knee\_r"{}},\ \textcolor{stringliteral}{"{}Knee\_l"{}},\ \textcolor{stringliteral}{"{}Spine1"{}},\textcolor{stringliteral}{"{}Spine2"{}},\ \textcolor{stringliteral}{"{}Toe\_hinge\_r"{}},\ \textcolor{stringliteral}{"{}Toe\_hinge\_l"{}},\ \textcolor{stringliteral}{"{}Elbow\_r"{}},\ \textcolor{stringliteral}{"{}Wrist\_r"{}},\ \textcolor{stringliteral}{"{}Elbow\_l"{}},\ \textcolor{stringliteral}{"{}Wrist\_l"{}},\textcolor{stringliteral}{"{}Neck"{}}\};}
+\DoxyCodeLine{00348\ \ \ \ \ map<std::string,\ dCustomHinge*>\ JHinge;\textcolor{comment}{//\ \ muscle\ as\ map:\ use\ muscle\_keys\ as\ string}}
+\DoxyCodeLine{00350\ \textcolor{comment}{}}
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keywordtype}{void}\ dump\_to\_stdout(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pFilename);}
+\DoxyCodeLine{00353\ \ \ \ \ \textcolor{keywordtype}{void}\ dump\_to\_stdout(\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ pParent,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ indent\ =\ 0);}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ getIndent(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ numIndents);}
+\DoxyCodeLine{00355\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ getIndentAlt(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ numIndents);}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordtype}{int}\ dump\_attribs\_to\_stdout(\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pElement,\ std::vector<float>\&\ vector,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ indent);}
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordtype}{int}\ dump\_attribs\_to\_stdout2(\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pElement,\ std::map<std::string,\ float>\&\ l,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ indent);}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00361\ \ \ \ \ std::vector<float>\ v\_scale,\ v\_lengths,\ v\_total\_weight,\ v\_masses,\ v\_ixx,\ v\_iyy,\ v\_izz,\ v\_com,\ v\_angles,\ v\_x1,\ v\_y1,\ v\_z1,\ v\_x2,\ v\_y2,\ v\_z2,\ v\_maxForce;}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ map<std::string,\ float>\ lengths;}
+\DoxyCodeLine{00364\ \ \ \ \ map<std::string,\ float>\ mass\_distrib,\ delta\_cm;}
+\DoxyCodeLine{00365\ \ \ \ \ map<std::string,\ float>\ Ixx,\ Iyy,\ Izz,\ body\_rot\_ang;}
+\DoxyCodeLine{00366\ \ \ \ \ std::vector<std::string>\ lengths\_keys\ =\ \{\ \textcolor{stringliteral}{"{}Head"{}},\textcolor{stringliteral}{"{}UpArm"{}},\textcolor{stringliteral}{"{}ForeArm"{}},\textcolor{stringliteral}{"{}Hand"{}},\textcolor{stringliteral}{"{}Trunk"{}},\textcolor{stringliteral}{"{}Thigh"{}},\textcolor{stringliteral}{"{}Shank"{}},\textcolor{stringliteral}{"{}Foot"{}},\textcolor{stringliteral}{"{}Toe"{}},\textcolor{stringliteral}{"{}UPT"{}},\textcolor{stringliteral}{"{}MPT"{}},\textcolor{stringliteral}{"{}LPT"{}},\textcolor{stringliteral}{"{}Hip"{}},\textcolor{stringliteral}{"{}Shoulder"{}},\textcolor{stringliteral}{"{}FootBreadth"{}},\textcolor{stringliteral}{"{}AnkleHeight"{}},\textcolor{stringliteral}{"{}Neck"{}},\ \textcolor{stringliteral}{"{}RadBones"{}},\textcolor{stringliteral}{"{}RadSpheres"{}}\ \};}
+\DoxyCodeLine{00367\ \ \ \ \ std::vector<std::string>\ mass\_keys\ =\ \ \ \ \{\ \textcolor{stringliteral}{"{}Head"{}},\textcolor{stringliteral}{"{}UpArm"{}},\textcolor{stringliteral}{"{}ForeArm"{}},\textcolor{stringliteral}{"{}Hand"{}},\textcolor{stringliteral}{"{}Trunk"{}},\textcolor{stringliteral}{"{}Thigh"{}},\textcolor{stringliteral}{"{}Shank"{}},\textcolor{stringliteral}{"{}Foot"{}},\textcolor{stringliteral}{"{}Toe"{}},\textcolor{stringliteral}{"{}UPT"{}},\textcolor{stringliteral}{"{}MPT"{}},\textcolor{stringliteral}{"{}LPT"{}}\ \};}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordtype}{float}\ l\_Hip,l\_Up\_Leg,l\_Low\_Leg,r\_bones,l\_foot,w\_foot,l\_toe,h\_foot;}
+\DoxyCodeLine{00370\ \ \ \ \ \textcolor{keywordtype}{float}\ scale\_mass,\ scale\_length;}
+\DoxyCodeLine{00371\ \ \ \ \ \textcolor{keywordtype}{float}\ l\_Clav,l\_Up\_Arm,l\_Low\_Arm,l\_Hand,l\_Head,\ r\_Pad,\ h\_sphere,l\_UPT,\ l\_MPT,\ l\_LPT,\ l\_trunk,\ l\_neck,\ l\_delta,\ ankle\_j,\ knee\_j;}
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{keywordtype}{float}\ Shoulder\_sagittal\_R,\ Shoulder\_sagittal\_L,\ Shoulder\_transverse;}
+\DoxyCodeLine{00373\ \ \ \ \ dVector\ \ ContactFoot\_L,NormalFoot\_L,ContactGround\_L;}
+\DoxyCodeLine{00374\ \ \ \ \ dVector\ \ ContactFoot,NormalFoot,ContactGround;}
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keywordtype}{float}\ SimulationCost;}
+\DoxyCodeLine{00379\ \};}
+\DoxyCodeLine{00384\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_walker_manager}{WalkerManager}}:\ \textcolor{keyword}{public}\ dModelManager}
+\DoxyCodeLine{00385\ \{}
+\DoxyCodeLine{00386\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00387\ \ \ \ \ \mbox{\hyperlink{class_walker_manager}{WalkerManager}}(\mbox{\hyperlink{struct_window_main}{WindowMain}}*\ winctx);}
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_walker_manager}{\string~WalkerManager}}();}
+\DoxyCodeLine{00389\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00396\ \textcolor{comment}{}\ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_walker_manager_a96c043b65291422a74c16f9e761c24b0}{OnPreUpdate}}(dModelRootNode*\ \textcolor{keyword}{const}\ model,\ dFloat\ timestep,\ \textcolor{keywordtype}{int}\ threadID)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnPostUpdate(dModelRootNode*\ \textcolor{keyword}{const}\ model,\ dFloat\ timestep,\ \textcolor{keywordtype}{int}\ threadID)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnUpdateTransform(\textcolor{keyword}{const}\ dModelNode*\ \textcolor{keyword}{const}\ bone,\ \textcolor{keyword}{const}\ dMatrix\&\ localMatrix)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ OnDebug(dModelRootNode*\ \textcolor{keyword}{const}\ model,\ dCustomJoint::dDebugDisplay*\ \textcolor{keyword}{const}\ debugContext);}
+\DoxyCodeLine{00400\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00408\ \textcolor{comment}{}\ \ \ \ \mbox{\hyperlink{classd_walker_model}{dWalkerModel}}*\ \mbox{\hyperlink{class_walker_manager_a2c9f63ded93e69f5096c519701ea9af4}{CreateWalkerPlayer}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ modelName,\ \textcolor{keyword}{const}\ dMatrix\&\ location,\ \textcolor{keywordtype}{double}*\ params,\ \mbox{\hyperlink{class_w_b_v}{WBV}}\ wbv);}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_walker_manager_a72f607911ec7d67b1dc3f93d56f67c2d}{GetContactPoints}}(NewtonBody*\ \textcolor{keyword}{const}\ body,\ dVector*\ \textcolor{keyword}{const}\ points)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00416\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00417\ \ \ \ \ \mbox{\hyperlink{struct_window_main}{WindowMain}}*\ m\_winManager;}
+\DoxyCodeLine{00418\ \};}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//HUMANOID\_\_H\_}}
+
+\end{DoxyCode}

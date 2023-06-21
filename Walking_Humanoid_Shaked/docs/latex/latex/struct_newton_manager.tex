@@ -1,0 +1,75 @@
+\hypertarget{struct_newton_manager}{}\doxysection{Newton\+Manager Struct Reference}
+\label{struct_newton_manager}\index{NewtonManager@{NewtonManager}}
+
+
+{\ttfamily \#include $<$Newton\+Manager.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a5d1fc8cc7c97436e9fb1d6cb4957f3f6}\label{struct_newton_manager_a5d1fc8cc7c97436e9fb1d6cb4957f3f6}} 
+Newton\+World $\ast$ {\bfseries Get\+World} ()
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a45ad0dc7cbbe5e370b13add7ba4a760f}\label{struct_newton_manager_a45ad0dc7cbbe5e370b13add7ba4a760f}} 
+d\+Vector {\bfseries Get\+Gravity} ()
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a3c5db7f69929dd39dd5d6a44883e1a33}\label{struct_newton_manager_a3c5db7f69929dd39dd5d6a44883e1a33}} 
+void {\bfseries Render} (\mbox{\hyperlink{struct_shader}{Shader}} $\ast$cshd, d\+Float steptime)
+\item 
+\mbox{\Hypertarget{struct_newton_manager_abfe907010eeadac2decf7554d7635ed3}\label{struct_newton_manager_abfe907010eeadac2decf7554d7635ed3}} 
+void {\bfseries Update\+Newton} (d\+Float steptime)
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a85fedcfbccbf7eb2a3e2ea206d0aaa85}\label{struct_newton_manager_a85fedcfbccbf7eb2a3e2ea206d0aaa85}} 
+void {\bfseries Calculate\+FPS} (d\+Float timestep)
+\item 
+\mbox{\Hypertarget{struct_newton_manager_ae6eacf94cd8317ffa1e07d372a01a1d8}\label{struct_newton_manager_ae6eacf94cd8317ffa1e07d372a01a1d8}} 
+d\+Float {\bfseries Get\+Fps} ()
+\item 
+\mbox{\Hypertarget{struct_newton_manager_ac8e61a1864fc05ea7571b2507d524087}\label{struct_newton_manager_ac8e61a1864fc05ea7571b2507d524087}} 
+d\+Float {\bfseries Get\+Physic\+Time} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a132cc775337a23991f860e83fde1ccf4}\label{struct_newton_manager_a132cc775337a23991f860e83fde1ccf4}} 
+static void {\bfseries Physics\+Apply\+Gravity\+Force} (const Newton\+Body $\ast$body, d\+Float timestep, int thread\+Index)
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a838701de9886bedbc76aee6831caf682}\label{struct_newton_manager_a838701de9886bedbc76aee6831caf682}} 
+static void {\bfseries Physics\+Apply\+Control\+Force} (const Newton\+Body $\ast$body1, bool action, d\+Float timestep, int thread\+Index)
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a58d6744883682e781eceda3688ad8124}\label{struct_newton_manager_a58d6744883682e781eceda3688ad8124}} 
+static void {\bfseries Transform\+Callback} (const Newton\+Body $\ast$body, const d\+Float $\ast$matrix, int thread\+Index)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a1b1ca5f4e34daa0ed36d50e7f1e103d3}\label{struct_newton_manager_a1b1ca5f4e34daa0ed36d50e7f1e103d3}} 
+std\+::vector$<$ void $\ast$ $>$ {\bfseries v\+Geom\+List}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_ace0c5120597a9a5c7a81a4f62308f3f3}\label{struct_newton_manager_ace0c5120597a9a5c7a81a4f62308f3f3}} 
+std\+::vector$<$ void $\ast$ $>$ {\bfseries v\+Ass\+Mesh\+List}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_ad1c571241f27c6f9ec9458a223888ab7}\label{struct_newton_manager_ad1c571241f27c6f9ec9458a223888ab7}} 
+std\+::vector$<$ void $\ast$ $>$ {\bfseries v\+Joint\+List}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a910f912c73334d3b463598d3491e7c3f}\label{struct_newton_manager_a910f912c73334d3b463598d3491e7c3f}} 
+std\+::vector$<$ Joint\+Name $>$ {\bfseries v\+Joint\+Name\+List}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_a497fa0e1d5f914692cb23ae0376cb97f}\label{struct_newton_manager_a497fa0e1d5f914692cb23ae0376cb97f}} 
+std\+::vector$<$ void $\ast$ $>$ {\bfseries v\+Muscle\+List}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_aecd6de50151e66bc9555b8d21960d83d}\label{struct_newton_manager_aecd6de50151e66bc9555b8d21960d83d}} 
+\mbox{\hyperlink{struct_texture}{Texture}} $\ast$ {\bfseries v\+Texture\+Manager}
+\item 
+\mbox{\Hypertarget{struct_newton_manager_af59c1d5f7b9bd679d2ea8e165a600da7}\label{struct_newton_manager_af59c1d5f7b9bd679d2ea8e165a600da7}} 
+bool {\bfseries Is\+Terminated}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+3D real-\/physic engine manager. This struct uses newton.\+dll to update the simulation at each timestep 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Newton\+Manager.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Newton\+Manager.\+cpp\end{DoxyCompactItemize}

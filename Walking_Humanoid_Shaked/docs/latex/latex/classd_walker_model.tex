@@ -1,0 +1,439 @@
+\hypertarget{classd_walker_model}{}\doxysection{d\+Walker\+Model Class Reference}
+\label{classd_walker_model}\index{dWalkerModel@{dWalkerModel}}
+
+
+{\ttfamily \#include $<$Humanoid.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a298a27aa7ce30f5256c1f8ad2988081c}\label{classd_walker_model_a298a27aa7ce30f5256c1f8ad2988081c}} 
+{\bfseries d\+Walker\+Model} (\mbox{\hyperlink{struct_window_main}{Window\+Main}} $\ast$const winctx, const char $\ast$const model\+Name, const d\+Matrix \&location, int link\+Materil\+ID, double $\ast$params, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\item 
+void \mbox{\hyperlink{classd_walker_model_a1b32bbfaf04d4a92f747a88c0cffab36}{Draw\+Frame}} (const d\+Vector \&posit, d\+Float scale)
+\item 
+int \mbox{\hyperlink{classd_walker_model_aa40873322d31a95005897ed92cd6db36}{Create\+Line}} ()
+\item 
+void \mbox{\hyperlink{classd_walker_model_ae643960da45959b984f542931698d6cc}{Create\+Descrete\+Contact\+Foot\+Collision}} (Newton\+Body $\ast$const foot\+Body) const
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_afc21abeede03d15e3928b19d9abbe5c8}{Get\+Sagittal\+State}} (string body)
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_a80d52bee876d766e2c20ea41998f123e}{Get\+Trunk\+Coronal\+State}} ()
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_af2c6c09732296507bbacb9cfec50b163}{Get\+Foot\+Coronal\+State}} (string body)
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_a7724783f1c569f1e20da894dca410e9e}{Get\+Trunk\+Transverse\+State}} ()
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_a34af99445b0470899efc611029893464}{Get\+Relative\+Sagittal\+State}} (string body1, string body2)
+\item 
+vector$<$ d\+Float $>$ \mbox{\hyperlink{classd_walker_model_abdc68a253fe161faa7794f67503be712}{Get\+Relative\+Transverse\+State}} (string body1, string body2)
+\item 
+float \mbox{\hyperlink{classd_walker_model_a3fe7d624ed2b28cb05630b6b466bcdec}{Compute\+Angle\+BWVectors}} (d\+Vector const \&dir, d\+Vector const \&ref, d\+Vector const \&crossref)
+\item 
+d\+Vector \mbox{\hyperlink{classd_walker_model_a08d8ba212d0f678aea105b887ea79822}{Compute\+Walker\+COM}} ()
+\item 
+d\+Vector \mbox{\hyperlink{classd_walker_model_a0a5d253eed4f66a731488832abd0fb47}{Compute\+Walker\+COMvelocity}} ()
+\item 
+\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ \mbox{\hyperlink{classd_walker_model_a2c734c46291389e7a2d597453387952e}{Get\+\_\+\+Floor}} ()
+\item 
+map$<$ std\+::string, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ $>$ \mbox{\hyperlink{classd_walker_model_a8e9cb12a051670e60a098bfb355f6d3d}{Get\+\_\+\+Rigid\+Elemet\+List}} ()
+\item 
+map$<$ std\+::string, d\+Custom\+Hinge $\ast$ $>$ \mbox{\hyperlink{classd_walker_model_a5e9f1cd328bd4663f6b99bcb94d113ea}{Get\+\_\+\+Hinge\+Joint\+List}} ()
+\item 
+map$<$ std\+::string, d\+Custom\+Double\+Hinge $\ast$ $>$ \mbox{\hyperlink{classd_walker_model_a8f75d258579afae57f829dcd97d22d39}{Get\+\_\+\+Double\+Hinge\+Joint\+List}} ()
+\item 
+float \mbox{\hyperlink{classd_walker_model_a4d95e9b77c23698ec7804bd3eadd085c}{Get\+Leg\+Length}} ()
+\item 
+void \mbox{\hyperlink{classd_walker_model_a82452b04257ef45a4cfd145f2272ae9f}{Add\+Action\+Reaction\+Torque}} (float Torque, d\+Vector pin, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$b1, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$b2)
+\item 
+float \mbox{\hyperlink{classd_walker_model_a6d95e11db33f5918e16db149181b4ac7}{Get\+Hip\+Length}} ()
+\item 
+float \mbox{\hyperlink{classd_walker_model_a8d99b088c2c15805f9df2ebde20d5627}{Get\+Model\+Mass}} ()
+\item 
+void \mbox{\hyperlink{classd_walker_model_a03de5ee367b1edac431149d3d34e66c9}{Apply\+Tilting}} (float angle)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a46368d4443b751db3559f5e96cbc9c78}\label{classd_walker_model_a46368d4443b751db3559f5e96cbc9c78}} 
+\mbox{\hyperlink{class_control_algorithm}{Control\+Algorithm}} {\bfseries controller}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a80593e318c3c8faf09ed1a7a73321984}\label{classd_walker_model_a80593e318c3c8faf09ed1a7a73321984}} 
+int {\bfseries write\+\_\+txt}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aaafd15f1ead2e158801148d350eafdbb}\label{classd_walker_model_aaafd15f1ead2e158801148d350eafdbb}} 
+vector$<$ float $>$ {\bfseries time\+\_\+v}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a0a5a26ffc42e0fcf3bfcb7e8918be029}\label{classd_walker_model_a0a5a26ffc42e0fcf3bfcb7e8918be029}} 
+vector$<$ float $>$ {\bfseries HFLr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ad0f5982060d7411fba4add9f1e6be351}\label{classd_walker_model_ad0f5982060d7411fba4add9f1e6be351}} 
+vector$<$ float $>$ {\bfseries HFLl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a4522cc122d4f3eb38296af6c99b9c876}\label{classd_walker_model_a4522cc122d4f3eb38296af6c99b9c876}} 
+vector$<$ float $>$ {\bfseries HAMr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a1f221b287da5f4781b4fb758b1f30136}\label{classd_walker_model_a1f221b287da5f4781b4fb758b1f30136}} 
+vector$<$ float $>$ {\bfseries HAMr\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ae9a02f8c1e4fa43ca06ff639557fe81f}\label{classd_walker_model_ae9a02f8c1e4fa43ca06ff639557fe81f}} 
+vector$<$ float $>$ {\bfseries HAMl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a20f9813c000894f53c075f469af28902}\label{classd_walker_model_a20f9813c000894f53c075f469af28902}} 
+vector$<$ float $>$ {\bfseries HAMl\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_adb24c02b3996ccc92f73054207dd2570}\label{classd_walker_model_adb24c02b3996ccc92f73054207dd2570}} 
+vector$<$ float $>$ {\bfseries GLUr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a19076c56eb0fa45c1b862d2fd9031909}\label{classd_walker_model_a19076c56eb0fa45c1b862d2fd9031909}} 
+vector$<$ float $>$ {\bfseries GLUl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_af80685322003b82c97b00d09504973be}\label{classd_walker_model_af80685322003b82c97b00d09504973be}} 
+vector$<$ float $>$ {\bfseries VASr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a1af0970d4bbe30788ed1dbb828fb58fb}\label{classd_walker_model_a1af0970d4bbe30788ed1dbb828fb58fb}} 
+vector$<$ float $>$ {\bfseries VASl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ade261794e36c4923fad73c115be7ef0f}\label{classd_walker_model_ade261794e36c4923fad73c115be7ef0f}} 
+vector$<$ float $>$ {\bfseries GASr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a8dae8a096e6d2cdffdf0d4068dc307c7}\label{classd_walker_model_a8dae8a096e6d2cdffdf0d4068dc307c7}} 
+vector$<$ float $>$ {\bfseries GASr\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ad6d3651827866c5382197f5e7f896952}\label{classd_walker_model_ad6d3651827866c5382197f5e7f896952}} 
+vector$<$ float $>$ {\bfseries GASl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_af9a4755515f3eba81d285558d9defb8e}\label{classd_walker_model_af9a4755515f3eba81d285558d9defb8e}} 
+vector$<$ float $>$ {\bfseries GASl\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a9c790fb6c7cdce284927dfd19c140d2c}\label{classd_walker_model_a9c790fb6c7cdce284927dfd19c140d2c}} 
+vector$<$ float $>$ {\bfseries SOLr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ae3cb8b975aaf7c199494f20eb7369754}\label{classd_walker_model_ae3cb8b975aaf7c199494f20eb7369754}} 
+vector$<$ float $>$ {\bfseries SOLl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a5c9d30d13ef53ab95e8b670a2e93859d}\label{classd_walker_model_a5c9d30d13ef53ab95e8b670a2e93859d}} 
+vector$<$ float $>$ {\bfseries TAr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a1b11344d7b8bcec3ae690d683967f8b6}\label{classd_walker_model_a1b11344d7b8bcec3ae690d683967f8b6}} 
+vector$<$ float $>$ {\bfseries TAl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a598f5c3155b385cbd7932f996688ee1e}\label{classd_walker_model_a598f5c3155b385cbd7932f996688ee1e}} 
+vector$<$ float $>$ {\bfseries RFr\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_acc6c20b442f923bd394755ab81567ac5}\label{classd_walker_model_acc6c20b442f923bd394755ab81567ac5}} 
+vector$<$ float $>$ {\bfseries RFr\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a7371e5156471931a5fc00aed88183793}\label{classd_walker_model_a7371e5156471931a5fc00aed88183793}} 
+vector$<$ float $>$ {\bfseries RFl\+\_\+\+T1}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a65e451f8f6689847d51cf7e9fa6cdf24}\label{classd_walker_model_a65e451f8f6689847d51cf7e9fa6cdf24}} 
+vector$<$ float $>$ {\bfseries RFl\+\_\+\+T2}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aff7bd1373c999dd5a32da4d214460dde}\label{classd_walker_model_aff7bd1373c999dd5a32da4d214460dde}} 
+vector$<$ float $>$ {\bfseries Hip\+RAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ace9180cd01d748abd53274715587ccc0}\label{classd_walker_model_ace9180cd01d748abd53274715587ccc0}} 
+vector$<$ float $>$ {\bfseries Hip\+LAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_adf4edba4c555fe3786a62d9d646b8b2b}\label{classd_walker_model_adf4edba4c555fe3786a62d9d646b8b2b}} 
+vector$<$ float $>$ {\bfseries Knee\+RAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a81320ac75965c7fa632909a01b509d36}\label{classd_walker_model_a81320ac75965c7fa632909a01b509d36}} 
+vector$<$ float $>$ {\bfseries Knee\+LAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a1dc15008f83b8932dfe8d919534ef37f}\label{classd_walker_model_a1dc15008f83b8932dfe8d919534ef37f}} 
+vector$<$ float $>$ {\bfseries Ankle\+RAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a702020e8314b1bec69427051489afba7}\label{classd_walker_model_a702020e8314b1bec69427051489afba7}} 
+vector$<$ float $>$ {\bfseries Ankle\+LAng}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a4a2891e38ca535245bfca8fc730f0474}\label{classd_walker_model_a4a2891e38ca535245bfca8fc730f0474}} 
+vector$<$ float $>$ {\bfseries COMPos\+\_\+X}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a68a933d147aa9ad15d41a81c11c6e44b}\label{classd_walker_model_a68a933d147aa9ad15d41a81c11c6e44b}} 
+vector$<$ float $>$ {\bfseries COMPos\+\_\+Y}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a698966e410e7d51a37613d15fab3b8c6}\label{classd_walker_model_a698966e410e7d51a37613d15fab3b8c6}} 
+vector$<$ float $>$ {\bfseries COMPos\+\_\+Z}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aab162ef84d972238ac0ae9cecce94b88}\label{classd_walker_model_aab162ef84d972238ac0ae9cecce94b88}} 
+vector$<$ float $>$ {\bfseries COMVel\+\_\+X}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ab2b6efb789036f6dd59746e468ec7156}\label{classd_walker_model_ab2b6efb789036f6dd59746e468ec7156}} 
+vector$<$ float $>$ {\bfseries COMVel\+\_\+Y}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aee57af541ad907a9e91fa83b0fe514a7}\label{classd_walker_model_aee57af541ad907a9e91fa83b0fe514a7}} 
+vector$<$ float $>$ {\bfseries COMVel\+\_\+Z}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a30106f89018eaa21064699a0427726c9}\label{classd_walker_model_a30106f89018eaa21064699a0427726c9}} 
+vector$<$ float $>$ {\bfseries Foot\+RPos\+\_\+X}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ad49928e28061993c82a1b2fe02d8ed34}\label{classd_walker_model_ad49928e28061993c82a1b2fe02d8ed34}} 
+vector$<$ float $>$ {\bfseries Foot\+RPos\+\_\+Y}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a4577310be4bd6d9f12a0af764f278bd1}\label{classd_walker_model_a4577310be4bd6d9f12a0af764f278bd1}} 
+vector$<$ float $>$ {\bfseries Foot\+RPos\+\_\+Z}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a26eda3015352da7e3b85395eb4e0ecec}\label{classd_walker_model_a26eda3015352da7e3b85395eb4e0ecec}} 
+vector$<$ float $>$ {\bfseries Foot\+LPos\+\_\+X}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ab568605f749c21a7d512c05d840e48e6}\label{classd_walker_model_ab568605f749c21a7d512c05d840e48e6}} 
+vector$<$ float $>$ {\bfseries Foot\+LPos\+\_\+Y}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a44caacd382c560f9c57a277daa6a9842}\label{classd_walker_model_a44caacd382c560f9c57a277daa6a9842}} 
+vector$<$ float $>$ {\bfseries Foot\+LPos\+\_\+Z}
+\item 
+\mbox{\Hypertarget{classd_walker_model_acc2cf526f388d6c5756997368e58be7a}\label{classd_walker_model_acc2cf526f388d6c5756997368e58be7a}} 
+vector$<$ float $>$ {\bfseries StanceR}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a372401425cfc39c7783f63f77fba0c0d}\label{classd_walker_model_a372401425cfc39c7783f63f77fba0c0d}} 
+vector$<$ float $>$ {\bfseries StanceL}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aa40b47080eae81dbf39435a1b925f8a8}\label{classd_walker_model_aa40b47080eae81dbf39435a1b925f8a8}} 
+vector$<$ float $>$ {\bfseries SPR}
+\item 
+\mbox{\Hypertarget{classd_walker_model_ac6d8eab8c652b54097e4f2595dcc5c70}\label{classd_walker_model_ac6d8eab8c652b54097e4f2595dcc5c70}} 
+vector$<$ float $>$ {\bfseries SPL}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a14bb895254eec5735b03e8a554c13e69}\label{classd_walker_model_a14bb895254eec5735b03e8a554c13e69}} 
+vector$<$ float $>$ {\bfseries SwingR}
+\item 
+\mbox{\Hypertarget{classd_walker_model_aa92346b34ccc3d5c66cb717ebae26f6b}\label{classd_walker_model_aa92346b34ccc3d5c66cb717ebae26f6b}} 
+vector$<$ float $>$ {\bfseries SwingL}
+\item 
+\mbox{\Hypertarget{classd_walker_model_a09188c4a506e93da5a69f8bdffc30a66}\label{classd_walker_model_a09188c4a506e93da5a69f8bdffc30a66}} 
+vector$<$ float $>$ {\bfseries SIR}
+\item 
+\mbox{\Hypertarget{classd_walker_model_af3ec5e7365fd605db80ea32bbaa869f4}\label{classd_walker_model_af3ec5e7365fd605db80ea32bbaa869f4}} 
+vector$<$ float $>$ {\bfseries SIL}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Walker model definition\+: rigid bodies, joints, muscles, floor. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classd_walker_model_a82452b04257ef45a4cfd145f2272ae9f}\label{classd_walker_model_a82452b04257ef45a4cfd145f2272ae9f}} 
+\index{dWalkerModel@{dWalkerModel}!AddActionReactionTorque@{AddActionReactionTorque}}
+\index{AddActionReactionTorque@{AddActionReactionTorque}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{AddActionReactionTorque()}{AddActionReactionTorque()}}
+{\footnotesize\ttfamily void d\+Walker\+Model\+::\+Add\+Action\+Reaction\+Torque (\begin{DoxyParamCaption}\item[{float}]{Torque,  }\item[{d\+Vector}]{pin,  }\item[{\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$}]{b1,  }\item[{\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$}]{b2 }\end{DoxyParamCaption})}
+
+Applies the torque of a joint to the bodies linked to the joint around a given axis 
+\begin{DoxyParams}{Parameters}
+{\em Torque} & (input) torque value \\
+\hline
+{\em pin} & (input) axis of the torque \\
+\hline
+{\em b1} & (input) body 1 \\
+\hline
+{\em b2} & (input) body 2 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a03de5ee367b1edac431149d3d34e66c9}\label{classd_walker_model_a03de5ee367b1edac431149d3d34e66c9}} 
+\index{dWalkerModel@{dWalkerModel}!ApplyTilting@{ApplyTilting}}
+\index{ApplyTilting@{ApplyTilting}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{ApplyTilting()}{ApplyTilting()}}
+{\footnotesize\ttfamily void d\+Walker\+Model\+::\+Apply\+Tilting (\begin{DoxyParamCaption}\item[{float}]{angle }\end{DoxyParamCaption})}
+
+Apply a given inclination angle to the hinge actuator of the floor \mbox{\Hypertarget{classd_walker_model_a3fe7d624ed2b28cb05630b6b466bcdec}\label{classd_walker_model_a3fe7d624ed2b28cb05630b6b466bcdec}} 
+\index{dWalkerModel@{dWalkerModel}!ComputeAngleBWVectors@{ComputeAngleBWVectors}}
+\index{ComputeAngleBWVectors@{ComputeAngleBWVectors}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{ComputeAngleBWVectors()}{ComputeAngleBWVectors()}}
+{\footnotesize\ttfamily float d\+Walker\+Model\+::\+Compute\+Angle\+BWVectors (\begin{DoxyParamCaption}\item[{d\+Vector const \&}]{dir,  }\item[{d\+Vector const \&}]{ref,  }\item[{d\+Vector const \&}]{crossref }\end{DoxyParamCaption})}
+
+Compute the angle between vectors 
+\begin{DoxyParams}{Parameters}
+{\em dir} & (input) vector \\
+\hline
+{\em ref} & (input) reference vector \\
+\hline
+{\em crossref} & (input) vector to define he sign \\
+\hline
+{\em angle} & (output) angle between dir and ref signed. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a08d8ba212d0f678aea105b887ea79822}\label{classd_walker_model_a08d8ba212d0f678aea105b887ea79822}} 
+\index{dWalkerModel@{dWalkerModel}!ComputeWalkerCOM@{ComputeWalkerCOM}}
+\index{ComputeWalkerCOM@{ComputeWalkerCOM}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{ComputeWalkerCOM()}{ComputeWalkerCOM()}}
+{\footnotesize\ttfamily d\+Vector d\+Walker\+Model\+::\+Compute\+Walker\+COM (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Compute walker centre of mass 
+\begin{DoxyParams}{Parameters}
+{\em com} & (output) vector with com position \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a0a5d253eed4f66a731488832abd0fb47}\label{classd_walker_model_a0a5d253eed4f66a731488832abd0fb47}} 
+\index{dWalkerModel@{dWalkerModel}!ComputeWalkerCOMvelocity@{ComputeWalkerCOMvelocity}}
+\index{ComputeWalkerCOMvelocity@{ComputeWalkerCOMvelocity}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{ComputeWalkerCOMvelocity()}{ComputeWalkerCOMvelocity()}}
+{\footnotesize\ttfamily d\+Vector d\+Walker\+Model\+::\+Compute\+Walker\+COMvelocity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Compute the walker com position 
+\begin{DoxyParams}{Parameters}
+{\em comvel} & (output) vector with com velocities \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_ae643960da45959b984f542931698d6cc}\label{classd_walker_model_ae643960da45959b984f542931698d6cc}} 
+\index{dWalkerModel@{dWalkerModel}!CreateDescreteContactFootCollision@{CreateDescreteContactFootCollision}}
+\index{CreateDescreteContactFootCollision@{CreateDescreteContactFootCollision}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{CreateDescreteContactFootCollision()}{CreateDescreteContactFootCollision()}}
+{\footnotesize\ttfamily void d\+Walker\+Model\+::\+Create\+Descrete\+Contact\+Foot\+Collision (\begin{DoxyParamCaption}\item[{Newton\+Body $\ast$const}]{foot\+Body }\end{DoxyParamCaption}) const}
+
+Creates the foot as a collision of spheres. The contact happens at the heel, forefoot and toes. 
+\begin{DoxyParams}{Parameters}
+{\em foot\+Body} & (input) body of the foot \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_aa40873322d31a95005897ed92cd6db36}\label{classd_walker_model_aa40873322d31a95005897ed92cd6db36}} 
+\index{dWalkerModel@{dWalkerModel}!CreateLine@{CreateLine}}
+\index{CreateLine@{CreateLine}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{CreateLine()}{CreateLine()}}
+{\footnotesize\ttfamily int d\+Walker\+Model\+::\+Create\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Draws a line. 
+\begin{DoxyParams}{Parameters}
+{\em posit} & (output) ID of the line \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a1b32bbfaf04d4a92f747a88c0cffab36}\label{classd_walker_model_a1b32bbfaf04d4a92f747a88c0cffab36}} 
+\index{dWalkerModel@{dWalkerModel}!DrawFrame@{DrawFrame}}
+\index{DrawFrame@{DrawFrame}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{DrawFrame()}{DrawFrame()}}
+{\footnotesize\ttfamily void d\+Walker\+Model\+::\+Draw\+Frame (\begin{DoxyParamCaption}\item[{const d\+Vector \&}]{posit,  }\item[{d\+Float}]{scale }\end{DoxyParamCaption})}
+
+Draws a reference frame of three lines. The origin is the location of the interest point 
+\begin{DoxyParams}{Parameters}
+{\em posit} & (input) point vector to be drawn \\
+\hline
+{\em scale} & (input) length of lines \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a8f75d258579afae57f829dcd97d22d39}\label{classd_walker_model_a8f75d258579afae57f829dcd97d22d39}} 
+\index{dWalkerModel@{dWalkerModel}!Get\_DoubleHingeJointList@{Get\_DoubleHingeJointList}}
+\index{Get\_DoubleHingeJointList@{Get\_DoubleHingeJointList}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{Get\_DoubleHingeJointList()}{Get\_DoubleHingeJointList()}}
+{\footnotesize\ttfamily map$<$ std\+::string, d\+Custom\+Double\+Hinge $\ast$ $>$ d\+Walker\+Model\+::\+Get\+\_\+\+Double\+Hinge\+Joint\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a map with name an pointer of all double hinge joints \mbox{\Hypertarget{classd_walker_model_a2c734c46291389e7a2d597453387952e}\label{classd_walker_model_a2c734c46291389e7a2d597453387952e}} 
+\index{dWalkerModel@{dWalkerModel}!Get\_Floor@{Get\_Floor}}
+\index{Get\_Floor@{Get\_Floor}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{Get\_Floor()}{Get\_Floor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ d\+Walker\+Model\+::\+Get\+\_\+\+Floor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the pointer to the floor object \mbox{\Hypertarget{classd_walker_model_a5e9f1cd328bd4663f6b99bcb94d113ea}\label{classd_walker_model_a5e9f1cd328bd4663f6b99bcb94d113ea}} 
+\index{dWalkerModel@{dWalkerModel}!Get\_HingeJointList@{Get\_HingeJointList}}
+\index{Get\_HingeJointList@{Get\_HingeJointList}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{Get\_HingeJointList()}{Get\_HingeJointList()}}
+{\footnotesize\ttfamily map$<$ std\+::string, d\+Custom\+Hinge $\ast$ $>$ d\+Walker\+Model\+::\+Get\+\_\+\+Hinge\+Joint\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a map with name an pointer of all hing joints \mbox{\Hypertarget{classd_walker_model_a8e9cb12a051670e60a098bfb355f6d3d}\label{classd_walker_model_a8e9cb12a051670e60a098bfb355f6d3d}} 
+\index{dWalkerModel@{dWalkerModel}!Get\_RigidElemetList@{Get\_RigidElemetList}}
+\index{Get\_RigidElemetList@{Get\_RigidElemetList}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{Get\_RigidElemetList()}{Get\_RigidElemetList()}}
+{\footnotesize\ttfamily map$<$ std\+::string, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ $>$ d\+Walker\+Model\+::\+Get\+\_\+\+Rigid\+Elemet\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a map with name an pointer of all bodies \mbox{\Hypertarget{classd_walker_model_af2c6c09732296507bbacb9cfec50b163}\label{classd_walker_model_af2c6c09732296507bbacb9cfec50b163}} 
+\index{dWalkerModel@{dWalkerModel}!GetFootCoronalState@{GetFootCoronalState}}
+\index{GetFootCoronalState@{GetFootCoronalState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetFootCoronalState()}{GetFootCoronalState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Foot\+Coronal\+State (\begin{DoxyParamCaption}\item[{string}]{body }\end{DoxyParamCaption})}
+
+Gets the coronal orientation angle and rotation speed of the foot 
+\begin{DoxyParams}{Parameters}
+{\em body} & (input) name of the body \\
+\hline
+{\em state} & (output) state vector with angle and rotation speed in coronal plane of the foot \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a6d95e11db33f5918e16db149181b4ac7}\label{classd_walker_model_a6d95e11db33f5918e16db149181b4ac7}} 
+\index{dWalkerModel@{dWalkerModel}!GetHipLength@{GetHipLength}}
+\index{GetHipLength@{GetHipLength}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetHipLength()}{GetHipLength()}}
+{\footnotesize\ttfamily float d\+Walker\+Model\+::\+Get\+Hip\+Length (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a the hip width \mbox{\Hypertarget{classd_walker_model_a4d95e9b77c23698ec7804bd3eadd085c}\label{classd_walker_model_a4d95e9b77c23698ec7804bd3eadd085c}} 
+\index{dWalkerModel@{dWalkerModel}!GetLegLength@{GetLegLength}}
+\index{GetLegLength@{GetLegLength}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetLegLength()}{GetLegLength()}}
+{\footnotesize\ttfamily float d\+Walker\+Model\+::\+Get\+Leg\+Length (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns the leg of the leg \mbox{\Hypertarget{classd_walker_model_a8d99b088c2c15805f9df2ebde20d5627}\label{classd_walker_model_a8d99b088c2c15805f9df2ebde20d5627}} 
+\index{dWalkerModel@{dWalkerModel}!GetModelMass@{GetModelMass}}
+\index{GetModelMass@{GetModelMass}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetModelMass()}{GetModelMass()}}
+{\footnotesize\ttfamily float d\+Walker\+Model\+::\+Get\+Model\+Mass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns walker mass \mbox{\Hypertarget{classd_walker_model_a34af99445b0470899efc611029893464}\label{classd_walker_model_a34af99445b0470899efc611029893464}} 
+\index{dWalkerModel@{dWalkerModel}!GetRelativeSagittalState@{GetRelativeSagittalState}}
+\index{GetRelativeSagittalState@{GetRelativeSagittalState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetRelativeSagittalState()}{GetRelativeSagittalState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Relative\+Sagittal\+State (\begin{DoxyParamCaption}\item[{string}]{body1,  }\item[{string}]{body2 }\end{DoxyParamCaption})}
+
+Gets the relative orientation angle and rotation speed of body1 and body2 in the sagittal plane 
+\begin{DoxyParams}{Parameters}
+{\em body1} & (input) name of the body1 \\
+\hline
+{\em body2} & (input) name of the body2 \\
+\hline
+{\em state} & (output) state vector with relative angle and rotation speed in sagittal plane \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_abdc68a253fe161faa7794f67503be712}\label{classd_walker_model_abdc68a253fe161faa7794f67503be712}} 
+\index{dWalkerModel@{dWalkerModel}!GetRelativeTransverseState@{GetRelativeTransverseState}}
+\index{GetRelativeTransverseState@{GetRelativeTransverseState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetRelativeTransverseState()}{GetRelativeTransverseState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Relative\+Transverse\+State (\begin{DoxyParamCaption}\item[{string}]{body1,  }\item[{string}]{body2 }\end{DoxyParamCaption})}
+
+Gets the relative orientation angle and rotation speed of body1 and body2 in the transverse plane 
+\begin{DoxyParams}{Parameters}
+{\em body1} & (input) name of the body1 \\
+\hline
+{\em body2} & (input) name of the body2 \\
+\hline
+{\em state} & (output) state vector with relative angle and rotation speed in transverse plane \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_afc21abeede03d15e3928b19d9abbe5c8}\label{classd_walker_model_afc21abeede03d15e3928b19d9abbe5c8}} 
+\index{dWalkerModel@{dWalkerModel}!GetSagittalState@{GetSagittalState}}
+\index{GetSagittalState@{GetSagittalState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetSagittalState()}{GetSagittalState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Sagittal\+State (\begin{DoxyParamCaption}\item[{string}]{body }\end{DoxyParamCaption})}
+
+Gets the sagittal orientation angle and rotation speed of a body 
+\begin{DoxyParams}{Parameters}
+{\em body} & (input) point vector to be drawn \\
+\hline
+{\em state} & (output) state vector with angle and rotation speed in sagittal plane of body \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a80d52bee876d766e2c20ea41998f123e}\label{classd_walker_model_a80d52bee876d766e2c20ea41998f123e}} 
+\index{dWalkerModel@{dWalkerModel}!GetTrunkCoronalState@{GetTrunkCoronalState}}
+\index{GetTrunkCoronalState@{GetTrunkCoronalState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetTrunkCoronalState()}{GetTrunkCoronalState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Trunk\+Coronal\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the coronal orientation angle and rotation speed of the trunk 
+\begin{DoxyParams}{Parameters}
+{\em state} & (output) state vector with angle and rotation speed in coronal plane of the trunk \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classd_walker_model_a7724783f1c569f1e20da894dca410e9e}\label{classd_walker_model_a7724783f1c569f1e20da894dca410e9e}} 
+\index{dWalkerModel@{dWalkerModel}!GetTrunkTransverseState@{GetTrunkTransverseState}}
+\index{GetTrunkTransverseState@{GetTrunkTransverseState}!dWalkerModel@{dWalkerModel}}
+\doxysubsubsection{\texorpdfstring{GetTrunkTransverseState()}{GetTrunkTransverseState()}}
+{\footnotesize\ttfamily vector$<$ d\+Float $>$ d\+Walker\+Model\+::\+Get\+Trunk\+Transverse\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the transverse orientation angle and rotation speed of a the trunk 
+\begin{DoxyParams}{Parameters}
+{\em state} & (output) state vector with angle and rotation speed in transverse plane of the trunk \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Humanoid.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Humanoid.\+cpp\end{DoxyCompactItemize}

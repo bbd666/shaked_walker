@@ -1,0 +1,1185 @@
+\hypertarget{tinyxml_8h_source}{}\doxysection{tinyxml.\+h}
+\label{tinyxml_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/tinyxml.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/tinyxml.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{www.sourceforge.net/projects/tinyxml}}
+\DoxyCodeLine{00003\ \textcolor{comment}{Original\ code\ (2.0\ and\ earlier\ )copyright\ (c)\ 2000-\/2006\ Lee\ Thomason\ (www.grinninglizard.com)}}
+\DoxyCodeLine{00004\ \textcolor{comment}{}}
+\DoxyCodeLine{00005\ \textcolor{comment}{This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00006\ \textcolor{comment}{warranty.\ In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any}}
+\DoxyCodeLine{00007\ \textcolor{comment}{damages\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00008\ \textcolor{comment}{}}
+\DoxyCodeLine{00009\ \textcolor{comment}{Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any}}
+\DoxyCodeLine{00010\ \textcolor{comment}{purpose,\ including\ commercial\ applications,\ and\ to\ alter\ it\ and}}
+\DoxyCodeLine{00011\ \textcolor{comment}{redistribute\ it\ freely,\ subject\ to\ the\ following\ restrictions:}}
+\DoxyCodeLine{00012\ \textcolor{comment}{}}
+\DoxyCodeLine{00013\ \textcolor{comment}{1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must}}
+\DoxyCodeLine{00014\ \textcolor{comment}{not\ claim\ that\ you\ wrote\ the\ original\ software.\ If\ you\ use\ this}}
+\DoxyCodeLine{00015\ \textcolor{comment}{software\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation}}
+\DoxyCodeLine{00016\ \textcolor{comment}{would\ be\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{}}
+\DoxyCodeLine{00018\ \textcolor{comment}{2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and}}
+\DoxyCodeLine{00019\ \textcolor{comment}{must\ not\ be\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00020\ \textcolor{comment}{}}
+\DoxyCodeLine{00021\ \textcolor{comment}{3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source}}
+\DoxyCodeLine{00022\ \textcolor{comment}{distribution.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#ifndef\ TINYXML\_INCLUDED}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ TINYXML\_INCLUDED}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#ifdef\ \_MSC\_VER}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#pragma\ warning(\ push\ )}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#pragma\ warning(\ disable\ :\ 4530\ )}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#pragma\ warning(\ disable\ :\ 4786\ )}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <ctype.h>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <assert.h>}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ Help\ out\ windows:}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#if\ defined(\ \_DEBUG\ )\ \&\&\ !defined(\ DEBUG\ )}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ DEBUG}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \ \#include\ <string>}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\ \ \ \ \#include\ <sstream>}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ \#define\ TIXML\_STRING\ \ \ \ \ \ \ \ std::string}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}tinystr.h"{}}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\ \ \ \ \#define\ TIXML\_STRING\ \ \ \ \ \ \ \ TiXmlString}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{comment}{//\ Deprecated\ library\ function\ hell.\ Compilers\ want\ to\ use\ the}}
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ new\ safe\ versions.\ This\ probably\ doesn't\ fully\ address\ the\ problem,}}
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ but\ it\ gets\ closer.\ There\ are\ too\ many\ compilers\ for\ me\ to\ fully}}
+\DoxyCodeLine{00059\ \textcolor{comment}{//\ test.\ If\ you\ get\ compilation\ troubles,\ undefine\ TIXML\_SAFE}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ TIXML\_SAFE}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#ifdef\ TIXML\_SAFE}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined(\_MSC\_VER)\ \&\&\ (\_MSC\_VER\ >=\ 1400\ )}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Microsoft\ visual\ studio,\ version\ 2005\ and\ higher.}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNPRINTF\ \_snprintf\_s}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNSCANF\ \ \_snscanf\_s}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SSCANF\ \ \ sscanf\_s}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ \#elif\ defined(\_MSC\_VER)\ \&\&\ (\_MSC\_VER\ >=\ 1200\ )}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Microsoft\ visual\ studio,\ version\ 6\ and\ higher.}}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\#pragma\ message(\ "{}Using\ \_sn*\ functions."{}\ )}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNPRINTF\ \_snprintf}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNSCANF\ \ \_snscanf}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SSCANF\ \ \ sscanf}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\ \ \ \ \#elif\ defined(\_\_GNUC\_\_)\ \&\&\ (\_\_GNUC\_\_\ >=\ 3\ )}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GCC\ version\ 3\ and\ higher.s}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\#warning(\ "{}Using\ sn*\ functions."{}\ )}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNPRINTF\ snprintf}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SNSCANF\ \ snscanf}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SSCANF\ \ \ sscanf}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ TIXML\_SSCANF\ \ \ sscanf}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#endif\ \ }}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}};}
+\DoxyCodeLine{00086\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}};}
+\DoxyCodeLine{00087\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}};}
+\DoxyCodeLine{00088\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}};}
+\DoxyCodeLine{00089\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}};}
+\DoxyCodeLine{00090\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_text}{TiXmlText}};}
+\DoxyCodeLine{00091\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}};}
+\DoxyCodeLine{00092\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ TIXML\_MAJOR\_VERSION\ =\ 2;}
+\DoxyCodeLine{00095\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ TIXML\_MINOR\_VERSION\ =\ 5;}
+\DoxyCodeLine{00096\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ TIXML\_PATCH\_VERSION\ =\ 3;}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{comment}{/*\ \ Internal\ structure\ for\ tracking\ location\ of\ items\ }}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ in\ the\ XML\ file.}}
+\DoxyCodeLine{00100\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00101\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_ti_xml_cursor}{TiXmlCursor}}}
+\DoxyCodeLine{00102\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{struct_ti_xml_cursor}{TiXmlCursor}}()\ \ \ \ \ \ \ \ \{\ Clear();\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{void}\ Clear()\ \ \ \ \ \ \ \ \{\ row\ =\ col\ =\ -\/1;\ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{int}\ row;\ \ \ \ \textcolor{comment}{//\ 0\ based.}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{int}\ col;\ \ \ \ \textcolor{comment}{//\ 0\ based.}}
+\DoxyCodeLine{00108\ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}}
+\DoxyCodeLine{00130\ \{}
+\DoxyCodeLine{00131\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_visitor}{\string~TiXmlVisitor}}()\ \{\}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_a07baecb52dd7d8716ae2a48ad0956ee0}{VisitEnter}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ \textcolor{comment}{/*doc*/}\ )\ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_aa0ade4f27087447e93974e975c3246ad}{VisitExit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ \textcolor{comment}{/*doc*/}\ )\ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_af6c6178ffa517bbdba95d70490875fff}{VisitEnter}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ \textcolor{comment}{/*element*/},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{comment}{/*firstAttribute*/}\ )\ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_aec2b1f8116226d52f3a1b95dafd3a32c}{VisitExit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ \textcolor{comment}{/*element*/}\ )\ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_afad71c71ce6473fb9b4b64cd92de4a19}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}\&\ \textcolor{comment}{/*declaration*/}\ )\ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_a399b8ebca5cd14664974a32d2ce029e5}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}\&\ \textcolor{comment}{/*text*/}\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_a53a60e7a528627b31af3161972cc7fa2}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}\&\ \textcolor{comment}{/*comment*/}\ )\ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_visitor_a7e284d607d275c51dac1adb58159ce28}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}\&\ \textcolor{comment}{/*unknown*/}\ )\ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00152\ \};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{comment}{//\ Only\ used\ by\ Attribute::Query\ functions}}
+\DoxyCodeLine{00155\ \textcolor{keyword}{enum}\ }
+\DoxyCodeLine{00156\ \{\ }
+\DoxyCodeLine{00157\ \ \ \ \ TIXML\_SUCCESS,}
+\DoxyCodeLine{00158\ \ \ \ \ TIXML\_NO\_ATTRIBUTE,}
+\DoxyCodeLine{00159\ \ \ \ \ TIXML\_WRONG\_TYPE}
+\DoxyCodeLine{00160\ \};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{comment}{//\ Used\ by\ the\ parsing\ routines.}}
+\DoxyCodeLine{00164\ \textcolor{keyword}{enum}\ TiXmlEncoding}
+\DoxyCodeLine{00165\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ TIXML\_ENCODING\_UNKNOWN,}
+\DoxyCodeLine{00167\ \ \ \ \ TIXML\_ENCODING\_UTF8,}
+\DoxyCodeLine{00168\ \ \ \ \ TIXML\_ENCODING\_LEGACY}
+\DoxyCodeLine{00169\ \};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \textcolor{keyword}{const}\ TiXmlEncoding\ TIXML\_DEFAULT\_ENCODING\ =\ TIXML\_ENCODING\_UNKNOWN;}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00195\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}}
+\DoxyCodeLine{00196\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}};}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}};}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}};}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00202\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}()\ \ \ \ :\ \ \ \mbox{\hyperlink{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}{userData}}(0)\ \ \ \ \ \{\}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_base}{\string~TiXmlBase}}()\ \ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_base_a0de56b3f2ef14c65091a3b916437b512}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_base_a0f799ec645bfb8d8a969e83478f379c1}{SetCondenseWhiteSpace}}(\ \textcolor{keywordtype}{bool}\ condense\ )\ \ \ \ \ \{\ condenseWhiteSpace\ =\ condense;\ \}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_base_ad4b1472531c647a25b1840a87ae42438}{IsWhiteSpaceCondensed}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ condenseWhiteSpace;\ \}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_base_ad0cacca5d76d156b26511f46080b442e}{Row}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ location.row\ +\ 1;\ \}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_base_ad283b95d9858d5d78c334f4a61b07bb4}{Column}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ location.col\ +\ 1;\ \}\ \ \ \ }
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \mbox{\hyperlink{class_ti_xml_base_ac6b3e0f790930d4970ec30764e937b5d}{SetUserData}}(\ \textcolor{keywordtype}{void}*\ user\ )\ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}{userData}}\ =\ user;\ \}\ \ \ \ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{class_ti_xml_base_a436b80c865d437835d370a9eada6f9f5}{GetUserData}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}{userData}};\ \}\ \ \ \ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{class_ti_xml_base_aa44896ae7cc0e9b1007429b150a81d92}{GetUserData}}()\textcolor{keyword}{\ const\ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}{userData}};\ \}\ \ \ \ }
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{comment}{//\ Table\ that\ returs,\ for\ a\ given\ lead\ byte,\ the\ total\ number\ of\ bytes}}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{comment}{//\ in\ the\ UTF-\/8\ sequence.}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ utf8ByteTable[256];}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TiXmlEncoding\ encoding\ \textcolor{comment}{/*=\ TIXML\_ENCODING\_UNKNOWN\ */}\ )\ =\ 0;}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_base_a32ed202562b58de64c7d799ca3c9db98}{EncodeString}}(\ \textcolor{keyword}{const}\ TIXML\_STRING\&\ str,\ TIXML\_STRING*\ out\ );}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00266\ \ \ \ \ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ TIXML\_NO\_ERROR\ =\ 0,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ TIXML\_ERROR,}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_OPENING\_FILE,}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_OUT\_OF\_MEMORY,}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_ELEMENT,}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_FAILED\_TO\_READ\_ELEMENT\_NAME,}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_READING\_ELEMENT\_VALUE,}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_READING\_ATTRIBUTES,}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_EMPTY,}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_READING\_END\_TAG,}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_UNKNOWN,}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_COMMENT,}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_DECLARATION,}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_DOCUMENT\_EMPTY,}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_EMBEDDED\_NULL,}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_PARSING\_CDATA,}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_DOCUMENT\_TOP\_ONLY,}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ TIXML\_ERROR\_STRING\_COUNT}
+\DoxyCodeLine{00286\ \ \ \ \ \};}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ SkipWhiteSpace(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ IsWhiteSpace(\ \textcolor{keywordtype}{char}\ c\ )\ \ \ \ \ \ \ }
+\DoxyCodeLine{00292\ \ \ \ \ \{\ }
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\ isspace(\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})\ c\ )\ ||\ c\ ==\ \textcolor{charliteral}{'\(\backslash\)n'}\ ||\ c\ ==\ \textcolor{charliteral}{'\(\backslash\)r'}\ );\ }
+\DoxyCodeLine{00294\ \ \ \ \ \}}
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ IsWhiteSpace(\ \textcolor{keywordtype}{int}\ c\ )}
+\DoxyCodeLine{00296\ \ \ \ \ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ c\ <\ 256\ )}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ IsWhiteSpace(\ (\textcolor{keywordtype}{char})\ c\ );}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \ \ \textcolor{comment}{//\ Again,\ only\ truly\ correct\ for\ English/Latin...but\ usually\ works.}}
+\DoxyCodeLine{00300\ \ \ \ \ \}}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ StreamWhiteSpace(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ StreamTo(\ std::istream\ *\ in,\ \textcolor{keywordtype}{int}\ character,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{00305\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{comment}{/*\ \ Reads\ an\ XML\ name\ into\ the\ string\ provided.\ Returns}}
+\DoxyCodeLine{00308\ \textcolor{comment}{\ \ \ \ \ \ \ \ a\ pointer\ just\ past\ the\ last\ character\ of\ the\ name,}}
+\DoxyCodeLine{00309\ \textcolor{comment}{\ \ \ \ \ \ \ \ or\ 0\ if\ the\ function\ has\ an\ error.}}
+\DoxyCodeLine{00310\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ReadName(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ TIXML\_STRING*\ name,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ \textcolor{comment}{/*\ \ Reads\ text.\ Returns\ a\ pointer\ past\ the\ given\ end\ tag.}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ \ \ \ \ \ Wickedly\ complex\ options,\ but\ it\ keeps\ the\ (sensitive)\ code\ in\ one\ place.}}
+\DoxyCodeLine{00315\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ReadText(\ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ in,\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ where\ to\ start}}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TIXML\_STRING*\ text,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ string\ read}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ ignoreWhiteSpace,\ \ \ \ \ \ \textcolor{comment}{//\ whether\ to\ keep\ the\ white\ space}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ endTag,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ what\ ends\ this\ text}}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ ignoreCase,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ whether\ to\ ignore\ case\ in\ the\ end\ tag}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TiXmlEncoding\ encoding\ );\ \ \ \textcolor{comment}{//\ the\ current\ encoding}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//\ If\ an\ entity\ has\ been\ found,\ transform\ it\ into\ a\ character.}}
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ GetEntity(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ in,\ \textcolor{keywordtype}{char}*\ value,\ \textcolor{keywordtype}{int}*\ length,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{comment}{//\ Get\ a\ character,\ while\ interpreting\ entities.}}
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{comment}{//\ The\ length\ can\ be\ from\ 0\ to\ 4\ bytes.}}
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ GetChar(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \textcolor{keywordtype}{char}*\ \_value,\ \textcolor{keywordtype}{int}*\ length,\ TiXmlEncoding\ encoding\ )}
+\DoxyCodeLine{00329\ \ \ \ \ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ assert(\ p\ );}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ encoding\ ==\ TIXML\_ENCODING\_UTF8\ )}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ *length\ =\ utf8ByteTable[\ *((\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)p)\ ];}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ assert(\ *length\ >=\ 0\ \&\&\ *length\ <\ 5\ );}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ *length\ =\ 1;}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ *length\ ==\ 1\ )}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ *p\ ==\ \textcolor{charliteral}{'\&'}\ )}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GetEntity(\ p,\ \_value,\ length,\ encoding\ );}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ *\_value\ =\ *p;}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p+1;}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\ *length\ )}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//strncpy(\ \_value,\ p,\ *length\ );\ \ \ \ //\ lots\ of\ compilers\ don't\ like\ this\ function\ (unsafe),}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ and\ the\ null\ terminator\ isn't\ needed}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ \textcolor{keywordtype}{int}\ i=0;\ p[i]\ \&\&\ i<*length;\ ++i\ )\ \{}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_value[i]\ =\ p[i];}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ p\ +\ (*length);}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Not\ valid\ text.}}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00362\ \ \ \ \ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{comment}{//\ Return\ true\ if\ the\ next\ characters\ in\ the\ stream\ are\ any\ of\ the\ endTag\ sequences.}}
+\DoxyCodeLine{00365\ \ \ \ \ \textcolor{comment}{//\ Ignore\ case\ only\ works\ for\ english,\ and\ should\ only\ be\ relied\ on\ when\ comparing}}
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{comment}{//\ to\ English\ words:\ StringEqual(\ p,\ "{}version"{},\ true\ )\ is\ fine.}}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ StringEqual(\ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ endTag,}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ ignoreCase,}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ errorString[\ TIXML\_ERROR\_STRING\_COUNT\ ];}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \mbox{\hyperlink{struct_ti_xml_cursor}{TiXmlCursor}}\ location;}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00377\ \ \ \ \ \textcolor{keywordtype}{void}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_base_ab242c01590191f644569fa89a080d97c}{userData}};}
+\DoxyCodeLine{00378\ \ \ \ \ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{//\ None\ of\ these\ methods\ are\ reliable\ for\ any\ language\ except\ English.}}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{comment}{//\ Good\ for\ approximation,\ not\ great\ for\ accuracy.}}
+\DoxyCodeLine{00381\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ IsAlpha(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ anyByte,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ IsAlphaNum(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ anyByte,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00383\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ ToLower(\ \textcolor{keywordtype}{int}\ v,\ TiXmlEncoding\ encoding\ )}
+\DoxyCodeLine{00384\ \ \ \ \ \{}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ encoding\ ==\ TIXML\_ENCODING\_UTF8\ )}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ v\ <\ 128\ )\ \textcolor{keywordflow}{return}\ tolower(\ v\ );}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ v;}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tolower(\ v\ );}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00394\ \ \ \ \ \}}
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ ConvertUTF32ToUTF8(\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ input,\ \textcolor{keywordtype}{char}*\ output,\ \textcolor{keywordtype}{int}*\ length\ );}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00398\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}\&\ );\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ not\ implemented.}}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}\&\ base\ );\ \ \ \textcolor{comment}{//\ not\ allowed.}}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{keyword}{struct\ }Entity}
+\DoxyCodeLine{00402\ \ \ \ \ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \ \ \ \ str;}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \ \ strLength;}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \ \ chr;}
+\DoxyCodeLine{00406\ \ \ \ \ \};}
+\DoxyCodeLine{00407\ \ \ \ \ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00408\ \ \ \ \ \{}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ NUM\_ENTITY\ =\ 5,}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ MAX\_ENTITY\_LENGTH\ =\ 6}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \ \ \ \ \};}
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keyword}{static}\ Entity\ entity[\ NUM\_ENTITY\ ];}
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ condenseWhiteSpace;}
+\DoxyCodeLine{00415\ \};}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00424\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}}
+\DoxyCodeLine{00425\ \{}
+\DoxyCodeLine{00426\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}};}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}};}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00430\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL\ \ \ \ }}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::istream\&\ operator\ >>\ (std::istream\&\ in,\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ base);}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<\ (std::ostream\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ base);}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::string\&\ operator<<\ (std::string\&\ out,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ base\ );}
+\DoxyCodeLine{00457\ }
+\DoxyCodeLine{00458\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00463\ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_ti_xml_node_a836eded4920ab9e9ef28496f48cd95a2}{NodeType}}}
+\DoxyCodeLine{00464\ \ \ \ \ \{}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ DOCUMENT,}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ ELEMENT,}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ COMMENT,}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ UNKNOWN,}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ TEXT,}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ DECLARATION,}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ TYPECOUNT}
+\DoxyCodeLine{00472\ \ \ \ \ \};}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{\string~TiXmlNode}}();}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value.c\_str\ ();\ \}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ ValueStr()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value;\ \}}
+\DoxyCodeLine{00496\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \ \ \ \ \textcolor{keyword}{const}\ TIXML\_STRING\&\ ValueTStr()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value;\ \}}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00509\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_node_a2a38329ca5d3f28f98ce932b8299ae90}{SetValue}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value)\ \{\ value\ =\ \_value;\}}
+\DoxyCodeLine{00510\ }
+\DoxyCodeLine{00511\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00513\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_node_a2a38329ca5d3f28f98ce932b8299ae90}{SetValue}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \{\ value\ =\ \_value;\ \}}
+\DoxyCodeLine{00514\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00517\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_node_a708e7f953df61d4d2d12f73171550a4b}{Clear}}();}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00520\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a98ccf4dfc53c8eb12839f3680fdbf839}{Parent}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ parent;\ \}}
+\DoxyCodeLine{00521\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a98ccf4dfc53c8eb12839f3680fdbf839}{Parent}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ parent;\ \}}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}()\textcolor{keyword}{\ \ \ \ const\ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ firstChild;\ \}\ \ }
+\DoxyCodeLine{00524\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ firstChild;\ \}}
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ value\ )\ \textcolor{keyword}{const};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00527\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ab1dda042ebd0253f36519b76afa645fb}{FirstChild}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ )\ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ through\ to\ the\ const\ version\ -\/\ safe\ since\ nothing\ is\ changed.\ Exiting\ syntax:\ cast\ this\ to\ a\ const\ (always\ safe)}}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ call\ the\ method,\ cast\ the\ return\ back\ to\ non-\/const.}}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}\ ((\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>FirstChild(\ \_value\ ));}
+\DoxyCodeLine{00531\ \ \ \ \ \}}
+\DoxyCodeLine{00532\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ LastChild()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ lastChild;\ \}\ \ \ \ \ \ \ }
+\DoxyCodeLine{00533\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a418603b3d7a2cf33d146521d96e6af20}{LastChild}}()\ \ \ \ \{\ \textcolor{keywordflow}{return}\ lastChild;\ \}}
+\DoxyCodeLine{00534\ \ \ \ \ }
+\DoxyCodeLine{00535\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ LastChild(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ value\ )\ \textcolor{keyword}{const};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00536\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_afe68e2adbf007c58d9348b25c44faa79}{LastChild}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ )\ \{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}\ ((\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>LastChild(\ \_value\ ));}
+\DoxyCodeLine{00538\ \ \ \ \ \}}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00541\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ \ \ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}\ (\_value.c\_str\ ());\ \ \}\ \ \ }
+\DoxyCodeLine{00542\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_ae4fc3b6726cc9593784e1b622af249d5}{FirstChild}}\ (\_value.c\_str\ ());\ \ \}\ \ \ }
+\DoxyCodeLine{00543\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ LastChild(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ \ }\{\ \ \ \textcolor{keywordflow}{return}\ LastChild\ (\_value.c\_str\ ());\ \}\ \ \ }
+\DoxyCodeLine{00544\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ LastChild(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ LastChild\ (\_value.c\_str\ ());\ \}\ \ \ }
+\DoxyCodeLine{00545\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00563\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00564\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\ \{}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>IterateChildren(\ previous\ )\ );}
+\DoxyCodeLine{00566\ \ \ \ \ \}}
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00569\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00570\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\ \{}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>IterateChildren(\ \_value,\ previous\ )\ );}
+\DoxyCodeLine{00572\ \ \ \ \ \}}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00574\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00575\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\textcolor{keyword}{\ const\ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}\ (\_value.c\_str\ (),\ previous);\ \ \}\ \ \ }
+\DoxyCodeLine{00576\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ previous\ )\ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a67c3a02b797f08d9a31b2553661257e1}{IterateChildren}}\ (\_value.c\_str\ (),\ previous);\ \ \}\ \ \ }
+\DoxyCodeLine{00577\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00582\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_af287a913ce46d8dbf7ef24fec69bbaf0}{InsertEndChild}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ addThis\ );}
+\DoxyCodeLine{00583\ }
+\DoxyCodeLine{00584\ }
+\DoxyCodeLine{00594\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ addThis\ );}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00599\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a71e54e393336382bc9875f64aab5cb15}{InsertBeforeChild}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ beforeThis,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ addThis\ );}
+\DoxyCodeLine{00600\ }
+\DoxyCodeLine{00604\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a274db3292218202805c093f66a964cb5}{InsertAfterChild}}(\ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ afterThis,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ addThis\ );}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00609\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a543208c2c801c84a213529541e904b9f}{ReplaceChild}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ replaceThis,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ withThis\ );}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00612\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_node_ae19d8510efc90596552f4feeac9a8fbf}{RemoveChild}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ removeThis\ );}
+\DoxyCodeLine{00613\ }
+\DoxyCodeLine{00615\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ prev;\ \}}
+\DoxyCodeLine{00616\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ prev;\ \}}
+\DoxyCodeLine{00617\ }
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00620\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\_prev\ )\ \{}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>PreviousSibling(\ \_prev\ )\ );}
+\DoxyCodeLine{00622\ \ \ \ \ \}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00626\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a33375eafbc6cb1bdd75be47bcfb3ea1e}{PreviousSibling}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00627\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value)\textcolor{keyword}{\ const\ \ \ \ \ \ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00628\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00629\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ next;\ \}}
+\DoxyCodeLine{00633\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ next;\ \}}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00636\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00637\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a3db05b0249218e94fd41c766df87426c}{NextSibling}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_next\ )\ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>NextSibling(\ \_next\ )\ );}
+\DoxyCodeLine{00639\ \ \ \ \ \}}
+\DoxyCodeLine{00640\ }
+\DoxyCodeLine{00645\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00646\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}()\ \{}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>NextSiblingElement()\ );}
+\DoxyCodeLine{00648\ \ \ \ \ \}}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00654\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00655\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\_next\ )\ \{}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>NextSiblingElement(\ \_next\ )\ );}
+\DoxyCodeLine{00657\ \ \ \ \ \}}
+\DoxyCodeLine{00658\ }
+\DoxyCodeLine{00659\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00660\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value)\textcolor{keyword}{\ const\ \ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}\ (\_value.c\_str\ ());\ \ \}\ \ \ }
+\DoxyCodeLine{00661\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}\ (\_value.c\_str\ ());\ \ \}\ \ \ }
+\DoxyCodeLine{00662\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00663\ }
+\DoxyCodeLine{00665\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}()\ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{00666\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}()\ \{}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>FirstChildElement()\ );}
+\DoxyCodeLine{00668\ \ \ \ \ \}}
+\DoxyCodeLine{00669\ }
+\DoxyCodeLine{00671\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00672\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ )\ \{}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>FirstChildElement(\ \_value\ )\ );}
+\DoxyCodeLine{00674\ \ \ \ \ \}}
+\DoxyCodeLine{00675\ }
+\DoxyCodeLine{00676\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00677\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ \ \ }\{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00678\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}\ (\_value.c\_str\ ());\ \ \ \ \}\ \ \ }
+\DoxyCodeLine{00679\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00685\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_node_a0f4dd916b2afc2ab2f1a84f3e2b8fd5d}{Type}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ type;\ \}}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00690\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \mbox{\hyperlink{class_ti_xml_node_adcb070acefcbaedaa0673d82e530538b}{GetDocument}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00691\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \mbox{\hyperlink{class_ti_xml_node_adcb070acefcbaedaa0673d82e530538b}{GetDocument}}()\ \{}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>GetDocument()\ );}
+\DoxyCodeLine{00693\ \ \ \ \ \}}
+\DoxyCodeLine{00694\ }
+\DoxyCodeLine{00696\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_node_abe85e0ec04ea59c033f324c8504653e5}{NoChildren}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ !firstChild;\ \}}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a82fb1921862d1619dd302d00e2bdc280}{ToDocument}}()\textcolor{keyword}{\ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00699\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_ad05bc141115b9e49f5ab2ee72cf6cfd1}{ToElement}}()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a124af8d4f18a027384c92871cfcd5ca2}{ToComment}}()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00701\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a9a513c44f34b597b4aaf89fd034eab7d}{ToUnknown}}()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00702\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a249f8cfd73c1fd7259529fa7c606bbd3}{ToText}}()\textcolor{keyword}{\ \ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00703\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ \mbox{\hyperlink{class_ti_xml_node_a57b8c8ff1924891d0d683aa250c9a961}{ToDeclaration}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00704\ }
+\DoxyCodeLine{00705\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a7946c320fb8ba3fa94ed0ef2da946f24}{ToDocument}}()\ \ \ \ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00706\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_acf4c98b9da8f60f9312bcc9ddd0a4d24}{ToElement}}()\ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00707\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a690352c7851dddd448385d197b5ef83e}{ToComment}}()\ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00708\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a9e5c565c0e9e5ca1ba9e8be9d6557fda}{ToUnknown}}()\ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00709\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a8e2e910e97726d80309dbb485bcf774d}{ToText}}()\ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00710\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a847ab30e2655ffa1a66ea79a31d62af2}{ToDeclaration}}()\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}\ }
+\DoxyCodeLine{00711\ }
+\DoxyCodeLine{00715\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_node_a8393385d6431e5e046c78c91ea44843e}{Clone}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00716\ }
+\DoxyCodeLine{00739\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_node_acc0f88b7462c6cb73809d410a4f5bb86}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ visitor\ )\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00740\ }
+\DoxyCodeLine{00741\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00742\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \mbox{\hyperlink{class_ti_xml_node_a836eded4920ab9e9ef28496f48cd95a2}{NodeType}}\ \_type\ );}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \ \ \ \ \textcolor{comment}{//\ Copy\ to\ the\ allocated\ object.\ Shared\ functionality\ between\ Clone,\ Copy\ constructor,}}
+\DoxyCodeLine{00745\ \ \ \ \ \textcolor{comment}{//\ and\ the\ assignment\ operator.}}
+\DoxyCodeLine{00746\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00747\ }
+\DoxyCodeLine{00748\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ real\ work\ of\ the\ input\ operator.}}
+\DoxyCodeLine{00750\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream*\ in,\ TIXML\_STRING*\ tag\ )\ =\ 0;}
+\DoxyCodeLine{00751\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00752\ }
+\DoxyCodeLine{00753\ \ \ \ \ \textcolor{comment}{//\ Figure\ out\ what\ is\ at\ *p,\ and\ parse\ it.\ Returns\ null\ if\ it\ is\ not\ an\ xml\ node.}}
+\DoxyCodeLine{00754\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ Identify(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ start,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \ \ \ \ parent;}
+\DoxyCodeLine{00757\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a836eded4920ab9e9ef28496f48cd95a2}{NodeType}}\ \ \ \ \ \ \ \ type;}
+\DoxyCodeLine{00758\ }
+\DoxyCodeLine{00759\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \ \ \ \ firstChild;}
+\DoxyCodeLine{00760\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \ \ \ \ lastChild;}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ \ \ \ \ TIXML\_STRING\ \ \ \ value;}
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00764\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \ \ \ \ prev;}
+\DoxyCodeLine{00765\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \ \ \ \ next;}
+\DoxyCodeLine{00766\ }
+\DoxyCodeLine{00767\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00768\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ );\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ not\ implemented.}}
+\DoxyCodeLine{00769\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\&\ base\ );\ \ \ \textcolor{comment}{//\ not\ allowed.}}
+\DoxyCodeLine{00770\ \};}
+\DoxyCodeLine{00771\ }
+\DoxyCodeLine{00772\ }
+\DoxyCodeLine{00780\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}}
+\DoxyCodeLine{00781\ \{}
+\DoxyCodeLine{00782\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}};}
+\DoxyCodeLine{00783\ }
+\DoxyCodeLine{00784\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00786\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a9cfa3c8179873fd485d83003b114f8e1}{TiXmlAttribute}}()\ :\ \mbox{\hyperlink{class_ti_xml_base}{TiXmlBase}}()}
+\DoxyCodeLine{00787\ \ \ \ \ \{}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ document\ =\ 0;}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ prev\ =\ next\ =\ 0;}
+\DoxyCodeLine{00790\ \ \ \ \ \}}
+\DoxyCodeLine{00791\ }
+\DoxyCodeLine{00792\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00794\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a9cfa3c8179873fd485d83003b114f8e1}{TiXmlAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ \_name,\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )}
+\DoxyCodeLine{00795\ \ \ \ \ \{}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ name\ =\ \_name;}
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ value\ =\ \_value;}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ document\ =\ 0;}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ prev\ =\ next\ =\ 0;}
+\DoxyCodeLine{00800\ \ \ \ \ \}}
+\DoxyCodeLine{00801\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00804\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a759d0b76fb8fcf765ecab243bc14f05e}{TiXmlAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ )}
+\DoxyCodeLine{00805\ \ \ \ \ \{}
+\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ name\ =\ \_name;}
+\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ value\ =\ \_value;}
+\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ document\ =\ 0;}
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ prev\ =\ next\ =\ 0;}
+\DoxyCodeLine{00810\ \ \ \ \ \}}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a83798ef3113c3522154c3fc37b4db85b}{Name}}()\textcolor{keyword}{\ \ const\ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ name.c\_str();\ \}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00813\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a0da84344b585308878ec68605f1cbb20}{Value}}()\textcolor{keyword}{\ const\ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ value.c\_str();\ \}\ \ \ \ \ \ \ }
+\DoxyCodeLine{00814\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00815\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ ValueStr()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00816\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00817\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_ac8501370b065df31a35003c81d87cef2}{IntValue}}()\ \textcolor{keyword}{const};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00818\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a8cca240fb2a7130c87b0fc6156e8b34f}{DoubleValue}}()\ \textcolor{keyword}{const};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00819\ }
+\DoxyCodeLine{00820\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ tinyxml\ string\ representation}}
+\DoxyCodeLine{00821\ \ \ \ \ \textcolor{keyword}{const}\ TIXML\_STRING\&\ NameTStr()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ name;\ \}}
+\DoxyCodeLine{00822\ }
+\DoxyCodeLine{00832\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_attribute_a6caa8090d2fbb7966700a16e45ed33de}{QueryIntValue}}(\ \textcolor{keywordtype}{int}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00834\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_attribute_a6fa41b710c1b79de37a97004aa600c06}{QueryDoubleValue}}(\ \textcolor{keywordtype}{double}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00835\ }
+\DoxyCodeLine{00836\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_ab7fa3d21ff8d7c5764cf9af15b667a99}{SetName}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_name\ )\ \ \ \ \{\ name\ =\ \_name;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00837\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a2dae44178f668b3cb48101be4f2236a0}{SetValue}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_value\ )\ \{\ value\ =\ \_value;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00838\ }
+\DoxyCodeLine{00839\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a7e065df640116a62ea4f4b7da5449cc8}{SetIntValue}}(\ \textcolor{keywordtype}{int}\ \_value\ );\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00840\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a0316da31373496c4368ad549bf711394}{SetDoubleValue}}(\ \textcolor{keywordtype}{double}\ \_value\ );\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00844\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_ab7fa3d21ff8d7c5764cf9af15b667a99}{SetName}}(\ \textcolor{keyword}{const}\ std::string\&\ \_name\ )\ \{\ name\ =\ \_name;\ \}\ \ \ }
+\DoxyCodeLine{00846\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a2dae44178f668b3cb48101be4f2236a0}{SetValue}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\ \ \{\ value\ =\ \_value;\ \}}
+\DoxyCodeLine{00847\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00848\ }
+\DoxyCodeLine{00850\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_attribute_af2e78f1ba9ed56a26ddc80614ed1c393}{Next}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00851\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_attribute_af2e78f1ba9ed56a26ddc80614ed1c393}{Next}}()\ \{}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>Next()\ );\ }
+\DoxyCodeLine{00853\ \ \ \ \ \}}
+\DoxyCodeLine{00854\ }
+\DoxyCodeLine{00856\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_attribute_afc7bbfdf83d59fbc4ff5e283d27b5d7d}{Previous}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00857\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_attribute_afc7bbfdf83d59fbc4ff5e283d27b5d7d}{Previous}}()\ \{}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>Previous()\ );\ }
+\DoxyCodeLine{00859\ \ \ \ \ \}}
+\DoxyCodeLine{00860\ }
+\DoxyCodeLine{00861\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\&\ rhs\ )\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ rhs.name\ ==\ name;\ \}}
+\DoxyCodeLine{00862\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\&\ rhs\ )\textcolor{keyword}{\ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ name\ <\ rhs.name;\ \}}
+\DoxyCodeLine{00863\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator>(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\&\ rhs\ )\textcolor{keyword}{\ \ const\ }\{\ \textcolor{keywordflow}{return}\ name\ >\ rhs.name;\ \}}
+\DoxyCodeLine{00864\ }
+\DoxyCodeLine{00865\ \ \ \ \ \textcolor{comment}{/*\ \ Attribute\ parsing\ starts:\ first\ letter\ of\ the\ name}}
+\DoxyCodeLine{00866\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ returns:\ the\ next\ char\ after\ the\ value\ end\ quote}}
+\DoxyCodeLine{00867\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00868\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{00869\ }
+\DoxyCodeLine{00870\ \ \ \ \ \textcolor{comment}{//\ Prints\ this\ Attribute\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{00871\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}{Print}}(\ cfile,\ depth,\ 0\ );}
+\DoxyCodeLine{00873\ \ \ \ \ \}}
+\DoxyCodeLine{00874\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_attribute_a68ae373e03b9c35be4c9d0c3c233b894}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth,\ TIXML\_STRING*\ str\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00875\ }
+\DoxyCodeLine{00876\ \ \ \ \ \textcolor{comment}{//\ [internal\ use]}}
+\DoxyCodeLine{00877\ \ \ \ \ \textcolor{comment}{//\ Set\ the\ document\ pointer\ so\ the\ attribute\ can\ report\ errors.}}
+\DoxyCodeLine{00878\ \ \ \ \ \textcolor{keywordtype}{void}\ SetDocument(\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ doc\ )\ \{\ document\ =\ doc;\ \}}
+\DoxyCodeLine{00879\ }
+\DoxyCodeLine{00880\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00881\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_a9cfa3c8179873fd485d83003b114f8e1}{TiXmlAttribute}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\&\ );\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ not\ implemented.}}
+\DoxyCodeLine{00882\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\&\ base\ );\ \textcolor{comment}{//\ not\ allowed.}}
+\DoxyCodeLine{00883\ }
+\DoxyCodeLine{00884\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ document;\ \ \ \textcolor{comment}{//\ A\ pointer\ back\ to\ a\ document,\ for\ error\ reporting.}}
+\DoxyCodeLine{00885\ \ \ \ \ TIXML\_STRING\ name;}
+\DoxyCodeLine{00886\ \ \ \ \ TIXML\_STRING\ value;}
+\DoxyCodeLine{00887\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \ \ prev;}
+\DoxyCodeLine{00888\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \ \ next;}
+\DoxyCodeLine{00889\ \};}
+\DoxyCodeLine{00890\ }
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \textcolor{comment}{/*\ \ A\ class\ used\ to\ manage\ a\ group\ of\ attributes.}}
+\DoxyCodeLine{00893\ \textcolor{comment}{\ \ \ \ It\ is\ only\ used\ internally,\ both\ by\ the\ ELEMENT\ and\ the\ DECLARATION.}}
+\DoxyCodeLine{00894\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00895\ \textcolor{comment}{\ \ \ \ The\ set\ can\ be\ changed\ transparent\ to\ the\ Element\ and\ Declaration}}
+\DoxyCodeLine{00896\ \textcolor{comment}{\ \ \ \ classes\ that\ use\ it,\ but\ NOT\ transparent\ to\ the\ Attribute}}
+\DoxyCodeLine{00897\ \textcolor{comment}{\ \ \ \ which\ has\ to\ implement\ a\ next()\ and\ previous()\ method.\ Which\ makes}}
+\DoxyCodeLine{00898\ \textcolor{comment}{\ \ \ \ it\ a\ bit\ problematic\ and\ prevents\ the\ use\ of\ STL.}}
+\DoxyCodeLine{00899\ \textcolor{comment}{}}
+\DoxyCodeLine{00900\ \textcolor{comment}{\ \ \ \ This\ version\ is\ implemented\ with\ circular\ lists\ because:}}
+\DoxyCodeLine{00901\ \textcolor{comment}{\ \ \ \ \ \ \ \ -\/\ I\ like\ circular\ lists}}
+\DoxyCodeLine{00902\ \textcolor{comment}{\ \ \ \ \ \ \ \ -\/\ it\ demonstrates\ some\ independence\ from\ the\ (typical)\ doubly\ linked\ list.}}
+\DoxyCodeLine{00903\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00904\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}}
+\DoxyCodeLine{00905\ \{}
+\DoxyCodeLine{00906\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00907\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}();}
+\DoxyCodeLine{00908\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_set}{\string~TiXmlAttributeSet}}();}
+\DoxyCodeLine{00909\ }
+\DoxyCodeLine{00910\ \ \ \ \ \textcolor{keywordtype}{void}\ Add(\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ attribute\ );}
+\DoxyCodeLine{00911\ \ \ \ \ \textcolor{keywordtype}{void}\ Remove(\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ attribute\ );}
+\DoxyCodeLine{00912\ }
+\DoxyCodeLine{00913\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ First()\textcolor{keyword}{\ const\ \ \ }\{\ \textcolor{keywordflow}{return}\ (\ sentinel.next\ ==\ \&sentinel\ )\ ?\ 0\ :\ sentinel.next;\ \}}
+\DoxyCodeLine{00914\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ First()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ (\ sentinel.next\ ==\ \&sentinel\ )\ ?\ 0\ :\ sentinel.next;\ \}}
+\DoxyCodeLine{00915\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ Last()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ (\ sentinel.prev\ ==\ \&sentinel\ )\ ?\ 0\ :\ sentinel.prev;\ \}}
+\DoxyCodeLine{00916\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ Last()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ (\ sentinel.prev\ ==\ \&sentinel\ )\ ?\ 0\ :\ sentinel.prev;\ \}}
+\DoxyCodeLine{00917\ }
+\DoxyCodeLine{00918\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ Find(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00919\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \ \ Find(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_name\ )\ \{}
+\DoxyCodeLine{00920\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>Find(\ \_name\ )\ );}
+\DoxyCodeLine{00921\ \ \ \ \ \}}
+\DoxyCodeLine{00922\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00923\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ Find(\ \textcolor{keyword}{const}\ std::string\&\ \_name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00924\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \ \ Find(\ \textcolor{keyword}{const}\ std::string\&\ \_name\ )\ \{}
+\DoxyCodeLine{00925\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{const\_cast<}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \textcolor{keyword}{>}(\ (\textcolor{keyword}{const\_cast<}\ \textcolor{keyword}{const\ }\mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}*\ \textcolor{keyword}{>}(\textcolor{keyword}{this}))-\/>Find(\ \_name\ )\ );}
+\DoxyCodeLine{00926\ \ \ \ \ \}}
+\DoxyCodeLine{00927\ }
+\DoxyCodeLine{00928\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00929\ }
+\DoxyCodeLine{00930\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00931\ \ \ \ \ \textcolor{comment}{//*ME:\ \ Because\ of\ hidden/disabled\ copy-\/construktor\ in\ TiXmlAttribute\ (sentinel-\/element),}}
+\DoxyCodeLine{00932\ \ \ \ \ \textcolor{comment}{//*ME:\ \ this\ class\ must\ be\ also\ use\ a\ hidden/disabled\ copy-\/constructor\ !!!}}
+\DoxyCodeLine{00933\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}\&\ );\ \ \ \ \textcolor{comment}{//\ not\ allowed}}
+\DoxyCodeLine{00934\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}\&\ );\ \ \ \ \textcolor{comment}{//\ not\ allowed\ (as\ TiXmlAttribute)}}
+\DoxyCodeLine{00935\ }
+\DoxyCodeLine{00936\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}\ sentinel;}
+\DoxyCodeLine{00937\ \};}
+\DoxyCodeLine{00938\ }
+\DoxyCodeLine{00939\ }
+\DoxyCodeLine{00944\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{00945\ \{}
+\DoxyCodeLine{00946\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00948\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ in\_value);}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00950\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{00952\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ );}
+\DoxyCodeLine{00953\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00954\ }
+\DoxyCodeLine{00955\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ );}
+\DoxyCodeLine{00956\ }
+\DoxyCodeLine{00957\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ base\ );}
+\DoxyCodeLine{00958\ }
+\DoxyCodeLine{00959\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_element}{\string~TiXmlElement}}();}
+\DoxyCodeLine{00960\ }
+\DoxyCodeLine{00964\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00965\ }
+\DoxyCodeLine{00972\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{int}*\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00973\ }
+\DoxyCodeLine{00980\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{double}*\ d\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00981\ }
+\DoxyCodeLine{00989\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_element_a5c0f739e0f6f5905a201364532e54a60}{QueryIntAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{int}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00991\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{double}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00993\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_element_a5591929834178699b4561ab6ab460068}{QueryFloatAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keywordtype}{float}*\ \_value\ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00994\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ d;}
+\DoxyCodeLine{00995\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ result\ =\ \mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\ name,\ \&d\ );}
+\DoxyCodeLine{00996\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ result\ ==\ TIXML\_SUCCESS\ )\ \{}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ \ \ \ \ *\_value\ =\ (float)d;}
+\DoxyCodeLine{00998\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00999\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{01000\ \ \ \ \ \}}
+\DoxyCodeLine{01001\ }
+\DoxyCodeLine{01002\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01011\ \ \ \ \ \textcolor{keyword}{template}<\ \textcolor{keyword}{typename}\ T\ >\ \textcolor{keywordtype}{int}\ QueryValueAttribute(\ \textcolor{keyword}{const}\ std::string\&\ name,\ T*\ outValue\ )\textcolor{keyword}{\ const}}
+\DoxyCodeLine{01012\ \textcolor{keyword}{\ \ \ \ }\{}
+\DoxyCodeLine{01013\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ node\ =\ attributeSet.Find(\ name\ );}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !node\ )}
+\DoxyCodeLine{01015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TIXML\_NO\_ATTRIBUTE;}
+\DoxyCodeLine{01016\ }
+\DoxyCodeLine{01017\ \ \ \ \ \ \ \ \ std::stringstream\ sstream(\ node-\/>ValueStr()\ );}
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ sstream\ >>\ *outValue;}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ !sstream.fail()\ )}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TIXML\_SUCCESS;}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ TIXML\_WRONG\_TYPE;}
+\DoxyCodeLine{01022\ \ \ \ \ \}}
+\DoxyCodeLine{01023\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{01024\ \textcolor{comment}{\ \ \ \ \ This\ is\ -\/\ in\ theory\ -\/\ a\ bug\ fix\ for\ "{}QueryValueAtribute\ returns\ truncated\ std::string"{}}}
+\DoxyCodeLine{01025\ \textcolor{comment}{\ \ \ \ \ but\ template\ specialization\ is\ hard\ to\ get\ working\ cross-\/compiler.\ Leaving\ the\ bug\ for\ now.}}
+\DoxyCodeLine{01026\ \textcolor{comment}{\ \ \ \ \ }}
+\DoxyCodeLine{01027\ \textcolor{comment}{\ \ \ \ //\ The\ above\ will\ fail\ for\ std::string\ because\ the\ space\ character\ is\ used\ as\ a\ seperator.}}
+\DoxyCodeLine{01028\ \textcolor{comment}{\ \ \ \ //\ Specialize\ for\ strings.\ Bug\ [\ 1695429\ ]\ QueryValueAtribute\ returns\ truncated\ std::string}}
+\DoxyCodeLine{01029\ \textcolor{comment}{\ \ \ \ template<>\ int\ QueryValueAttribute(\ const\ std::string\&\ name,\ std::string*\ outValue\ )\ const}}
+\DoxyCodeLine{01030\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{01031\ \textcolor{comment}{\ \ \ \ \ \ \ \ const\ TiXmlAttribute*\ node\ =\ attributeSet.Find(\ name\ );}}
+\DoxyCodeLine{01032\ \textcolor{comment}{\ \ \ \ \ \ \ \ if\ (\ !node\ )}}
+\DoxyCodeLine{01033\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ return\ TIXML\_NO\_ATTRIBUTE;}}
+\DoxyCodeLine{01034\ \textcolor{comment}{\ \ \ \ \ \ \ \ *outValue\ =\ node-\/>ValueStr();}}
+\DoxyCodeLine{01035\ \textcolor{comment}{\ \ \ \ \ \ \ \ return\ TIXML\_SUCCESS;}}
+\DoxyCodeLine{01036\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{01037\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{01038\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01039\ }
+\DoxyCodeLine{01043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_abf0b3bd7f0e4c746a89ec6e7f101fc32}{SetAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \_value\ );}
+\DoxyCodeLine{01044\ }
+\DoxyCodeLine{01045\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01046\ \ \ \ \ \textcolor{keyword}{const}\ std::string*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01047\ \ \ \ \ \textcolor{keyword}{const}\ std::string*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{int}*\ i\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01048\ \ \ \ \ \textcolor{keyword}{const}\ std::string*\ \mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{double}*\ d\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01049\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_element_a5c0f739e0f6f5905a201364532e54a60}{QueryIntAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{int}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01050\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{double}*\ \_value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01051\ }
+\DoxyCodeLine{01053\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_abf0b3bd7f0e4c746a89ec6e7f101fc32}{SetAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keyword}{const}\ std::string\&\ \_value\ );}
+\DoxyCodeLine{01055\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_abf0b3bd7f0e4c746a89ec6e7f101fc32}{SetAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name,\ \textcolor{keywordtype}{int}\ \_value\ );}
+\DoxyCodeLine{01056\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01057\ }
+\DoxyCodeLine{01061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_abf0b3bd7f0e4c746a89ec6e7f101fc32}{SetAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ name,\ \textcolor{keywordtype}{int}\ value\ );}
+\DoxyCodeLine{01062\ }
+\DoxyCodeLine{01066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ name,\ \textcolor{keywordtype}{double}\ value\ );}
+\DoxyCodeLine{01067\ }
+\DoxyCodeLine{01070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_a56979767deca794376b1dfa69a525b2a}{RemoveAttribute}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ name\ );}
+\DoxyCodeLine{01071\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_a56979767deca794376b1dfa69a525b2a}{RemoveAttribute}}(\ \textcolor{keyword}{const}\ std::string\&\ name\ )\ \ \{\ \ \ \mbox{\hyperlink{class_ti_xml_element_a56979767deca794376b1dfa69a525b2a}{RemoveAttribute}}\ (name.c\_str\ ());\ \}\ \ \ }
+\DoxyCodeLine{01073\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01074\ }
+\DoxyCodeLine{01075\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_element_ad9326f97287828cf533de34fb8e10834}{FirstAttribute}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ attributeSet.First();\ \}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01076\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_element_ad9326f97287828cf533de34fb8e10834}{FirstAttribute}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ attributeSet.First();\ \}}
+\DoxyCodeLine{01077\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_element_adb3212c0c62ab98dba77b68d41c3fa9e}{LastAttribute}}()\textcolor{keyword}{\ \ \ \ const\ \ \ }\{\ \textcolor{keywordflow}{return}\ attributeSet.Last();\ \}\ \ \ \ \ }
+\DoxyCodeLine{01078\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ \mbox{\hyperlink{class_ti_xml_element_adb3212c0c62ab98dba77b68d41c3fa9e}{LastAttribute}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ attributeSet.Last();\ \}}
+\DoxyCodeLine{01079\ }
+\DoxyCodeLine{01112\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_element_af0f814ecbd43d50d4cdbdf4354d3da39}{GetText}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01113\ }
+\DoxyCodeLine{01115\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_element_a810ea8fa40844c01334e5af2a26794cb}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01116\ \ \ \ \ \textcolor{comment}{//\ Print\ the\ Element\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{01117\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_element_aa31a15cddfb8601a31236fe7d2569fb4}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01118\ }
+\DoxyCodeLine{01119\ \ \ \ \ \textcolor{comment}{/*\ \ Attribtue\ parsing\ starts:\ next\ char\ past\ '<'}}
+\DoxyCodeLine{01120\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ returns:\ next\ char\ past\ '>'}}
+\DoxyCodeLine{01121\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{01122\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01123\ }
+\DoxyCodeLine{01124\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element_ab1ae639a9c3fde5f799a099c7bf0c694}{ToElement}}()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01125\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element_ae4e4f9dc2f5fe815a2b13be73a8f1fb8}{ToElement}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01126\ }
+\DoxyCodeLine{01129\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_element_a01d33358cce9d1817b557d314dda3779}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ visitor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01130\ }
+\DoxyCodeLine{01131\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01132\ }
+\DoxyCodeLine{01133\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01134\ \ \ \ \ \textcolor{keywordtype}{void}\ ClearThis();\ \ \ \textcolor{comment}{//\ like\ clear,\ but\ initializes\ 'this'\ object\ as\ well}}
+\DoxyCodeLine{01135\ }
+\DoxyCodeLine{01136\ \ \ \ \ \textcolor{comment}{//\ Used\ to\ be\ public\ [internal\ use]}}
+\DoxyCodeLine{01137\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01138\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01139\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01140\ \ \ \ \ \textcolor{comment}{/*\ \ [internal\ use]}}
+\DoxyCodeLine{01141\ \textcolor{comment}{\ \ \ \ \ \ \ \ Reads\ the\ "{}value"{}\ of\ the\ element\ -\/-\/\ another\ element,\ or\ text.}}
+\DoxyCodeLine{01142\ \textcolor{comment}{\ \ \ \ \ \ \ \ This\ should\ terminate\ with\ the\ current\ end\ tag.}}
+\DoxyCodeLine{01143\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{01144\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ ReadValue(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ in,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ prevData,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01145\ }
+\DoxyCodeLine{01146\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01147\ }
+\DoxyCodeLine{01148\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_attribute_set}{TiXmlAttributeSet}}\ attributeSet;}
+\DoxyCodeLine{01149\ \};}
+\DoxyCodeLine{01150\ }
+\DoxyCodeLine{01151\ }
+\DoxyCodeLine{01154\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{01155\ \{}
+\DoxyCodeLine{01156\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01158\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_comment_aaa3252031d3e8bd3a2bf51a1c61201b7}{TiXmlComment}}()\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::COMMENT\ )\ \{\}}
+\DoxyCodeLine{01160\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_comment_a37e7802ef17bc03ebe5ae79bf0713d47}{TiXmlComment}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_value\ )\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::COMMENT\ )\ \{}
+\DoxyCodeLine{01161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a2a38329ca5d3f28f98ce932b8299ae90}{SetValue}}(\ \_value\ );}
+\DoxyCodeLine{01162\ \ \ \ \ \}}
+\DoxyCodeLine{01163\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_comment_aaa3252031d3e8bd3a2bf51a1c61201b7}{TiXmlComment}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}\&\ );}
+\DoxyCodeLine{01164\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}\&\ base\ );}
+\DoxyCodeLine{01165\ }
+\DoxyCodeLine{01166\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_comment}{\string~TiXmlComment}}()\ \ \ \ \{\}}
+\DoxyCodeLine{01167\ }
+\DoxyCodeLine{01169\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_comment_a1f9f06e2ed3f77875093436193b16c16}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01170\ \ \ \ \ \textcolor{comment}{//\ Write\ this\ Comment\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{01171\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_comment_a873171beac19d40f0eaae945711c98ed}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01172\ }
+\DoxyCodeLine{01173\ \ \ \ \ \textcolor{comment}{/*\ \ Attribtue\ parsing\ starts:\ at\ the\ !\ of\ the\ !-\/-\/}}
+\DoxyCodeLine{01174\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ returns:\ next\ char\ past\ '>'}}
+\DoxyCodeLine{01175\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{01176\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01177\ }
+\DoxyCodeLine{01178\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ \ \mbox{\hyperlink{class_ti_xml_comment_a1ba35041f43548ff9e6d431beea5bd4d}{ToComment}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01179\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ \ \mbox{\hyperlink{class_ti_xml_comment_ad1a522962d357ed568816f9294f74fe1}{ToComment}}()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01180\ }
+\DoxyCodeLine{01183\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_comment_ac894241530d1d266131a5026cb251a95}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ visitor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01184\ }
+\DoxyCodeLine{01185\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01186\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01187\ }
+\DoxyCodeLine{01188\ \ \ \ \ \textcolor{comment}{//\ used\ to\ be\ public}}
+\DoxyCodeLine{01189\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01190\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01191\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01192\ \textcolor{comment}{//\ \ virtual\ void\ StreamOut(\ TIXML\_OSTREAM\ *\ out\ )\ const;}}
+\DoxyCodeLine{01193\ }
+\DoxyCodeLine{01194\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01195\ }
+\DoxyCodeLine{01196\ \};}
+\DoxyCodeLine{01197\ }
+\DoxyCodeLine{01198\ }
+\DoxyCodeLine{01204\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{01205\ \{}
+\DoxyCodeLine{01206\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}};}
+\DoxyCodeLine{01207\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01212\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text_af659e77c6b87d684827f35a8f4895960}{TiXmlText}}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ initValue\ )\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\ (\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::TEXT)}
+\DoxyCodeLine{01213\ \ \ \ \ \{}
+\DoxyCodeLine{01214\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a2a38329ca5d3f28f98ce932b8299ae90}{SetValue}}(\ initValue\ );}
+\DoxyCodeLine{01215\ \ \ \ \ \ \ \ \ cdata\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01216\ \ \ \ \ \}}
+\DoxyCodeLine{01217\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_text}{\string~TiXmlText}}()\ \{\}}
+\DoxyCodeLine{01218\ }
+\DoxyCodeLine{01219\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01221\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}(\ \textcolor{keyword}{const}\ std::string\&\ initValue\ )\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}\ (\mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::TEXT)}
+\DoxyCodeLine{01222\ \ \ \ \ \{}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node_a2a38329ca5d3f28f98ce932b8299ae90}{SetValue}}(\ initValue\ );}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ cdata\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01225\ \ \ \ \ \}}
+\DoxyCodeLine{01226\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01227\ }
+\DoxyCodeLine{01228\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}\&\ copy\ )\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::TEXT\ )\ \ \ \{\ copy.CopyTo(\ \textcolor{keyword}{this}\ );\ \}}
+\DoxyCodeLine{01229\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}\&\ base\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ base.CopyTo(\ \textcolor{keyword}{this}\ );\ \}}
+\DoxyCodeLine{01230\ }
+\DoxyCodeLine{01231\ \ \ \ \ \textcolor{comment}{//\ Write\ this\ text\ object\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{01232\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_text_a75f6895906333894e2574cc8cf77ea79}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01233\ }
+\DoxyCodeLine{01235\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_text_aac1f4764d220ed6bf809b16dfcb6b45a}{CDATA}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ cdata;\ \}}
+\DoxyCodeLine{01237\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_text_acb17ff7c5d09b2c839393445a3de5ea9}{SetCDATA}}(\ \textcolor{keywordtype}{bool}\ \_cdata\ )\ \ \ \ \{\ cdata\ =\ \_cdata;\ \}}
+\DoxyCodeLine{01238\ }
+\DoxyCodeLine{01239\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01240\ }
+\DoxyCodeLine{01241\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \mbox{\hyperlink{class_ti_xml_text_a7516e9c6f4995c7dba811b5fec95e1f9}{ToText}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01242\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text_a2dd0f59f15c53ae11909d9e23571bc11}{ToText}}()\ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01243\ }
+\DoxyCodeLine{01246\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_text_af65964326eac4640bfb97d4622fa0de2}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ content\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01247\ }
+\DoxyCodeLine{01248\ protected\ :}
+\DoxyCodeLine{01250\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_text_a98a20d7a4f1c1478e25e34921be24bfe}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01251\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01252\ }
+\DoxyCodeLine{01253\ \ \ \ \ \textcolor{keywordtype}{bool}\ Blank()\ \textcolor{keyword}{const};\ \textcolor{comment}{//\ returns\ true\ if\ all\ white\ space\ and\ new\ lines}}
+\DoxyCodeLine{01254\ \ \ \ \ \textcolor{comment}{//\ [internal\ use]}}
+\DoxyCodeLine{01255\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01256\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01257\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01258\ }
+\DoxyCodeLine{01259\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01260\ \ \ \ \ \textcolor{keywordtype}{bool}\ cdata;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ true\ if\ this\ should\ be\ input\ and\ output\ as\ a\ CDATA\ style\ text\ element}}
+\DoxyCodeLine{01261\ \};}
+\DoxyCodeLine{01262\ }
+\DoxyCodeLine{01263\ }
+\DoxyCodeLine{01277\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{01278\ \{}
+\DoxyCodeLine{01279\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01281\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration_aa0484d059bea0ea1acb47c9094382d79}{TiXmlDeclaration}}()\ \ \ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}::DECLARATION\ )\ \{\}}
+\DoxyCodeLine{01282\ }
+\DoxyCodeLine{01283\ \textcolor{preprocessor}{\#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01285\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration_aa0484d059bea0ea1acb47c9094382d79}{TiXmlDeclaration}}(\ \ \ \textcolor{keyword}{const}\ std::string\&\ \_version,}
+\DoxyCodeLine{01286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \_encoding,}
+\DoxyCodeLine{01287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ \_standalone\ );}
+\DoxyCodeLine{01288\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01289\ }
+\DoxyCodeLine{01291\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration_aa0484d059bea0ea1acb47c9094382d79}{TiXmlDeclaration}}(\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_version,}
+\DoxyCodeLine{01292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_encoding,}
+\DoxyCodeLine{01293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_standalone\ );}
+\DoxyCodeLine{01294\ }
+\DoxyCodeLine{01295\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration_aa0484d059bea0ea1acb47c9094382d79}{TiXmlDeclaration}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}\&\ copy\ );}
+\DoxyCodeLine{01296\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}\&\ copy\ );}
+\DoxyCodeLine{01297\ }
+\DoxyCodeLine{01298\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_declaration}{\string~TiXmlDeclaration}}()\ \ \ \ \{\}}
+\DoxyCodeLine{01299\ }
+\DoxyCodeLine{01301\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{class_ti_xml_declaration_aa4059b08504a70db291005015dcead02}{Version}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ version.c\_str\ ();\ \}}
+\DoxyCodeLine{01303\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{class_ti_xml_declaration_a52a6e73b714d3ea590e022178e54b9d3}{Encoding}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ encoding.c\_str\ ();\ \}}
+\DoxyCodeLine{01305\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{class_ti_xml_declaration_a11fc7756966a9f993e0b962495298f24}{Standalone}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ standalone.c\_str\ ();\ \}}
+\DoxyCodeLine{01306\ }
+\DoxyCodeLine{01308\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_declaration_a35dc1455f69b79e81cae28e186944610}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01309\ \ \ \ \ \textcolor{comment}{//\ Print\ this\ declaration\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{01310\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Print(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth,\ TIXML\_STRING*\ str\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01311\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_declaration_ae46cff6565f299210ab945e78bf28514}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{01312\ \ \ \ \ \ \ \ \ Print(\ cfile,\ depth,\ 0\ );}
+\DoxyCodeLine{01313\ \ \ \ \ \}}
+\DoxyCodeLine{01314\ }
+\DoxyCodeLine{01315\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01316\ }
+\DoxyCodeLine{01317\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ \mbox{\hyperlink{class_ti_xml_declaration_af51e513cee73829fc372cb1163a7cbee}{ToDeclaration}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01318\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration_a0c6a1f0235d5fef120b0e3ef56cc900f}{ToDeclaration}}()\ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01319\ }
+\DoxyCodeLine{01322\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_declaration_aa1b6bade6c989407ce9881bdfc73c1e6}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ visitor\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01323\ }
+\DoxyCodeLine{01324\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01325\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01326\ \ \ \ \ \textcolor{comment}{//\ used\ to\ be\ public}}
+\DoxyCodeLine{01327\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01328\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01329\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01330\ }
+\DoxyCodeLine{01331\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01332\ }
+\DoxyCodeLine{01333\ \ \ \ \ TIXML\_STRING\ version;}
+\DoxyCodeLine{01334\ \ \ \ \ TIXML\_STRING\ encoding;}
+\DoxyCodeLine{01335\ \ \ \ \ TIXML\_STRING\ standalone;}
+\DoxyCodeLine{01336\ \};}
+\DoxyCodeLine{01337\ }
+\DoxyCodeLine{01338\ }
+\DoxyCodeLine{01346\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{01347\ \{}
+\DoxyCodeLine{01348\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01349\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}()\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ TiXmlNode::UNKNOWN\ )\ \ \ \{\}}
+\DoxyCodeLine{01350\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_unknown}{\string~TiXmlUnknown}}()\ \{\}}
+\DoxyCodeLine{01351\ }
+\DoxyCodeLine{01352\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}\&\ copy\ )\ :\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}(\ TiXmlNode::UNKNOWN\ )\ \ \ \ \ \{\ copy.CopyTo(\ \textcolor{keyword}{this}\ );\ \}}
+\DoxyCodeLine{01353\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}\&\ copy\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ copy.CopyTo(\ \textcolor{keyword}{this}\ );\ \}}
+\DoxyCodeLine{01354\ }
+\DoxyCodeLine{01356\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_unknown_a3dea7689de5b1931fd6657992948fde0}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01357\ \ \ \ \ \textcolor{comment}{//\ Print\ this\ Unknown\ to\ a\ FILE\ stream.}}
+\DoxyCodeLine{01358\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_unknown_a5793fbc48ab3419783c0e866ca2d334e}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01359\ }
+\DoxyCodeLine{01360\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ Parse(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01361\ }
+\DoxyCodeLine{01362\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown_a80820b3dcb5fb333e9865d36aa380198}{ToUnknown}}()\textcolor{keyword}{\ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01363\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown_a4f0fc52c4d4e2570941c8d537142d71c}{ToUnknown}}()\ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01364\ }
+\DoxyCodeLine{01367\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_unknown_aafdf1b2d4f561979c7907bad91004999}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ content\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01368\ }
+\DoxyCodeLine{01369\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01370\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01371\ }
+\DoxyCodeLine{01372\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01373\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01374\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01375\ }
+\DoxyCodeLine{01376\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01377\ }
+\DoxyCodeLine{01378\ \};}
+\DoxyCodeLine{01379\ }
+\DoxyCodeLine{01380\ }
+\DoxyCodeLine{01385\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}}
+\DoxyCodeLine{01386\ \{}
+\DoxyCodeLine{01387\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01389\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a9f5e84335708fde98400230f9f12659c}{TiXmlDocument}}();}
+\DoxyCodeLine{01391\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a9f5e84335708fde98400230f9f12659c}{TiXmlDocument}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ documentName\ );}
+\DoxyCodeLine{01392\ }
+\DoxyCodeLine{01393\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01395\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a9f5e84335708fde98400230f9f12659c}{TiXmlDocument}}(\ \textcolor{keyword}{const}\ std::string\&\ documentName\ );}
+\DoxyCodeLine{01396\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01397\ }
+\DoxyCodeLine{01398\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a9f5e84335708fde98400230f9f12659c}{TiXmlDocument}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ copy\ );}
+\DoxyCodeLine{01399\ \ \ \ \ \textcolor{keywordtype}{void}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ copy\ );}
+\DoxyCodeLine{01400\ }
+\DoxyCodeLine{01401\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_document}{\string~TiXmlDocument}}()\ \{\}}
+\DoxyCodeLine{01402\ }
+\DoxyCodeLine{01407\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\ TiXmlEncoding\ encoding\ =\ TIXML\_DEFAULT\_ENCODING\ );}
+\DoxyCodeLine{01409\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01411\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ filename,\ TiXmlEncoding\ encoding\ =\ TIXML\_DEFAULT\_ENCODING\ );}
+\DoxyCodeLine{01413\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ filename\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01419\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\ FILE*,\ TiXmlEncoding\ encoding\ =\ TIXML\_DEFAULT\_ENCODING\ );}
+\DoxyCodeLine{01421\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}(\ FILE*\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01422\ }
+\DoxyCodeLine{01423\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01424\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\ \textcolor{keyword}{const}\ std::string\&\ filename,\ TiXmlEncoding\ encoding\ =\ TIXML\_DEFAULT\_ENCODING\ )\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01425\ \ \ \ \ \{}
+\DoxyCodeLine{01426\ \textcolor{comment}{//\ \ \ \ \ \ StringToBuffer\ f(\ filename\ );}}
+\DoxyCodeLine{01427\ \textcolor{comment}{//\ \ \ \ \ \ return\ (\ f.buffer\ \&\&\ LoadFile(\ f.buffer,\ encoding\ ));}}
+\DoxyCodeLine{01428\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\ filename.c\_str(),\ encoding\ );}
+\DoxyCodeLine{01429\ \ \ \ \ \}}
+\DoxyCodeLine{01430\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}(\ \textcolor{keyword}{const}\ std::string\&\ filename\ )\ \textcolor{keyword}{const}\ \ \ \ \ \ }
+\DoxyCodeLine{01431\ \ \ \ \ \{}
+\DoxyCodeLine{01432\ \textcolor{comment}{//\ \ \ \ \ \ StringToBuffer\ f(\ filename\ );}}
+\DoxyCodeLine{01433\ \textcolor{comment}{//\ \ \ \ \ \ return\ (\ f.buffer\ \&\&\ SaveFile(\ f.buffer\ ));}}
+\DoxyCodeLine{01434\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}(\ filename.c\_str()\ );}
+\DoxyCodeLine{01435\ \ \ \ \ \}}
+\DoxyCodeLine{01436\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01437\ }
+\DoxyCodeLine{01442\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_document_a789ad2f06f93d52bdb5570b2f3670289}{Parse}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ data\ =\ 0,\ TiXmlEncoding\ encoding\ =\ TIXML\_DEFAULT\_ENCODING\ );}
+\DoxyCodeLine{01443\ }
+\DoxyCodeLine{01448\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_document_ab7d8c7025dd910259f1fea16fc72cda0}{RootElement}}()\textcolor{keyword}{\ const\ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}();\ \}}
+\DoxyCodeLine{01449\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_document_ab7d8c7025dd910259f1fea16fc72cda0}{RootElement}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_node_a12c973e1da9e90a178924b8ea5a5f4d1}{FirstChildElement}}();\ \}}
+\DoxyCodeLine{01450\ }
+\DoxyCodeLine{01456\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a348e68faad4a3498f413c51ee9bc321a}{Error}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ error;\ \}}
+\DoxyCodeLine{01457\ }
+\DoxyCodeLine{01459\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ \mbox{\hyperlink{class_ti_xml_document_a03d596f13b24ebae712b2c42b019a5ab}{ErrorDesc}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ errorDesc.c\_str\ ();\ \}}
+\DoxyCodeLine{01460\ }
+\DoxyCodeLine{01464\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_document_abd928b49a646c8ed53e0453c555d96a2}{ErrorId}}()\textcolor{keyword}{\ \ \ \ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ errorId;\ \}}
+\DoxyCodeLine{01465\ }
+\DoxyCodeLine{01473\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_document_a062e5257128a7da31b0b2e38cd524600}{ErrorRow}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ errorLocation.row+1;\ \}}
+\DoxyCodeLine{01474\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ti_xml_document_adea69de889449a2587afb8ee043f43f5}{ErrorCol}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ errorLocation.col+1;\ \}\ }
+\DoxyCodeLine{01475\ }
+\DoxyCodeLine{01500\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_document_a51dac56316f89b35bdb7d0d433ba988e}{SetTabSize}}(\ \textcolor{keywordtype}{int}\ \_tabsize\ )\ \ \ \ \ \ \ \{\ tabsize\ =\ \_tabsize;\ \}}
+\DoxyCodeLine{01501\ }
+\DoxyCodeLine{01502\ \ \ \ \ \textcolor{keywordtype}{int}\ TabSize()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tabsize;\ \}}
+\DoxyCodeLine{01503\ }
+\DoxyCodeLine{01507\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_document_ac66b8c28db86363315712a3574e87c35}{ClearError}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ error\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{01508\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ errorId\ =\ 0;\ }
+\DoxyCodeLine{01509\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ errorDesc\ =\ \textcolor{stringliteral}{"{}"{}};\ }
+\DoxyCodeLine{01510\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ errorLocation.row\ =\ errorLocation.col\ =\ 0;\ }
+\DoxyCodeLine{01511\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//errorLocation.last\ =\ 0;\ }}
+\DoxyCodeLine{01512\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01513\ }
+\DoxyCodeLine{01515\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_document_aa4e8c1498a76dcde7191c683e1220882}{Print}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \mbox{\hyperlink{class_ti_xml_document_aa4e8c1498a76dcde7191c683e1220882}{Print}}(\ stdout,\ 0\ );\ \}}
+\DoxyCodeLine{01516\ }
+\DoxyCodeLine{01517\ \ \ \ \ \textcolor{comment}{/*\ Write\ the\ document\ to\ a\ string\ using\ formatted\ printing\ ("{}pretty\ print"{}).\ This}}
+\DoxyCodeLine{01518\ \textcolor{comment}{\ \ \ \ \ \ \ \ will\ allocate\ a\ character\ array\ (new\ char[])\ and\ return\ it\ as\ a\ pointer.\ The}}
+\DoxyCodeLine{01519\ \textcolor{comment}{\ \ \ \ \ \ \ \ calling\ code\ pust\ call\ delete[]\ on\ the\ return\ char*\ to\ avoid\ a\ memory\ leak.}}
+\DoxyCodeLine{01520\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{01521\ \ \ \ \ \textcolor{comment}{//char*\ PrintToMemory()\ const;\ }}
+\DoxyCodeLine{01522\ }
+\DoxyCodeLine{01524\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_document_aa4e8c1498a76dcde7191c683e1220882}{Print}}(\ FILE*\ cfile,\ \textcolor{keywordtype}{int}\ depth\ =\ 0\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01525\ \ \ \ \ \textcolor{comment}{//\ [internal\ use]}}
+\DoxyCodeLine{01526\ \ \ \ \ \textcolor{keywordtype}{void}\ SetError(\ \textcolor{keywordtype}{int}\ err,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ errorLocation,\ \mbox{\hyperlink{class_ti_xml_parsing_data}{TiXmlParsingData}}*\ prevData,\ TiXmlEncoding\ encoding\ );}
+\DoxyCodeLine{01527\ }
+\DoxyCodeLine{01528\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a76a8c412a77fe339918125d18708c898}{ToDocument}}()\textcolor{keyword}{\ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01529\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document_a6df051851cd77470e372b9b8f7bd98ce}{ToDocument}}()\ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{this};\ \}\ }
+\DoxyCodeLine{01530\ }
+\DoxyCodeLine{01533\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_document_a8ddd6eec722cbd25900bbac664909bac}{Accept}}(\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}*\ content\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01534\ }
+\DoxyCodeLine{01535\ protected\ :}
+\DoxyCodeLine{01536\ \ \ \ \ \textcolor{comment}{//\ [internal\ use]}}
+\DoxyCodeLine{01537\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_document_a46a4dda6c56eb106d46d4046ae1e5353}{Clone}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01538\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01539\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ StreamIn(\ std::istream\ *\ in,\ TIXML\_STRING\ *\ tag\ );}
+\DoxyCodeLine{01540\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01541\ }
+\DoxyCodeLine{01542\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01543\ \ \ \ \ \textcolor{keywordtype}{void}\ CopyTo(\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}*\ target\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01544\ }
+\DoxyCodeLine{01545\ \ \ \ \ \textcolor{keywordtype}{bool}\ error;}
+\DoxyCodeLine{01546\ \ \ \ \ \textcolor{keywordtype}{int}\ \ errorId;}
+\DoxyCodeLine{01547\ \ \ \ \ TIXML\_STRING\ errorDesc;}
+\DoxyCodeLine{01548\ \ \ \ \ \textcolor{keywordtype}{int}\ tabsize;}
+\DoxyCodeLine{01549\ \ \ \ \ \mbox{\hyperlink{struct_ti_xml_cursor}{TiXmlCursor}}\ errorLocation;}
+\DoxyCodeLine{01550\ \ \ \ \ \textcolor{keywordtype}{bool}\ useMicrosoftBOM;\ \ \ \ \ \ \ \textcolor{comment}{//\ the\ UTF-\/8\ BOM\ were\ found\ when\ read.\ Note\ this,\ and\ try\ to\ write.}}
+\DoxyCodeLine{01551\ \};}
+\DoxyCodeLine{01552\ }
+\DoxyCodeLine{01553\ }
+\DoxyCodeLine{01634\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}}
+\DoxyCodeLine{01635\ \{}
+\DoxyCodeLine{01636\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01638\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle_aba18fd7bdefb942ecdea4bf4b8e29ec8}{TiXmlHandle}}(\ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \_node\ )\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ this-\/>node\ =\ \_node;\ \}}
+\DoxyCodeLine{01640\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle_a236d7855e1e56ccc7b980630c48c7fd7}{TiXmlHandle}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\&\ ref\ )\ \ \ \ \ \ \ \ \ \{\ this-\/>node\ =\ ref.node;\ \}}
+\DoxyCodeLine{01641\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ operator=(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\&\ ref\ )\ \{\ this-\/>node\ =\ ref.node;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{01642\ }
+\DoxyCodeLine{01644\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01646\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01648\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01650\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ value\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01651\ }
+\DoxyCodeLine{01655\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_a9903b035444ee36450fe00ede403f920}{Child}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ value,\ \textcolor{keywordtype}{int}\ index\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01659\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_a9903b035444ee36450fe00ede403f920}{Child}}(\ \textcolor{keywordtype}{int}\ index\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01664\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afccc59d8a0daa8c5d78474fbed430ddb}{ChildElement}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ value,\ \textcolor{keywordtype}{int}\ index\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01669\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afccc59d8a0daa8c5d78474fbed430ddb}{ChildElement}}(\ \textcolor{keywordtype}{int}\ index\ )\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01670\ }
+\DoxyCodeLine{01671\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01672\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}(\ \_value.c\_str()\ );\ \}}
+\DoxyCodeLine{01673\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value\ )\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}(\ \_value.c\_str()\ );\ \}}
+\DoxyCodeLine{01674\ }
+\DoxyCodeLine{01675\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_a9903b035444ee36450fe00ede403f920}{Child}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value,\ \textcolor{keywordtype}{int}\ index\ )\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_a9903b035444ee36450fe00ede403f920}{Child}}(\ \_value.c\_str(),\ index\ );\ \}}
+\DoxyCodeLine{01676\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ \mbox{\hyperlink{class_ti_xml_handle_afccc59d8a0daa8c5d78474fbed430ddb}{ChildElement}}(\ \textcolor{keyword}{const}\ std::string\&\ \_value,\ \textcolor{keywordtype}{int}\ index\ )\textcolor{keyword}{\ const\ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_afccc59d8a0daa8c5d78474fbed430ddb}{ChildElement}}(\ \_value.c\_str(),\ index\ );\ \}}
+\DoxyCodeLine{01677\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01678\ }
+\DoxyCodeLine{01681\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_handle_a2d17b68a093486c1f780878ec4d7a10c}{ToNode}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ node;\ \}\ }
+\DoxyCodeLine{01684\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_handle_ab3358be11c1b91e87d0007a6e2adde89}{ToElement}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ (\ (\ node\ \&\&\ node-\/>ToElement()\ )\ ?\ node-\/>ToElement()\ :\ 0\ );\ \}}
+\DoxyCodeLine{01687\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \mbox{\hyperlink{class_ti_xml_handle_a8ddc9f6fe3fbcd86294c6a83d2e281db}{ToText}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ (\ (\ node\ \&\&\ node-\/>ToText()\ )\ ?\ node-\/>ToText()\ :\ 0\ );\ \}}
+\DoxyCodeLine{01690\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \mbox{\hyperlink{class_ti_xml_handle_a112bd6325e4bcdf0717c0ea013eac105}{ToUnknown}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ (\ (\ node\ \&\&\ node-\/>ToUnknown()\ )\ ?\ node-\/>ToUnknown()\ :\ 0\ );\ \}}
+\DoxyCodeLine{01691\ }
+\DoxyCodeLine{01695\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ \mbox{\hyperlink{class_ti_xml_handle_afa2eb82bacfb6e4c3dd5351ce28e5d7a}{Node}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_a2d17b68a093486c1f780878ec4d7a10c}{ToNode}}();\ \}\ }
+\DoxyCodeLine{01699\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ \mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_ab3358be11c1b91e87d0007a6e2adde89}{ToElement}}();\ \}}
+\DoxyCodeLine{01703\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}*\ \mbox{\hyperlink{class_ti_xml_handle_a58a9b3e3d710a603038e6e291eb6d580}{Text}}()\textcolor{keyword}{\ const\ \ \ \ \ \ \ \ \ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_a8ddc9f6fe3fbcd86294c6a83d2e281db}{ToText}}();\ \}}
+\DoxyCodeLine{01707\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}*\ \mbox{\hyperlink{class_ti_xml_handle_aa7a8756af3ac24f0b2d469e500b85824}{Unknown}}()\textcolor{keyword}{\ const\ \ \ \ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ti_xml_handle_a112bd6325e4bcdf0717c0ea013eac105}{ToUnknown}}();\ \}}
+\DoxyCodeLine{01708\ }
+\DoxyCodeLine{01709\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01710\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_node}{TiXmlNode}}*\ node;}
+\DoxyCodeLine{01711\ \};}
+\DoxyCodeLine{01712\ }
+\DoxyCodeLine{01713\ }
+\DoxyCodeLine{01733\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ti_xml_printer}{TiXmlPrinter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_ti_xml_visitor}{TiXmlVisitor}}}
+\DoxyCodeLine{01734\ \{}
+\DoxyCodeLine{01735\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01736\ \ \ \ \ \mbox{\hyperlink{class_ti_xml_printer}{TiXmlPrinter}}()\ :\ depth(\ 0\ ),\ simpleTextPrint(\ \textcolor{keyword}{false}\ ),}
+\DoxyCodeLine{01737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer(),\ indent(\ \textcolor{stringliteral}{"{}\ \ \ \ "{}}\ ),\ lineBreak(\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ )\ \{\}}
+\DoxyCodeLine{01738\ }
+\DoxyCodeLine{01739\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_a2ec73087db26ff4d2c4316c56f861db7}{VisitEnter}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ doc\ );}
+\DoxyCodeLine{01740\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_a0a636046fa589b6d7f3e5bd025b3f33e}{VisitExit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\&\ doc\ );}
+\DoxyCodeLine{01741\ }
+\DoxyCodeLine{01742\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_a2ec73087db26ff4d2c4316c56f861db7}{VisitEnter}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ element,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_attribute}{TiXmlAttribute}}*\ firstAttribute\ );}
+\DoxyCodeLine{01743\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_a0a636046fa589b6d7f3e5bd025b3f33e}{VisitExit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}\&\ element\ );}
+\DoxyCodeLine{01744\ }
+\DoxyCodeLine{01745\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_adaf7eec4dc43ad071ff52b60361574f5}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}\&\ declaration\ );}
+\DoxyCodeLine{01746\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_adaf7eec4dc43ad071ff52b60361574f5}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_text}{TiXmlText}}\&\ text\ );}
+\DoxyCodeLine{01747\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_adaf7eec4dc43ad071ff52b60361574f5}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}\&\ comment\ );}
+\DoxyCodeLine{01748\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_ti_xml_printer_adaf7eec4dc43ad071ff52b60361574f5}{Visit}}(\ \textcolor{keyword}{const}\ \mbox{\hyperlink{class_ti_xml_unknown}{TiXmlUnknown}}\&\ unknown\ );}
+\DoxyCodeLine{01749\ }
+\DoxyCodeLine{01753\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_printer_a213377a4070c7e625bae59716b089e5e}{SetIndent}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_indent\ )\ \ \ \ \ \ \ \ \ \ \{\ indent\ =\ \_indent\ ?\ \_indent\ :\ \textcolor{stringliteral}{"{}"{}}\ ;\ \}}
+\DoxyCodeLine{01755\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_printer_a1fc2c60ce1a4bf2dfbdee9f4ca116cf4}{Indent}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ indent.c\_str();\ \}}
+\DoxyCodeLine{01760\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_printer_a4be1e37e69e3858c59635aa947174fe6}{SetLineBreak}}(\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \_lineBreak\ )\ \ \ \ \ \{\ lineBreak\ =\ \_lineBreak\ ?\ \_lineBreak\ :\ \textcolor{stringliteral}{"{}"{}};\ \}}
+\DoxyCodeLine{01762\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_printer_a94969892998ef6a200b7f987b756e823}{LineBreak}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ lineBreak.c\_str();\ \}}
+\DoxyCodeLine{01763\ }
+\DoxyCodeLine{01767\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ti_xml_printer_ab23a90629e374cb1cadca090468bbd19}{SetStreamPrinting}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ indent\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01768\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ lineBreak\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ }
+\DoxyCodeLine{01771\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{class_ti_xml_printer_af84fb6d0edc8977a40e531cdeb98696a}{CStr}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ buffer.c\_str();\ \}}
+\DoxyCodeLine{01773\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_ti_xml_printer_ad01375ae9199bd2f48252eaddce3039d}{Size}}()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ buffer.size();\ \}}
+\DoxyCodeLine{01774\ }
+\DoxyCodeLine{01775\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ TIXML\_USE\_STL}}
+\DoxyCodeLine{01777\ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ Str()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{keywordflow}{return}\ buffer;\ \}}
+\DoxyCodeLine{01778\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{01779\ }
+\DoxyCodeLine{01780\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01781\ \ \ \ \ \textcolor{keywordtype}{void}\ DoIndent()\ \{}
+\DoxyCodeLine{01782\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ \textcolor{keywordtype}{int}\ i=0;\ i<depth;\ ++i\ )}
+\DoxyCodeLine{01783\ \ \ \ \ \ \ \ \ \ \ \ \ buffer\ +=\ indent;}
+\DoxyCodeLine{01784\ \ \ \ \ \}}
+\DoxyCodeLine{01785\ \ \ \ \ \textcolor{keywordtype}{void}\ DoLineBreak()\ \{}
+\DoxyCodeLine{01786\ \ \ \ \ \ \ \ \ buffer\ +=\ lineBreak;}
+\DoxyCodeLine{01787\ \ \ \ \ \}}
+\DoxyCodeLine{01788\ }
+\DoxyCodeLine{01789\ \ \ \ \ \textcolor{keywordtype}{int}\ depth;}
+\DoxyCodeLine{01790\ \ \ \ \ \textcolor{keywordtype}{bool}\ simpleTextPrint;}
+\DoxyCodeLine{01791\ \ \ \ \ TIXML\_STRING\ buffer;}
+\DoxyCodeLine{01792\ \ \ \ \ TIXML\_STRING\ indent;}
+\DoxyCodeLine{01793\ \ \ \ \ TIXML\_STRING\ lineBreak;}
+\DoxyCodeLine{01794\ \};}
+\DoxyCodeLine{01795\ }
+\DoxyCodeLine{01796\ }
+\DoxyCodeLine{01797\ \textcolor{preprocessor}{\#ifdef\ \_MSC\_VER}}
+\DoxyCodeLine{01798\ \textcolor{preprocessor}{\#pragma\ warning(\ pop\ )}}
+\DoxyCodeLine{01799\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01800\ }
+\DoxyCodeLine{01801\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01802\ }
+
+\end{DoxyCode}

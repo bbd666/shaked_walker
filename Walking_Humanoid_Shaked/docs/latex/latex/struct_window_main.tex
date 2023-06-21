@@ -1,0 +1,99 @@
+\hypertarget{struct_window_main}{}\doxysection{Window\+Main Struct Reference}
+\label{struct_window_main}\index{WindowMain@{WindowMain}}
+
+
+{\ttfamily \#include $<$Window\+GL.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_window_main_aa96774d1a3a95ccd8a3a42e202357b40}\label{struct_window_main_aa96774d1a3a95ccd8a3a42e202357b40}} 
+{\bfseries Window\+Main} (int dwidth=1024, int dheight=768)
+\item 
+\mbox{\Hypertarget{struct_window_main_ac13f04f91bc6255165174259334ca75b}\label{struct_window_main_ac13f04f91bc6255165174259334ca75b}} 
+void {\bfseries Main\+Loop} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ae448cc51de38c26c3df1777dd37632d2}\label{struct_window_main_ae448cc51de38c26c3df1777dd37632d2}} 
+void {\bfseries Init\+GLRender} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_a6ac7920f59487ccf1641150cba7dde5c}\label{struct_window_main_a6ac7920f59487ccf1641150cba7dde5c}} 
+void {\bfseries Main\+Render} (string info, int iteration, int max\+\_\+iteration, int remaining\+\_\+time)
+\item 
+\mbox{\Hypertarget{struct_window_main_a32c0064acd498bfc9340cd6167d83068}\label{struct_window_main_a32c0064acd498bfc9340cd6167d83068}} 
+void {\bfseries Context\+Resize} (int cw, int ch)
+\item 
+\mbox{\Hypertarget{struct_window_main_a9f7cf1a9f110857ac87028828990782d}\label{struct_window_main_a9f7cf1a9f110857ac87028828990782d}} 
+void {\bfseries Context\+Keypress} (int key, int scancode, int action, int mods)
+\item 
+\mbox{\Hypertarget{struct_window_main_a5bee1460633a30b6f52f3f894e808a64}\label{struct_window_main_a5bee1460633a30b6f52f3f894e808a64}} 
+void {\bfseries Context\+Mouse\+Button} (int button, int action, int mods)
+\item 
+\mbox{\Hypertarget{struct_window_main_a2743713f12bc64f1a592a572ab685c16}\label{struct_window_main_a2743713f12bc64f1a592a572ab685c16}} 
+void {\bfseries Context\+Mouse\+Move} (double xpos, double ypos)
+\item 
+\mbox{\Hypertarget{struct_window_main_a5fe93ce4e6caa81f6c3e30beb8935a0f}\label{struct_window_main_a5fe93ce4e6caa81f6c3e30beb8935a0f}} 
+void {\bfseries Context\+Mouse\+Scrl} (float scrlx, float scrly)
+\item 
+\mbox{\Hypertarget{struct_window_main_a6a0526125575c28fef8ddc00d465866e}\label{struct_window_main_a6a0526125575c28fef8ddc00d465866e}} 
+void {\bfseries Set\+Use\+Mouse\+View\+Rotation} (bool val)
+\item 
+\mbox{\Hypertarget{struct_window_main_a904db0d2d6650ef7ed40131d07584646}\label{struct_window_main_a904db0d2d6650ef7ed40131d07584646}} 
+int {\bfseries Get\+Mousebutton} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ab68b5c6451e03c6c296cef102925ca02}\label{struct_window_main_ab68b5c6451e03c6c296cef102925ca02}} 
+int {\bfseries Get\+Mousebuttonaction} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ab45f648ba9004d8804cedfbe81ff4618}\label{struct_window_main_ab45f648ba9004d8804cedfbe81ff4618}} 
+int {\bfseries Get\+Mousebuttonmods} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_abe44dbaa159c8ad82fb805276623b828}\label{struct_window_main_abe44dbaa159c8ad82fb805276623b828}} 
+double {\bfseries Get\+Mouse\+MoveX} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ad26b7f6a6e3e981dc41e873dee9a240a}\label{struct_window_main_ad26b7f6a6e3e981dc41e873dee9a240a}} 
+double {\bfseries Get\+Mouse\+MoveY} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_a5804df6f6a832976483bffa46b0edf73}\label{struct_window_main_a5804df6f6a832976483bffa46b0edf73}} 
+\mbox{\hyperlink{struct_newton_mouse_pick}{Newton\+Mouse\+Pick}} $\ast$ {\bfseries Get\+Mouse\+Picking} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_a38fce590adef92bdc1790691df4cd2ca}\label{struct_window_main_a38fce590adef92bdc1790691df4cd2ca}} 
+\mbox{\hyperlink{struct_main_camera}{Main\+Camera}} $\ast$ {\bfseries Get\+Camera} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ae88f4b901368ba30e6abcfc88a0b46d2}\label{struct_window_main_ae88f4b901368ba30e6abcfc88a0b46d2}} 
+void {\bfseries Set\+Simulation\+Time} (float time)
+\item 
+\mbox{\Hypertarget{struct_window_main_a3d6c25409970c2ab007f7f950569ca72}\label{struct_window_main_a3d6c25409970c2ab007f7f950569ca72}} 
+float {\bfseries Get\+Simulation\+Time} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_aad4f2543e022fdc7feecd5592d1176b2}\label{struct_window_main_aad4f2543e022fdc7feecd5592d1176b2}} 
+void {\bfseries Set\+Max\+Simulation\+Time} (float time)
+\item 
+\mbox{\Hypertarget{struct_window_main_a1b98de5fc80f73d168dfe489677df544}\label{struct_window_main_a1b98de5fc80f73d168dfe489677df544}} 
+float {\bfseries Get\+Max\+Simulation\+Time} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_abab18b89aa11b9daa32d4142b2883234}\label{struct_window_main_abab18b89aa11b9daa32d4142b2883234}} 
+void {\bfseries Set\+Simulation\+Info} (int operation\+\_\+, int iteration\+\_\+, int max\+\_\+iteration\+\_\+, int remaining\+\_\+time\+\_\+, string info\+\_\+wbv, float Amp, float freq)
+\item 
+\mbox{\Hypertarget{struct_window_main_a27b9c918e41d7b5484675f235a1408c0}\label{struct_window_main_a27b9c918e41d7b5484675f235a1408c0}} 
+float {\bfseries Get\+WVBFreq} ()
+\item 
+\mbox{\Hypertarget{struct_window_main_ae74a7db13588bbd2e7c6ce33d05927b6}\label{struct_window_main_ae74a7db13588bbd2e7c6ce33d05927b6}} 
+float {\bfseries Get\+WVBAmp} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_window_main_a6d4310a1afb00f897f02e1d91baa535d}\label{struct_window_main_a6d4310a1afb00f897f02e1d91baa535d}} 
+\mbox{\hyperlink{struct_newton_manager}{Newton\+Manager}} $\ast$ {\bfseries a\+Manager}
+\item 
+\mbox{\Hypertarget{struct_window_main_a7e480949674ca7a3a69466ec5b636ac4}\label{struct_window_main_a7e480949674ca7a3a69466ec5b636ac4}} 
+\mbox{\hyperlink{struct_line_debug_manager}{Line\+Debug\+Manager}} $\ast$ {\bfseries a\+Line\+Manager}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main window definition. The simulation environment is created inside this window. 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Window\+GL.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Window\+GL.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<Settings>
+<!-- Simulation options: SimulationTime [1-10] in s, Optimization [yes/no] (runs the CMAES), Iterations number [50-3000], Output [yes/no] saves gait_timeseries.txt file, Whole-body vibration data: active[yes/no], direction[roll/pitch/no], amplitude [2-8] in °, frequency [0.25-1] in Hz -->
+	<Options SimulationTime="8" Optimization ="no" IterationsNumber="100" Output="yes"/>
+	<WholeBodyVibration Active="no" Direction="roll" Amplitude="4" Frequency="0.25"/>
+</Settings>

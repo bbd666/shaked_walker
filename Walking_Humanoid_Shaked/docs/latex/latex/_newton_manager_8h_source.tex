@@ -1,0 +1,93 @@
+\hypertarget{_newton_manager_8h_source}{}\doxysection{Newton\+Manager.\+h}
+\label{_newton_manager_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/NewtonManager.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/NewtonManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ NEWTONMANAGER\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ NEWTONMANAGER\_H}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}shader.h"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}texture.h"{}}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{enum}\ JointName\ \{\ HIP\_L,\ KNEE\_L,\ ANKLE\_L,\ HIP\_R,\ KNEE\_R,\ ANKLE\_R,\ NOjoint\ \};}
+\DoxyCodeLine{00046\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_newton_manager}{NewtonManager}}}
+\DoxyCodeLine{00047\ \{\ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}();}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{\string~NewtonManager}}();}
+\DoxyCodeLine{00050\ \ \ \ \ NewtonWorld*\ GetWorld();}
+\DoxyCodeLine{00051\ \ \ \ \ dVector\ GetGravity();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ Render(\mbox{\hyperlink{struct_shader}{Shader}}*\ cshd,\ dFloat\ steptime);}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateNewton(dFloat\ steptime);}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//\ Surely\ not\ the\ best\ method\ but\ for\ the\ tutorial\ it\ is\ ok\ I\ think...}}
+\DoxyCodeLine{00055\ \ \ \ \ std::vector<void*>\ vGeomList;}
+\DoxyCodeLine{00056\ \ \ \ \ std::vector<void*>\ vAssMeshList;}
+\DoxyCodeLine{00057\ \ \ \ \ std::vector<void*>\ vJointList;}
+\DoxyCodeLine{00058\ \ \ \ \ std::vector<JointName>\ vJointNameList;\textcolor{comment}{//\ List\ of\ joint\ names}}
+\DoxyCodeLine{00059\ \ \ \ \ std::vector<void*>\ vMuscleList;}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{struct_texture}{Texture}}*\ vTextureManager;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsTerminated;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ WIP:\ I\ can\ show\ in\ the\ later\ tutorial\ version\ how\ to\ update\ all\ newton\ options\ in\ runtime.}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//void\ UpdateNewtonOptions();}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ CalculateFPS(dFloat\ timestep);}
+\DoxyCodeLine{00068\ \ \ \ \ dFloat\ GetFps();}
+\DoxyCodeLine{00069\ \ \ \ \ dFloat\ GetPhysicTime();}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ PhysicsApplyGravityForce(\textcolor{keyword}{const}\ NewtonBody*\ body,\ dFloat\ timestep,\ \textcolor{keywordtype}{int}\ threadIndex);}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ PhysicsApplyControlForce(\textcolor{keyword}{const}\ NewtonBody*\ body1,\ \textcolor{keywordtype}{bool}\ action,\ dFloat\ timestep,\ \textcolor{keywordtype}{int}\ threadIndex);}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ TransformCallback(\textcolor{keyword}{const}\ NewtonBody*\ body,\ \textcolor{keyword}{const}\ dFloat*\ matrix,\ \textcolor{keywordtype}{int}\ threadIndex);}
+\DoxyCodeLine{00073\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{int}\ aLastpluginnewton;\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ aCurrentPluginID;}
+\DoxyCodeLine{00076\ \ \ \ \ std::string\ aCurrentPlugin;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{bool}\ aSuspendPhysicsUpdate;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ aAsynchronousPhysicsUpdate;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{int}\ aPhysicsFramesCount;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{int}\ aFramesCount;}
+\DoxyCodeLine{00081\ \ \ \ \ dFloat\ aMaxphysicfps;}
+\DoxyCodeLine{00082\ \ \ \ \ dFloat\ aFps;}
+\DoxyCodeLine{00083\ \ \ \ \ dFloat\ aTimestepAcc;}
+\DoxyCodeLine{00084\ \ \ \ \ dFloat\ aCurrentListenerTimestep;}
+\DoxyCodeLine{00085\ \ \ \ \ dFloat\ aMainThreadPhysicsTime;}
+\DoxyCodeLine{00086\ \ \ \ \ dFloat\ aMainThreadPhysicsTimeAcc;}
+\DoxyCodeLine{00087\ \ \ \ \ unsigned64\ aMicrosecunds;}
+\DoxyCodeLine{00088\ \ \ \ \ NewtonWorld*\ nWorld;}
+\DoxyCodeLine{00089\ \ \ \ \ dVector\ nGravity;}
+\DoxyCodeLine{00090\ \};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ NEWTONMANAGER\_H}}
+
+\end{DoxyCode}

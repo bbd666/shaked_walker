@@ -1,0 +1,1462 @@
+\hypertarget{cmaes_8h_source}{}\doxysection{cmaes.\+h}
+\label{cmaes_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/cmaes.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/cmaes.h}}
+\mbox{\hyperlink{cmaes_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#include\ "{}parameters.h"{}}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#include\ "{}random.h"{}}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#include\ "{}timings.h"{}}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utils_8h}{utils.h}}"{}}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#include\ <cstdio>}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#include\ <mbstring.h>}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00119\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00120\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}}
+\DoxyCodeLine{00121\ \{}
+\DoxyCodeLine{00122\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00127\ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{GetScalar}}}
+\DoxyCodeLine{00128\ \ \ \{}
+\DoxyCodeLine{00129\ \ \ \ \ NoScalar\ =\ 0,}
+\DoxyCodeLine{00130\ \ \ \ \ AxisRatio\ =\ 1,}
+\DoxyCodeLine{00131\ \ \ \ \ Eval\ =\ 2,\ Evaluations\ =\ 2,}
+\DoxyCodeLine{00132\ \ \ \ \ FctValue\ =\ 3,\ FuncValue\ =\ 3,\ FunValue\ =\ 3,\ Fitness\ =\ 3,}
+\DoxyCodeLine{00133\ \ \ \ \ FBestEver\ =\ 4,}
+\DoxyCodeLine{00134\ \ \ \ \ Generation\ =\ 5,\ Iteration\ =\ 5,}
+\DoxyCodeLine{00135\ \ \ \ \ MaxEval\ =\ 6,\ MaxFunEvals\ =\ 6,\ StopMaxFunEvals\ =\ 6,}
+\DoxyCodeLine{00136\ \ \ \ \ MaxGen\ =\ 7,\ MaxIter\ =\ 7,\ StopMaxIter\ =\ 7,}
+\DoxyCodeLine{00137\ \ \ \ \ MaxAxisLength\ =\ 8,}
+\DoxyCodeLine{00138\ \ \ \ \ MinAxisLength\ =\ 9,}
+\DoxyCodeLine{00139\ \ \ \ \ MaxStdDev\ =\ 10,}
+\DoxyCodeLine{00140\ \ \ \ \ MinStdDev\ =\ 11,}
+\DoxyCodeLine{00141\ \ \ \ \ Dim\ =\ 12,\ Dimension\ =\ 12,}
+\DoxyCodeLine{00142\ \ \ \ \ Lambda\ =\ 13,\ SampleSize\ =\ 13,\ PopSize\ =\ 13,}
+\DoxyCodeLine{00143\ \ \ \ \ Sigma\ =\ 14}
+\DoxyCodeLine{00144\ \ \ \};}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00149\ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{GetVector}}}
+\DoxyCodeLine{00150\ \ \ \{}
+\DoxyCodeLine{00151\ \ \ \ \ NoVector\ =\ 0,}
+\DoxyCodeLine{00152\ \ \ \ \ DiagC\ =\ 1,}
+\DoxyCodeLine{00153\ \ \ \ \ DiagD\ =\ 2,}
+\DoxyCodeLine{00154\ \ \ \ \ StdDev\ =\ 3,}
+\DoxyCodeLine{00155\ \ \ \ \ XBestEver\ =\ 4,}
+\DoxyCodeLine{00156\ \ \ \ \ XBest\ =\ 5,}
+\DoxyCodeLine{00157\ \ \ \ \ XMean\ =\ 6}
+\DoxyCodeLine{00158\ \ \ \};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00163\ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_c_m_a_e_s_ae9f81c1f7041cad8e768ecd6d30aaed5}{WriteKey}}}
+\DoxyCodeLine{00164\ \ \ \{}
+\DoxyCodeLine{00165\ \ \ \ \ WCNone\ =\ 0,}
+\DoxyCodeLine{00166\ \ \ \ \ WKResume\ =\ 1,}
+\DoxyCodeLine{00167\ \ \ \ \ WKXMean\ =\ 2,}
+\DoxyCodeLine{00168\ \ \ \ \ WKC\ =\ 4,}
+\DoxyCodeLine{00169\ \ \ \ \ WKAll\ =\ 8,}
+\DoxyCodeLine{00170\ \ \ \ \ WKFewInfo\ =\ 16,}
+\DoxyCodeLine{00171\ \ \ \ \ WKFew\ =\ 32,}
+\DoxyCodeLine{00172\ \ \ \ \ WKEval\ =\ 64,}
+\DoxyCodeLine{00173\ \ \ \ \ WKFitness\ =\ 128,}
+\DoxyCodeLine{00174\ \ \ \ \ WKFBestEver\ =\ 256,}
+\DoxyCodeLine{00175\ \ \ \ \ WKCGeneration\ =\ 512,}
+\DoxyCodeLine{00176\ \ \ \ \ WKSigma\ =\ 1024,}
+\DoxyCodeLine{00177\ \ \ \ \ WKLambda\ =\ 2048,}
+\DoxyCodeLine{00178\ \ \ \ \ WKB\ =\ 4096,}
+\DoxyCodeLine{00179\ \ \ \ \ WKXBest\ =\ 8192,}
+\DoxyCodeLine{00180\ \ \ \ \ WKClock\ =\ 16384,}
+\DoxyCodeLine{00181\ \ \ \ \ WKDim\ =\ 32768}
+\DoxyCodeLine{00182\ \ \ \};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00187\ \ \ std::string\ version;}
+\DoxyCodeLine{00189\ \ \ \mbox{\hyperlink{class_random}{Random<T>}}\ rand;}
+\DoxyCodeLine{00191\ \ \ \mbox{\hyperlink{class_parameters}{Parameters<T>}}\ params;}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00194\ \ \ T\ sigma;}
+\DoxyCodeLine{00196\ \ \ T*\ xmean;}
+\DoxyCodeLine{00198\ \ \ T*\ xBestEver;}
+\DoxyCodeLine{00200\ \ \ T**\ population;}
+\DoxyCodeLine{00202\ \ \ \textcolor{keywordtype}{int}*\ index;}
+\DoxyCodeLine{00204\ \ \ T*\ funcValueHistory;}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ T\ chiN;}
+\DoxyCodeLine{00208\ \ \ T**\ C;}
+\DoxyCodeLine{00210\ \ \ T**\ B;}
+\DoxyCodeLine{00212\ \ \ T*\ rgD;}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00215\ \ \ T*\ pc;}
+\DoxyCodeLine{00217\ \ \ T*\ ps;}
+\DoxyCodeLine{00219\ \ \ T*\ xold;}
+\DoxyCodeLine{00221\ \ \ T*\ output;}
+\DoxyCodeLine{00223\ \ \ T*\ BDz;}
+\DoxyCodeLine{00225\ \ \ T*\ tempRandom;}
+\DoxyCodeLine{00227\ \ \ T*\ functionValues;}
+\DoxyCodeLine{00229\ \ \ T*\ publicFitness;}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00232\ \ \ T\ gen;}
+\DoxyCodeLine{00234\ \ \ \textcolor{keyword}{enum}\ \{INITIALIZED,\ SAMPLED,\ UPDATED\}\ state;}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \textcolor{comment}{//\ repeatedly\ used\ for\ output}}
+\DoxyCodeLine{00237\ \ \ T\ maxdiagC;}
+\DoxyCodeLine{00238\ \ \ T\ mindiagC;}
+\DoxyCodeLine{00239\ \ \ T\ maxEW;}
+\DoxyCodeLine{00240\ \ \ T\ minEW;}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \textcolor{keywordtype}{bool}\ eigensysIsUptodate;}
+\DoxyCodeLine{00243\ \ \ \textcolor{keywordtype}{bool}\ doCheckEigen;\ }
+\DoxyCodeLine{00244\ \ \ T\ genOfEigensysUpdate;}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ T\ dMaxSignifKond;}
+\DoxyCodeLine{00247\ \ \ T\ dLastMinEWgroesserNull;}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \textcolor{keywordtype}{bool}\ isResumeDone;}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ time\_t\ printtime;}
+\DoxyCodeLine{00252\ \ \ time\_t\ writetime;\ }
+\DoxyCodeLine{00253\ \ \ time\_t\ firstwritetime;}
+\DoxyCodeLine{00254\ \ \ time\_t\ firstprinttime;}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ std::string\ stopMessage;\ }
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ std::string\ getTimeStr(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{00259\ \ \ \{}
+\DoxyCodeLine{00260\ \ \ \ \ time\_t\ ltime;}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{wchar\_t}\ buf[26];}
+\DoxyCodeLine{00262\ \ \ \ \ errno\_t\ err;}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ time(\&ltime);}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ err\ =\ \_wctime\_s(buf,\ 26,\ \&ltime);}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordflow}{if}\ (err\ !=\ 0)}
+\DoxyCodeLine{00268\ \ \ \ \ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Invalid\ Arguments\ for\ \_wctime\_s.\ Error\ Code:\ \%d\(\backslash\)n"{}},\ err);}
+\DoxyCodeLine{00270\ \ \ \ \ \}}
+\DoxyCodeLine{00271\ \ \ \ \ wprintf\_s(L\textcolor{stringliteral}{"{}The\ time\ is\ \%s\(\backslash\)n"{}},\ buf);}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ origsize\ =\ wcslen(buf)\ +\ 1;}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ convertedChars\ =\ 0;}
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordtype}{char}\ strConcat[]\ =\ \textcolor{stringliteral}{"{}\ (char\ *)"{}};}
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ strConcatsize\ =\ (strlen(strConcat)\ +\ 1)\ *\ 2;}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ newsize\ =\ origsize\ *\ 2;}
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keywordtype}{char}*\ nstring\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{char}[newsize\ +\ strConcatsize];}
+\DoxyCodeLine{00279\ \ \ \ \ wcstombs\_s(\&convertedChars,\ nstring,\ newsize,\ buf,\ \_TRUNCATE);}
+\DoxyCodeLine{00280\ \ \ \ \ \_mbscat\_s((\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)nstring,\ newsize\ +\ strConcatsize,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)strConcat);}
+\DoxyCodeLine{00281\ \ \ \ \ std::cout\ <<\ nstring\ <<\ std::endl;}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ std::string\ timeStr\ =\ nstring;}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keyword}{delete}[]nstring;}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordflow}{return}\ timeStr.substr(0,\ 24);}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{//time\_t\ tm\ =\ time(0);}}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{//std::string\ timeStr(ctime(\&tm));}}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{//return\ timeStr.substr(0,\ 24);}}
+\DoxyCodeLine{00291\ \ \ \}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00299\ \ \ \textcolor{keywordtype}{void}\ eigen(T*\ diag,\ T**\ Q,\ T*\ rgtmp)}
+\DoxyCodeLine{00300\ \ \ \{}
+\DoxyCodeLine{00301\ \ \ \ \ assert(rgtmp\ \&\&\ \textcolor{stringliteral}{"{}eigen():\ input\ parameter\ rgtmp\ must\ be\ non-\/NULL"{}});}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordflow}{if}(C\ !=\ Q)\ \textcolor{comment}{//\ copy\ C\ to\ Q}}
+\DoxyCodeLine{00304\ \ \ \ \ \{}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <=\ i;\ ++j)}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ Q[i][j]\ =\ Q[j][i]\ =\ C[i][j];}
+\DoxyCodeLine{00308\ \ \ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ householder(Q,\ diag,\ rgtmp);}
+\DoxyCodeLine{00311\ \ \ \ \ ql(diag,\ rgtmp,\ Q);}
+\DoxyCodeLine{00312\ \ \ \}}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00319\ \ \ \textcolor{keywordtype}{int}\ checkEigen(T*\ diag,\ T**\ Q)}
+\DoxyCodeLine{00320\ \ \ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{comment}{//\ compute\ Q\ diag\ Q\string^T\ and\ Q\ Q\string^T\ to\ check}}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordtype}{int}\ res\ =\ 0;}
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++j)\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ T\ cc\ =\ 0.,\ dd\ =\ 0.;}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++k)}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ cc\ +=\ diag[k]*Q[i][k]*Q[j][k];}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ dd\ +=\ Q[i][k]*Q[j][k];}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ here,\ is\ the\ normalization\ the\ right\ one?}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ cond1\ =\ fabs(cc\ -\/\ C[i\ >\ j\ ?\ i\ :\ j][i\ >\ j\ ?\ j\ :\ i])\ /\ sqrt(C[i][i]*\ C[j][j])\ >\ T(1e-\/10);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ cond2\ =\ fabs(cc\ -\/\ C[i\ >\ j\ ?\ i\ :\ j][i\ >\ j\ ?\ j\ :\ i])\ >\ T(3e-\/14);}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(cond1\ \&\&\ cond2)}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ std::stringstream\ s;}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ s\ <<\ i\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ j\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ cc\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ C[i\ >\ j\ ?\ i\ :\ j][i\ >\ j\ ?\ j\ :\ i]}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ cc\ -\/\ C[i\ >\ j\ ?\ i\ :\ j][i\ >\ j\ ?\ j\ :\ i];}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_a377109d797314308676b483b3f64a489}{logWarnings}})}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ params.\mbox{\hyperlink{class_parameters_ad35a3925e3bb84b32ca2661a804c440d}{logStream}}\ <<\ \textcolor{stringliteral}{"{}eigen():\ imprecise\ result\ detected\ "{}}\ <<\ s.str()}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ ++res;}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(std::fabs(dd\ -\/\ (i\ ==\ j))\ >\ T(1e-\/10))}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ std::stringstream\ s;}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ s\ <<\ i\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ j\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ dd;}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_a377109d797314308676b483b3f64a489}{logWarnings}})}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ params.\mbox{\hyperlink{class_parameters_ad35a3925e3bb84b32ca2661a804c440d}{logStream}}\ <<\ \textcolor{stringliteral}{"{}eigen():\ imprecise\ result\ detected\ (Q\ not\ orthog.)"{}}}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ s.str()\ <<\ std::endl;}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ ++res;}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
+\DoxyCodeLine{00355\ \ \ \}}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00366\ \ \ \textcolor{keywordtype}{void}\ ql(T*\ d,\ T*\ e,\ T**\ V)}
+\DoxyCodeLine{00367\ \ \ \{}
+\DoxyCodeLine{00368\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ n\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00369\ \ \ \ \ T\ f(0);}
+\DoxyCodeLine{00370\ \ \ \ \ T\ tst1(0);}
+\DoxyCodeLine{00371\ \ \ \ \ \textcolor{keyword}{const}\ T\ eps(2.22e-\/16);\ \textcolor{comment}{//\ 2.0\string^-\/52.0\ =\ 2.22e-\/16}}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \textcolor{comment}{//\ shift\ input\ e}}
+\DoxyCodeLine{00374\ \ \ \ \ T*\ ep1\ =\ e;}
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keywordflow}{for}(T\ *ep2\ =\ e+1,\ *\textcolor{keyword}{const}\ end\ =\ e+n;\ ep2\ !=\ end;\ ep1++,\ ep2++)}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ *ep1\ =\ *ep2;}
+\DoxyCodeLine{00377\ \ \ \ \ *ep1\ =\ T(0);\ \textcolor{comment}{//\ never\ changed\ again}}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ l\ =\ 0;\ l\ <\ n;\ l++)}
+\DoxyCodeLine{00380\ \ \ \ \ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \textcolor{comment}{//\ find\ small\ subdiagonal\ element}}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ T\&\ el\ =\ e[l];}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ T\&\ dl\ =\ d[l];}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ smallSDElement\ =\ std::fabs(dl)\ +\ std::fabs(el);}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tst1\ <\ smallSDElement)}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ tst1\ =\ smallSDElement;}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ epsTst1\ =\ eps*tst1;}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ m\ =\ l;}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \textcolor{keywordflow}{while}(m\ <\ n)}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(std::fabs(e[m])\ <=\ epsTst1)\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ m++;}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \textcolor{comment}{//\ if\ m\ ==\ l,\ d[l]\ is\ an\ eigenvalue,\ otherwise,\ iterate.}}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(m\ >\ l)}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ T\ h,\ g\ =\ dl;}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ T\&\ dl1r\ =\ d[l+1];}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ T\ p\ =\ (dl1r\ -\/\ g)\ /\ (T(2)*el);}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ T\ r\ =\ \mbox{\hyperlink{utils_8h_ad4188c97df9a6a63692e13e7d7accca3}{myhypot}}(p,\ T(1));}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ compute\ implicit\ shift}}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(p\ <\ 0)\ r\ =\ -\/r;}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ pr\ =\ p+r;}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ dl\ =\ el/pr;}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ h\ =\ g\ -\/\ dl;}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ dl1\ =\ el*pr;}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ dl1r\ =\ dl1;}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ l+2;\ i\ <\ n;\ i++)\ d[i]\ -\/=\ h;}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ f\ +=\ h;}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ implicit\ QL\ transformation.}}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ p\ =\ d[m];}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ T\ c(1);}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ T\ c2(1);}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ T\ c3(1);}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ el1\ =\ e[l+1];}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ T\ s(0);}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ T\ s2(0);}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ m-\/1;\ i\ >=\ l;\ i-\/-\/)}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ c3\ =\ c2;}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ c2\ =\ c;}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ s2\ =\ s;}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\&\ ei\ =\ e[i];}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ g\ =\ c*ei;}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ h\ =\ c*p;}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ r\ =\ \mbox{\hyperlink{utils_8h_ad4188c97df9a6a63692e13e7d7accca3}{myhypot}}(p,\ ei);}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ e[i+1]\ =\ s*r;}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ s\ =\ ei/r;}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ c\ =\ p/r;}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\&\ di\ =\ d[i];}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ p\ =\ c*di\ -\/\ s*g;}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ d[i+1]\ =\ h\ +\ s*(c*g\ +\ s*di);}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ accumulate\ transformation.}}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <\ n;\ k++)}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\&\ Vki1\ =\ V[k][i+1];}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ h\ =\ Vki1;}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\&\ Vki\ =\ V[k][i];}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Vki1\ =\ s*Vki\ +\ c*h;}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Vki\ *=\ c;\ Vki\ -\/=\ s*h;}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ p\ =\ -\/s*s2*c3*el1*el/dl1;}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ el\ =\ s*p;}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ dl\ =\ c*p;}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}(std::fabs(el)\ >\ epsTst1);}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ dl\ +=\ f;}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ el\ =\ 0.0;}
+\DoxyCodeLine{00455\ \ \ \ \ \}}
+\DoxyCodeLine{00456\ \ \ \}}
+\DoxyCodeLine{00457\ }
+\DoxyCodeLine{00466\ \ \ \textcolor{keywordtype}{void}\ householder(T**\ V,\ T*\ d,\ T*\ e)}
+\DoxyCodeLine{00467\ \ \ \{}
+\DoxyCodeLine{00468\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ n\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ n;\ j++)}
+\DoxyCodeLine{00471\ \ \ \ \ \{}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ d[j]\ =\ V[n\ -\/\ 1][j];}
+\DoxyCodeLine{00473\ \ \ \ \ \}}
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \ \ \ \ \textcolor{comment}{//\ Householder\ reduction\ to\ tridiagonal\ form}}
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ n\ -\/\ 1;\ i\ >\ 0;\ i-\/-\/)}
+\DoxyCodeLine{00478\ \ \ \ \ \{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \textcolor{comment}{//\ scale\ to\ avoid\ under/overflow}}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ T\ scale\ =\ 0.0;}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ T\ h\ =\ 0.0;}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(T\ *pd\ =\ d,\ *\textcolor{keyword}{const}\ dend\ =\ d+i;\ pd\ !=\ dend;\ pd++)}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ scale\ +=\ std::fabs(*pd);}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(scale\ ==\ 0.0)}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ e[i]\ =\ d[i-\/1];}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ j++)}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ d[j]\ =\ V[i-\/1][j];}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ V[i][j]\ =\ 0.0;}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ V[j][i]\ =\ 0.0;}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ generate\ Householder\ vector}}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(T\ *pd\ =\ d,\ *\textcolor{keyword}{const}\ dend\ =\ d+i;\ pd\ !=\ dend;\ pd++)}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ *pd\ /=\ scale;}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ h\ +=\ *pd\ *\ *pd;}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ T\&\ dim1\ =\ d[i-\/1];}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ T\ f\ =\ dim1;}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ T\ g\ =\ f\ >\ 0\ ?\ -\/std::sqrt(h)\ :\ std::sqrt(h);}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ e[i]\ =\ scale*g;}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ h\ =\ h\ -\/\ f*\ g;}
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ dim1\ =\ f\ -\/\ g;}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ memset((\textcolor{keywordtype}{void}\ *)\ e,\ 0,\ (\textcolor{keywordtype}{size\_t})i*\textcolor{keyword}{sizeof}(T));}
+\DoxyCodeLine{00511\ }
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ apply\ similarity\ transformation\ to\ remaining\ columns}}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ j++)}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ f\ =\ d[j];}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ V[j][i]\ =\ f;}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ T\&\ ej\ =\ e[j];}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ g\ =\ ej\ +\ V[j][j]*\ f;}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ j\ +\ 1;\ k\ <=\ i\ -\/\ 1;\ k++)}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ T\&\ Vkj\ =\ V[k][j];}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ g\ +=\ Vkj*d[k];}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ e[k]\ +=\ Vkj*f;}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ ej\ =\ g;}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ f\ =\ 0.0;}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ j++)}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ T\&\ ej\ =\ e[j];}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ ej\ /=\ h;}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ f\ +=\ ej*\ d[j];}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ T\ hh\ =\ f\ /\ (h\ +\ h);}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ j++)}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ e[j]\ -\/=\ hh*d[j];}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ j++)}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ T\&\ dj\ =\ d[j];}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ f\ =\ dj;}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ g\ =\ e[j];}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ j;\ k\ <=\ i\ -\/\ 1;\ k++)}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ V[k][j]\ -\/=\ f*e[k]\ +\ g*d[k];}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ dj\ =\ V[i-\/1][j];}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ V[i][j]\ =\ 0.0;}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ d[i]\ =\ h;}
+\DoxyCodeLine{00553\ \ \ \ \ \}}
+\DoxyCodeLine{00554\ }
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{comment}{//\ accumulate\ transformations}}
+\DoxyCodeLine{00556\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ nm1\ =\ n-\/1;}
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ nm1;\ i++)}
+\DoxyCodeLine{00558\ \ \ \ \ \{}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ T\ h;}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ T\&\ Vii\ =\ V[i][i];}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ V[n-\/1][i]\ =\ Vii;}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ Vii\ =\ 1.0;}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ h\ =\ d[i+1];}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(h\ !=\ 0.0)}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <=\ i;\ k++)}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ d[k]\ =\ V[k][i+1]\ /\ h;}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <=\ i;\ j++)\ \{}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ T\ g\ =\ 0.0;}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <=\ i;\ k++)}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ T*\ Vk\ =\ V[k];}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ g\ +=\ Vk[i+1]*\ Vk[j];}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <=\ i;\ k++)}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ V[k][j]\ -\/=\ g*d[k];}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <=\ i;\ k++)}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ V[k][i+1]\ =\ 0.0;}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00587\ \ \ \ \ \}}
+\DoxyCodeLine{00588\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ n;\ j++)}
+\DoxyCodeLine{00589\ \ \ \ \ \{}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ T\&\ Vnm1j\ =\ V[n-\/1][j];}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ d[j]\ =\ Vnm1j;}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ Vnm1j\ =\ 0.0;}
+\DoxyCodeLine{00593\ \ \ \ \ \}}
+\DoxyCodeLine{00594\ \ \ \ \ V[n-\/1][n-\/1]\ =\ 1.0;}
+\DoxyCodeLine{00595\ \ \ \ \ e[0]\ =\ 0.0;}
+\DoxyCodeLine{00596\ \ \ \}}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00601\ \ \ \textcolor{keywordtype}{void}\ sortIndex(\textcolor{keyword}{const}\ T*\ rgFunVal,\ \textcolor{keywordtype}{int}*\ iindex,\ \textcolor{keywordtype}{int}\ n)}
+\DoxyCodeLine{00602\ \ \ \{}
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{keywordtype}{int}\ i,\ j;}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keywordflow}{for}(i\ =\ 1,\ iindex[0]\ =\ 0;\ i\ <\ n;\ ++i)}
+\DoxyCodeLine{00605\ \ \ \ \ \{}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(j\ =\ i;\ j\ >\ 0;\ -\/-\/j)}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(rgFunVal[iindex[j\ -\/\ 1]]\ <\ rgFunVal[i])}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ iindex[j]\ =\ iindex[j\ -\/\ 1];\ \textcolor{comment}{//\ shift\ up}}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ iindex[j]\ =\ i;}
+\DoxyCodeLine{00613\ \ \ \ \ \}}
+\DoxyCodeLine{00614\ \ \ \}}
+\DoxyCodeLine{00615\ }
+\DoxyCodeLine{00616\ \ \ \textcolor{keywordtype}{void}\ adaptC2(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ hsig)}
+\DoxyCodeLine{00617\ \ \ \{}
+\DoxyCodeLine{00618\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ N\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keywordtype}{bool}\ diag\ =\ params.diagonalCov\ ==\ 1\ ||\ params.diagonalCov\ >=\ gen;}
+\DoxyCodeLine{00620\ }
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_add6890b6cffb7022d3a024bb3c48dfaf}{ccov}}\ !=\ T(0))}
+\DoxyCodeLine{00622\ \ \ \ \ \{}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \textcolor{comment}{//\ definitions\ for\ speeding\ up\ inner-\/most\ loop}}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ mucovinv\ =\ T(1)/params.mucov;}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ commonFactor\ =\ params.\mbox{\hyperlink{class_parameters_add6890b6cffb7022d3a024bb3c48dfaf}{ccov}}\ *\ (diag\ ?\ (N\ +\ T(1.5))\ /\ T(3)\ :\ T(1));}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ ccov1\ =\ (std::min)(commonFactor*mucovinv,\ T(1));}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ ccovmu\ =\ (std::min)(commonFactor*(T(1)-\/mucovinv),\ T(1)-\/ccov1);}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ sigmasquare\ =\ sigma*sigma;}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ onemccov1ccovmu\ =\ T(1)-\/ccov1-\/ccovmu;}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ longFactor\ =\ (T(1)-\/hsig)*params.ccumcov*(T(2)-\/params.ccumcov);}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \ \ eigensysIsUptodate\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00633\ }
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \textcolor{comment}{//\ update\ covariance\ matrix}}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ diag\ ?\ i\ :\ 0;\ j\ <=\ i;\ ++j)}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ T\&\ Cij\ =\ C[i][j];}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ Cij\ =\ onemccov1ccovmu*Cij\ +\ ccov1\ *\ (pc[i]*pc[j]\ +\ longFactor*Cij);}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <\ params.\mbox{\hyperlink{class_parameters_a218e778535a9538e4ca24483b74505e8}{mu}};\ ++k)}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \{\ \textcolor{comment}{//\ additional\ rank\ mu\ update}}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T*\ rgrgxindexk\ =\ population[index[k]];}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ Cij\ +=\ ccovmu*params.\mbox{\hyperlink{class_parameters_a517ffc44e157e7c8c87073af10c3e4a4}{weights}}[k]\ *\ (rgrgxindexk[i]\ -\/\ xold[i])}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ (rgrgxindexk[j]\ -\/\ xold[j])\ /\ sigmasquare;}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \textcolor{comment}{//\ update\ maximal\ and\ minimal\ diagonal\ value}}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ maxdiagC\ =\ mindiagC\ =\ C[0][0];}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\&\ Cii\ =\ C[i][i];}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(maxdiagC\ <\ Cii)}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ maxdiagC\ =\ Cii;}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(mindiagC\ >\ Cii)}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \ \ mindiagC\ =\ Cii;}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00657\ \ \ \ \ \}}
+\DoxyCodeLine{00658\ \ \ \}}
+\DoxyCodeLine{00659\ }
+\DoxyCodeLine{00663\ \ \ \textcolor{keywordtype}{void}\ testMinStdDevs(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{00664\ \ \ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \textcolor{keywordflow}{if}(!this-\/>params.rgDiffMinChange)}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00667\ }
+\DoxyCodeLine{00668\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \textcolor{keywordflow}{while}(this-\/>sigma*std::sqrt(this-\/>C[i][i])\ <\ this-\/>params.rgDiffMinChange[i])}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ this-\/>sigma\ *=\ std::exp(T(0.05)\ +\ this-\/>params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}}\ /\ this-\/>params.damps);}
+\DoxyCodeLine{00671\ \ \ \}}
+\DoxyCodeLine{00672\ }
+\DoxyCodeLine{00678\ \ \ \textcolor{keywordtype}{void}\ addMutation(T*\ x,\ T\ eps\ =\ 1.0)}
+\DoxyCodeLine{00679\ \ \ \{}
+\DoxyCodeLine{00680\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00681\ \ \ \ \ \ \ tempRandom[i]\ =\ rgD[i]*rand.\mbox{\hyperlink{class_random_ad35753a318917fa4b9aafe2a07054c91}{gauss}}();}
+\DoxyCodeLine{00682\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00683\ \ \ \ \ \{}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ T\ sum\ =\ 0.0;}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++j)}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ sum\ +=\ B[i][j]*tempRandom[j];}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ x[i]\ =\ xmean[i]\ +\ eps*sigma*sum;}
+\DoxyCodeLine{00688\ \ \ \ \ \}}
+\DoxyCodeLine{00689\ \ \ \}}
+\DoxyCodeLine{00690\ }
+\DoxyCodeLine{00697\ \ \ \textcolor{keywordtype}{void}\ writeToStream(\textcolor{keywordtype}{int}\ key,\ std::ostream\&\ file)}
+\DoxyCodeLine{00698\ \ \ \{}
+\DoxyCodeLine{00699\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKResume)}
+\DoxyCodeLine{00700\ \ \ \ \ \{}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ file\ <<\ std::endl\ <<\ \textcolor{stringliteral}{"{}\#\ resume\ "{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}\ <<\ std::endl;}
+\DoxyCodeLine{00702\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}xmean"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00703\ \ \ \ \ \ \ writeToStream(WKXMean,\ file);}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}path\ for\ sigma"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ file\ <<\ ps[i]\ <<\ (i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ :\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}});}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}path\ for\ C"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ file\ <<\ pc[i]\ <<\ (i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}}\ :\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}});}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}sigma\ "{}}\ <<\ sigma\ <<\ std::endl;}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \textcolor{comment}{//\ note\ than\ B\ and\ D\ might\ not\ be\ up-\/to-\/date}}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}covariance\ matrix"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ writeToStream(WKC,\ file);}
+\DoxyCodeLine{00714\ \ \ \ \ \}}
+\DoxyCodeLine{00715\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKXMean)}
+\DoxyCodeLine{00716\ \ \ \ \ \{}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ file\ <<\ (i\ ==\ 0\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}})\ <<\ xmean[i];}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00720\ \ \ \ \ \}}
+\DoxyCodeLine{00721\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKC)}
+\DoxyCodeLine{00722\ \ \ \ \ \{}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <=\ i;\ ++j)}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \ \ file\ <<\ C[i][j];}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(j\ ==\ i)}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{charliteral}{'\(\backslash\)t'};}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00733\ \ \ \ \ \}}
+\DoxyCodeLine{00734\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKAll)}
+\DoxyCodeLine{00735\ \ \ \ \ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Unsafe}}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \textcolor{comment}{//time\_t\ ti\ =\ time(0);}}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \textcolor{comment}{//file\ <<\ std::endl\ <<\ "{}\#\ -\/-\/-\/-\/-\/-\/-\/-\/-\/\ "{}\ <<\ asctime(localtime(\&ti))\ <<\ std::endl;}}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }tm\ newtime;}
+\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \_\_time32\_t\ aclock;}
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ buffer[32];}
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ errno\_t\ errNum;}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \_time32(\&aclock);\ \ \ \textcolor{comment}{//\ Get\ time\ in\ seconds.}}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \_localtime32\_s(\&newtime,\ \&aclock);\ \ \ \textcolor{comment}{//\ Convert\ time\ to\ struct\ tm\ form.}}
+\DoxyCodeLine{00746\ }
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Print\ local\ time\ as\ a\ string.}}
+\DoxyCodeLine{00748\ }
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ errNum\ =\ asctime\_s(buffer,\ 32,\ \&newtime);}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (errNum)}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ code:\ \%d"{}},\ (\textcolor{keywordtype}{int})errNum);}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ file\ <<\ std::endl\ <<\ \textcolor{stringliteral}{"{}\#\ -\/-\/-\/-\/-\/-\/-\/-\/-\/\ "{}}\ <<\ buffer\ <<\ std::endl;}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ N\ "{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}\ <<\ std::endl;}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}function\ evaluations\ "{}}\ <<\ (long)\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}\ <<\ std::endl;}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}elapsed\ (CPU)\ time\ [s]\ "{}}\ <<\ std::setprecision(2)\ <<\ eigenTimings.\mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}}\ <<\ std::endl;}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}function\ value\ f(x)="{}}\ <<\ population[index[0]][params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}]\ <<\ std::endl;}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}maximal\ standard\ deviation\ "{}}\ <<\ sigma*std::sqrt(maxdiagC)\ <<\ std::endl;}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}minimal\ standard\ deviation\ "{}}\ <<\ sigma*std::sqrt(mindiagC)\ <<\ std::endl;}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}sigma\ "{}}\ <<\ sigma\ <<\ std::endl;}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}axisratio\ "{}}\ <<\ (maxElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}})\ /\ minElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}))\ <<\ std::endl;}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}xbestever\ found\ after\ "{}}\ <<\ std::setprecision(0)\ <<\ xBestEver[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+1]}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}evaluations,\ function\ value\ "{}}\ <<\ xBestEver[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}]\ <<\ std::endl;}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ xBestEver[i]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}xbest\ (of\ last\ generation,\ function\ value\ "{}}\ <<\ population[index[0]][params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}]\ <<\ \textcolor{stringliteral}{"{})"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ population[index[0]][i]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}xmean"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ xmean[i]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}Standard\ deviation\ of\ coordinate\ axes\ (sigma*sqrt(diag(C)))"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ sigma*std::sqrt(C[i][i])\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}Main\ axis\ lengths\ of\ mutation\ ellipsoid\ (sigma*diag(D))"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ tempRandom[i]\ =\ rgD[i];}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ std::sort(tempRandom,\ tempRandom\ +\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ sigma*tempRandom[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1-\/i]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}Longest\ axis\ (b\_i\ where\ d\_ii=max(diag(D))"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ k\ =\ maxIndex(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ B[i][k]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}Shortest\ axis\ (b\_i\ where\ d\_ii=max(diag(D))"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ k\ =\ minIndex(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ std::setw(12)\ <<\ B[i][k]\ <<\ (i\ \%\ 5\ ==\ 4\ ||\ i\ ==\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1\ ?\ \textcolor{charliteral}{'\(\backslash\)n'}\ :\ \textcolor{charliteral}{'\ '});}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00792\ \ \ \ \ \}}
+\DoxyCodeLine{00793\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKFewInfo)}
+\DoxyCodeLine{00794\ \ \ \ \ \{}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ file\ <<\ \textcolor{stringliteral}{"{}\ Iter\(\backslash\)tFevals\(\backslash\)tFunction\ Value\(\backslash\)tSigma\(\backslash\)tMaxCoorDev\(\backslash\)tMinCoorDev\(\backslash\)t"{}}}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}AxisRatio\(\backslash\)tMinDii\(\backslash\)tTime\ in\ eig"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00797\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00798\ \ \ \ \ \}}
+\DoxyCodeLine{00799\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKFew)}
+\DoxyCodeLine{00800\ \ \ \ \ \{}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ file\ <<\ (int)\ gen\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}\ <<\ (\textcolor{keywordtype}{int})\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ <<\ functionValues[index[0]]\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)t"{}}\ <<\ sigma\ <<\ \textcolor{stringliteral}{"{}\ \ "{}}}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ <<\ sigma*std::sqrt(maxdiagC)\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}\ <<\ sigma*std::sqrt(mindiagC)}
+\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}\ <<\ std::scientific\ <<\ std::setprecision(2)}
+\DoxyCodeLine{00805\ \ \ \ \ \ \ \ \ \ \ <<\ std::sqrt(maxEW\ /\ minEW)\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}}\ <<\ std::sqrt(minEW)}
+\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ \ "{}}\ <<\ eigenTimings.\mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}};}
+\DoxyCodeLine{00807\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00808\ \ \ \ \ \}}
+\DoxyCodeLine{00809\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKEval)}
+\DoxyCodeLine{00810\ \ \ \ \ \{}
+\DoxyCodeLine{00811\ \ \ \ \ \ \ file\ <<\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}};}
+\DoxyCodeLine{00812\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00813\ \ \ \ \ \}}
+\DoxyCodeLine{00814\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKFitness)}
+\DoxyCodeLine{00815\ \ \ \ \ \{}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ file\ <<\ (i\ ==\ 0\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}})\ <<\ functionValues[index[i]];}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00819\ \ \ \ \ \}}
+\DoxyCodeLine{00820\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKFBestEver)}
+\DoxyCodeLine{00821\ \ \ \ \ \{}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ file\ <<\ xBestEver[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}]\ <<\ std::endl;}
+\DoxyCodeLine{00823\ \ \ \ \ \}}
+\DoxyCodeLine{00824\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKCGeneration)}
+\DoxyCodeLine{00825\ \ \ \ \ \{}
+\DoxyCodeLine{00826\ \ \ \ \ \ \ file\ <<\ gen\ <<\ std::endl;}
+\DoxyCodeLine{00827\ \ \ \ \ \}}
+\DoxyCodeLine{00828\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKSigma)}
+\DoxyCodeLine{00829\ \ \ \ \ \{}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ file\ <<\ sigma\ <<\ std::endl;}
+\DoxyCodeLine{00831\ \ \ \ \ \}}
+\DoxyCodeLine{00832\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKLambda)}
+\DoxyCodeLine{00833\ \ \ \ \ \{}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ file\ <<\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}\ <<\ std::endl;}
+\DoxyCodeLine{00835\ \ \ \ \ \}}
+\DoxyCodeLine{00836\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKB)}
+\DoxyCodeLine{00837\ \ \ \ \ \{}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \textcolor{keywordtype}{int}*\ iindex\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{int}[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ sortIndex(rgD,\ iindex,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{00840\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++j)}
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \ \ file\ <<\ B[j][iindex[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1-\/i]];}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(j\ !=\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}-\/1)}
+\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \ \ \ \ file\ <<\ \textcolor{charliteral}{'\(\backslash\)t'};}
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00847\ \ \ \ \ \ \ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ iindex;}
+\DoxyCodeLine{00850\ \ \ \ \ \ \ iindex\ =\ 0;}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00852\ \ \ \ \ \}}
+\DoxyCodeLine{00853\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKXBest)}
+\DoxyCodeLine{00854\ \ \ \ \ \{}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ file\ <<\ (i\ ==\ 0\ ?\ \textcolor{stringliteral}{"{}"{}}\ :\ \textcolor{stringliteral}{"{}\(\backslash\)t"{}})\ <<\ population[index[0]][i];}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00858\ \ \ \ \ \}}
+\DoxyCodeLine{00859\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKClock)}
+\DoxyCodeLine{00860\ \ \ \ \ \{}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ eigenTimings.\mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}}();}
+\DoxyCodeLine{00862\ \ \ \ \ \ \ file\ <<\ eigenTimings.\mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}}\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ eigenTimings.tictoctime}
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00864\ \ \ \ \ \}}
+\DoxyCodeLine{00865\ \ \ \ \ \textcolor{keywordflow}{if}(key\ \&\ WKDim)}
+\DoxyCodeLine{00866\ \ \ \ \ \{}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ file\ <<\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ file\ <<\ std::endl;}
+\DoxyCodeLine{00869\ \ \ \ \ \}}
+\DoxyCodeLine{00870\ \ \ \}}
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00873\ }
+\DoxyCodeLine{00874\ \ \ T\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}};\ }
+\DoxyCodeLine{00875\ \ \ \mbox{\hyperlink{class_timing}{Timing}}\ eigenTimings;}
+\DoxyCodeLine{00876\ }
+\DoxyCodeLine{00877\ \ \ \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}}()}
+\DoxyCodeLine{00878\ \ \ \ \ :\ version(\textcolor{stringliteral}{"{}1.0alpha"{}})}
+\DoxyCodeLine{00879\ \ \ \{}
+\DoxyCodeLine{00880\ \ \ \}}
+\DoxyCodeLine{00881\ }
+\DoxyCodeLine{00886\ \ \ \mbox{\hyperlink{class_c_m_a_e_s_a1dafd6714642367224020c2b8bd6573a}{\string~CMAES}}()}
+\DoxyCodeLine{00887\ \ \ \{}
+\DoxyCodeLine{00888\ \ \ \ \ \textcolor{keyword}{delete}[]\ pc;}
+\DoxyCodeLine{00889\ \ \ \ \ \textcolor{keyword}{delete}[]\ ps;}
+\DoxyCodeLine{00890\ \ \ \ \ \textcolor{keyword}{delete}[]\ tempRandom;}
+\DoxyCodeLine{00891\ \ \ \ \ \textcolor{keyword}{delete}[]\ BDz;}
+\DoxyCodeLine{00892\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/xmean;}
+\DoxyCodeLine{00893\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/xold;}
+\DoxyCodeLine{00894\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/xBestEver;}
+\DoxyCodeLine{00895\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/output;}
+\DoxyCodeLine{00896\ \ \ \ \ \textcolor{keyword}{delete}[]\ rgD;}
+\DoxyCodeLine{00897\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00898\ \ \ \ \ \{}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ C[i];}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ B[i];}
+\DoxyCodeLine{00901\ \ \ \ \ \}}
+\DoxyCodeLine{00902\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ ++i)}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/population[i];}
+\DoxyCodeLine{00904\ \ \ \ \ \textcolor{keyword}{delete}[]\ population;}
+\DoxyCodeLine{00905\ \ \ \ \ \textcolor{keyword}{delete}[]\ C;}
+\DoxyCodeLine{00906\ \ \ \ \ \textcolor{keyword}{delete}[]\ B;}
+\DoxyCodeLine{00907\ \ \ \ \ \textcolor{keyword}{delete}[]\ index;}
+\DoxyCodeLine{00908\ \ \ \ \ \textcolor{keyword}{delete}[]\ publicFitness;}
+\DoxyCodeLine{00909\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/functionValues;}
+\DoxyCodeLine{00910\ \ \ \ \ \textcolor{keyword}{delete}[]\ -\/-\/funcValueHistory;}
+\DoxyCodeLine{00911\ \ \ \}}
+\DoxyCodeLine{00912\ }
+\DoxyCodeLine{00920\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_aa3b633d6c87ebce36c612cd3d9b11585}{init}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_parameters}{Parameters<T>}}\&\ parameters)}
+\DoxyCodeLine{00921\ \ \ \{}
+\DoxyCodeLine{00922\ \ \ \ \ params\ =\ parameters;}
+\DoxyCodeLine{00923\ }
+\DoxyCodeLine{00924\ \ \ \ \ stopMessage\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00925\ }
+\DoxyCodeLine{00926\ \ \ \ \ T\ trace(0);}
+\DoxyCodeLine{00927\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00928\ \ \ \ \ \ \ trace\ +=\ params.\mbox{\hyperlink{class_parameters_abcd5a706fceab041a69297c1c58149a4}{rgInitialStds}}[i]*params.\mbox{\hyperlink{class_parameters_abcd5a706fceab041a69297c1c58149a4}{rgInitialStds}}[i];}
+\DoxyCodeLine{00929\ \ \ \ \ sigma\ =\ std::sqrt(trace/params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{00930\ }
+\DoxyCodeLine{00931\ \ \ \ \ chiN\ =\ std::sqrt((T)\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}})\ *\ (T(1)\ -\/\ T(1)/(T(4)*params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}})\ +\ T(1)/(T(21)*params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}*params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}));}
+\DoxyCodeLine{00932\ \ \ \ \ eigensysIsUptodate\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00933\ \ \ \ \ doCheckEigen\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00934\ \ \ \ \ genOfEigensysUpdate\ =\ 0;}
+\DoxyCodeLine{00935\ \ \ \ \ isResumeDone\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00936\ }
+\DoxyCodeLine{00937\ \ \ \ \ T\ dtest;}
+\DoxyCodeLine{00938\ \ \ \ \ \textcolor{keywordflow}{for}(dtest\ =\ T(1);\ dtest\ \&\&\ dtest\ <\ T(1.1)*dtest;\ dtest\ *=\ T(2))}
+\DoxyCodeLine{00939\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(dtest\ ==\ dtest\ +\ T(1))}
+\DoxyCodeLine{00940\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00941\ \ \ \ \ dMaxSignifKond\ =\ dtest\ /\ T(1000);\ \textcolor{comment}{//\ not\ sure\ whether\ this\ is\ really\ save,\ 100\ does\ not\ work\ well\ enough}}
+\DoxyCodeLine{00942\ }
+\DoxyCodeLine{00943\ \ \ \ \ gen\ =\ 0;}
+\DoxyCodeLine{00944\ \ \ \ \ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}\ =\ 0;}
+\DoxyCodeLine{00945\ \ \ \ \ state\ =\ INITIALIZED;}
+\DoxyCodeLine{00946\ \ \ \ \ dLastMinEWgroesserNull\ =\ T(1);}
+\DoxyCodeLine{00947\ \ \ \ \ printtime\ =\ writetime\ =\ firstwritetime\ =\ firstprinttime\ =\ 0;}
+\DoxyCodeLine{00948\ }
+\DoxyCodeLine{00949\ \ \ \ \ pc\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00950\ \ \ \ \ ps\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00951\ \ \ \ \ tempRandom\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+1];}
+\DoxyCodeLine{00952\ \ \ \ \ BDz\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00953\ \ \ \ \ xmean\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+2];}
+\DoxyCodeLine{00954\ \ \ \ \ xmean[0]\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00955\ \ \ \ \ ++xmean;}
+\DoxyCodeLine{00956\ \ \ \ \ xold\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+2];}
+\DoxyCodeLine{00957\ \ \ \ \ xold[0]\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00958\ \ \ \ \ ++xold;}
+\DoxyCodeLine{00959\ \ \ \ \ xBestEver\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+3];}
+\DoxyCodeLine{00960\ \ \ \ \ xBestEver[0]\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00961\ \ \ \ \ ++xBestEver;}
+\DoxyCodeLine{00962\ \ \ \ \ xBestEver[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}]\ =\ (std::numeric\_limits<T>::max)();}
+\DoxyCodeLine{00963\ \ \ \ \ output\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+2];}
+\DoxyCodeLine{00964\ \ \ \ \ output[0]\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00965\ \ \ \ \ ++output;}
+\DoxyCodeLine{00966\ \ \ \ \ rgD\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00967\ \ \ \ \ C\ =\ \textcolor{keyword}{new}\ T*[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00968\ \ \ \ \ B\ =\ \textcolor{keyword}{new}\ T*[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00969\ \ \ \ \ publicFitness\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}];}
+\DoxyCodeLine{00970\ \ \ \ \ functionValues\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}+1];}
+\DoxyCodeLine{00971\ \ \ \ \ functionValues[0]\ =\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};}
+\DoxyCodeLine{00972\ \ \ \ \ ++functionValues;}
+\DoxyCodeLine{00973\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ historySize\ =\ 10\ +\ (int)\ ceil(3.*10.*params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}/params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}});}
+\DoxyCodeLine{00974\ \ \ \ \ funcValueHistory\ =\ \textcolor{keyword}{new}\ T[historySize\ +\ 1];}
+\DoxyCodeLine{00975\ \ \ \ \ funcValueHistory[0]\ =\ (T)\ historySize;}
+\DoxyCodeLine{00976\ \ \ \ \ funcValueHistory++;}
+\DoxyCodeLine{00977\ }
+\DoxyCodeLine{00978\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{00979\ \ \ \ \ \{}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ C[i]\ =\ \textcolor{keyword}{new}\ T[i+1];}
+\DoxyCodeLine{00981\ \ \ \ \ \ \ B[i]\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{00982\ \ \ \ \ \}}
+\DoxyCodeLine{00983\ \ \ \ \ index\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{int}[params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}];}
+\DoxyCodeLine{00984\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ ++i)}
+\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ index[i]\ =\ i;}
+\DoxyCodeLine{00986\ \ \ \ \ population\ =\ \textcolor{keyword}{new}\ T*[params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}];}
+\DoxyCodeLine{00987\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ ++i)}
+\DoxyCodeLine{00988\ \ \ \ \ \{}
+\DoxyCodeLine{00989\ \ \ \ \ \ \ population[i]\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}+2];}
+\DoxyCodeLine{00990\ \ \ \ \ \ \ population[i][0]\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{00991\ \ \ \ \ \ \ population[i]++;}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ j++)}
+\DoxyCodeLine{00993\ \ \ \ \ \ \ \ \ population[i][j]\ =\ 0.0;}
+\DoxyCodeLine{00994\ \ \ \ \ \}}
+\DoxyCodeLine{00995\ }
+\DoxyCodeLine{00996\ \ \ \ \ \textcolor{comment}{//\ initialize\ newed\ space}}
+\DoxyCodeLine{00997\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ i++)}
+\DoxyCodeLine{00998\ \ \ \ \ \{}
+\DoxyCodeLine{00999\ \ \ \ \ \ \ functionValues[i]\ =\ (std::numeric\_limits<T>::max)();}
+\DoxyCodeLine{01000\ \ \ \ \ \}}
+\DoxyCodeLine{01001\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ historySize;\ i++)}
+\DoxyCodeLine{01002\ \ \ \ \ \{}
+\DoxyCodeLine{01003\ \ \ \ \ \ \ funcValueHistory[i]\ =\ (std::numeric\_limits<T>::max)();}
+\DoxyCodeLine{01004\ \ \ \ \ \}}
+\DoxyCodeLine{01005\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01006\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ i;\ ++j)}
+\DoxyCodeLine{01007\ \ \ \ \ \ \ \ \ C[i][j]\ =\ B[i][j]\ =\ B[j][i]\ =\ 0.;}
+\DoxyCodeLine{01008\ }
+\DoxyCodeLine{01009\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01010\ \ \ \ \ \{}
+\DoxyCodeLine{01011\ \ \ \ \ \ \ B[i][i]\ =\ T(1);}
+\DoxyCodeLine{01012\ \ \ \ \ \ \ C[i][i]\ =\ rgD[i]\ =\ params.\mbox{\hyperlink{class_parameters_abcd5a706fceab041a69297c1c58149a4}{rgInitialStds}}[i]*std::sqrt(params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}/trace);}
+\DoxyCodeLine{01013\ \ \ \ \ \ \ C[i][i]\ *=\ C[i][i];}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ pc[i]\ =\ ps[i]\ =\ T(0);}
+\DoxyCodeLine{01015\ \ \ \ \ \}}
+\DoxyCodeLine{01016\ \ \ \ \ minEW\ =\ minElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{01017\ \ \ \ \ minEW\ =\ minEW*minEW;}
+\DoxyCodeLine{01018\ \ \ \ \ maxEW\ =\ maxElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{01019\ \ \ \ \ maxEW\ =\ maxEW*maxEW;}
+\DoxyCodeLine{01020\ }
+\DoxyCodeLine{01021\ \ \ \ \ maxdiagC\ =\ C[0][0];}
+\DoxyCodeLine{01022\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)\ \textcolor{keywordflow}{if}(maxdiagC\ <\ C[i][i])\ maxdiagC\ =\ C[i][i];}
+\DoxyCodeLine{01023\ \ \ \ \ mindiagC\ =\ C[0][0];}
+\DoxyCodeLine{01024\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)\ \textcolor{keywordflow}{if}(mindiagC\ >\ C[i][i])\ mindiagC\ =\ C[i][i];}
+\DoxyCodeLine{01025\ }
+\DoxyCodeLine{01026\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01027\ \ \ \ \ \ \ xmean[i]\ =\ xold[i]\ =\ params.\mbox{\hyperlink{class_parameters_a1977464fae3ccf5579334f9c52bc0577}{xstart}}[i];}
+\DoxyCodeLine{01028\ \ \ \ \ \textcolor{comment}{//\ use\ in\ case\ xstart\ as\ typicalX}}
+\DoxyCodeLine{01029\ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_abd22adce3be4279432409e422bdc76e2}{typicalXcase}})}
+\DoxyCodeLine{01030\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01031\ \ \ \ \ \ \ \ \ xmean[i]\ +=\ sigma*rgD[i]*rand.\mbox{\hyperlink{class_random_ad35753a318917fa4b9aafe2a07054c91}{gauss}}();}
+\DoxyCodeLine{01032\ }
+\DoxyCodeLine{01033\ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_af491c599991bb837188c9675fa5686a8}{resumefile}}\ !=\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{01034\ \ \ \ \ \ \ \mbox{\hyperlink{class_c_m_a_e_s_a6fb584672adf0a856b638cadbe2e3b84}{resumeDistribution}}(params.\mbox{\hyperlink{class_parameters_af491c599991bb837188c9675fa5686a8}{resumefile}});}
+\DoxyCodeLine{01035\ }
+\DoxyCodeLine{01036\ \ \ \ \ \textcolor{keywordflow}{return}\ publicFitness;}
+\DoxyCodeLine{01037\ \ \ \}}
+\DoxyCodeLine{01038\ }
+\DoxyCodeLine{01043\ \ \ std::string\ \mbox{\hyperlink{class_c_m_a_e_s_a514dd76a8dd20a33a3c52f0cc6af74d2}{sayHello}}()}
+\DoxyCodeLine{01044\ \ \ \{}
+\DoxyCodeLine{01045\ \ \ \ \ std::stringstream\ stream;}
+\DoxyCodeLine{01046\ \ \ \ \ stream\ <<\ \textcolor{stringliteral}{"{}("{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a218e778535a9538e4ca24483b74505e8}{mu}}\ <<\ \textcolor{stringliteral}{"{},"{}}\ <<\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}\ <<\ \textcolor{stringliteral}{"{})-\/CMA-\/ES(mu\_eff="{}}}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ <<\ std::setprecision(1)\ <<\ params.\mbox{\hyperlink{class_parameters_a0dea53bad82fba45a0bc6b45922b9cfd}{mueff}}\ <<\ \textcolor{stringliteral}{"{}),\ Ver=\(\backslash\)"{}"{}}\ <<\ version}
+\DoxyCodeLine{01048\ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{},\ dimension="{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}\ <<\ \textcolor{stringliteral}{"{},\ diagonalIterations="{}}}
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ <<\ (long)\ params.diagonalCov\ <<\ \textcolor{stringliteral}{"{}\ ("{}}\ <<\ getTimeStr()\ <<\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{01050\ \ \ \ \ \textcolor{keywordflow}{return}\ stream.str();}
+\DoxyCodeLine{01051\ \ \ \}}
+\DoxyCodeLine{01052\ }
+\DoxyCodeLine{01070\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_c_m_a_e_s_a6fb584672adf0a856b638cadbe2e3b84}{resumeDistribution}}(\textcolor{keyword}{const}\ std::string\&\ filename)}
+\DoxyCodeLine{01071\ \ \ \{}
+\DoxyCodeLine{01072\ \ \ \ \ std::ifstream\ file(filename.c\_str());}
+\DoxyCodeLine{01073\ \ \ \ \ \textcolor{keywordflow}{if}(!file.is\_open())}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ could\ not\ open\ '"{}}\ +\ filename\ +\ \textcolor{stringliteral}{"{}'"{}});}
+\DoxyCodeLine{01075\ }
+\DoxyCodeLine{01076\ \ \ \ \ std::streampos\ lastResume\ =\ 0;}
+\DoxyCodeLine{01077\ \ \ \ \ std::string\ entry\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01078\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01079\ \ \ \ \ \{}
+\DoxyCodeLine{01080\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01081\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}resume"{}})}
+\DoxyCodeLine{01082\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01083\ \ \ \ \ \ \ \ \ lastResume\ =\ file.tellg();}
+\DoxyCodeLine{01084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01085\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01086\ \ \ \ \ \}}
+\DoxyCodeLine{01087\ \ \ \ \ file.clear();}
+\DoxyCodeLine{01088\ \ \ \ \ file.seekg(lastResume);}
+\DoxyCodeLine{01089\ }
+\DoxyCodeLine{01090\ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01091\ \ \ \ \ file\ >>\ n;}
+\DoxyCodeLine{01092\ \ \ \ \ \textcolor{keywordflow}{if}(n\ !=\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}})}
+\DoxyCodeLine{01093\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ Dimension\ numbers\ do\ not\ match"{}});}
+\DoxyCodeLine{01094\ }
+\DoxyCodeLine{01095\ \ \ \ \ \textcolor{comment}{//\ find\ next\ "{}xmean"{}\ entry}}
+\DoxyCodeLine{01096\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01097\ \ \ \ \ \{}
+\DoxyCodeLine{01098\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01099\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}xmean"{}})}
+\DoxyCodeLine{01100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01101\ \ \ \ \ \}}
+\DoxyCodeLine{01102\ \ \ \ \ \textcolor{comment}{//\ read\ xmean}}
+\DoxyCodeLine{01103\ \ \ \ \ \textcolor{keywordflow}{if}(file.eof())}
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ 'xmean'\ not\ found"{}});}
+\DoxyCodeLine{01105\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{01106\ \ \ \ \ \ \ file\ >>\ xmean[i];}
+\DoxyCodeLine{01107\ \ \ \ \ file.clear();}
+\DoxyCodeLine{01108\ \ \ \ \ file.seekg(lastResume);}
+\DoxyCodeLine{01109\ }
+\DoxyCodeLine{01110\ \ \ \ \ \textcolor{comment}{//\ find\ next\ "{}path\ for\ sigma"{}\ entry}}
+\DoxyCodeLine{01111\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01112\ \ \ \ \ \{}
+\DoxyCodeLine{01113\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01114\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}path"{}})}
+\DoxyCodeLine{01115\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01116\ \ \ \ \ \ \ \ \ std::string\ temp\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01117\ \ \ \ \ \ \ \ \ file\ >>\ temp;}
+\DoxyCodeLine{01118\ \ \ \ \ \ \ \ \ entry\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ temp;}
+\DoxyCodeLine{01119\ \ \ \ \ \ \ \ \ file\ >>\ temp;}
+\DoxyCodeLine{01120\ \ \ \ \ \ \ \ \ entry\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ temp;}
+\DoxyCodeLine{01121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}path\ for\ sigma"{}})}
+\DoxyCodeLine{01122\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01123\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01124\ \ \ \ \ \}}
+\DoxyCodeLine{01125\ \ \ \ \ \textcolor{comment}{//\ read\ ps}}
+\DoxyCodeLine{01126\ \ \ \ \ \textcolor{keywordflow}{if}(file.eof())}
+\DoxyCodeLine{01127\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ 'path\ for\ sigma'\ not\ found"{}});}
+\DoxyCodeLine{01128\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{01129\ \ \ \ \ \ \ file\ >>\ ps[i];}
+\DoxyCodeLine{01130\ \ \ \ \ file.clear();}
+\DoxyCodeLine{01131\ \ \ \ \ file.seekg(lastResume);}
+\DoxyCodeLine{01132\ }
+\DoxyCodeLine{01133\ \ \ \ \ \textcolor{comment}{//\ find\ next\ "{}path\ for\ C"{}\ entry}}
+\DoxyCodeLine{01134\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01135\ \ \ \ \ \{}
+\DoxyCodeLine{01136\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01137\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}path"{}})}
+\DoxyCodeLine{01138\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01139\ \ \ \ \ \ \ \ \ std::string\ temp\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01140\ \ \ \ \ \ \ \ \ file\ >>\ temp;}
+\DoxyCodeLine{01141\ \ \ \ \ \ \ \ \ entry\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ temp;}
+\DoxyCodeLine{01142\ \ \ \ \ \ \ \ \ file\ >>\ temp;}
+\DoxyCodeLine{01143\ \ \ \ \ \ \ \ \ entry\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ temp;}
+\DoxyCodeLine{01144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}path\ for\ C"{}})}
+\DoxyCodeLine{01145\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01146\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01147\ \ \ \ \ \}}
+\DoxyCodeLine{01148\ \ \ \ \ \textcolor{comment}{//\ read\ pc}}
+\DoxyCodeLine{01149\ \ \ \ \ \textcolor{keywordflow}{if}(file.eof())}
+\DoxyCodeLine{01150\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ 'path\ for\ C'\ not\ found"{}});}
+\DoxyCodeLine{01151\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{01152\ \ \ \ \ \ \ file\ >>\ pc[i];}
+\DoxyCodeLine{01153\ \ \ \ \ file.clear();}
+\DoxyCodeLine{01154\ \ \ \ \ file.seekg(lastResume);}
+\DoxyCodeLine{01155\ }
+\DoxyCodeLine{01156\ \ \ \ \ \textcolor{comment}{//\ find\ next\ "{}sigma"{}\ entry}}
+\DoxyCodeLine{01157\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01158\ \ \ \ \ \{}
+\DoxyCodeLine{01159\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01160\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}sigma"{}})}
+\DoxyCodeLine{01161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01162\ \ \ \ \ \}}
+\DoxyCodeLine{01163\ \ \ \ \ \textcolor{comment}{//\ read\ pc}}
+\DoxyCodeLine{01164\ \ \ \ \ \textcolor{keywordflow}{if}(file.eof())}
+\DoxyCodeLine{01165\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ 'sigma'\ not\ found"{}});}
+\DoxyCodeLine{01166\ \ \ \ \ file\ >>\ sigma;}
+\DoxyCodeLine{01167\ \ \ \ \ file.clear();}
+\DoxyCodeLine{01168\ \ \ \ \ file.seekg(lastResume);}
+\DoxyCodeLine{01169\ }
+\DoxyCodeLine{01170\ \ \ \ \ \textcolor{comment}{//\ find\ next\ "{}covariance\ matrix"{}\ entry}}
+\DoxyCodeLine{01171\ \ \ \ \ \textcolor{keywordflow}{while}(!file.eof())}
+\DoxyCodeLine{01172\ \ \ \ \ \{}
+\DoxyCodeLine{01173\ \ \ \ \ \ \ file\ >>\ entry;}
+\DoxyCodeLine{01174\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}covariance"{}})}
+\DoxyCodeLine{01175\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01176\ \ \ \ \ \ \ \ \ std::string\ temp\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01177\ \ \ \ \ \ \ \ \ file\ >>\ temp;}
+\DoxyCodeLine{01178\ \ \ \ \ \ \ \ \ entry\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ temp;}
+\DoxyCodeLine{01179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(entry\ ==\ \textcolor{stringliteral}{"{}covariance\ matrix"{}})}
+\DoxyCodeLine{01180\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01181\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01182\ \ \ \ \ \}}
+\DoxyCodeLine{01183\ \ \ \ \ \textcolor{comment}{//\ read\ C}}
+\DoxyCodeLine{01184\ \ \ \ \ \textcolor{keywordflow}{if}(file.eof())}
+\DoxyCodeLine{01185\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}resumeDistribution():\ 'covariance\ matrix'\ not\ found"{}});}
+\DoxyCodeLine{01186\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01187\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <=\ i;\ ++j)}
+\DoxyCodeLine{01188\ \ \ \ \ \ \ \ \ file\ >>\ C[i][j];}
+\DoxyCodeLine{01189\ }
+\DoxyCodeLine{01190\ \ \ \ \ eigensysIsUptodate\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01191\ \ \ \ \ isResumeDone\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01192\ \ \ \ \ \mbox{\hyperlink{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}{updateEigensystem}}(\textcolor{keyword}{true});}
+\DoxyCodeLine{01193\ \ \ \}}
+\DoxyCodeLine{01194\ }
+\DoxyCodeLine{01201\ \ \ T*\ \textcolor{keyword}{const}*\ \mbox{\hyperlink{class_c_m_a_e_s_a9be5a5a84e664db362e635e71be01b8b}{samplePopulation}}()}
+\DoxyCodeLine{01202\ \ \ \{}
+\DoxyCodeLine{01203\ \ \ \ \ \textcolor{keywordtype}{bool}\ diag\ =\ params.diagonalCov\ ==\ 1\ ||\ params.diagonalCov\ >=\ gen;}
+\DoxyCodeLine{01204\ }
+\DoxyCodeLine{01205\ \ \ \ \ \textcolor{comment}{//\ calculate\ eigensystem}}
+\DoxyCodeLine{01206\ \ \ \ \ \textcolor{keywordflow}{if}(!eigensysIsUptodate)}
+\DoxyCodeLine{01207\ \ \ \ \ \{}
+\DoxyCodeLine{01208\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!diag)}
+\DoxyCodeLine{01209\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}{updateEigensystem}}(\textcolor{keyword}{false});}
+\DoxyCodeLine{01210\ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01211\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01213\ \ \ \ \ \ \ \ \ \ \ rgD[i]\ =\ std::sqrt(C[i][i]);}
+\DoxyCodeLine{01214\ \ \ \ \ \ \ \ \ minEW\ =\ square(minElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}));}
+\DoxyCodeLine{01215\ \ \ \ \ \ \ \ \ maxEW\ =\ square(maxElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}));}
+\DoxyCodeLine{01216\ \ \ \ \ \ \ \ \ eigensysIsUptodate\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01217\ \ \ \ \ \ \ \ \ eigenTimings.start();}
+\DoxyCodeLine{01218\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01219\ \ \ \ \ \}}
+\DoxyCodeLine{01220\ }
+\DoxyCodeLine{01221\ \ \ \ \ testMinStdDevs();}
+\DoxyCodeLine{01222\ }
+\DoxyCodeLine{01223\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ iNk\ =\ 0;\ iNk\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ ++iNk)}
+\DoxyCodeLine{01224\ \ \ \ \ \{\ \textcolor{comment}{//\ generate\ scaled\ random\ vector\ D*z}}
+\DoxyCodeLine{01225\ \ \ \ \ \ \ T*\ rgrgxink\ =\ population[iNk];}
+\DoxyCodeLine{01226\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(diag)}
+\DoxyCodeLine{01228\ \ \ \ \ \ \ \ \ \ \ rgrgxink[i]\ =\ xmean[i]\ +\ sigma*rgD[i]*rand.\mbox{\hyperlink{class_random_ad35753a318917fa4b9aafe2a07054c91}{gauss}}();}
+\DoxyCodeLine{01229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01230\ \ \ \ \ \ \ \ \ \ \ tempRandom[i]\ =\ rgD[i]*rand.\mbox{\hyperlink{class_random_ad35753a318917fa4b9aafe2a07054c91}{gauss}}();}
+\DoxyCodeLine{01231\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!diag)}
+\DoxyCodeLine{01232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)\ \textcolor{comment}{//\ add\ mutation\ sigma*B*(D*z)}}
+\DoxyCodeLine{01233\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01234\ \ \ \ \ \ \ \ \ \ \ T\ sum\ =\ 0.0;}
+\DoxyCodeLine{01235\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++j)}
+\DoxyCodeLine{01236\ \ \ \ \ \ \ \ \ \ \ \ \ sum\ +=\ B[i][j]*tempRandom[j];}
+\DoxyCodeLine{01237\ \ \ \ \ \ \ \ \ \ \ rgrgxink[i]\ =\ xmean[i]\ +\ sigma*sum;}
+\DoxyCodeLine{01238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01239\ \ \ \ \ \}}
+\DoxyCodeLine{01240\ }
+\DoxyCodeLine{01241\ \ \ \ \ \textcolor{keywordflow}{if}(state\ ==\ UPDATED\ ||\ gen\ ==\ 0)}
+\DoxyCodeLine{01242\ \ \ \ \ \ \ ++gen;}
+\DoxyCodeLine{01243\ \ \ \ \ state\ =\ SAMPLED;}
+\DoxyCodeLine{01244\ }
+\DoxyCodeLine{01245\ \ \ \ \ \textcolor{keywordflow}{return}\ population;}
+\DoxyCodeLine{01246\ \ \ \}}
+\DoxyCodeLine{01247\ }
+\DoxyCodeLine{01257\ \ \ T*\ \textcolor{keyword}{const}*\ \mbox{\hyperlink{class_c_m_a_e_s_a145951d7af563f43e19cfb34839aa7e9}{reSampleSingle}}(\textcolor{keywordtype}{int}\ i)}
+\DoxyCodeLine{01258\ \ \ \{}
+\DoxyCodeLine{01259\ \ \ \ \ T*\ x;}
+\DoxyCodeLine{01260\ \ \ \ \ assert(i\ >=\ 0\ \&\&\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}\ \&\&}
+\DoxyCodeLine{01261\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}reSampleSingle():\ index\ must\ be\ between\ 0\ and\ sp.lambda"{}});}
+\DoxyCodeLine{01262\ \ \ \ \ x\ =\ population[i];}
+\DoxyCodeLine{01263\ \ \ \ \ addMutation(x);}
+\DoxyCodeLine{01264\ \ \ \ \ \textcolor{keywordflow}{return}\ population;}
+\DoxyCodeLine{01265\ \ \ \}}
+\DoxyCodeLine{01266\ }
+\DoxyCodeLine{01281\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_ac25ffa90f349fc509ab81905bafaf261}{sampleSingleInto}}(T*\ x)}
+\DoxyCodeLine{01282\ \ \ \{}
+\DoxyCodeLine{01283\ \ \ \ \ \textcolor{keywordflow}{if}(!x)}
+\DoxyCodeLine{01284\ \ \ \ \ \ \ x\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{01285\ \ \ \ \ addMutation(x);}
+\DoxyCodeLine{01286\ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{01287\ \ \ \}}
+\DoxyCodeLine{01288\ }
+\DoxyCodeLine{01298\ \ \ T\ \textcolor{keyword}{const}*\ \mbox{\hyperlink{class_c_m_a_e_s_aa29db4c6da98609862bee80acd448e1b}{reSampleSingleOld}}(T*\ x)}
+\DoxyCodeLine{01299\ \ \ \{}
+\DoxyCodeLine{01300\ \ \ \ \ assert(x\ \&\&\ \textcolor{stringliteral}{"{}reSampleSingleOld():\ Missing\ input\ x"{}});}
+\DoxyCodeLine{01301\ \ \ \ \ addMutation(x);}
+\DoxyCodeLine{01302\ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{01303\ \ \ \}}
+\DoxyCodeLine{01304\ }
+\DoxyCodeLine{01318\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_a8719ce412e59e3d59786f88702c5a2ae}{perturbSolutionInto}}(T*\ x,\ T\ \textcolor{keyword}{const}*\ pxmean,\ T\ eps)}
+\DoxyCodeLine{01319\ \ \ \{}
+\DoxyCodeLine{01320\ \ \ \ \ \textcolor{keywordflow}{if}(!x)}
+\DoxyCodeLine{01321\ \ \ \ \ \ \ x\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{01322\ \ \ \ \ assert(pxmean\ \&\&\ \textcolor{stringliteral}{"{}perturbSolutionInto():\ pxmean\ was\ not\ given"{}});}
+\DoxyCodeLine{01323\ \ \ \ \ addMutation(x,\ eps);}
+\DoxyCodeLine{01324\ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{01325\ \ \ \}}
+\DoxyCodeLine{01326\ }
+\DoxyCodeLine{01334\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_a6a7a70199907d648c27b55e3cedfa14d}{updateDistribution}}(\textcolor{keyword}{const}\ T*\ fitnessValues)}
+\DoxyCodeLine{01335\ \ \ \{}
+\DoxyCodeLine{01336\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ N\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{01337\ \ \ \ \ \textcolor{keywordtype}{bool}\ diag\ =\ params.diagonalCov\ ==\ 1\ ||\ params.diagonalCov\ >=\ gen;}
+\DoxyCodeLine{01338\ }
+\DoxyCodeLine{01339\ \ \ \ \ assert(state\ !=\ UPDATED\ \&\&\ \textcolor{stringliteral}{"{}updateDistribution():\ You\ need\ to\ call\ "{}}}
+\DoxyCodeLine{01340\ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}samplePopulation()\ before\ update\ can\ take\ place."{}});}
+\DoxyCodeLine{01341\ \ \ \ \ assert(fitnessValues\ \&\&\ \textcolor{stringliteral}{"{}updateDistribution():\ No\ fitness\ function\ value\ array\ input."{}});}
+\DoxyCodeLine{01342\ }
+\DoxyCodeLine{01343\ \ \ \ \ \textcolor{keywordflow}{if}(state\ ==\ SAMPLED)\ \textcolor{comment}{//\ function\ values\ are\ delivered\ here}}
+\DoxyCodeLine{01344\ \ \ \ \ \ \ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}\ +=\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};}
+\DoxyCodeLine{01345\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_a377109d797314308676b483b3f64a489}{logWarnings}})}
+\DoxyCodeLine{01346\ \ \ \ \ \ \ params.\mbox{\hyperlink{class_parameters_ad35a3925e3bb84b32ca2661a804c440d}{logStream}}\ <<\ \ \textcolor{stringliteral}{"{}updateDistribution():\ unexpected\ state"{}}\ <<\ std::endl;}
+\DoxyCodeLine{01347\ }
+\DoxyCodeLine{01348\ \ \ \ \ \textcolor{comment}{//\ assign\ function\ values}}
+\DoxyCodeLine{01349\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};\ ++i)}
+\DoxyCodeLine{01350\ \ \ \ \ \ \ population[i][N]\ =\ functionValues[i]\ =\ fitnessValues[i];}
+\DoxyCodeLine{01351\ }
+\DoxyCodeLine{01352\ \ \ \ \ \textcolor{comment}{//\ Generate\ index}}
+\DoxyCodeLine{01353\ \ \ \ \ sortIndex(fitnessValues,\ index,\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}});}
+\DoxyCodeLine{01354\ }
+\DoxyCodeLine{01355\ \ \ \ \ \textcolor{comment}{//\ Test\ if\ function\ values\ are\ identical,\ escape\ flat\ fitness}}
+\DoxyCodeLine{01356\ \ \ \ \ \textcolor{keywordflow}{if}(fitnessValues[index[0]]\ ==\ fitnessValues[index[(\textcolor{keywordtype}{int})\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}\ /\ 2]])}
+\DoxyCodeLine{01357\ \ \ \ \ \{}
+\DoxyCodeLine{01358\ \ \ \ \ \ \ sigma\ *=\ std::exp(T(0.2)\ +\ params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}}\ /\ params.\mbox{\hyperlink{class_parameters_a6f4b9da4066bc29530419997e9fd4d0a}{damps}});}
+\DoxyCodeLine{01359\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(params.\mbox{\hyperlink{class_parameters_a377109d797314308676b483b3f64a489}{logWarnings}})}
+\DoxyCodeLine{01360\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01361\ \ \ \ \ \ \ \ \ params.\mbox{\hyperlink{class_parameters_ad35a3925e3bb84b32ca2661a804c440d}{logStream}}\ <<\ \textcolor{stringliteral}{"{}Warning:\ sigma\ increased\ due\ to\ equal\ function\ values"{}}}
+\DoxyCodeLine{01362\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl\ <<\ \textcolor{stringliteral}{"{}\ \ \ Reconsider\ the\ formulation\ of\ the\ objective\ function"{}};}
+\DoxyCodeLine{01363\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01364\ \ \ \ \ \}}
+\DoxyCodeLine{01365\ }
+\DoxyCodeLine{01366\ \ \ \ \ \textcolor{comment}{//\ update\ function\ value\ history}}
+\DoxyCodeLine{01367\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ (\textcolor{keywordtype}{int})\ *(funcValueHistory\ -\/\ 1)\ -\/\ 1;\ i\ >\ 0;\ -\/-\/i)}
+\DoxyCodeLine{01368\ \ \ \ \ \ \ funcValueHistory[i]\ =\ funcValueHistory[i\ -\/\ 1];}
+\DoxyCodeLine{01369\ \ \ \ \ funcValueHistory[0]\ =\ fitnessValues[index[0]];}
+\DoxyCodeLine{01370\ }
+\DoxyCodeLine{01371\ \ \ \ \ \textcolor{comment}{//\ update\ xbestever}}
+\DoxyCodeLine{01372\ \ \ \ \ \textcolor{keywordflow}{if}(xBestEver[N]\ >\ population[index[0]][N]\ ||\ gen\ ==\ 1)}
+\DoxyCodeLine{01373\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <=\ N;\ ++i)}
+\DoxyCodeLine{01374\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01375\ \ \ \ \ \ \ \ \ xBestEver[i]\ =\ population[index[0]][i];}
+\DoxyCodeLine{01376\ \ \ \ \ \ \ \ \ xBestEver[N+1]\ =\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}};}
+\DoxyCodeLine{01377\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01378\ }
+\DoxyCodeLine{01379\ \ \ \ \ \textcolor{keyword}{const}\ T\ sqrtmueffdivsigma\ =\ std::sqrt(params.\mbox{\hyperlink{class_parameters_a0dea53bad82fba45a0bc6b45922b9cfd}{mueff}})\ /\ sigma;}
+\DoxyCodeLine{01380\ \ \ \ \ \textcolor{comment}{//\ calculate\ xmean\ and\ rgBDz\string~N(0,C)}}
+\DoxyCodeLine{01381\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01382\ \ \ \ \ \{}
+\DoxyCodeLine{01383\ \ \ \ \ \ \ xold[i]\ =\ xmean[i];}
+\DoxyCodeLine{01384\ \ \ \ \ \ \ xmean[i]\ =\ 0.;}
+\DoxyCodeLine{01385\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ iNk\ =\ 0;\ iNk\ <\ params.\mbox{\hyperlink{class_parameters_a218e778535a9538e4ca24483b74505e8}{mu}};\ ++iNk)}
+\DoxyCodeLine{01386\ \ \ \ \ \ \ \ \ xmean[i]\ +=\ params.\mbox{\hyperlink{class_parameters_a517ffc44e157e7c8c87073af10c3e4a4}{weights}}[iNk]*population[index[iNk]][i];}
+\DoxyCodeLine{01387\ \ \ \ \ \ \ BDz[i]\ =\ sqrtmueffdivsigma*(xmean[i]-\/xold[i]);}
+\DoxyCodeLine{01388\ \ \ \ \ \}}
+\DoxyCodeLine{01389\ }
+\DoxyCodeLine{01390\ \ \ \ \ \textcolor{comment}{//\ calculate\ z\ :=\ D\string^(-\/1)*\ B\string^(-\/1)*\ rgBDz\ into\ rgdTmp}}
+\DoxyCodeLine{01391\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01392\ \ \ \ \ \{}
+\DoxyCodeLine{01393\ \ \ \ \ \ \ T\ sum;}
+\DoxyCodeLine{01394\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(diag)}
+\DoxyCodeLine{01395\ \ \ \ \ \ \ \ \ sum\ =\ BDz[i];}
+\DoxyCodeLine{01396\ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01397\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01398\ \ \ \ \ \ \ \ \ sum\ =\ 0.;}
+\DoxyCodeLine{01399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ N;\ ++j)}
+\DoxyCodeLine{01400\ \ \ \ \ \ \ \ \ \ \ sum\ +=\ B[j][i]*BDz[j];}
+\DoxyCodeLine{01401\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01402\ \ \ \ \ \ \ tempRandom[i]\ =\ sum/rgD[i];}
+\DoxyCodeLine{01403\ \ \ \ \ \}}
+\DoxyCodeLine{01404\ }
+\DoxyCodeLine{01405\ \ \ \ \ \textcolor{comment}{//\ cumulation\ for\ sigma\ (ps)\ using\ B*z}}
+\DoxyCodeLine{01406\ \ \ \ \ \textcolor{keyword}{const}\ T\ sqrtFactor\ =\ std::sqrt(params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}}*(T(2)-\/params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}}));}
+\DoxyCodeLine{01407\ \ \ \ \ \textcolor{keyword}{const}\ T\ invps\ =\ T(1)-\/params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}};}
+\DoxyCodeLine{01408\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01409\ \ \ \ \ \{}
+\DoxyCodeLine{01410\ \ \ \ \ \ \ T\ sum;}
+\DoxyCodeLine{01411\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(diag)}
+\DoxyCodeLine{01412\ \ \ \ \ \ \ \ \ sum\ =\ tempRandom[i];}
+\DoxyCodeLine{01413\ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01414\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01415\ \ \ \ \ \ \ \ \ sum\ =\ T(0);}
+\DoxyCodeLine{01416\ \ \ \ \ \ \ \ \ T*\ Bi\ =\ B[i];}
+\DoxyCodeLine{01417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ N;\ ++j)}
+\DoxyCodeLine{01418\ \ \ \ \ \ \ \ \ \ \ sum\ +=\ Bi[j]*tempRandom[j];}
+\DoxyCodeLine{01419\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01420\ \ \ \ \ \ \ ps[i]\ =\ invps*ps[i]\ +\ sqrtFactor*sum;}
+\DoxyCodeLine{01421\ \ \ \ \ \}}
+\DoxyCodeLine{01422\ }
+\DoxyCodeLine{01423\ \ \ \ \ \textcolor{comment}{//\ calculate\ norm(ps)\string^2}}
+\DoxyCodeLine{01424\ \ \ \ \ T\ psxps(0);}
+\DoxyCodeLine{01425\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01426\ \ \ \ \ \{}
+\DoxyCodeLine{01427\ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\&\ rgpsi\ =\ ps[i];}
+\DoxyCodeLine{01428\ \ \ \ \ \ \ psxps\ +=\ rgpsi*rgpsi;}
+\DoxyCodeLine{01429\ \ \ \ \ \}}
+\DoxyCodeLine{01430\ }
+\DoxyCodeLine{01431\ \ \ \ \ \textcolor{comment}{//\ cumulation\ for\ covariance\ matrix\ (pc)\ using\ B*D*z\string~N(0,C)}}
+\DoxyCodeLine{01432\ \ \ \ \ \textcolor{keywordtype}{int}\ hsig\ =\ std::sqrt(psxps)\ /\ std::sqrt(T(1)\ -\/\ std::pow(T(1)\ -\/\ params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}},\ T(2)*\ gen))}
+\DoxyCodeLine{01433\ \ \ \ \ \ \ \ \ /\ chiN\ <\ T(1.4)\ +\ T(2)\ /\ (N\ +\ 1);}
+\DoxyCodeLine{01434\ \ \ \ \ \textcolor{keyword}{const}\ T\ ccumcovinv\ =\ 1.-\/params.ccumcov;}
+\DoxyCodeLine{01435\ \ \ \ \ \textcolor{keyword}{const}\ T\ hsigFactor\ =\ hsig*std::sqrt(params.ccumcov*(T(2)-\/params.ccumcov));}
+\DoxyCodeLine{01436\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01437\ \ \ \ \ \ \ pc[i]\ =\ ccumcovinv*pc[i]\ +\ hsigFactor*BDz[i];}
+\DoxyCodeLine{01438\ }
+\DoxyCodeLine{01439\ \ \ \ \ \textcolor{comment}{//\ update\ of\ C}}
+\DoxyCodeLine{01440\ \ \ \ \ adaptC2(hsig);}
+\DoxyCodeLine{01441\ }
+\DoxyCodeLine{01442\ \ \ \ \ \textcolor{comment}{//\ update\ of\ sigma}}
+\DoxyCodeLine{01443\ \ \ \ \ sigma\ *=\ std::exp(((std::sqrt(psxps)\ /\ chiN)\ -\/\ T(1))*\ params.\mbox{\hyperlink{class_parameters_a610b5f60c42060b8507e060e4707f911}{cs}}\ /\ params.\mbox{\hyperlink{class_parameters_a6f4b9da4066bc29530419997e9fd4d0a}{damps}});}
+\DoxyCodeLine{01444\ }
+\DoxyCodeLine{01445\ \ \ \ \ state\ =\ UPDATED;}
+\DoxyCodeLine{01446\ \ \ \ \ \textcolor{keywordflow}{return}\ xmean;}
+\DoxyCodeLine{01447\ \ \ \}}
+\DoxyCodeLine{01448\ }
+\DoxyCodeLine{01454\ \ \ T\ \mbox{\hyperlink{class_c_m_a_e_s_a45e773741a707a9f95a5c2bab07fcfca}{get}}(\mbox{\hyperlink{class_c_m_a_e_s_ad7400b48c05115ef004ce20317646ca8}{GetScalar}}\ key)}
+\DoxyCodeLine{01455\ \ \ \{}
+\DoxyCodeLine{01456\ \ \ \ \ \textcolor{keywordflow}{switch}(key)}
+\DoxyCodeLine{01457\ \ \ \ \ \{}
+\DoxyCodeLine{01458\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ AxisRatio:}
+\DoxyCodeLine{01459\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ maxElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}})\ /\ minElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{01460\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Eval:}
+\DoxyCodeLine{01461\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}};}
+\DoxyCodeLine{01462\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Fitness:}
+\DoxyCodeLine{01463\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ functionValues[index[0]];}
+\DoxyCodeLine{01464\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ FBestEver:}
+\DoxyCodeLine{01465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ xBestEver[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{01466\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Generation:}
+\DoxyCodeLine{01467\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ gen;}
+\DoxyCodeLine{01468\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MaxEval:}
+\DoxyCodeLine{01469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ params.\mbox{\hyperlink{class_parameters_a9edd654298a4d071a1ef3a0a89aa45fc}{stopMaxFunEvals}};}
+\DoxyCodeLine{01470\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MaxIter:}
+\DoxyCodeLine{01471\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ceil(params.\mbox{\hyperlink{class_parameters_a21ebdc23f72ec6a3cb24751c55e7db88}{stopMaxIter}});}
+\DoxyCodeLine{01472\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MaxAxisLength:}
+\DoxyCodeLine{01473\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sigma*std::sqrt(maxEW);}
+\DoxyCodeLine{01474\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MinAxisLength:}
+\DoxyCodeLine{01475\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sigma*std::sqrt(minEW);}
+\DoxyCodeLine{01476\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MaxStdDev:}
+\DoxyCodeLine{01477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sigma*std::sqrt(maxdiagC);}
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ MinStdDev:}
+\DoxyCodeLine{01479\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sigma*std::sqrt(mindiagC);}
+\DoxyCodeLine{01480\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Dimension:}
+\DoxyCodeLine{01481\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{01482\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ SampleSize:}
+\DoxyCodeLine{01483\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}};}
+\DoxyCodeLine{01484\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Sigma:}
+\DoxyCodeLine{01485\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sigma;}
+\DoxyCodeLine{01486\ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01487\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}get():\ No\ match\ found\ for\ key"{}});}
+\DoxyCodeLine{01488\ \ \ \ \ \}}
+\DoxyCodeLine{01489\ \ \ \}}
+\DoxyCodeLine{01490\ }
+\DoxyCodeLine{01498\ \ \ \textcolor{keyword}{const}\ T*\ \mbox{\hyperlink{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}{getPtr}}(\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{GetVector}}\ key)}
+\DoxyCodeLine{01499\ \ \ \{}
+\DoxyCodeLine{01500\ \ \ \ \ \textcolor{keywordflow}{switch}(key)}
+\DoxyCodeLine{01501\ \ \ \ \ \{}
+\DoxyCodeLine{01502\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DiagC:}
+\DoxyCodeLine{01503\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01504\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01505\ \ \ \ \ \ \ \ \ \ \ output[i]\ =\ C[i][i];}
+\DoxyCodeLine{01506\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ output;}
+\DoxyCodeLine{01507\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01508\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ DiagD:}
+\DoxyCodeLine{01509\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ rgD;}
+\DoxyCodeLine{01510\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ StdDev:}
+\DoxyCodeLine{01511\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01512\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01513\ \ \ \ \ \ \ \ \ \ \ output[i]\ =\ sigma*std::sqrt(C[i][i]);}
+\DoxyCodeLine{01514\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ output;}
+\DoxyCodeLine{01515\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01516\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ XBestEver:}
+\DoxyCodeLine{01517\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ xBestEver;}
+\DoxyCodeLine{01518\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ XBest:}
+\DoxyCodeLine{01519\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ population[index[0]];}
+\DoxyCodeLine{01520\ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ XMean:}
+\DoxyCodeLine{01521\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ xmean;}
+\DoxyCodeLine{01522\ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01523\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}getPtr():\ No\ match\ found\ for\ key"{}});}
+\DoxyCodeLine{01524\ \ \ \ \ \}}
+\DoxyCodeLine{01525\ \ \ \}}
+\DoxyCodeLine{01526\ }
+\DoxyCodeLine{01534\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_a63365a17f3579447a8f04d5d50962b77}{getNew}}(\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{GetVector}}\ key)}
+\DoxyCodeLine{01535\ \ \ \{}
+\DoxyCodeLine{01536\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_c_m_a_e_s_af8ee064aa8deffeb737bd4be42a06f18}{getInto}}(key,\ 0);}
+\DoxyCodeLine{01537\ \ \ \}}
+\DoxyCodeLine{01538\ }
+\DoxyCodeLine{01546\ \ \ T*\ \mbox{\hyperlink{class_c_m_a_e_s_af8ee064aa8deffeb737bd4be42a06f18}{getInto}}(\mbox{\hyperlink{class_c_m_a_e_s_a55c21f2418b9972c6ffe26d188115f82}{GetVector}}\ key,\ T*\ res)}
+\DoxyCodeLine{01547\ \ \ \{}
+\DoxyCodeLine{01548\ \ \ \ \ T\ \textcolor{keyword}{const}*\ res0\ =\ \mbox{\hyperlink{class_c_m_a_e_s_aaed180cdceb9836983bf44fb588ceabe}{getPtr}}(key);}
+\DoxyCodeLine{01549\ \ \ \ \ \textcolor{keywordflow}{if}(!res)}
+\DoxyCodeLine{01550\ \ \ \ \ \ \ res\ =\ \textcolor{keyword}{new}\ T[params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}}];}
+\DoxyCodeLine{01551\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01552\ \ \ \ \ \ \ res[i]\ =\ res0[i];}
+\DoxyCodeLine{01553\ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
+\DoxyCodeLine{01554\ \ \ \}}
+\DoxyCodeLine{01555\ }
+\DoxyCodeLine{01564\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_c_m_a_e_s_a5d3fb0bbff460e5901ef0e8a2bb2f839}{testForTermination}}()}
+\DoxyCodeLine{01565\ \ \ \{}
+\DoxyCodeLine{01566\ \ \ \ \ T\ range,\ fac;}
+\DoxyCodeLine{01567\ \ \ \ \ \textcolor{keywordtype}{int}\ iAchse,\ iKoo;}
+\DoxyCodeLine{01568\ \ \ \ \ \textcolor{keywordtype}{int}\ diag\ =\ params.diagonalCov\ ==\ 1\ ||\ params.diagonalCov\ >=\ gen;}
+\DoxyCodeLine{01569\ \ \ \ \ \textcolor{keywordtype}{int}\ N\ =\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};}
+\DoxyCodeLine{01570\ \ \ \ \ std::stringstream\ message;}
+\DoxyCodeLine{01571\ }
+\DoxyCodeLine{01572\ \ \ \ \ \textcolor{keywordflow}{if}(stopMessage\ !=\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{01573\ \ \ \ \ \{}
+\DoxyCodeLine{01574\ \ \ \ \ \ \ message\ <<\ stopMessage\ <<\ std::endl;}
+\DoxyCodeLine{01575\ \ \ \ \ \}}
+\DoxyCodeLine{01576\ }
+\DoxyCodeLine{01577\ \ \ \ \ \textcolor{comment}{//\ function\ value\ reached}}
+\DoxyCodeLine{01578\ \ \ \ \ \textcolor{keywordflow}{if}((gen\ >\ 1\ ||\ state\ >\ SAMPLED)\ \&\&\ params.\mbox{\hyperlink{class_parameters_a89ef0397c90c0993d2f9befafc72b2f7}{stStopFitness}}.flg\ \&\&}
+\DoxyCodeLine{01579\ \ \ \ \ \ \ \ \ functionValues[index[0]]\ <=\ params.\mbox{\hyperlink{class_parameters_a89ef0397c90c0993d2f9befafc72b2f7}{stStopFitness}}.val)}
+\DoxyCodeLine{01580\ \ \ \ \ \{}
+\DoxyCodeLine{01581\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}Fitness:\ function\ value\ "{}}\ <<\ functionValues[index[0]]}
+\DoxyCodeLine{01582\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ <=\ stopFitness\ ("{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a89ef0397c90c0993d2f9befafc72b2f7}{stStopFitness}}.val\ <<\ \textcolor{stringliteral}{"{})"{}}\ <<\ std::endl;}
+\DoxyCodeLine{01583\ \ \ \ \ \}}
+\DoxyCodeLine{01584\ }
+\DoxyCodeLine{01585\ \ \ \ \ \textcolor{comment}{//\ TolFun}}
+\DoxyCodeLine{01586\ \ \ \ \ range\ =\ (std::max)(maxElement(funcValueHistory,\ (\textcolor{keywordtype}{int})\ (std::min)(gen,\ *(funcValueHistory\ -\/\ 1))),}
+\DoxyCodeLine{01587\ \ \ \ \ \ \ \ \ maxElement(functionValues,\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}))\ -\/}
+\DoxyCodeLine{01588\ \ \ \ \ \ \ \ \ (std::min)(minElement(funcValueHistory,\ (\textcolor{keywordtype}{int})\ (std::min)(gen,\ *(funcValueHistory\ -\/\ 1))),}
+\DoxyCodeLine{01589\ \ \ \ \ \ \ \ \ minElement(functionValues,\ params.\mbox{\hyperlink{class_parameters_af091e261d5ed864859cbba1b6ed38b8b}{lambda}}));}
+\DoxyCodeLine{01590\ }
+\DoxyCodeLine{01591\ \ \ \ \ \textcolor{keywordflow}{if}(gen\ >\ 0\ \&\&\ range\ <=\ params.\mbox{\hyperlink{class_parameters_ac86c526858d402c154209c0a0144361d}{stopTolFun}})}
+\DoxyCodeLine{01592\ \ \ \ \ \{}
+\DoxyCodeLine{01593\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}TolFun:\ function\ value\ differences\ "{}}\ <<\ range}
+\DoxyCodeLine{01594\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ <\ stopTolFun="{}}\ <<\ params.\mbox{\hyperlink{class_parameters_ac86c526858d402c154209c0a0144361d}{stopTolFun}}\ <<\ std::endl;}
+\DoxyCodeLine{01595\ \ \ \ \ \}}
+\DoxyCodeLine{01596\ }
+\DoxyCodeLine{01597\ \ \ \ \ \textcolor{comment}{//\ TolFunHist}}
+\DoxyCodeLine{01598\ \ \ \ \ \textcolor{keywordflow}{if}(gen\ >\ *(funcValueHistory\ -\/\ 1))}
+\DoxyCodeLine{01599\ \ \ \ \ \{}
+\DoxyCodeLine{01600\ \ \ \ \ \ \ range\ =\ maxElement(funcValueHistory,\ (\textcolor{keywordtype}{int})\ *(funcValueHistory\ -\/\ 1))}
+\DoxyCodeLine{01601\ \ \ \ \ \ \ \ \ \ \ -\/\ minElement(funcValueHistory,\ (\textcolor{keywordtype}{int})\ *(funcValueHistory\ -\/\ 1));}
+\DoxyCodeLine{01602\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(range\ <=\ params.\mbox{\hyperlink{class_parameters_a2c569c1e8284af5b03698e175e533aef}{stopTolFunHist}})}
+\DoxyCodeLine{01603\ \ \ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}TolFunHist:\ history\ of\ function\ value\ changes\ "{}}\ <<\ range}
+\DoxyCodeLine{01604\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ stopTolFunHist="{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a2c569c1e8284af5b03698e175e533aef}{stopTolFunHist}}\ <<\ std::endl;}
+\DoxyCodeLine{01605\ \ \ \ \ \}}
+\DoxyCodeLine{01606\ }
+\DoxyCodeLine{01607\ \ \ \ \ \textcolor{comment}{//\ TolX}}
+\DoxyCodeLine{01608\ \ \ \ \ \textcolor{keywordtype}{int}\ cTemp\ =\ 0;}
+\DoxyCodeLine{01609\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01610\ \ \ \ \ \{}
+\DoxyCodeLine{01611\ \ \ \ \ \ \ cTemp\ +=\ (sigma*std::sqrt(C[i][i])\ <\ params.\mbox{\hyperlink{class_parameters_ae0be942ebf81f0545414294cde956305}{stopTolX}})\ ?\ 1\ :\ 0;}
+\DoxyCodeLine{01612\ \ \ \ \ \ \ cTemp\ +=\ (sigma*pc[i]\ <\ params.\mbox{\hyperlink{class_parameters_ae0be942ebf81f0545414294cde956305}{stopTolX}})\ ?\ 1\ :\ 0;}
+\DoxyCodeLine{01613\ \ \ \ \ \}}
+\DoxyCodeLine{01614\ \ \ \ \ \textcolor{keywordflow}{if}(cTemp\ ==\ 2*N)}
+\DoxyCodeLine{01615\ \ \ \ \ \{}
+\DoxyCodeLine{01616\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}TolX:\ object\ variable\ changes\ below\ "{}}\ <<\ params.\mbox{\hyperlink{class_parameters_ae0be942ebf81f0545414294cde956305}{stopTolX}}\ <<\ std::endl;}
+\DoxyCodeLine{01617\ \ \ \ \ \}}
+\DoxyCodeLine{01618\ }
+\DoxyCodeLine{01619\ \ \ \ \ \textcolor{comment}{//\ TolUpX}}
+\DoxyCodeLine{01620\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ N;\ ++i)}
+\DoxyCodeLine{01621\ \ \ \ \ \{}
+\DoxyCodeLine{01622\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(sigma*std::sqrt(C[i][i])\ >\ params.\mbox{\hyperlink{class_parameters_a8c95db0771b90808700c705def716425}{stopTolUpXFactor}}*params.\mbox{\hyperlink{class_parameters_abcd5a706fceab041a69297c1c58149a4}{rgInitialStds}}[i])}
+\DoxyCodeLine{01623\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01624\ \ \ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}TolUpX:\ standard\ deviation\ increased\ by\ more\ than\ "{}}}
+\DoxyCodeLine{01625\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ params.\mbox{\hyperlink{class_parameters_a8c95db0771b90808700c705def716425}{stopTolUpXFactor}}\ <<\ \textcolor{stringliteral}{"{},\ larger\ initial\ standard\ deviation\ recommended."{}}}
+\DoxyCodeLine{01626\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{01627\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01628\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01629\ \ \ \ \ \}}
+\DoxyCodeLine{01630\ }
+\DoxyCodeLine{01631\ \ \ \ \ \textcolor{comment}{//\ Condition\ of\ C\ greater\ than\ dMaxSignifKond}}
+\DoxyCodeLine{01632\ \ \ \ \ \textcolor{keywordflow}{if}(maxEW\ >=\ minEW*\ dMaxSignifKond)}
+\DoxyCodeLine{01633\ \ \ \ \ \{}
+\DoxyCodeLine{01634\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}ConditionNumber:\ maximal\ condition\ number\ "{}}\ <<\ dMaxSignifKond}
+\DoxyCodeLine{01635\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ reached.\ maxEW="{}}\ <<\ maxEW\ <<\ \ \textcolor{stringliteral}{"{},minEW="{}}\ <<\ minEW\ <<\ \textcolor{stringliteral}{"{},maxdiagC="{}}}
+\DoxyCodeLine{01636\ \ \ \ \ \ \ \ \ \ \ <<\ maxdiagC\ <<\ \textcolor{stringliteral}{"{},mindiagC="{}}\ <<\ mindiagC\ <<\ std::endl;}
+\DoxyCodeLine{01637\ \ \ \ \ \}}
+\DoxyCodeLine{01638\ }
+\DoxyCodeLine{01639\ \ \ \ \ \textcolor{comment}{//\ Principal\ axis\ i\ has\ no\ effect\ on\ xmean,\ ie.\ x\ ==\ x\ +\ 0.1*\ sigma*\ rgD[i]*\ B[i]}}
+\DoxyCodeLine{01640\ \ \ \ \ \textcolor{keywordflow}{if}(!diag)}
+\DoxyCodeLine{01641\ \ \ \ \ \{}
+\DoxyCodeLine{01642\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(iAchse\ =\ 0;\ iAchse\ <\ N;\ ++iAchse)}
+\DoxyCodeLine{01643\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01644\ \ \ \ \ \ \ \ \ fac\ =\ 0.1*\ sigma*\ rgD[iAchse];}
+\DoxyCodeLine{01645\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(iKoo\ =\ 0;\ iKoo\ <\ N;\ ++iKoo)}
+\DoxyCodeLine{01646\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01647\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(xmean[iKoo]\ !=\ xmean[iKoo]\ +\ fac*\ B[iKoo][iAchse])}
+\DoxyCodeLine{01648\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01649\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01650\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(iKoo\ ==\ N)}
+\DoxyCodeLine{01651\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01652\ \ \ \ \ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}NoEffectAxis:\ standard\ deviation\ 0.1*"{}}\ <<\ (fac\ /\ 0.1)}
+\DoxyCodeLine{01653\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ in\ principal\ axis\ "{}}\ <<\ iAchse\ <<\ \textcolor{stringliteral}{"{}\ without\ effect"{}}\ <<\ std::endl;}
+\DoxyCodeLine{01654\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01655\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01656\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01657\ \ \ \ \ \}}
+\DoxyCodeLine{01658\ \ \ \ \ \textcolor{comment}{//\ Component\ of\ xmean\ is\ not\ changed\ anymore}}
+\DoxyCodeLine{01659\ \ \ \ \ \textcolor{keywordflow}{for}(iKoo\ =\ 0;\ iKoo\ <\ N;\ ++iKoo)}
+\DoxyCodeLine{01660\ \ \ \ \ \{}
+\DoxyCodeLine{01661\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(xmean[iKoo]\ ==\ xmean[iKoo]\ +\ sigma*std::sqrt(C[iKoo][iKoo])/T(5))}
+\DoxyCodeLine{01662\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01663\ \ \ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}NoEffectCoordinate:\ standard\ deviation\ 0.2*"{}}}
+\DoxyCodeLine{01664\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ (sigma*std::sqrt(C[iKoo][iKoo]))\ <<\ \textcolor{stringliteral}{"{}\ in\ coordinate\ "{}}\ <<\ iKoo}
+\DoxyCodeLine{01665\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ without\ effect"{}}\ <<\ std::endl;}
+\DoxyCodeLine{01666\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01667\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01668\ \ \ \ \ \}}
+\DoxyCodeLine{01669\ }
+\DoxyCodeLine{01670\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}\ >=\ params.\mbox{\hyperlink{class_parameters_a9edd654298a4d071a1ef3a0a89aa45fc}{stopMaxFunEvals}})}
+\DoxyCodeLine{01671\ \ \ \ \ \{}
+\DoxyCodeLine{01672\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}MaxFunEvals:\ conducted\ function\ evaluations\ "{}}\ <<\ \mbox{\hyperlink{class_c_m_a_e_s_a4e328b09739d2fb1a220a3d7cf4bc82c}{countevals}}}
+\DoxyCodeLine{01673\ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ >=\ "{}}\ <<\ params.\mbox{\hyperlink{class_parameters_a9edd654298a4d071a1ef3a0a89aa45fc}{stopMaxFunEvals}}\ <<\ std::endl;}
+\DoxyCodeLine{01674\ \ \ \ \ \}}
+\DoxyCodeLine{01675\ \ \ \ \ \textcolor{keywordflow}{if}(gen\ >=\ params.\mbox{\hyperlink{class_parameters_a21ebdc23f72ec6a3cb24751c55e7db88}{stopMaxIter}})}
+\DoxyCodeLine{01676\ \ \ \ \ \{}
+\DoxyCodeLine{01677\ \ \ \ \ \ \ message\ <<\ \textcolor{stringliteral}{"{}MaxIter:\ number\ of\ iterations\ "{}}\ <<\ gen\ <<\ \textcolor{stringliteral}{"{}\ >=\ "{}}}
+\DoxyCodeLine{01678\ \ \ \ \ \ \ \ \ \ \ <<\ params.\mbox{\hyperlink{class_parameters_a21ebdc23f72ec6a3cb24751c55e7db88}{stopMaxIter}}\ <<\ std::endl;}
+\DoxyCodeLine{01679\ \ \ \ \ \}}
+\DoxyCodeLine{01680\ }
+\DoxyCodeLine{01681\ \ \ \ \ stopMessage\ =\ message.str();}
+\DoxyCodeLine{01682\ \ \ \ \ \textcolor{keywordflow}{return}\ stopMessage\ !=\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01683\ \ \ \}}
+\DoxyCodeLine{01684\ }
+\DoxyCodeLine{01689\ \ \ std::string\ \mbox{\hyperlink{class_c_m_a_e_s_a3a09215b6efefde35c9faa5c2201c7a7}{getStopMessage}}()}
+\DoxyCodeLine{01690\ \ \ \{}
+\DoxyCodeLine{01691\ \ \ \ \ \textcolor{keywordflow}{return}\ stopMessage;}
+\DoxyCodeLine{01692\ \ \ \}}
+\DoxyCodeLine{01693\ }
+\DoxyCodeLine{01699\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_c_m_a_e_s_a57ea7bb50956aed2aa9eb03f7233f71e}{writeToFile}}(\textcolor{keywordtype}{int}\ key,\ \textcolor{keyword}{const}\ std::string\&\ filename)}
+\DoxyCodeLine{01700\ \ \ \{}
+\DoxyCodeLine{01701\ \ \ \ \ std::ofstream\ file;}
+\DoxyCodeLine{01702\ \ \ \ \ file.open(filename.c\_str(),\ std::ios\_base::app);}
+\DoxyCodeLine{01703\ }
+\DoxyCodeLine{01704\ \ \ \ \ \textcolor{keywordflow}{if}(file.is\_open())}
+\DoxyCodeLine{01705\ \ \ \ \ \{}
+\DoxyCodeLine{01706\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(gen\ >\ 0\ ||\ filename.substr(0,\ 11)\ !=\ \textcolor{stringliteral}{"{}outcmaesfit"{}})}
+\DoxyCodeLine{01707\ \ \ \ \ \ \ \ \ writeToStream(key,\ file);\ \textcolor{comment}{/*\ do\ not\ write\ fitness\ for\ gen==0\ */}}
+\DoxyCodeLine{01708\ \ \ \ \ \ \ file.close();}
+\DoxyCodeLine{01709\ \ \ \ \ \}}
+\DoxyCodeLine{01710\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01711\ \ \ \ \ \{}
+\DoxyCodeLine{01712\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}writeToFile():\ could\ not\ open\ '"{}}\ +\ filename\ +\ \textcolor{stringliteral}{"{}'"{}});}
+\DoxyCodeLine{01713\ \ \ \ \ \}}
+\DoxyCodeLine{01714\ \ \ \}}
+\DoxyCodeLine{01715\ }
+\DoxyCodeLine{01723\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_c_m_a_e_s_ae0dcc966a2b41a9f35724c5f65e87cf5}{updateEigensystem}}(\textcolor{keywordtype}{bool}\ force)}
+\DoxyCodeLine{01724\ \ \ \{}
+\DoxyCodeLine{01725\ \ \ \ \ eigenTimings.\mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}}();}
+\DoxyCodeLine{01726\ }
+\DoxyCodeLine{01727\ \ \ \ \ \textcolor{keywordflow}{if}(!force)}
+\DoxyCodeLine{01728\ \ \ \ \ \{}
+\DoxyCodeLine{01729\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(eigensysIsUptodate)}
+\DoxyCodeLine{01730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{01731\ \ \ \ \ \ \ \textcolor{comment}{//\ return\ on\ modulo\ generation\ number}}
+\DoxyCodeLine{01732\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(gen\ <\ genOfEigensysUpdate\ +\ params.updateCmode.modulo)}
+\DoxyCodeLine{01733\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{01734\ \ \ \ \ \ \ \textcolor{comment}{//\ return\ on\ time\ percentage}}
+\DoxyCodeLine{01735\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(params.updateCmode.maxtime\ <\ 1.00}
+\DoxyCodeLine{01736\ \ \ \ \ \ \ \ \ \ \ \&\&\ eigenTimings.tictoctime\ >\ params.updateCmode.maxtime*\ eigenTimings.totaltime}
+\DoxyCodeLine{01737\ \ \ \ \ \ \ \ \ \ \ \&\&\ eigenTimings.tictoctime\ >\ 0.0002)}
+\DoxyCodeLine{01738\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{01739\ \ \ \ \ \}}
+\DoxyCodeLine{01740\ }
+\DoxyCodeLine{01741\ \ \ \ \ eigenTimings.tic();}
+\DoxyCodeLine{01742\ \ \ \ \ eigen(rgD,\ B,\ tempRandom);}
+\DoxyCodeLine{01743\ \ \ \ \ eigenTimings.toc();}
+\DoxyCodeLine{01744\ }
+\DoxyCodeLine{01745\ \ \ \ \ \textcolor{comment}{//\ find\ largest\ and\ smallest\ eigenvalue,\ they\ are\ supposed\ to\ be\ sorted\ anyway}}
+\DoxyCodeLine{01746\ \ \ \ \ minEW\ =\ minElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{01747\ \ \ \ \ maxEW\ =\ maxElement(rgD,\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}});}
+\DoxyCodeLine{01748\ }
+\DoxyCodeLine{01749\ \ \ \ \ \textcolor{keywordflow}{if}(doCheckEigen)\ \textcolor{comment}{//\ needs\ O(n\string^3)!\ writes,\ in\ case,\ error\ message\ in\ error\ file}}
+\DoxyCodeLine{01750\ \ \ \ \ \ \ checkEigen(rgD,\ B);}
+\DoxyCodeLine{01751\ }
+\DoxyCodeLine{01752\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01753\ \ \ \ \ \ \ rgD[i]\ =\ std::sqrt(rgD[i]);}
+\DoxyCodeLine{01754\ }
+\DoxyCodeLine{01755\ \ \ \ \ eigensysIsUptodate\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01756\ \ \ \ \ genOfEigensysUpdate\ =\ gen;}
+\DoxyCodeLine{01757\ \ \ \}}
+\DoxyCodeLine{01758\ }
+\DoxyCodeLine{01765\ \ \ T\ \textcolor{keyword}{const}*\ \mbox{\hyperlink{class_c_m_a_e_s_af4ab1f3748edd5980124fd18d8eda3d2}{setMean}}(\textcolor{keyword}{const}\ T*\ newxmean)}
+\DoxyCodeLine{01766\ \ \ \{}
+\DoxyCodeLine{01767\ \ \ \ \ assert(state\ !=\ SAMPLED\ \&\&\ \textcolor{stringliteral}{"{}setMean:\ mean\ cannot\ be\ set\ inbetween\ the\ calls"{}}}
+\DoxyCodeLine{01768\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}of\ samplePopulation\ and\ updateDistribution"{}});}
+\DoxyCodeLine{01769\ }
+\DoxyCodeLine{01770\ \ \ \ \ \textcolor{keywordflow}{if}(newxmean\ \&\&\ newxmean\ !=\ xmean)}
+\DoxyCodeLine{01771\ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ params.\mbox{\hyperlink{class_parameters_a929e950a998a953439bd555fd5db57de}{N}};\ ++i)}
+\DoxyCodeLine{01772\ \ \ \ \ \ \ \ \ xmean[i]\ =\ newxmean[i];}
+\DoxyCodeLine{01773\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{01774\ \ \ \ \ \ \ newxmean\ =\ xmean;}
+\DoxyCodeLine{01775\ }
+\DoxyCodeLine{01776\ \ \ \ \ \textcolor{keywordflow}{return}\ newxmean;}
+\DoxyCodeLine{01777\ \ \ \}}
+\DoxyCodeLine{01778\ \};}
+
+\end{DoxyCode}

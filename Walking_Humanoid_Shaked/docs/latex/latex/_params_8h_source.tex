@@ -1,0 +1,522 @@
+\hypertarget{_params_8h_source}{}\doxysection{Params.\+h}
+\label{_params_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Params.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Params.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_PARAMS\_H\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_PARAMS\_H\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}tinyxml.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{typedef}\ std::map<std::string,\ std::string>\ MessageMap;}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_opt_params}{OptParams}}}
+\DoxyCodeLine{00017\ \{}
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_opt_params}{OptParams}}()\ \{\}}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_opt_params}{\string~OptParams}}()\ }
+\DoxyCodeLine{00021\ \ \ \ \ \{\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ something\ to\ delete?}}
+\DoxyCodeLine{00023\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}};}
+\DoxyCodeLine{00026\ \ \ \ \ std::vector<double>\ IC\_min,\ IC\_max,\ SL\_min,\ SL\_max,\ FF\_min,\ FF\_max,\ LF\_min,\ LF\_max,\ CL\_min,\ CL\_max,\ C\_min,\ C\_max,\ A\_min,\ A\_max,\ Additional\_min,\ Additional\_max,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ PreSI\_max,\ PreSI\_min,\ min\_v,\ PreSTANCE\_max,\ PreSTANCE\_min,\ Stance\_prep\_min,\ Stance\_prep\_max,\ Simbicon\_max,\ Simbicon\_min,\ max\_v;}
+\DoxyCodeLine{00028\ \ \ \ \ vector<double>\ parameters\_scaled,\ params\_not\_scaled;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{double}*\ \mbox{\hyperlink{class_opt_params_a912c13ad26c107b46922907d77c09ac3}{params\_pointer}}()\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}[0];}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_opt_params_a32d65779e3b109ebaf21d18aafc4900f}{load}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pFilename)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\ doc(pFilename);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!doc.\mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}())\ \textcolor{keywordflow}{return}(1);}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ flag\_error\_xml\ =\ 0;\ \textcolor{comment}{//\ flag\ error\ on\ loading\ values\ from\ xml\ file}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ hDoc(\&doc);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pElem;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ hRoot(0);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ pElem\ =\ hDoc.\mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}().\mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ this\ for\ later}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ hRoot\ =\ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}(pElem);}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ parameters}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.clear();}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ IC\_arr[7][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}trunk"{}}\},\ \{\textcolor{stringliteral}{"{}alfaR"{}}\},\ \{\textcolor{stringliteral}{"{}alfaL"{}}\},\ \{\textcolor{stringliteral}{"{}beta"{}}\},\ \{\textcolor{stringliteral}{"{}gamma"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}head"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}vel"{}}\ \}\ \};\ \textcolor{comment}{//\ names\ of\ each\ attribute\ of\ Initial\ Condition\ in\ XML\ file.}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ IC\_min\ =\ \{\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0\ \};\ \textcolor{comment}{//\ minima\ for\ initial\ condition\ params}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ IC\_max\ =\ \{\ 20.0*dDegreeToRad,\ 20.0*dDegreeToRad,\ 30.0*dDegreeToRad,\ 20.0*dDegreeToRad,\ 20.0*dDegreeToRad,\ 20.0*dDegreeToRad,\ 3.5\ \};\ \textcolor{comment}{//\ maxima\ for\ initial\ condition\ params}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ SL\_arr[9][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}hamP"{}}\},\ \{\textcolor{stringliteral}{"{}hamA"{}}\},\ \{\textcolor{stringliteral}{"{}hamD"{}}\},\ \{\textcolor{stringliteral}{"{}gluP"{}}\},\ \{\textcolor{stringliteral}{"{}gluA"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}gluD"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}hflP"{}}\ \},\ \{\textcolor{stringliteral}{"{}hflA"{}}\},\ \{\textcolor{stringliteral}{"{}hflD"{}}\}\};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ SL\_min\ =\ \{\ 1.78,\ 0.97*dDegreeToRad,\ 0.1,\ 1.0,\ 0.97\ *\ dDegreeToRad,\ 0.1,1.78,\ 0.97\ *\ dDegreeToRad,\ 0.1\ \};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ SL\_max\ =\ \{\ 22,\ 6.3\ *\ dDegreeToRad,\ 0.5,\ 22,\ 6.3\ *\ dDegreeToRad,\ 0.5,\ 22,\ 6.3\ *\ dDegreeToRad,\ 0.5\};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ FF\_arr[6][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}glu"{}}\},\ \{\textcolor{stringliteral}{"{}ham"{}}\},\ \{\textcolor{stringliteral}{"{}vas"{}}\},\ \{\textcolor{stringliteral}{"{}sol"{}}\},\ \{\textcolor{stringliteral}{"{}gas"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}tasol"{}}\ \}\};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ FF\_min\ =\ \{\ 0,\ 0,\ 0.82,\ 0.97,\ 0,\ 0\ \};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ FF\_max\ =\ \{\ 1.0,\ 0.67,\ 13.5,\ 2.17,\ 10,\ 10\};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ LF\_arr[6][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}hflG"{}}\},\ \{\textcolor{stringliteral}{"{}hamG"{}}\},\ \{\textcolor{stringliteral}{"{}taG"{}}\},\ \{\textcolor{stringliteral}{"{}hflH"{}}\},\ \{\textcolor{stringliteral}{"{}hamH"{}}\ \},\ \{\ \textcolor{stringliteral}{"{}taH"{}}\ \}\};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ LF\_min\ =\ \{\ 0.17,\ 0,\ 0.55,\ 0,\ 0.6,\ 0.59\ \};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ LF\_max\ =\ \{\ 5,\ 100,\ 3.2,\ 0.67,\ 10,\ 2.0\};}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ CL\_arr[4][7]\ =\ \{\ \{\textcolor{stringliteral}{"{}trunkP"{}}\},\ \{\textcolor{stringliteral}{"{}trunkV"{}}\},\ \{\textcolor{stringliteral}{"{}footP"{}}\},\ \{\textcolor{stringliteral}{"{}footV"{}}\}\};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ CL\_min\ =\ \{\ 100,\ 10,\ 10,\ 1\ \};}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ CL\_max\ =\ \{\ 3000,\ 300,\ 300,\ 30\ \};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ C\_arr[6][8]\ =\ \{\ \{\textcolor{stringliteral}{"{}trunkP"{}}\},\ \{\textcolor{stringliteral}{"{}trunkV"{}}\},\ \{\textcolor{stringliteral}{"{}footP"{}}\},\ \{\textcolor{stringliteral}{"{}footV"{}}\},\ \{\textcolor{stringliteral}{"{}TtrunkP"{}}\},\ \{\textcolor{stringliteral}{"{}TtrunkV"{}}\}\};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ C\_min\ =\ \{\ 50,\ 0,\ 1,\ 0,\ 50,\ 0\ \};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ C\_max\ =\ \{\ 200,\ 30,\ 100,\ 10,\ 500,\ 50\};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ A\_arr[2][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}alpha"{}}\},\ \{\textcolor{stringliteral}{"{}elbow"{}}\}\};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ A\_min\ =\ \{\ 0,\ 0\ \};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ A\_max\ =\ \{\ 1,\ 90.0*dDegreeToRad\ \};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ PreSI\_arr[4][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}vas"{}}\},\ \{\textcolor{stringliteral}{"{}rf"{}}\},\ \{\textcolor{stringliteral}{"{}glu"{}}\},\ \{\textcolor{stringliteral}{"{}hfl"{}}\}\};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ PreSI\_min\ =\ \{\ 0.01,\ 0.01,\ 0.01,\ 0.01\ \};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ PreSI\_max\ =\ \{\ 1,\ 1,\ 1,\ 1\ \};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ PreSTANCE\_arr[2][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}vas"{}}\},\ \{\textcolor{stringliteral}{"{}hip"{}}\}\};}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ PreSTANCE\_min\ =\ \{\ 0.01,\ 0.01\ \};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ PreSTANCE\_max\ =\ \{\ 1,\ 1\ \};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ Stanceprep\_arr[9][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}hflK"{}}\},\ \{\textcolor{stringliteral}{"{}hflD"{}}\},\{\textcolor{stringliteral}{"{}hflA"{}}\},\{\textcolor{stringliteral}{"{}gluK"{}}\},\ \{\textcolor{stringliteral}{"{}gluD"{}}\},\{\textcolor{stringliteral}{"{}gluA"{}}\}\ ,\{\textcolor{stringliteral}{"{}vasK"{}}\},\ \{\textcolor{stringliteral}{"{}vasD"{}}\},\{\textcolor{stringliteral}{"{}vasA"{}}\}\ \};}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ Stance\_prep\_min\ =\ \{0.1,\ 0.001,\ 100\ *\ dDegreeToRad,\ 0.1,\ 0.01,\ 100\ *\ dDegreeToRad,0.01,\ 0.01,\ 100\ *\ dDegreeToRad\ \};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ Stance\_prep\_max\ =\ \{\ 2,\ 0.5,\ 180\ *\ dDegreeToRad,\ 2,\ 0.5,\ 180\ *\ dDegreeToRad,2,\ 0.5,\ 180\ *\ dDegreeToRad\ \};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ Simbicon\_arr[4][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}cd"{}}\},\ \{\textcolor{stringliteral}{"{}cv"{}}\},\ \{\textcolor{stringliteral}{"{}cd1"{}}\},\ \{\textcolor{stringliteral}{"{}cv1"{}}\}\ \};}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ Simbicon\_min\ =\ \{\ 0.4,0.1,0.0,0.0\};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ Simbicon\_max\ =\ \{\ 0.6,\ 0.3,\ 0.6,\ 0.3\};}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ Additional\_arr[3][6]\ =\ \{\ \{\textcolor{stringliteral}{"{}hflK"{}}\},\ \{\textcolor{stringliteral}{"{}vasK"{}}\},\{\textcolor{stringliteral}{"{}vasA"{}}\}\ \};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ Additional\_min\ =\ \{\ 0.0,\ 0.0,\ 160\ *\ dDegreeToRad\ \};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ Additional\_max\ =\ \{\ 2.0,\ 3.0,\ 180\ *\ dDegreeToRad\ \};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ IC\_min.begin(),\ IC\_min.end());}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ SL\_min.begin(),\ SL\_min.end());}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ FF\_min.begin(),\ FF\_min.end());}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ LF\_min.begin(),\ LF\_min.end());}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ CL\_min.begin(),\ CL\_min.end());}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ C\_min.begin(),\ C\_min.end());}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ A\_min.begin(),\ A\_min.end());}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ PreSI\_min.begin(),\ PreSI\_min.end());}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ PreSTANCE\_min.begin(),\ PreSTANCE\_min.end());}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ Stance\_prep\_min.begin(),\ Stance\_prep\_min.end());}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ Simbicon\_min.begin(),\ Simbicon\_min.end());}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ min\_v.insert(min\_v.end(),\ Additional\_min.begin(),\ Additional\_min.end());}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ IC\_max.begin(),\ IC\_max.end());}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ SL\_max.begin(),\ SL\_max.end());}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ FF\_max.begin(),\ FF\_max.end());}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ LF\_max.begin(),\ LF\_max.end());}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ CL\_max.begin(),\ CL\_max.end());}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ C\_max.begin(),\ C\_max.end());}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ A\_max.begin(),\ A\_max.end());}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ PreSI\_max.begin(),\ PreSI\_max.end());}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ PreSTANCE\_max.begin(),\ PreSTANCE\_max.end());}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ Stance\_prep\_max.begin(),\ Stance\_prep\_max.end());}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ Simbicon\_max.begin(),\ Simbicon\_max.end());}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ max\_v.insert(max\_v.end(),\ Additional\_max.begin(),\ Additional\_max.end());}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pWindowNode\ =\ hRoot.\mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}().\mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}();}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ loop\ all\ sets\ of\ params}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (pWindowNode;\ pWindowNode\ !=\ NULL;\ pWindowNode\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}())}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}InitialCondition"{}})\ ==\ 0)}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ loop\ on\ all\ params\ of\ each\ set.\ TO\ DO:\ use\ just\ one\ fot\ loop\ and\ a\ function}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 7;\ ++ii)}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;\textcolor{comment}{//\ initialization}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&IC\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}StanceLead"{}})\ ==\ 0)}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 9;\ ++ii)}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&SL\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}ForceFeedback"{}})\ ==\ 0)}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 6;\ ++ii)}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&FF\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}LengthFeedback"{}})\ ==\ 0)}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 6;\ ++ii)}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&LF\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}Coronal\_lead"{}})\ ==\ 0)}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 4;\ ++ii)}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&CL\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}Coronal"{}})\ ==\ 0)}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 6;\ ++ii)}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&C\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}Arm"{}})\ ==\ 0)}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 2;\ ++ii)}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&A\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}PreSI"{}})\ ==\ 0)}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 4;\ ++ii)}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&PreSI\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}PreSTANCE"{}})\ ==\ 0)}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 2;\ ++ii)}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&PreSTANCE\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}StancePrep"{}})\ ==\ 0)}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 9;\ ++ii)}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&Stanceprep\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}Simbicon"{}})\ ==\ 0)}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 4;\ ++ii)}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&Simbicon\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strcmp(pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}(),\ \textcolor{stringliteral}{"{}Additional"{}})\ ==\ 0)}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 3;\ ++ii)}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value\ =\ -\/1;}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_ae04bad29ddb281a7e6c662b3882e9928}{QueryDoubleAttribute}}(\&Additional\_arr[ii][0],\ \&value);}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.push\_back(value);}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ -\/1)}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_error\_xml\ =\ 1;}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(flag\_error\_xml);}
+\DoxyCodeLine{00263\ \ \ \ \ \};}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{double}*\ \mbox{\hyperlink{class_opt_params_aa8bba10499a5b1e391f42d4b3b5d17d3}{RemoveScaling}}(\textcolor{keywordtype}{double}\ *\ scaled\_params)}
+\DoxyCodeLine{00271\ \ \ \ \ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ params\_not\_scaled.clear();}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ 62;\ ii++)}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ params\_not\_scaled.push\_back(scaled\_params[ii]\ *\ (max\_v[ii]\ -\/\ min\_v[ii])\ +\ min\_v[ii]);}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&params\_not\_scaled[0];}
+\DoxyCodeLine{00276\ \ \ \ \ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{double}*\ \mbox{\hyperlink{class_opt_params_ab7230a6e0fc2042c815c4a3eb244ec4d}{ScaleParameters}}()}
+\DoxyCodeLine{00283\ \ \ \ \ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ parameters\_scaled.clear();}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ ii\ =\ 0;\ ii\ <\ \mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}.size();\ ii++)}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ parameters\_scaled.push\_back((\mbox{\hyperlink{class_opt_params_ab177e264ad7dfaab3de90c6214893be6}{ParamList}}[ii]\ -\/\ min\_v[ii])\ /\ (max\_v[ii]\ -\/\ min\_v[ii]));\textcolor{comment}{//\ NORMALIZATION\ BEFORE\ OPTIMIZATION}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&parameters\_scaled[0];}
+\DoxyCodeLine{00289\ \ \ \ \ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_opt_params_a8059c3e095f508754bf8d945ba134d03}{write\_params\_doc}}(\textcolor{keywordtype}{double}\ *\ opt\_params,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \&Name)}
+\DoxyCodeLine{00297\ \ \ \ \ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\ doc;}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ msg;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{string}\ check\ =\ \textcolor{stringliteral}{"{}Params"{}};}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Name.compare(check)\ ==\ 0)}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ doc.\mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}(\textcolor{stringliteral}{"{}OptimizationParameters.xml"{}});}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}*\ decl\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_declaration}{TiXmlDeclaration}}(\textcolor{stringliteral}{"{}1.0"{}},\ \textcolor{stringliteral}{"{}"{}},\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ doc.\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(decl);}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ root\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(Name.c\_str());}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ doc.\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(root);}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}*\ comment\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_comment}{TiXmlComment}}();}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{comment}{//comment-\/>SetValue("{}\ Bestever\ parameters\ of\ CMAES\ "{});}}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{comment}{//root-\/>LinkEndChild(comment);}}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ IC;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ IC\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}InitialCondition"{}});}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(IC);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}trunk"{}},\ opt\_params[0]);}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}alfaR"{}},\ opt\_params[1]);}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}alfaL"{}},\ opt\_params[2]);}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}beta"{}},\ \ opt\_params[3]);}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gamma"{}},\ opt\_params[4]);}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}head"{}},\ \ opt\_params[5]);}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ IC-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vel"{}},\ \ \ opt\_params[6]);}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ SL;}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ SL\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}StanceLead"{}});}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(SL);}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hamP"{}},\ opt\_params[7]);}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hamA"{}},\ opt\_params[8]);}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hamD"{}},\ opt\_params[9]);}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluP"{}},\ opt\_params[10]);}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluA"{}},\ opt\_params[11]);}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluD"{}},\ opt\_params[12]);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflP"{}},\ opt\_params[13]);}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflA"{}},\ opt\_params[14]);}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ SL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflD"{}},\ opt\_params[15]);}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ FF;}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ FF\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}ForceFeedback"{}});}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(FF);}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}glu"{}},\ opt\_params[16]);}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}ham"{}},\ opt\_params[17]);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vas"{}},\ opt\_params[18]);}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}sol"{}},\ opt\_params[19]);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gas"{}},\ opt\_params[20]);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ FF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}tasol"{}},\ opt\_params[21]);}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ LF;}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ LF\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}LengthFeedback"{}});}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(LF);}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflG"{}},\ opt\_params[22]);}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hamG"{}},\ opt\_params[23]);}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}taG"{}},\ opt\_params[24]);}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflH"{}},\ opt\_params[25]);}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hamH"{}},\ opt\_params[26]);}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ LF-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}taH"{}},\ opt\_params[27]);}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ CL;}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ CL\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}Coronal\_lead"{}});}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(CL);}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ CL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}trunkP"{}},\ opt\_params[28]);}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ CL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}trunkV"{}},\ opt\_params[29]);}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ CL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}footP"{}},\ opt\_params[30]);}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ CL-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}footV"{}},\ opt\_params[31]);}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ C;}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ C\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}Coronal"{}});}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(C);}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}trunkP"{}},\ opt\_params[32]);\textcolor{comment}{//rename}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}trunkV"{}},\ opt\_params[33]);\textcolor{comment}{//rename}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}footP"{}},\ opt\_params[34]);\textcolor{comment}{//rename}}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}footV"{}},\ opt\_params[35]);\textcolor{comment}{//rename}}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}TtrunkP"{}},\ opt\_params[36]);}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ C-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}TtrunkV"{}},\ opt\_params[37]);}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ A;}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ A\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}Arm"{}});}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(A);}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ A-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}alpha"{}},\ opt\_params[38]);}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ A-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}elbow"{}},\ opt\_params[39]);}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pre\_si;}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ pre\_si\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}PreSI"{}});}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(pre\_si);}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ pre\_si-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vas"{}},\ opt\_params[40]);}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ pre\_si-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}rf"{}},\ opt\_params[41]);}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ pre\_si-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}glu"{}},\ opt\_params[42]);}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ pre\_si-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hfl"{}},\ opt\_params[43]);}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pre\_st;}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ pre\_st\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}PreSTANCE"{}});}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(pre\_st);}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ pre\_st-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vas"{}},\ opt\_params[44]);}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ pre\_st-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hip"{}},\ opt\_params[45]);}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ st\_prep;}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ st\_prep\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}StancePrep"{}});}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(st\_prep);}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflK"{}},\ opt\_params[46]);}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflD"{}},\ opt\_params[47]);}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflA"{}},\ opt\_params[48]);}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluK"{}},\ opt\_params[49]);}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluD"{}},\ opt\_params[50]);}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}gluA"{}},\ opt\_params[51]);}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vasK"{}},\ opt\_params[52]);}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vasD"{}},\ opt\_params[53]);}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ st\_prep-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vasA"{}},\ opt\_params[54]);}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ simbicon;}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ simbicon\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}Simbicon"{}});}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(simbicon);}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ simbicon-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}cd"{}},\ opt\_params[55]);}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ simbicon-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}cv"{}},\ opt\_params[56]);}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ simbicon-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}cd1"{}},\ opt\_params[57]);}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ simbicon-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}cv1"{}},\ opt\_params[58]);}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ additional;}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ additional\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}(\textcolor{stringliteral}{"{}Additional"{}});}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ root-\/>\mbox{\hyperlink{class_ti_xml_node_a1a881212554b759865f6cac79a851d38}{LinkEndChild}}(additional);}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ additional-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}hflK"{}},\ opt\_params[59]);}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ additional-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vasK"{}},\ opt\_params[60]);}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ additional-\/>\mbox{\hyperlink{class_ti_xml_element_a0d1dd975d75496778177e35abfe0ec0b}{SetDoubleAttribute}}(\textcolor{stringliteral}{"{}vasA"{}},\ opt\_params[61]);}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{comment}{//dump\_to\_stdout(\&doc);}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ doc.\mbox{\hyperlink{class_ti_xml_document_ab63b96a6af5a467e289c7c75202edad9}{SaveFile}}(\textcolor{stringliteral}{"{}OptimizationParameters.xml"{}});}
+\DoxyCodeLine{00414\ \ \ \ \ \}}
+\DoxyCodeLine{00415\ \};}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00421\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_options}{Options}}}
+\DoxyCodeLine{00422\ \{}
+\DoxyCodeLine{00423\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00425\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_options_a7fa6edc32dbfff521811de7d7395bb7f}{simulationtime}},\ iterationnumber;}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_options_a434fdff32165898b404a96b52f4b49eb}{optimization}},\ output;}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \ \ \ \ \mbox{\hyperlink{class_options}{Options}}()}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{class_options_a7fa6edc32dbfff521811de7d7395bb7f}{simulationtime}}(8),\ iterationnumber(50),\ output(\textcolor{stringliteral}{"{}no"{}}),\ \mbox{\hyperlink{class_options_a434fdff32165898b404a96b52f4b49eb}{optimization}}(\textcolor{stringliteral}{"{}no"{}})}
+\DoxyCodeLine{00431\ \ \ \ \ \{}
+\DoxyCodeLine{00432\ \ \ \ \ \}}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \mbox{\hyperlink{class_options}{Options}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_options_a7fa6edc32dbfff521811de7d7395bb7f}{simulationtime}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{class_options_a434fdff32165898b404a96b52f4b49eb}{optimization}},\ \textcolor{keywordtype}{int}\ iterationnumber,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ output)}
+\DoxyCodeLine{00435\ \ \ \ \ \{}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ this-\/>simulationtime\ =\ \mbox{\hyperlink{class_options_a7fa6edc32dbfff521811de7d7395bb7f}{simulationtime}};}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ this-\/>optimization\ =\ \mbox{\hyperlink{class_options_a434fdff32165898b404a96b52f4b49eb}{optimization}};}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ this-\/>iterationnumber\ =\ iterationnumber;}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ this-\/>output\ =\ output;}
+\DoxyCodeLine{00440\ \ \ \ \ \}}
+\DoxyCodeLine{00441\ \};}
+\DoxyCodeLine{00446\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_w_b_v}{WBV}}}
+\DoxyCodeLine{00447\ \{}
+\DoxyCodeLine{00448\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00450\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_w_b_v_a343c5d74d3c605d6e4f2141b6dc69d7f}{amplitude}},\ frequency;}
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{keywordtype}{string}\ \ \mbox{\hyperlink{class_w_b_v_ab72a0086cedfebe33b8131878e0f255b}{active}},\ direction;}
+\DoxyCodeLine{00453\ }
+\DoxyCodeLine{00454\ \ \ \ \ \mbox{\hyperlink{class_w_b_v}{WBV}}()}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{class_w_b_v_a343c5d74d3c605d6e4f2141b6dc69d7f}{amplitude}}(4),\ frequency(0.25),\ \mbox{\hyperlink{class_w_b_v_ab72a0086cedfebe33b8131878e0f255b}{active}}(\textcolor{stringliteral}{"{}no"{}}),\ direction(\textcolor{stringliteral}{"{}roll"{}})}
+\DoxyCodeLine{00456\ \ \ \ \ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \}}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ \ \ \ \ \mbox{\hyperlink{class_w_b_v}{WBV}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ \mbox{\hyperlink{class_w_b_v_ab72a0086cedfebe33b8131878e0f255b}{active}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\&\ direction,\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_w_b_v_a343c5d74d3c605d6e4f2141b6dc69d7f}{amplitude}},\ \textcolor{keywordtype}{float}\ frequency)}
+\DoxyCodeLine{00460\ \ \ \ \ \{}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ this-\/>active\ =\ \mbox{\hyperlink{class_w_b_v_ab72a0086cedfebe33b8131878e0f255b}{active}};}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ this-\/>direction\ =\ direction;}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ this-\/>amplitude\ =\ \mbox{\hyperlink{class_w_b_v_a343c5d74d3c605d6e4f2141b6dc69d7f}{amplitude}};}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ this-\/>frequency\ =\ frequency;}
+\DoxyCodeLine{00465\ \ \ \ \ \}}
+\DoxyCodeLine{00466\ \};}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_app_settings}{AppSettings}}}
+\DoxyCodeLine{00469\ \{}
+\DoxyCodeLine{00470\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00472\ \ \ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{class_app_settings_a76156e10c4b3aa901dcc748222a04760}{m\_name}};}
+\DoxyCodeLine{00474\ \ \ \ \ list<Options>\ \mbox{\hyperlink{class_app_settings_a260a78261146fc0bfee091009424765a}{m\_options}};}
+\DoxyCodeLine{00476\ \ \ \ \ list<WBV>\ \mbox{\hyperlink{class_app_settings_a090b343025cc351b12a93c704017b3c6}{m\_wbv}};}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \mbox{\hyperlink{class_app_settings}{AppSettings}}()\ \{\}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{comment}{//\ just\ to\ show\ how\ to\ do\ it}}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keywordtype}{void}\ setDemoValues()}
+\DoxyCodeLine{00482\ \ \ \ \ \{}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a76156e10c4b3aa901dcc748222a04760}{m\_name}}\ =\ \textcolor{stringliteral}{"{}Shaked\ Walker"{}};}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a260a78261146fc0bfee091009424765a}{m\_options}}.clear();}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a260a78261146fc0bfee091009424765a}{m\_options}}.push\_back(\mbox{\hyperlink{class_options}{Options}}(8,\ \textcolor{stringliteral}{"{}no"{}},\ 50,\ \textcolor{stringliteral}{"{}no"{}}));}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a090b343025cc351b12a93c704017b3c6}{m\_wbv}}.clear();}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a090b343025cc351b12a93c704017b3c6}{m\_wbv}}.push\_back(\mbox{\hyperlink{class_w_b_v}{WBV}}(\textcolor{stringliteral}{"{}no"{}},\ \textcolor{stringliteral}{"{}no"{}},\ 4,\ 0.25));}
+\DoxyCodeLine{00488\ \ \ \ \ \}}
+\DoxyCodeLine{00494\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_app_settings_ae6a1fb3c7dfe55b64eb1cdc4e5a730b4}{load}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pFilename)}
+\DoxyCodeLine{00495\ \ \ \ \ \{}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_document}{TiXmlDocument}}\ doc(pFilename);}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!doc.\mbox{\hyperlink{class_ti_xml_document_a4c852a889c02cf251117fd1d9fe1845f}{LoadFile}}())\ \textcolor{keywordflow}{return}(1);}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ flag\_error\_xml\ =\ 0;\ \textcolor{comment}{//\ flag\ error\ on\ loading\ values\ from\ xml\ file}}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ hDoc(\&doc);}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pElem;}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}\ hRoot(0);}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ block:\ name}}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ pElem\ =\ hDoc.\mbox{\hyperlink{class_ti_xml_handle_af0643f8683f3f2b779b8c9d78c67b2c0}{FirstChildElement}}().\mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}();}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ should\ always\ have\ a\ valid\ root\ but\ handle\ gracefully\ if\ it\ does}}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!pElem)\ \textcolor{keywordflow}{return}(1);}
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a76156e10c4b3aa901dcc748222a04760}{m\_name}}\ =\ pElem-\/>\mbox{\hyperlink{class_ti_xml_node_a3b260dd22313f310c0acb2e68ada6f5b}{Value}}();}
+\DoxyCodeLine{00510\ }
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ this\ for\ later}}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ hRoot\ =\ \mbox{\hyperlink{class_ti_xml_handle}{TiXmlHandle}}(pElem);}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ block:\ options}}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a260a78261146fc0bfee091009424765a}{m\_options}}.clear();\ \textcolor{comment}{//\ trash\ existing\ list}}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pWindowNode\ =\ hRoot.\mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}(\textcolor{stringliteral}{"{}Options"{}}).\mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}();}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (pWindowNode;\ pWindowNode;\ pWindowNode\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}())}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_options}{Options}}\ w;}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a5c0f739e0f6f5905a201364532e54a60}{QueryIntAttribute}}(\textcolor{stringliteral}{"{}SimulationTime"{}},\ \&w.\mbox{\hyperlink{class_options_a7fa6edc32dbfff521811de7d7395bb7f}{simulationtime}});\ \textcolor{comment}{//\ If\ this\ fails,\ original\ value\ is\ left\ as-\/is}}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pName\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\textcolor{stringliteral}{"{}Optimization"{}});}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pName)\ w.\mbox{\hyperlink{class_options_a434fdff32165898b404a96b52f4b49eb}{optimization}}\ =\ pName;}
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a5c0f739e0f6f5905a201364532e54a60}{QueryIntAttribute}}(\textcolor{stringliteral}{"{}IterationsNumber"{}},\ \&w.iterationnumber);\ \textcolor{comment}{//\ If\ this\ fails,\ original\ value\ is\ left\ as-\/is}}
+\DoxyCodeLine{00529\ }
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pName\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\textcolor{stringliteral}{"{}Output"{}});}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pName)\ w.output\ =\ pName;}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a260a78261146fc0bfee091009424765a}{m\_options}}.push\_back(w);}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ block:\ wbv}}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a090b343025cc351b12a93c704017b3c6}{m\_wbv}}.clear();\ \textcolor{comment}{//\ trash\ existing\ list}}
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ti_xml_element}{TiXmlElement}}*\ pWindowNode\ =\ hRoot.\mbox{\hyperlink{class_ti_xml_handle_afb1b4c0eda970b320dfd262304cc1d04}{FirstChild}}(\textcolor{stringliteral}{"{}WholeBodyVibration"{}}).\mbox{\hyperlink{class_ti_xml_handle_ac56814c76757eecc5bd951d3ed710dd2}{Element}}();}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (pWindowNode;\ pWindowNode;\ pWindowNode\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_node_ac6105781c913a42aa7f3f17bd1964f7c}{NextSiblingElement}}())}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_w_b_v}{WBV}}\ w;}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ pName\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\textcolor{stringliteral}{"{}Active"{}});}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pName)\ w.\mbox{\hyperlink{class_w_b_v_ab72a0086cedfebe33b8131878e0f255b}{active}}\ =\ pName;}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pName\ =\ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a6042f518748f475a7ac4b4e0b509eb05}{Attribute}}(\textcolor{stringliteral}{"{}Direction"{}});}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pName)\ w.direction\ =\ pName;}
+\DoxyCodeLine{00549\ }
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a5591929834178699b4561ab6ab460068}{QueryFloatAttribute}}(\textcolor{stringliteral}{"{}Amplitude"{}},\ \&w.\mbox{\hyperlink{class_w_b_v_a343c5d74d3c605d6e4f2141b6dc69d7f}{amplitude}});\ \textcolor{comment}{//\ If\ this\ fails,\ original\ value\ is\ left\ as-\/is}}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pWindowNode-\/>\mbox{\hyperlink{class_ti_xml_element_a5591929834178699b4561ab6ab460068}{QueryFloatAttribute}}(\textcolor{stringliteral}{"{}Frequency"{}},\ \&w.frequency);\ \textcolor{comment}{//\ If\ this\ fails,\ original\ value\ is\ left\ as-\/is}}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_app_settings_a090b343025cc351b12a93c704017b3c6}{m\_wbv}}.push\_back(w);}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ flag\_error\_xml;}
+\DoxyCodeLine{00558\ \ \ \ \ \}}
+\DoxyCodeLine{00559\ \ \ \ \ }
+\DoxyCodeLine{00560\ \};}
+\DoxyCodeLine{00561\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_PARAMS\_H\_}}
+
+\end{DoxyCode}

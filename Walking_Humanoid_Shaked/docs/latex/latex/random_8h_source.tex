@@ -1,0 +1,78 @@
+\hypertarget{random_8h_source}{}\doxysection{random.\+h}
+\label{random_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/random.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/random.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <ctime>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_random}{Random}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \textcolor{comment}{//\ variables\ for\ uniform()}}
+\DoxyCodeLine{00014\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ startseed;}
+\DoxyCodeLine{00015\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ aktseed;}
+\DoxyCodeLine{00016\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ aktrand;}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ rgrand[32];}
+\DoxyCodeLine{00018\ \ \ \textcolor{comment}{//\ variables\ for\ gauss()}}
+\DoxyCodeLine{00019\ \ \ \textcolor{keywordtype}{bool}\ stored;}
+\DoxyCodeLine{00020\ \ \ T\ hold;}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \mbox{\hyperlink{class_random_a4601dfee470d8cd213b4705d63333c4f}{Random}}(\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{unsigned}\ seed\ =\ 0)\ :\ hold(0.0)}
+\DoxyCodeLine{00026\ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ stored\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{if}(seed\ <\ 1)}
+\DoxyCodeLine{00029\ \ \ \ \ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ t\ =\ 100*time(0)\ +\ clock();}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ seed\ =\ (\textcolor{keywordtype}{long}\ unsigned)\ (t\ <\ 0\ ?\ -\/t\ :\ t);}
+\DoxyCodeLine{00032\ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{class_random_a0a0cfa14b28c24c9f7c02341ba8419d5}{start}}(seed);}
+\DoxyCodeLine{00034\ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_random_a0a0cfa14b28c24c9f7c02341ba8419d5}{start}}(\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{unsigned}\ seed)}
+\DoxyCodeLine{00039\ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ stored\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00041\ \ \ \ \ startseed\ =\ seed;}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordflow}{if}(seed\ <\ 1)\ seed\ =\ 1;}
+\DoxyCodeLine{00043\ \ \ \ \ aktseed\ =\ seed;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 39;\ i\ >=\ 0;\ -\/-\/i)}
+\DoxyCodeLine{00045\ \ \ \ \ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ tmp\ =\ aktseed\ /\ 127773;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ aktseed\ =\ 16807*\ (aktseed\ -\/\ tmp*\ 127773)\ -\/\ 2836*\ tmp;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(aktseed\ <\ 0)\ aktseed\ +=\ 2147483647;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i\ <\ 32)\ rgrand[i]\ =\ aktseed;}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ aktrand\ =\ rgrand[0];}
+\DoxyCodeLine{00052\ \ \ \}}
+\DoxyCodeLine{00056\ \ \ T\ \mbox{\hyperlink{class_random_ad35753a318917fa4b9aafe2a07054c91}{gauss}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{00057\ \ \ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordflow}{if}(stored)}
+\DoxyCodeLine{00059\ \ \ \ \ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ stored\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ hold;}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ stored\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00064\ \ \ \ \ T\ x1,\ x2,\ rquad;}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ x1\ =\ 2.0*\mbox{\hyperlink{class_random_ae9a051045e2d4c8f9bcac3e1dc545140}{uniform}}()\ -\/\ 1.0;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ x2\ =\ 2.0*\mbox{\hyperlink{class_random_ae9a051045e2d4c8f9bcac3e1dc545140}{uniform}}()\ -\/\ 1.0;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ rquad\ =\ x1*x1\ +\ x2*x2;}
+\DoxyCodeLine{00069\ \ \ \ \ \}\ \textcolor{keywordflow}{while}(rquad\ >=\ 1\ ||\ rquad\ <=\ 0);}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{register}\ T\ fac\ =\ std::sqrt(T(-\/2)*std::log(rquad)/rquad);}
+\DoxyCodeLine{00071\ \ \ \ \ hold\ =\ fac*x1;}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordflow}{return}\ fac*x2;}
+\DoxyCodeLine{00073\ \ \ \}}
+\DoxyCodeLine{00077\ \ \ T\ \mbox{\hyperlink{class_random_ae9a051045e2d4c8f9bcac3e1dc545140}{uniform}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{00078\ \ \ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{long}\ tmp\ =\ aktseed\ /\ 127773;}
+\DoxyCodeLine{00080\ \ \ \ \ aktseed\ =\ 16807\ *\ (aktseed\ -\/\ tmp\ *\ 127773)\ -\/\ 2836\ *\ tmp;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{if}(aktseed\ <\ 0)}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ aktseed\ +=\ 2147483647;}
+\DoxyCodeLine{00083\ \ \ \ \ tmp\ =\ aktrand\ /\ 67108865;}
+\DoxyCodeLine{00084\ \ \ \ \ aktrand\ =\ rgrand[tmp];}
+\DoxyCodeLine{00085\ \ \ \ \ rgrand[tmp]\ =\ aktseed;}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{return}\ (T)\ aktrand\ /\ T(2.147483647e9);}
+\DoxyCodeLine{00087\ \ \ \}}
+\DoxyCodeLine{00088\ \};}
+
+\end{DoxyCode}

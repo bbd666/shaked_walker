@@ -1,0 +1,231 @@
+\hypertarget{_geom_g_l_8h_source}{}\doxysection{Geom\+GL.\+h}
+\label{_geom_g_l_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/GeomGL.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/GeomGL.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ GEOMGL\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ GEOMGL\_H}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}shader.h"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}VertexGL.h"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}texture.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ "{}NewtonManager.h"{}}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{enum}\ GeomMeshType}
+\DoxyCodeLine{00041\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ amtNone\ =\ -\/1,}
+\DoxyCodeLine{00043\ \ \ \ \ amtConvex\ =\ 0,}
+\DoxyCodeLine{00044\ \ \ \ \ amtCollTree\ =\ 1}
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{enum}\ GeomBodyType}
+\DoxyCodeLine{00048\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ adtNone\ =\ -\/1,}
+\DoxyCodeLine{00050\ \ \ \ \ adtDynamic\ =\ 0,}
+\DoxyCodeLine{00051\ \ \ \ \ adtKinematic\ =\ 1}
+\DoxyCodeLine{00052\ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{enum}\ GeomType}
+\DoxyCodeLine{00055\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ atNone\ \ \ \ \ \ \ \ \ \ \ \ =\ -\/1,}
+\DoxyCodeLine{00057\ \ \ \ \ atBox\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00058\ \ \ \ \ atSphere\ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00059\ \ \ \ \ atCone\ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00060\ \ \ \ \ atCylinder\ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00061\ \ \ \ \ atCapsule\ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00062\ \ \ \ \ atCylinderChamfer\ =\ 5}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{//\ This\ is\ only\ a\ data\ pointer\ object.}}
+\DoxyCodeLine{00066\ \textcolor{comment}{//\ This\ is\ not\ the\ geom\ object\ class.}}
+\DoxyCodeLine{00067\ \textcolor{comment}{//\ This\ object\ is\ use\ as\ a\ pointer\ for\ the\ newton\ objects\ userdata.}}
+\DoxyCodeLine{00068\ \textcolor{comment}{//\ It\ is\ a\ helper\ for\ retrive\ the\ object\ userdata\ from\ newton.}}
+\DoxyCodeLine{00069\ \textcolor{comment}{//\ With\ this\ method\ you\ can\ use\ multiple\ and\ different\ class\ object\ as\ userdata.}}
+\DoxyCodeLine{00070\ \textcolor{comment}{//\ You\ can\ use\ the\ geomtype\ for\ know\ what\ is\ the\ class\ in\ the\ userdata\ pointer\ in\ coming\ from\ newton.\ }}
+\DoxyCodeLine{00071\ \textcolor{comment}{//}}
+\DoxyCodeLine{00072\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_geom_base}{GeomBase}}}
+\DoxyCodeLine{00073\ \{\ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00074\ \ \ \ \ \mbox{\hyperlink{struct_geom_base}{GeomBase}}();}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_geom_base}{\string~GeomBase}}();}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{comment}{//dMatrix\ GetMatrix();}}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{comment}{//dVector\ GetVelocity();}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{comment}{//dVector\ GetOmega();}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//dVector\ GetForce();}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}*\ GetDataPointer();}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{int}\ GetClassID();}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{comment}{//void\ SetMatrix(dMatrix\ val);}}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//void\ SetVelocity(dVector\ val);}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//void\ SetOmega(dVector\ val);}}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//void\ SetForce(dVector\ val);}}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ SetDataPointer(\textcolor{keywordtype}{void}*\ val);}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{void}\ SetClassID(\textcolor{keywordtype}{int}\ val);}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsPicked;}
+\DoxyCodeLine{00092\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{//dMatrix\ aMatrix;}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//dVector\ aVelocity;}}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//dVector\ aOmega;}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//dVector\ aForce;}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}*\ aDataPointer;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{int}\ aClassID;}
+\DoxyCodeLine{00099\ \};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_geom_newton}{GeomNewton}}}
+\DoxyCodeLine{00102\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00104\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}(\mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aMan);}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_geom_newton_a1038ebd55a73af0f7df0a643ec083004}{\string~GeomNewton}}();}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00107\ \ \ \ \ dMatrix\ GetMatrix();}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ SetMatrix(dMatrix\ val);}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ SetDiffuseColor(\textcolor{keywordtype}{float}\ cr,\ \textcolor{keywordtype}{float}\ cg,\ \textcolor{keywordtype}{float}\ cb);}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPosition(\textcolor{keywordtype}{float}\ px,\ \textcolor{keywordtype}{float}\ py,\ \textcolor{keywordtype}{float}\ pz);}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTransformMatrix(\textcolor{keywordtype}{float}*\ pMatrix);}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTexture0(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filetex,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ texname);}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTexture1(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filetex,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ texname);}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTexture2(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filetex,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ texname);}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTexTileU(\textcolor{keywordtype}{float}\ val);}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTexTileV(\textcolor{keywordtype}{float}\ val);}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTurnAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{void}\ SetRollAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPitchAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{float}\ GetTurnAngle();}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{float}\ GetRollAngle();}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{float}\ GetPitchAngle();}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ Render(\mbox{\hyperlink{struct_shader}{Shader}}*\ cshd,\ dFloat\ steptime);}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{void}\ SetBodyType(GeomBodyType\ ctype);}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{void}\ InitNewton(GeomType\ cGeomtype,\ \textcolor{keywordtype}{float}\ cSx,\ \textcolor{keywordtype}{float}\ cSy,\ \textcolor{keywordtype}{float}\ cSz,\ \textcolor{keywordtype}{float}\ cMass\ =\ 0.0f);}
+\DoxyCodeLine{00126\ \ \ \ \ NewtonBody*\ GetBody();}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ SetParent(\mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ uParent);}
+\DoxyCodeLine{00128\ \ \ \ \ dVector\ GetParentPosition();}
+\DoxyCodeLine{00129\ \ \ \ \ dVector\ GetPosition();}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ aParentGeom;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \mbox{\hyperlink{struct_geom_base}{GeomBase}}*\ aUserData;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \mbox{\hyperlink{struct_main_vertex_p_t_n}{MainVertexPTN}}*\ aVtx;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}*\ aIndices;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ aIndiceCount;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aMass;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aTexTileU;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aTexTileV;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aTurnAngle;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aRollAngle;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ aPitchAngle;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ NewtonBody*\ aBody;}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ GLuint\ aVao;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ GLuint\ aVbo;}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ GLuint\ aIbo;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ GLuint\ aTexture0;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ GLuint\ aTexture1;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ GLuint\ aTexture2;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aManager;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ glm::vec3\ aSize;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ dMatrix\ aTrans;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ dMatrix\ aMappingMat;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ dVector\ aDiffuseColor;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ GeomType\ aMeshType;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ GeomBodyType\ aBodyType;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ aBufferInited;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ GenerateMesh();}
+\DoxyCodeLine{00160\ \};}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \textcolor{comment}{//\ WIP:\ Very\ basic\ assimp\ mesh\ loader.}}
+\DoxyCodeLine{00163\ \textcolor{comment}{//\ I\ use\ a\ very\ basic\ method\ for\ import\ and\ load\ the\ mesh\ in\ this\ tutorial.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{//\ Later\ i'm\ going\ to\ add\ a\ more\ complex\ method\ with\ animation\ and\ material\ and\ texture\ loading.}}
+\DoxyCodeLine{00165\ \textcolor{comment}{//\ Currently\ you\ need\ to\ load\ the\ texture\ manually\ for\ any\ meshes\ by\ using\ the\ mesh\ id.}}
+\DoxyCodeLine{00166\ \textcolor{comment}{//}}
+\DoxyCodeLine{00167\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_geom_assimp_mesh}{GeomAssimpMesh}}}
+\DoxyCodeLine{00168\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ GLuint\ aVao;}
+\DoxyCodeLine{00170\ \ \ \ \ GLuint\ aVbo;}
+\DoxyCodeLine{00171\ \ \ \ \ GLuint\ aIbo;}
+\DoxyCodeLine{00172\ \ \ \ \ GLuint\ aTexture0;}
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keywordtype}{int}\ aVerticeCount;}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{int}\ aIndiceCount;}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordtype}{int}\ aFaceCount;}
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{char}*\ aName;}
+\DoxyCodeLine{00177\ \ \ \ \ \mbox{\hyperlink{struct_main_vertex_p_t_n}{MainVertexPTN}}*\ aVtx;}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}*\ aIndices;}
+\DoxyCodeLine{00179\ \};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{comment}{//\ I\ have\ create\ a\ new\ class\ for\ show\ how\ to\ use\ different\ userdate\ with\ newton.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{//\ This\ is\ only\ a\ WIP\ class,\ later\ It\ can\ become\ inherited\ from\ the\ original\ geomnewton\ class.}}
+\DoxyCodeLine{00183\ \textcolor{comment}{//\ For\ now\ it\ is\ only\ a\ quick\ and\ simple\ class\ for\ show\ some\ feature\ with\ the\ userdata\ use.}}
+\DoxyCodeLine{00184\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_geom_assimp}{GeomAssimp}}}
+\DoxyCodeLine{00185\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \mbox{\hyperlink{struct_geom_assimp}{GeomAssimp}}(\mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aMan);}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_geom_assimp_af0cc4b0c91a1afa017df543186d0a76c}{\string~GeomAssimp}}();}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keywordtype}{void}\ SetMatrix(dMatrix\ val);}
+\DoxyCodeLine{00190\ \ \ \ \ dMatrix\ GetMatrix();}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{void}\ ImportMeshFile(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ mfile);}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ FillBufferGL(aiMesh*\ aImportMesh,\ \mbox{\hyperlink{struct_geom_assimp_mesh}{GeomAssimpMesh}}\&\ gMesh);}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordtype}{void}\ RenderMeshes(\mbox{\hyperlink{struct_shader}{Shader}}*\ cshd,\ dFloat\ steptime);}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPosition(\textcolor{keywordtype}{float}\ px,\ \textcolor{keywordtype}{float}\ py,\ \textcolor{keywordtype}{float}\ pz);}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTransformMatrix(\textcolor{keywordtype}{float}*\ pMatrix);}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTextureMeshID(\textcolor{keywordtype}{int}\ mID,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ texfile,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ texname);}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}\ SetBodyType(GeomBodyType\ ctype);}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{void}\ SetMeshScale(\textcolor{keywordtype}{float}\ sx,\ \textcolor{keywordtype}{float}\ sy,\ \textcolor{keywordtype}{float}\ sz);}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{void}\ InitNewton(GeomMeshType\ cGeomMeshtype,\ \textcolor{keywordtype}{float}\ cHulltolerance\ =\ 0.01f,\ \textcolor{keywordtype}{float}\ cMass\ =\ 0.0f);}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{void}\ SetTurnAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordtype}{void}\ SetRollAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPitchAngle(\textcolor{keywordtype}{float}\ rAngle,\ \textcolor{keywordtype}{bool}\ rnoLocal\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keywordtype}{float}\ GetTurnAngle();}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordtype}{float}\ GetRollAngle();}
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{float}\ GetPitchAngle();}
+\DoxyCodeLine{00206\ \ \ \ \ NewtonBody*\ GetBody();}
+\DoxyCodeLine{00207\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{struct_geom_base}{GeomBase}}*\ aUserData;}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{struct_geom_assimp_mesh}{GeomAssimpMesh}}*\ aAssimpMeshes;}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{int}\ aMeshCount;}
+\DoxyCodeLine{00211\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aManager;}
+\DoxyCodeLine{00212\ \ \ \ \ NewtonBody*\ aBody;}
+\DoxyCodeLine{00213\ \ \ \ \ glm::vec3\ aScale;}
+\DoxyCodeLine{00214\ \ \ \ \ GeomBodyType\ aBodyType;}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{float}\ aTurnAngle;}
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordtype}{float}\ aRollAngle;}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{float}\ aPitchAngle;}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordtype}{float}\ aMass;}
+\DoxyCodeLine{00220\ \ \ \ \ dMatrix\ aTrans;}
+\DoxyCodeLine{00221\ \ \ \ \ dVector\ aDiffuseColor;}
+\DoxyCodeLine{00222\ \ \ \ \ aiScene*\ aScene;}
+\DoxyCodeLine{00223\ \};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GEOMGL\_H}}
+
+\end{DoxyCode}

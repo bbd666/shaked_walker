@@ -1,0 +1,547 @@
+\hypertarget{class_control_algorithm}{}\doxysection{Control\+Algorithm Class Reference}
+\label{class_control_algorithm}\index{ControlAlgorithm@{ControlAlgorithm}}
+
+
+{\ttfamily \#include $<$Control\+Algorithm.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_control_algorithm_a1f08c39570c7ba9c2344feb1f9d28a80}{Control\+Algorithm}} ()
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a004df8f6f07bd340d5cc5b3764106add}{PD\+\_\+controller}} (string dof, bool leading)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a98c5df1920346d3b2029761092aceb61}{MTU\+\_\+excitation}} (Mtuname m\+\_\+name, vector$<$ bool $>$ gait\+\_\+state, char lead, char lat, float l\+\_\+til, float f\+\_\+norm, d\+Vector com\+\_\+\+Playervel)
+\item 
+vector$<$ bool $>$ \mbox{\hyperlink{class_control_algorithm_a4c8d2c34d3fbe69849868ffb342f5754}{Stance\+\_\+\+Swing\+\_\+\+Detection}} (d\+Vector foot, d\+Vector com, float leg, float contact)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a9dba7cb1e2422f27a04e4a0d5fabb55f}{Set\+Player\+COMvel}} (d\+Vector COMvel)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_ab906fc5c212fe59f3c9e9c412834b2a6}{Set\+Sagittal\+Distance}} (float d)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a3a3c884ba65b68537b38db1649572990}{Set\+Coronal\+Distance}} (float d1)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_abc4f3d26f54bf34871b4c018730f375a}{Set\+Optimization\+Param}} (double $\ast$parameters)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_ab7fbe62db28dd1d93af542f17f9a5028}{Get\+Shoulder\+Target\+Angles}} (bool state0, char lat)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_ac721ae1301fd94879bc163db786568ae}{Get\+Gain\+\_\+\+Force\+\_\+\+Feedback}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_adb0db1fb1b4eea7c5565e49228ac1a76}{Get\+Gain1\+\_\+\+Length\+\_\+\+Feedback}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a938964913e5e24a1c17162035d9f4571}{Get\+Gain2\+\_\+\+Length\+\_\+\+Feedback}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a7479cf31f33407fecff5b12711edd871}{Get\+Gain\+\_\+\+PDk}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a88470a5b2940698087f149e58016a803}{Get\+Gain\+\_\+\+PDd}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a7d354ab02fcd7ce317b517ab942bcc6b}{Get\+Gain\+\_\+\+PDa}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a357efc690739c7d7eabd2076855f81a2}{Get\+Gain\+\_\+\+Lead1}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a98fbf99176f2251e75b1e29e02d08302}{Get\+Gain\+\_\+\+Lead2}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a9cf44c596ebfdb741565c7bdf2764294}{Get\+Gain\+\_\+\+Lead3}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_ae571bcb97b5fa16c662cc75f99ff22a8}{Get\+Gain\+\_\+\+P1}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a39ff0bca2d010b3b9904f59b0f5c5732}{Get\+Gain\+\_\+\+P2}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_a87c7476c61717765682ec81424bd8e40}{Get\+Pre\+Stim\+SI}} (Mtuname NAME)
+\item 
+float \mbox{\hyperlink{class_control_algorithm_aaa5ac10453966d25f0fcea38e025a740}{Get\+Pre\+Stim\+Stance}} (Mtuname NAME)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_a741506a244a8dd15052ed59d5fb50e26}{Get\+Gain\+\_\+\+HFLswing}} ()
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_a8026a76c9d68739b02e80de7395cc711}{Get\+Gain\+\_\+\+PD}} (string dof, bool lead)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_aa9321337d5c6738b00bc1e731bfb1050}{Set\+Shoulder\+Angle\+Gain}} (float gain, string dof)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_afa6d4221cab847b3987ad5f9888da9e6}{Get\+Initial\+Condition}} ()
+\item 
+void \mbox{\hyperlink{class_control_algorithm_ac273585d2edca1b55e9a4f332d57b02b}{Set\+State}} (float position, float velocity, string dof)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a5b9b141ffddc937ef0e32b14c8a12496}{Set\+State0}} (float position, float velocity, string dof)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_aa4d1866babd7cfc6ad814587138c3a2d}{Get\+State}} (string dof)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_a8ab58c9c6b124f99fba5492317d151d5}{Get\+State0}} (string dof)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a2ebfac3912ebb13704508678b7d49732}{Update\+Queue}} (string muscle, map$<$ string, list$<$ float $>$ $>$ \&queue, float value)
+\item 
+string \mbox{\hyperlink{class_control_algorithm_a676ec1a2e2f053dff068977327d82adb}{Muscle\+Name}} (Mtuname name, char lat)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a547641e83cd3d4180401a93e521d650a}{Update\+Task\+Reward}} (d\+Float COMY\+\_\+pos, d\+Vector COM\+\_\+vel, float Strunk, float Ftrunk)
+\item 
+void \mbox{\hyperlink{class_control_algorithm_a89ff835133f2ca526b1afd2e83854ad9}{Update\+Muscle\+Reward}} (float value)
+\item 
+vector$<$ float $>$ \mbox{\hyperlink{class_control_algorithm_a4159d6c6857cfe75f443bf52085efc1a}{Get\+Reward\+Values}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+useful to apply the control logic of MTU and define the fitness function for optimization 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_control_algorithm_a1f08c39570c7ba9c2344feb1f9d28a80}\label{class_control_algorithm_a1f08c39570c7ba9c2344feb1f9d28a80}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!ControlAlgorithm@{ControlAlgorithm}}
+\index{ControlAlgorithm@{ControlAlgorithm}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{ControlAlgorithm()}{ControlAlgorithm()}}
+{\footnotesize\ttfamily Control\+Algorithm\+::\+Control\+Algorithm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Control parameter initialization
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_control_algorithm_adb0db1fb1b4eea7c5565e49228ac1a76}\label{class_control_algorithm_adb0db1fb1b4eea7c5565e49228ac1a76}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain1\_Length\_Feedback@{GetGain1\_Length\_Feedback}}
+\index{GetGain1\_Length\_Feedback@{GetGain1\_Length\_Feedback}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain1\_Length\_Feedback()}{GetGain1\_Length\_Feedback()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain1\+\_\+\+Length\+\_\+\+Feedback (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the first length feedback gain for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em Gain1} & (output) gain 1 length feedback gain \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a938964913e5e24a1c17162035d9f4571}\label{class_control_algorithm_a938964913e5e24a1c17162035d9f4571}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain2\_Length\_Feedback@{GetGain2\_Length\_Feedback}}
+\index{GetGain2\_Length\_Feedback@{GetGain2\_Length\_Feedback}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain2\_Length\_Feedback()}{GetGain2\_Length\_Feedback()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain2\+\_\+\+Length\+\_\+\+Feedback (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the second length feedback gain for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em Gain2} & (output) gain 2 length feedback gain \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_ac721ae1301fd94879bc163db786568ae}\label{class_control_algorithm_ac721ae1301fd94879bc163db786568ae}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_Force\_Feedback@{GetGain\_Force\_Feedback}}
+\index{GetGain\_Force\_Feedback@{GetGain\_Force\_Feedback}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_Force\_Feedback()}{GetGain\_Force\_Feedback()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+Force\+\_\+\+Feedback (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the force feedback gain for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em Gain} & (output) force feedback gain \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a741506a244a8dd15052ed59d5fb50e26}\label{class_control_algorithm_a741506a244a8dd15052ed59d5fb50e26}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_HFLswing@{GetGain\_HFLswing}}
+\index{GetGain\_HFLswing@{GetGain\_HFLswing}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_HFLswing()}{GetGain\_HFLswing()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+Gain\+\_\+\+HFLswing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the hfl gains during swing 
+\begin{DoxyParams}{Parameters}
+{\em vector} & (output) gain vector \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a357efc690739c7d7eabd2076855f81a2}\label{class_control_algorithm_a357efc690739c7d7eabd2076855f81a2}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_Lead1@{GetGain\_Lead1}}
+\index{GetGain\_Lead1@{GetGain\_Lead1}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_Lead1()}{GetGain\_Lead1()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+Lead1 (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the proportional gain for given MTU of the leading leg 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em k} & (output) gain k \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a98fbf99176f2251e75b1e29e02d08302}\label{class_control_algorithm_a98fbf99176f2251e75b1e29e02d08302}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_Lead2@{GetGain\_Lead2}}
+\index{GetGain\_Lead2@{GetGain\_Lead2}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_Lead2()}{GetGain\_Lead2()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+Lead2 (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the derivative gain for given MTU of the leading leg 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em d} & (output) gain d \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a9cf44c596ebfdb741565c7bdf2764294}\label{class_control_algorithm_a9cf44c596ebfdb741565c7bdf2764294}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_Lead3@{GetGain\_Lead3}}
+\index{GetGain\_Lead3@{GetGain\_Lead3}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_Lead3()}{GetGain\_Lead3()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+Lead3 (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the reference angle value for given MTU of the leading leg 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em a} & (output) angle value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_ae571bcb97b5fa16c662cc75f99ff22a8}\label{class_control_algorithm_ae571bcb97b5fa16c662cc75f99ff22a8}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_P1@{GetGain\_P1}}
+\index{GetGain\_P1@{GetGain\_P1}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_P1()}{GetGain\_P1()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+P1 (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the additional P gain of vas and hfl 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em P1} & (output) proportional gain \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a39ff0bca2d010b3b9904f59b0f5c5732}\label{class_control_algorithm_a39ff0bca2d010b3b9904f59b0f5c5732}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_P2@{GetGain\_P2}}
+\index{GetGain\_P2@{GetGain\_P2}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_P2()}{GetGain\_P2()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+P2 (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the additional reference angle gain of vas and hfl 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em A} & (output) reference angle \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a8026a76c9d68739b02e80de7395cc711}\label{class_control_algorithm_a8026a76c9d68739b02e80de7395cc711}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_PD@{GetGain\_PD}}
+\index{GetGain\_PD@{GetGain\_PD}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_PD()}{GetGain\_PD()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+Gain\+\_\+\+PD (\begin{DoxyParamCaption}\item[{string}]{dof,  }\item[{bool}]{lead }\end{DoxyParamCaption})}
+
+Get proportional and derivative gains of a joint 
+\begin{DoxyParams}{Parameters}
+{\em dof} & (input) name of the joint \\
+\hline
+{\em lead} & (input) if true the joint is part of the leading leg \\
+\hline
+{\em value} & (output) vector with P and D \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a7d354ab02fcd7ce317b517ab942bcc6b}\label{class_control_algorithm_a7d354ab02fcd7ce317b517ab942bcc6b}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_PDa@{GetGain\_PDa}}
+\index{GetGain\_PDa@{GetGain\_PDa}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_PDa()}{GetGain\_PDa()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+PDa (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the reference angle value for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em a} & (output) angle value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a88470a5b2940698087f149e58016a803}\label{class_control_algorithm_a88470a5b2940698087f149e58016a803}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_PDd@{GetGain\_PDd}}
+\index{GetGain\_PDd@{GetGain\_PDd}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_PDd()}{GetGain\_PDd()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+PDd (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the derivative gain for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em d} & (output) gain d \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a7479cf31f33407fecff5b12711edd871}\label{class_control_algorithm_a7479cf31f33407fecff5b12711edd871}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetGain\_PDk@{GetGain\_PDk}}
+\index{GetGain\_PDk@{GetGain\_PDk}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetGain\_PDk()}{GetGain\_PDk()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Gain\+\_\+\+PDk (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the proportional gain for given MTU 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em k} & (output) gain k \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_afa6d4221cab847b3987ad5f9888da9e6}\label{class_control_algorithm_afa6d4221cab847b3987ad5f9888da9e6}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetInitialCondition@{GetInitialCondition}}
+\index{GetInitialCondition@{GetInitialCondition}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetInitialCondition()}{GetInitialCondition()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+Initial\+Condition (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get initial condition parameters 
+\begin{DoxyParams}{Parameters}
+{\em values} & (output) vector with the 7 initial condition parameters \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a87c7476c61717765682ec81424bd8e40}\label{class_control_algorithm_a87c7476c61717765682ec81424bd8e40}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetPreStimSI@{GetPreStimSI}}
+\index{GetPreStimSI@{GetPreStimSI}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetPreStimSI()}{GetPreStimSI()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Pre\+Stim\+SI (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the pre stimulation values during stance initiation 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em value} & (output) pre stimulation value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_aaa5ac10453966d25f0fcea38e025a740}\label{class_control_algorithm_aaa5ac10453966d25f0fcea38e025a740}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetPreStimStance@{GetPreStimStance}}
+\index{GetPreStimStance@{GetPreStimStance}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetPreStimStance()}{GetPreStimStance()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+Get\+Pre\+Stim\+Stance (\begin{DoxyParamCaption}\item[{Mtuname}]{NAME }\end{DoxyParamCaption})}
+
+Get the pre stimulation values during stance 
+\begin{DoxyParams}{Parameters}
+{\em NAME} & (input) name of the MTU \\
+\hline
+{\em value} & (output) pre stimulation value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a4159d6c6857cfe75f443bf52085efc1a}\label{class_control_algorithm_a4159d6c6857cfe75f443bf52085efc1a}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetRewardValues@{GetRewardValues}}
+\index{GetRewardValues@{GetRewardValues}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetRewardValues()}{GetRewardValues()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+Reward\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get task cost, MTU cost and PD controllers cost \mbox{\Hypertarget{class_control_algorithm_ab7fbe62db28dd1d93af542f17f9a5028}\label{class_control_algorithm_ab7fbe62db28dd1d93af542f17f9a5028}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetShoulderTargetAngles@{GetShoulderTargetAngles}}
+\index{GetShoulderTargetAngles@{GetShoulderTargetAngles}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetShoulderTargetAngles()}{GetShoulderTargetAngles()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+Shoulder\+Target\+Angles (\begin{DoxyParamCaption}\item[{bool}]{state0,  }\item[{char}]{lat }\end{DoxyParamCaption})}
+
+Get the shoulder target angles 
+\begin{DoxyParams}{Parameters}
+{\em state0} & (input) if true -\/\texorpdfstring{$>$}{>} initial condition values \\
+\hline
+{\em lat} & (input) laterality \\
+\hline
+{\em angles} & (output) sagittal and transverse angles of the shoulder \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_aa4d1866babd7cfc6ad814587138c3a2d}\label{class_control_algorithm_aa4d1866babd7cfc6ad814587138c3a2d}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetState@{GetState}}
+\index{GetState@{GetState}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetState()}{GetState()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+State (\begin{DoxyParamCaption}\item[{string}]{dof }\end{DoxyParamCaption})}
+
+Get the state of a rigid body 
+\begin{DoxyParams}{Parameters}
+{\em dof} & (input) name of the rigid body \\
+\hline
+{\em state} & (output) position (angle) and velocity value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a8ab58c9c6b124f99fba5492317d151d5}\label{class_control_algorithm_a8ab58c9c6b124f99fba5492317d151d5}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!GetState0@{GetState0}}
+\index{GetState0@{GetState0}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{GetState0()}{GetState0()}}
+{\footnotesize\ttfamily vector$<$ float $>$ Control\+Algorithm\+::\+Get\+State0 (\begin{DoxyParamCaption}\item[{string}]{dof }\end{DoxyParamCaption})}
+
+Get the initial state of a rigid body 
+\begin{DoxyParams}{Parameters}
+{\em dof} & (input) name of the rigid body \\
+\hline
+{\em state} & (output) position (angle) and velocity value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a98c5df1920346d3b2029761092aceb61}\label{class_control_algorithm_a98c5df1920346d3b2029761092aceb61}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!MTU\_excitation@{MTU\_excitation}}
+\index{MTU\_excitation@{MTU\_excitation}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{MTU\_excitation()}{MTU\_excitation()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+MTU\+\_\+excitation (\begin{DoxyParamCaption}\item[{Mtuname}]{m\+\_\+name,  }\item[{vector$<$ bool $>$}]{gait\+\_\+state,  }\item[{char}]{lead,  }\item[{char}]{lat,  }\item[{float}]{l\+\_\+til,  }\item[{float}]{f\+\_\+norm,  }\item[{d\+Vector}]{com\+\_\+\+Playervel }\end{DoxyParamCaption})}
+
+Cumputes the MTU excitation signal 
+\begin{DoxyParams}{Parameters}
+{\em m\+\_\+name} & (input) name of the MTU \\
+\hline
+{\em gait\+\_\+state} & (input) vector containing the step state (stance, swing, SI and SP) \\
+\hline
+{\em excitation} & (output) excitation signal. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a676ec1a2e2f053dff068977327d82adb}\label{class_control_algorithm_a676ec1a2e2f053dff068977327d82adb}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!MuscleName@{MuscleName}}
+\index{MuscleName@{MuscleName}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{MuscleName()}{MuscleName()}}
+{\footnotesize\ttfamily string Control\+Algorithm\+::\+Muscle\+Name (\begin{DoxyParamCaption}\item[{Mtuname}]{name,  }\item[{char}]{lat }\end{DoxyParamCaption})}
+
+Get the name of the MTU 
+\begin{DoxyParams}{Parameters}
+{\em name} & (input) key of the MTU \\
+\hline
+{\em lat} & (input) laterality \\
+\hline
+{\em string} & (output) string of the MTU name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a004df8f6f07bd340d5cc5b3764106add}\label{class_control_algorithm_a004df8f6f07bd340d5cc5b3764106add}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!PD\_controller@{PD\_controller}}
+\index{PD\_controller@{PD\_controller}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{PD\_controller()}{PD\_controller()}}
+{\footnotesize\ttfamily float Control\+Algorithm\+::\+PD\+\_\+controller (\begin{DoxyParamCaption}\item[{string}]{dof,  }\item[{bool}]{leading }\end{DoxyParamCaption})}
+
+Cumputes the torque of a joint produced by PD controller, based on the state of the related rigid bodies. 
+\begin{DoxyParams}{Parameters}
+{\em dof} & (input) name of the controlled degree of freedom \\
+\hline
+{\em leading} & (input) flag to indicate if the leg is the leading one \\
+\hline
+{\em torque} & (output) torque to be applied to the joint. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a3a3c884ba65b68537b38db1649572990}\label{class_control_algorithm_a3a3c884ba65b68537b38db1649572990}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetCoronalDistance@{SetCoronalDistance}}
+\index{SetCoronalDistance@{SetCoronalDistance}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetCoronalDistance()}{SetCoronalDistance()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+Coronal\+Distance (\begin{DoxyParamCaption}\item[{float}]{d1 }\end{DoxyParamCaption})}
+
+Sets the coronal distance between the feet (step width) 
+\begin{DoxyParams}{Parameters}
+{\em d} & (input) distance between feet coms \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_abc4f3d26f54bf34871b4c018730f375a}\label{class_control_algorithm_abc4f3d26f54bf34871b4c018730f375a}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetOptimizationParam@{SetOptimizationParam}}
+\index{SetOptimizationParam@{SetOptimizationParam}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetOptimizationParam()}{SetOptimizationParam()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+Optimization\+Param (\begin{DoxyParamCaption}\item[{double $\ast$}]{parameters }\end{DoxyParamCaption})}
+
+Sets optimization params 
+\begin{DoxyParams}{Parameters}
+{\em parameters} & (input) pointer to optimization parameters \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a9dba7cb1e2422f27a04e4a0d5fabb55f}\label{class_control_algorithm_a9dba7cb1e2422f27a04e4a0d5fabb55f}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetPlayerCOMvel@{SetPlayerCOMvel}}
+\index{SetPlayerCOMvel@{SetPlayerCOMvel}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetPlayerCOMvel()}{SetPlayerCOMvel()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+Player\+COMvel (\begin{DoxyParamCaption}\item[{d\+Vector}]{COMvel }\end{DoxyParamCaption})}
+
+Sets walker com velocity 
+\begin{DoxyParams}{Parameters}
+{\em COMvel} & (input) com velocity \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_ab906fc5c212fe59f3c9e9c412834b2a6}\label{class_control_algorithm_ab906fc5c212fe59f3c9e9c412834b2a6}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetSagittalDistance@{SetSagittalDistance}}
+\index{SetSagittalDistance@{SetSagittalDistance}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetSagittalDistance()}{SetSagittalDistance()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+Sagittal\+Distance (\begin{DoxyParamCaption}\item[{float}]{d }\end{DoxyParamCaption})}
+
+Sets the sagittal distance between the feet 
+\begin{DoxyParams}{Parameters}
+{\em d} & (input) distance between feet coms \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_aa9321337d5c6738b00bc1e731bfb1050}\label{class_control_algorithm_aa9321337d5c6738b00bc1e731bfb1050}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetShoulderAngleGain@{SetShoulderAngleGain}}
+\index{SetShoulderAngleGain@{SetShoulderAngleGain}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetShoulderAngleGain()}{SetShoulderAngleGain()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+Shoulder\+Angle\+Gain (\begin{DoxyParamCaption}\item[{float}]{gain,  }\item[{string}]{dof }\end{DoxyParamCaption})}
+
+Set shoulder angle gain 
+\begin{DoxyParams}{Parameters}
+{\em gain(input)} & value of the gain \\
+\hline
+{\em dof} & (input) name of the shoulder L or R \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_ac273585d2edca1b55e9a4f332d57b02b}\label{class_control_algorithm_ac273585d2edca1b55e9a4f332d57b02b}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetState@{SetState}}
+\index{SetState@{SetState}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetState()}{SetState()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+State (\begin{DoxyParamCaption}\item[{float}]{position,  }\item[{float}]{velocity,  }\item[{string}]{dof }\end{DoxyParamCaption})}
+
+Set the state of a rigid body 
+\begin{DoxyParams}{Parameters}
+{\em position} & (input) position (angle) value \\
+\hline
+{\em velocity} & (input) velocity (angular vel) value \\
+\hline
+{\em dof} & (input) name of the rigid body \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a5b9b141ffddc937ef0e32b14c8a12496}\label{class_control_algorithm_a5b9b141ffddc937ef0e32b14c8a12496}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!SetState0@{SetState0}}
+\index{SetState0@{SetState0}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{SetState0()}{SetState0()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Set\+State0 (\begin{DoxyParamCaption}\item[{float}]{position,  }\item[{float}]{velocity,  }\item[{string}]{dof }\end{DoxyParamCaption})}
+
+Set the initial state of a rigid body 
+\begin{DoxyParams}{Parameters}
+{\em position} & (input) position (angle) value \\
+\hline
+{\em velocity} & (input) velocity (angular vel) value \\
+\hline
+{\em dof} & (input) name of the rigid body \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a4c8d2c34d3fbe69849868ffb342f5754}\label{class_control_algorithm_a4c8d2c34d3fbe69849868ffb342f5754}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!Stance\_Swing\_Detection@{Stance\_Swing\_Detection}}
+\index{Stance\_Swing\_Detection@{Stance\_Swing\_Detection}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{Stance\_Swing\_Detection()}{Stance\_Swing\_Detection()}}
+{\footnotesize\ttfamily vector$<$ bool $>$ Control\+Algorithm\+::\+Stance\+\_\+\+Swing\+\_\+\+Detection (\begin{DoxyParamCaption}\item[{d\+Vector}]{foot,  }\item[{d\+Vector}]{com,  }\item[{float}]{leg,  }\item[{float}]{contact }\end{DoxyParamCaption})}
+
+Detects the state phase of the foot (stance swing stance preparation or swing initiation 
+\begin{DoxyParams}{Parameters}
+{\em foot} & (input) postioon vector of the foot \\
+\hline
+{\em com} & (input) postioon vector of the body com \\
+\hline
+{\em leg} & (input) length of the leg \\
+\hline
+{\em contact} & (input) number of contact points with the ground \\
+\hline
+{\em foot\+\_\+state} & (output) vector with foot state, order is\+: STANCE, SWING, SP, SI. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a89ff835133f2ca526b1afd2e83854ad9}\label{class_control_algorithm_a89ff835133f2ca526b1afd2e83854ad9}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!UpdateMuscleReward@{UpdateMuscleReward}}
+\index{UpdateMuscleReward@{UpdateMuscleReward}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{UpdateMuscleReward()}{UpdateMuscleReward()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Update\+Muscle\+Reward (\begin{DoxyParamCaption}\item[{float}]{value }\end{DoxyParamCaption})}
+
+Compute MTU reward of the fitnees function of the \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}} 
+\begin{DoxyParams}{Parameters}
+{\em value} & (input) the power of 2 of muscle torque \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a2ebfac3912ebb13704508678b7d49732}\label{class_control_algorithm_a2ebfac3912ebb13704508678b7d49732}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!UpdateQueue@{UpdateQueue}}
+\index{UpdateQueue@{UpdateQueue}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{UpdateQueue()}{UpdateQueue()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Update\+Queue (\begin{DoxyParamCaption}\item[{string}]{muscle,  }\item[{map$<$ string, list$<$ float $>$ $>$ \&}]{queue,  }\item[{float}]{value }\end{DoxyParamCaption})}
+
+Update the queue of activation values due to neural delay of a MTU 
+\begin{DoxyParams}{Parameters}
+{\em muscle} & (input) name of the MTU \\
+\hline
+{\em queue} & (input) queue to be updated \\
+\hline
+{\em value} & (input) value to append \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_control_algorithm_a547641e83cd3d4180401a93e521d650a}\label{class_control_algorithm_a547641e83cd3d4180401a93e521d650a}} 
+\index{ControlAlgorithm@{ControlAlgorithm}!UpdateTaskReward@{UpdateTaskReward}}
+\index{UpdateTaskReward@{UpdateTaskReward}!ControlAlgorithm@{ControlAlgorithm}}
+\doxysubsubsection{\texorpdfstring{UpdateTaskReward()}{UpdateTaskReward()}}
+{\footnotesize\ttfamily void Control\+Algorithm\+::\+Update\+Task\+Reward (\begin{DoxyParamCaption}\item[{d\+Float}]{COMY\+\_\+pos,  }\item[{d\+Vector}]{COM\+\_\+vel,  }\item[{float}]{Strunk,  }\item[{float}]{Ftrunk }\end{DoxyParamCaption})}
+
+Compute task reward of the fitnees function of the \mbox{\hyperlink{class_c_m_a_e_s}{CMAES}} 
+\begin{DoxyParams}{Parameters}
+{\em COMY\+\_\+pos} & (input) height of the walker COM \\
+\hline
+{\em COM\+\_\+vel} & (input) velocity vector of the walker COM \\
+\hline
+{\em Strunk} & (input) trunk sagittal orientation \\
+\hline
+{\em Ftrunk} & (input) trunk front orientation \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Control\+Algorithm.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Control\+Algorithm.\+cpp\end{DoxyCompactItemize}

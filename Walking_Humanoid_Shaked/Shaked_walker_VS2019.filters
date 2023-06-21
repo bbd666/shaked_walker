@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="Shaders\MainShader.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="Shaders\MainShader.vert">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{92e8f503-78dd-4b9c-bb56-6d7736077b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{cb500c48-8430-42e2-89f5-67d58537c3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{4316db1b-88aa-4e05-bc1a-baa2910e695d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tutorial">
+      <UniqueIdentifier>{a9bc64c9-3ba8-4ca6-a039-ba933fb89bdb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="System\BaseShader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Camera.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\dHighResolutionTimer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\GeomGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\NewtonManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\pch.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\texture.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\VertexGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\WindowGL.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Muscle.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Humanoid.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\NewtonUtil.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\tinystr.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\tinyxml.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ControlAlgorithm.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\parameters.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\random.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\timings.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\utils.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Params.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="System\cmaes.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="System\BaseShader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Camera.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\dHighResolutionTimer.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\GeomGL.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\NewtonManager.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\pch.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\shader.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ystem\texture.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\WindowGL.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Muscle.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Humanoid.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\NewtonUtil.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\tinystr.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\tinyxml.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\tinyxmlerror.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="System\tinyxmlparser.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaked_Walker.cpp">
+      <Filter>Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="System\ControlAlgorithm.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Shaked_Walker.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="OptimizationParameters.xml">
+      <Filter>Tutorial</Filter>
+    </Xml>
+    <Xml Include="DummyGeometricProperties.xml">
+      <Filter>Tutorial</Filter>
+    </Xml>
+    <Xml Include="Configuration.xml">
+      <Filter>Tutorial</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

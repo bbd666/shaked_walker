@@ -1,0 +1,118 @@
+\hypertarget{_muscle_8h_source}{}\doxysection{Muscle.\+h}
+\label{_muscle_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Muscle.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Muscle.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BIPED\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BIPED\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Shader.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}VertexGL.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}WindowGL.h"{}}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{enum}\ JointType\ \{Hinge,\ BallAndSocket,\ DoubleHinge,\ NOtype\};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{enum}\ Mtuname\ \{GLU,\ HAM,\ HFL,\ RF,\ VAS,\ GAS,\ SOL,\ TA\};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_muscle}{Muscle}}}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{struct_muscle}{Muscle}}(\mbox{\hyperlink{struct_line_debug_manager}{LineDebugManager}}*\ LManager,\ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ wMain,\ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ insert1,\ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ insert2,\ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ insert3,\ dVector\ ins1,\ dVector\ ins2,\ JointName\ jname,\ JointType\ jtype,\ JointName\ jname1,\ JointType\ jtype1,\ Mtuname\ mname);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_muscle}{\string~Muscle}}();}
+\DoxyCodeLine{00033\ \ \ \ \ Mtuname\ \mbox{\hyperlink{struct_muscle_a2539e15a04f3118ce547b0b5d0ff5a5d}{GetMuscleName}}();}
+\DoxyCodeLine{00034\ \ \ \ \ glm::vec3\ mColor;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a50759e5fbf2092d33ad4a6e97f6fa09f}{UpdateLineCoord}}(\mbox{\hyperlink{struct_shader}{Shader}}*\ cshd,\ dFloat\ steptime);}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a45744298a8de06de38b27d728c1d229f}{SetInsert1}}(\textcolor{keywordtype}{float}\ px,\ \textcolor{keywordtype}{float}\ py,\ \textcolor{keywordtype}{float}\ pz);}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_af8cfabb7058af642e91bf7ab2bfc5f71}{SetInsert2}}(\textcolor{keywordtype}{float}\ px,\ \textcolor{keywordtype}{float}\ py,\ \textcolor{keywordtype}{float}\ pz);}
+\DoxyCodeLine{00056\ \ \ \ \ dVector\ \mbox{\hyperlink{struct_muscle_aaf5dc8b416c05e0b0d21932d2cc61718}{GetInsert1\_GlobalRef}}();}
+\DoxyCodeLine{00060\ \ \ \ \ dVector\ \mbox{\hyperlink{struct_muscle_a5b3088c6a2abece57bfc5223c72be0a3}{GetInsert2\_GlobalRef}}();}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a55bf9d74c90154506c9ee8ed2543f20b}{GetOriginAndInsertion}}(dVector\ \&vOrigin,\ dVector\ \&vInsert);}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a717dc76b74138d581aa40f34c4eb001a}{SetActivation}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ iExcitation);}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_ad29deaad6cc67699b79b8014ca962e0b}{GetActivation}}();}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a694ba35c9729e54e14eeddae6ebbfa47}{GetMuscleParams}}(\textcolor{keywordtype}{float}\&\ angle,\ \textcolor{keywordtype}{float}\&\ angle1,\ \textcolor{keywordtype}{float}\&\ lce,\ \textcolor{keywordtype}{float}\&\ lopt,\ \textcolor{keywordtype}{float}\&\ lmtu,\ \textcolor{keywordtype}{float}\&\ Fmuscle,\ \textcolor{keywordtype}{float}\&\ Fmax,\ \textcolor{keywordtype}{float}\&\ V);}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_ac1933ce4ac0d9a734e333faf95bbd0cd}{SetNeuralDelay}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ iStepSize);}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a46cb0ccc5c05e17b0008d868f2f28820}{GetAngle}}();}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a27ddc83d7881b329df96ace273104a6f}{SetAngle}}(\textcolor{keywordtype}{float}\ ang);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a78dbf040ef746bf510ae24cddfc5b6e8}{GetAngle1}}();}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a1b50d913e4460ef5f8bf388da6121b5d}{SetAngle1}}(\textcolor{keywordtype}{float}\ ang);}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a06c2a0870757756fde47226edca81c48}{SetLimits}}(\textcolor{keywordtype}{float}\ a\_lim,\ \textcolor{keywordtype}{float}\ a1\_lim);}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_ae45362c45206c5de11ca1b5141fb45c1}{dresidu}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l,\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ t);}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a4553b3e8f526b0b9c2f550a4630f9310}{residu}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l,\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ t);}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_abd9493d8905e2d64a4a5291d2ee36d7c}{fSE}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l);}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_afcb4f2800440be4f2df691762dd369b6}{fCE}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ t);}
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_ae36bb51bb89a928b9addf53c7dc05af4}{fPE}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l);}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a445095eb4e60a873378662b9b0112f51}{fDE}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ t);}
+\DoxyCodeLine{00155\ \ \ \ \ dVector\ \mbox{\hyperlink{struct_muscle_a1a1ad2624f9994382d5c6f51a01005d9}{Compute\_muscle\_Torque}}(dFloat\ time);}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a9577dcc6ceaa1c27bffe3629bf9550d4}{Compute\_muscle\_length}}(\textcolor{keywordtype}{float}\ jointangle,\ \textcolor{keywordtype}{float}\ jointangle1);}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a9ebc680d1848ec68137e677c247e5f77}{SetThetazero}}(\textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a9191fc67f5d3bca3680ec64cf9e2b327}{SetTheta1zero}}(\textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_afbc30d987ed36cd5e659fc3af5d182f0}{SetMuscleParams}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ Fmax,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ v\_max,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ opt,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ slk,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ rhoin,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ r,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ r1,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ phiM,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ phiR,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ phi1M,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ phi1R);}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_ac7a454c41c4de01c578715862c1b8e6a}{GenerateMesh}}();}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a0a88e9b096c79ef965d2976bbdd4ab6e}{GetNmax}}();}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_aad19bcffb1c1bf80ff20c23b7344a76f}{GetDelta\_l}}();}
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_aa5fbd3f75b6c2e963e695bcfb47f6944}{SetDelta\_l}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l);}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_muscle_a2c94d6d28eea1b762bce2aedc984eacd}{GetLCE}}();}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a436cf60cacdec4b8ecc799cc5a678023}{SetLCE}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ l);}
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_muscle_a3635a8c9d628ff5b37155b4511d91f4f}{GetLaterality}}();}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{struct_muscle_a97055a71ca9a12883e41bccf5fd4d807}{SetLaterality}}(\textcolor{keywordtype}{char}\ letter);}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ body1;}
+\DoxyCodeLine{00221\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ body2;}
+\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{struct_geom_newton}{GeomNewton}}*\ body3;\ \ \ \ }
+\DoxyCodeLine{00223\ \ \ \ \ JointName\ Jname;}
+\DoxyCodeLine{00224\ \ \ \ \ JointType\ Jtype;}
+\DoxyCodeLine{00225\ \ \ \ \ JointName\ Jname1;}
+\DoxyCodeLine{00226\ \ \ \ \ JointType\ Jtype1;}
+\DoxyCodeLine{00227\ \ \ \ \ Mtuname\ m\_name;}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{char}\ laterality;}
+\DoxyCodeLine{00231\ \ \ \ \ }
+\DoxyCodeLine{00232\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ m\_Manager;}
+\DoxyCodeLine{00233\ \ \ \ \ \mbox{\hyperlink{struct_line_debug_manager}{LineDebugManager}}*\ LDebug\_Manager;}
+\DoxyCodeLine{00234\ \ \ \ \ \mbox{\hyperlink{struct_geom_base}{GeomBase}}*\ aUserData;}
+\DoxyCodeLine{00235\ \ \ \ \ \mbox{\hyperlink{struct_main_vertex_p_t_n}{MainVertexPTN}}*\ aVtx;}
+\DoxyCodeLine{00236\ \ \ \ \ glm::vec3\ lineColor;}
+\DoxyCodeLine{00237\ \ \ \ \ GLuint\ aVao;}
+\DoxyCodeLine{00238\ \ \ \ \ GLuint\ aVbo;}
+\DoxyCodeLine{00239\ \ \ \ \ GLuint\ aIbo;}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_Length0;}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_Stiffness;}
+\DoxyCodeLine{00242\ \ \ \ \ dVector\ m\_Insert1;}
+\DoxyCodeLine{00243\ \ \ \ \ dVector\ m\_Insert2;}
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{int}\ LineIndex;}
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{keywordtype}{float}\ l\_opt;\ \textcolor{comment}{//\ [cm]\ optimum\ muscle\ length}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordtype}{float}\ v;\ \textcolor{comment}{//\ [cm/s]\ \ muscle\ velocity}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{float}\ vm;\ \textcolor{comment}{//\ [cm/s]\ max\ muscle\ velocity}}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{float}\ lCE;\ \textcolor{comment}{//\ [cm]\ contractile\ element\ length}}
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{float}\ activation;\ \textcolor{comment}{//\ activation\ level\ of\ the\ muscle\ [0-\/1]}}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keywordtype}{double}\ stepSize;}
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordtype}{int}\ m\_nmax;}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_Delta\_l;\ \textcolor{comment}{//\ [cm]\ muscle\ increment}}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordtype}{float}\ arm;\ \textcolor{comment}{//\ [cm]\ maximum\ moment\ arm\ of\ the\ muscle}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{float}\ arm1;\ \textcolor{comment}{//\ [cm]\ maximum\ moment\ arm\ of\ the\ muscle.\ arm\ 1\ refers\ to\ the\ lowest\ joint\ of\ the\ muscle\ (proximal\ ref\ system)}}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordtype}{float}\ phi\_M;\ \textcolor{comment}{//\ [rad]\ joint\ angle\ with\ maximum\ moment\ arm}}
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{float}\ phi\_R;\ \textcolor{comment}{//\ [rad]\ joint\ angle\ in\ which\ delta\ =\ 0\ (l\_mtu\ =\ l\_opt\ +\ l\_slk)}}
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{float}\ phi1\_M;\ \textcolor{comment}{//\ [rad]\ joint\ 1\ angle\ with\ maximum\ moment\ arm.\ Joint\ 1\ is\ the\ lowest\ joint\ of\ the\ muscle\ (proximal\ ref\ system)}}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{float}\ phi1\_R;\ \textcolor{comment}{//\ [rad]\ joint\ 1\ angle\ in\ which\ delta\ =\ 0\ (l\_mtu\ =\ l\_opt\ +\ l\_slk)}}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keywordtype}{float}\ F\_max;\ \textcolor{comment}{//\ max\ isometric\ force\ [N]}}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{float}\ m\_Fmtu;}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{float}\ rho;\ \textcolor{comment}{//\ accounts\ for\ pennation\ angle}}
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{float}\ l\_slk;\ \textcolor{comment}{//\ slack\ length}}
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordtype}{float}\ l\_mtu;}
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordtype}{float}\ theta\_actual;\ \textcolor{comment}{//\ actual\ angle\ of\ the\ joint}}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{float}\ theta1\_actual;\ \textcolor{comment}{//\ actual\ angle\ of\ the\ joint\ 1}}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{float}\ theta\_0;\ \textcolor{comment}{//\ initial\ angle\ of\ the\ joint}}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{float}\ theta1\_0;\ \textcolor{comment}{//\ initial\ angle\ of\ the\ joint\ 1}}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{float}\ damp;}
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{float}\ Jang;\ \textcolor{comment}{//\ angle\ of\ the\ joint}}
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordtype}{float}\ Jang1;\ \textcolor{comment}{//\ angle\ of\ the\ joint\ 1}}
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{float}\ kj;\ \textcolor{comment}{//\ joint\ stiffness}}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordtype}{float}\ vj\_max;\ \textcolor{comment}{//\ max\ joint\ relaxation\ speed}}
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordtype}{float}\ ang\_lim;\ \textcolor{comment}{//min\ joint\ angle\ [rad]\ local\ angle\ reference\ system}}
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{float}\ ang1\_lim;\textcolor{comment}{//\ max\ joint\ angle\ [rad]\ local\ angle\ reference\ system\ joint\ 1}}
+\DoxyCodeLine{00275\ \};}
+\DoxyCodeLine{00276\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//BIPED\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,168 @@
+\hypertarget{_window_g_l_8h_source}{}\doxysection{Window\+GL.\+h}
+\label{_window_g_l_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/WindowGL.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/WindowGL.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ WINDOWGL\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ WINDOWGL\_H}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}shader.h"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}VertexGL.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ "{}Camera.h"{}}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ "{}GeomGL.h"{}}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ "{}NewtonManager.h"{}}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ General\ glfw\ callback's.}}
+\DoxyCodeLine{00043\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ glfw\_key\_callback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00044\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ glfw\_error\_callback(\textcolor{keywordtype}{int}\ error,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ description);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_newton_mouse_pick}{NewtonMousePick}}}
+\DoxyCodeLine{00047\ \{\ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{struct_newton_mouse_pick}{NewtonMousePick}}(\mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ mCamera,\ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ mManager);}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{struct_newton_mouse_pick}{\string~NewtonMousePick}}();}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//void\ UpdateMousePick();}}
+\DoxyCodeLine{00051\ \ \ \ \ dVector\ ScreenToWorld(\textcolor{keyword}{const}\ dVector\&\ screenPoint);}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{void}\ MouseButton(\textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{void}\ MouseMove(\textcolor{keywordtype}{double}\ msx,\ \textcolor{keywordtype}{double}\ msy);}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ UnPickBody();}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00056\ \ \ \ \ NewtonBody*\ aPickBody;}
+\DoxyCodeLine{00057\ \ \ \ \ dFloat\ aParam;}
+\DoxyCodeLine{00058\ \ \ \ \ dVector\ aNormal;}
+\DoxyCodeLine{00059\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00060\ \ \ \ \ dCustomKinematicController*\ aPickJoint;}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aManager;}
+\DoxyCodeLine{00062\ \ \ \ \ glm::ivec4\ aViewport;}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ aCamera;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{int}\ aMousebutton;}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{int}\ aMouseaction;}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{int}\ aMousemods;}
+\DoxyCodeLine{00067\ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_line_vertex}{LineVertex}}}
+\DoxyCodeLine{00070\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ glm::vec3\ point1;}
+\DoxyCodeLine{00072\ \ \ \ \ glm::vec3\ point2;}
+\DoxyCodeLine{00073\ \ \ \ \ glm::vec4\ color;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{int}\ lineID;}
+\DoxyCodeLine{00075\ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_line_debug_manager}{LineDebugManager}}}
+\DoxyCodeLine{00078\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{struct_line_debug_manager}{LineDebugManager}}(\mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ mainCam);}
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{struct_line_debug_manager}{\string~LineDebugManager}}();}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ InitBufferGL();}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{int}\ AddLine(glm::vec3\ linepos1,\ glm::vec3\ linepos2,\ glm::vec3\ linecolor);}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ RenderLine(\textcolor{keywordtype}{double}\ steptime);}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00088\ \ \ \ \ std::vector<LineVertex*>\ aLineList;}
+\DoxyCodeLine{00089\ \ \ \ \ std::vector<MainVertexPC>\ aLineBuffer;}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00091\ \ \ \ \ GLuint\ aLineVbo;}
+\DoxyCodeLine{00092\ \ \ \ \ GLuint\ aLineVao;}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ aCamera;}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{struct_shader}{Shader}}*\ aShader;}
+\DoxyCodeLine{00095\ \ \ \ \ dMatrix\ aMatrix;}
+\DoxyCodeLine{00096\ \};}
+\DoxyCodeLine{00101\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_window_main}{WindowMain}}}
+\DoxyCodeLine{00102\ \{\ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{struct_window_main}{WindowMain}}(\textcolor{keywordtype}{int}\ dwidth\ =\ 1024,\ \textcolor{keywordtype}{int}\ dheight\ =\ 768);}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_window_main}{\string~WindowMain}}();}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordtype}{void}\ MainLoop();}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ InitGLRender();}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordtype}{void}\ MainRender(\textcolor{keywordtype}{string}\ info,\ \textcolor{keywordtype}{int}\ iteration,\ \textcolor{keywordtype}{int}\ max\_iteration,\ \textcolor{keywordtype}{int}\ remaining\_time);}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{void}\ ContextResize(\textcolor{keywordtype}{int}\ cw,\ \textcolor{keywordtype}{int}\ ch);}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{void}\ ContextKeypress(\textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ ContextMouseButton(\textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{void}\ ContextMouseMove(\textcolor{keywordtype}{double}\ xpos,\ \textcolor{keywordtype}{double}\ ypos);}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{void}\ ContextMouseScrl(\textcolor{keywordtype}{float}\ scrlx,\ \textcolor{keywordtype}{float}\ scrly);}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ SetUseMouseViewRotation(\textcolor{keywordtype}{bool}\ val);}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{int}\ GetMousebutton();}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{int}\ GetMousebuttonaction();}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{int}\ GetMousebuttonmods();}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{double}\ GetMouseMoveX();}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{double}\ GetMouseMoveY();}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{struct_newton_mouse_pick}{NewtonMousePick}}*\ GetMousePicking();}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ GetCamera();}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{struct_newton_manager}{NewtonManager}}*\ aManager;}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{struct_line_debug_manager}{LineDebugManager}}*\ aLineManager;}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ SetSimulationTime(\textcolor{keywordtype}{float}\ time);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{float}\ GetSimulationTime();}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ SetMaxSimulationTime(\textcolor{keywordtype}{float}\ time);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{float}\ GetMaxSimulationTime();}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ SetSimulationInfo(\textcolor{keywordtype}{int}\ operation\_,\ \textcolor{keywordtype}{int}\ iteration\_,\ \textcolor{keywordtype}{int}\ max\_iteration\_,\ \textcolor{keywordtype}{int}\ remaining\_time\_,\ \textcolor{keywordtype}{string}\ info\_wbv,\ \textcolor{keywordtype}{float}\ Amp,\ \textcolor{keywordtype}{float}\ freq);}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{float}\ GetWVBFreq();}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keywordtype}{float}\ GetWVBAmp();}
+\DoxyCodeLine{00138\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00139\ \ \ \ \ \mbox{\hyperlink{struct_newton_mouse_pick}{NewtonMousePick}}*\ aMousePick;}
+\DoxyCodeLine{00140\ \ \ \ \ GLFWwindow*\ contextGL;}
+\DoxyCodeLine{00141\ \ \ \ \ \mbox{\hyperlink{struct_shader}{Shader}}*\ MainShader;}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{MainCamera}}*\ Camera;}
+\DoxyCodeLine{00143\ \ \ \ \ glm::vec4\ contextcolor;}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{int}\ mainwidth;}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keywordtype}{int}\ mainheight;}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{int}\ mousebutton;}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{int}\ mousebuttonaction;}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{int}\ mousebuttonmods;}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keywordtype}{double}\ mouvemovex;}
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordtype}{double}\ mouvemovey;}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{bool}\ usemouserotate;}
+\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordtype}{float}\ mousescrlx;}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{float}\ mousescrly;}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{int}\ delayerfps;}
+\DoxyCodeLine{00155\ \ \ \ \ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{float}\ Time;}
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{float}\ Max\_Time;}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordtype}{int}\ operation,\ iteration,\ max\_iteration,\ remaining\_time;}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordtype}{string}\ wbvinfo;}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{float}\ WBV\_amp,\ WBV\_freq;}
+\DoxyCodeLine{00161\ \};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{comment}{//\ WIP:\ unimplemented,\ I\ let's\ it\ present\ just\ to\ remember\ have\ I\ need\ to\ do\ later.}}
+\DoxyCodeLine{00164\ \textcolor{keyword}{static}\ \mbox{\hyperlink{struct_window_main}{WindowMain}}*\ singletonContextGL\ =\ NULL;}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//WINDOWGL\_H}}
+
+\end{DoxyCode}

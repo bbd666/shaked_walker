@@ -1,0 +1,212 @@
+\hypertarget{pch_8h_source}{}\doxysection{pch.\+h}
+\label{pch_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/pch.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/pch.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ PCH\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ PCH\_H}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#if\ defined(\_DEBUG)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#pragma\ comment\ (\ linker,\ "{}/subsystem:console"{}})}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#pragma\ comment\ (\ linker,\ "{}/subsystem:windows"{}})}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#ifdef\ \_MSC\_VER}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4100)\ }\textcolor{comment}{//unreferenced\ formal\ parameter}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4505)\ }\textcolor{comment}{//unreferenced\ local\ function\ has\ been\ removed}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4201)\ }\textcolor{comment}{//nonstandard\ extension\ used\ :\ nameless\ struct/union}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4127)\ }\textcolor{comment}{//conditional\ expression\ is\ constant}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4456)\ }\textcolor{comment}{//declaration\ of\ 'bone'\ hides\ previous\ local\ declaration}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)\ \&\&\ !defined(\_CRT\_SECURE\_NO\_WARNINGS)}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ \_CRT\_SECURE\_NO\_WARNINGS}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#if\ (\_MSC\_VER\ >=\ 1400)}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#pragma\ warning\ (disable:\ 4996)\ }\textcolor{comment}{//\ for\ 2005\ users\ declared\ deprecated}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ DOMMY\_API\ }}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{char}\ dInt8;}
+\DoxyCodeLine{00059\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ dUnsigned8;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{short}\ dInt16;}
+\DoxyCodeLine{00062\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ dUnsigned16;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{int}\ dInt32;}
+\DoxyCodeLine{00065\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ dUnsigned32;}
+\DoxyCodeLine{00066\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ dUnsigned32;}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ unsigned64;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#include\ "{}windows.h"{}}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ \_USE\_MATH\_DEFINES}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#include\ <cmath>}\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#include\ <tchar.h>}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#include\ <ctime>}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#define\ \_CRTDBG\_MAP\_ALLOC}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#include\ <crtdbg.h>}\ }
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#include\ <set>}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#include\ <list>}\ \ \ \ \ }
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#include\ <mmintrin.h>}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\#ifdef\ \_DEBUG}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\#define\ DBG\_NEW\ new\ (\ \_NORMAL\_BLOCK\ ,\ \_\_FILE\_\_\ ,\ \_\_LINE\_\_\ )}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\#else}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\#define\ DBG\_NEW\ new}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\#endif}}
+\DoxyCodeLine{00101\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#ifdef\ \_MSC\_VER}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ WIN32\_LEAN\_AND\_MEAN\ \ \ \ \ }\textcolor{comment}{//\ Exclude\ rarely-\/used\ stuff\ from\ Windows\ headers}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#undef\ APIENTRY}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ GLFW\_EXPOSE\_NATIVE\_WIN32}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ GLFW\_EXPOSE\_NATIVE\_WGL}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#include\ <Commctrl.h>}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#include\ <malloc.h>}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#include\ <memory.h>}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#include\ <tchar.h>}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#include\ <crtdbg.h>}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#define\ GLM\_ENABLE\_EXPERIMENTAL}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#define\ GLM\_SWIZZLE\_XYZW}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#define\ GLM\_FORCE\_MESSAGES}}
+\DoxyCodeLine{00124\ \textcolor{comment}{//\#define\ GLM\_FORCE\_AVX2}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)glm.hpp>}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtc\(\backslash\)type\_ptr.hpp>}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtc\(\backslash\)quaternion.hpp>}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)vector\_angle.hpp>}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)compatibility.hpp>}}
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)matrix\_operation.hpp>}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)transform.hpp>}}
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)quaternion.hpp>}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)euler\_angles.hpp>}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)norm.hpp>}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtx\(\backslash\)compatibility.hpp>}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)gtc\(\backslash\)matrix\_transform.hpp>}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)simd\(\backslash\)matrix.h>}}
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#include\ <glm\(\backslash\)simd\(\backslash\)vector\_relational.h>}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#define\ GLEW\_STATIC}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#include\ <glew.h>}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#include\ <wglew.h>}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#include\ <glfw3.h>}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#include\ <glfw3native.h>}}
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#include\ <Newton.h>}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#include\ <dMathDefines.h>}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#include\ <dLinearAlgebra.h>}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#include\ <dMatrix.h>}}
+\DoxyCodeLine{00151\ \textcolor{preprocessor}{\#include\ <dQuaternion.h>}}
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#include\ <dVector.h>}}
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#include\ <dBezierSpline.h>}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#include\ <dCustomJoint.h>}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#include\ <dCustomGear.h>}}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#include\ <dCustomHinge.h>}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#include\ <dCustomPlane.h>}}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\#include\ <dCustomWheel.h>}}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#include\ <dCustomMotor.h>}}
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\#include\ <dCustomSixdof.h>}}
+\DoxyCodeLine{00162\ \textcolor{preprocessor}{\#include\ <dCustomSlider.h>}}
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#include\ <dCustomPulley.h>}}
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#include\ <dCustomCorkScrew.h>}}
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#include\ <dCustomPathFollow.h>}}
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#include\ <dCustomDoubleHinge.h>}}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#include\ <dCustomFixDistance.h>}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\#include\ <dCustomRackAndPinion.h>}}
+\DoxyCodeLine{00169\ \textcolor{preprocessor}{\#include\ <dCustomHingeActuator.h>}}
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\#include\ <dCustomBallAndSocket.h>}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{\#include\ <dCustomSliderActuator.h>}}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#include\ <dCustomSlidingContact.h>}}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\#include\ <dCustomDoubleHingeActuator.h>}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\#include\ <dCustomTriggerManager.h>}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#include\ <dCustomKinematicController.h>}}
+\DoxyCodeLine{00177\ \textcolor{comment}{//\#include\ <dCustomPlayerControllerManager.h>}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{comment}{//\ }}
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#include\ <dModelAnimTree.h>}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#include\ <dModelAnimTreePose.h>}}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#include\ <dModelAnimTreePoseBlender.h>}}
+\DoxyCodeLine{00183\ \textcolor{preprocessor}{\#include\ <dModelManager.h>}}
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#include\ <dModelNode.h>}}
+\DoxyCodeLine{00185\ \textcolor{preprocessor}{\#include\ <dModelRootNode.h>}}
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#include\ <dModelStdAfx.h>}}
+\DoxyCodeLine{00187\ \textcolor{comment}{//}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#include\ <assimp/cimport.h>}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\#include\ <assimp/scene.h>}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#include\ <assimp/mesh.h>}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#include\ <assimp/texture.h>}}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#include\ <assimp/types.h>}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#include\ <assimp/vector2.h>}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#include\ <assimp/vector3.h>}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#include\ <assimp/matrix3x3.h>}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#include\ <assimp/matrix4x4.h>}}
+\DoxyCodeLine{00197\ \textcolor{preprocessor}{\#include\ <assimp/quaternion.h>}}
+\DoxyCodeLine{00198\ \textcolor{preprocessor}{\#include\ <assimp/postprocess.h>}}
+\DoxyCodeLine{00199\ \textcolor{preprocessor}{\#include\ <assimp/Exporter.hpp>}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{comment}{//}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#include\ <thread>}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#include\ <mutex>}\ }
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//PCH\_H}}
+
+\end{DoxyCode}

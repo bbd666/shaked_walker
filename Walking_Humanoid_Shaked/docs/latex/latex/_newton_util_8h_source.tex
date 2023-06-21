@@ -1,0 +1,23 @@
+\hypertarget{_newton_util_8h_source}{}\doxysection{Newton\+Util.\+h}
+\label{_newton_util_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/NewtonUtil.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/NewtonUtil.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ NEWTONUTIL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ NEWTONUTIL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keywordtype}{void}\ AddForceAtPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Force,\ dFloat*\ \textcolor{keyword}{const}\ Point);}
+\DoxyCodeLine{00008\ \textcolor{keywordtype}{void}\ AddForceAtRelPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Force,\ dFloat*\ \textcolor{keyword}{const}\ Point);}
+\DoxyCodeLine{00009\ \textcolor{keywordtype}{void}\ AddRelForceAtRelPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Force,\ dFloat*\ \textcolor{keyword}{const}\ Point);}
+\DoxyCodeLine{00010\ \textcolor{keywordtype}{void}\ AddRelForceAtPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Force,\ dFloat*\ \textcolor{keyword}{const}\ Point);}
+\DoxyCodeLine{00011\ dVector\ Rel2AbsPoint(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ PointRel)\ ;}
+\DoxyCodeLine{00012\ dVector\ Rel2AbsVector(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ VectorRel)\ ;}
+\DoxyCodeLine{00013\ dVector\ AbsVelatRelPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Point)\ ;}
+\DoxyCodeLine{00014\ dVector\ AbsVelatPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Point)\ ;}
+\DoxyCodeLine{00015\ dVector\ AbsAccatRelPos(\textcolor{keyword}{const}\ NewtonBody*\ \textcolor{keyword}{const}\ Body,\ dFloat*\ \textcolor{keyword}{const}\ Point)\ ;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//NEWTONUTIL\_H}}
+
+\end{DoxyCode}

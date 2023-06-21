@@ -1,0 +1,78 @@
+\hypertarget{_base_shader_8h_source}{}\doxysection{Base\+Shader.\+h}
+\label{_base_shader_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/BaseShader.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/BaseShader.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#ifndef\ BASESHADER\_H}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ BASESHADER\_H}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structshader_type}{shaderType}}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{structshader_type}{shaderType}}()\ :\ type(-\/1),\ name(\textcolor{stringliteral}{"{}"{}})\ \{\}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{structshader_type}{shaderType}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ type,\ std::string\ name)\ :\ type(type),\ name(name)\{\}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ type;}
+\DoxyCodeLine{00041\ \ \ \ \ std::string\ name;}
+\DoxyCodeLine{00042\ \};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ checkCompileErrors(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ shader,\ std::string\ type,\ std::string\ shaderName);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_base_shader}{BaseShader}}}
+\DoxyCodeLine{00047\ \{\ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{struct_base_shader}{BaseShader}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\ shaderPath);}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{struct_base_shader}{\string~BaseShader}}();}
+\DoxyCodeLine{00050\ \ \ \ \ std::string\ getName()\ }
+\DoxyCodeLine{00051\ \ \ \ \ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ getShaderName(path.c\_str());}
+\DoxyCodeLine{00053\ \ \ \ \ \}}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{structshader_type}{shaderType}}\ getType()\ }
+\DoxyCodeLine{00055\ \ \ \ \ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shadType;}
+\DoxyCodeLine{00057\ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ getShad()\ }
+\DoxyCodeLine{00059\ \ \ \ \ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ shad;}
+\DoxyCodeLine{00061\ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00063\ \ \ \ \ std::string\ loadShaderFromFile(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ shaderPath);}
+\DoxyCodeLine{00064\ \ \ \ \ std::string\ path;}
+\DoxyCodeLine{00065\ \ \ \ \ std::string\ getShaderName(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ shaderPath);}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{structshader_type}{shaderType}}\ getShaderType(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ path);}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ shad;}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{structshader_type}{shaderType}}\ shadType;}
+\DoxyCodeLine{00069\ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//BASESHADER\_H}}
+\DoxyCodeLine{00072\ }
+
+\end{DoxyCode}

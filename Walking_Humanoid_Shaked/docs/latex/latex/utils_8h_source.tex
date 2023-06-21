@@ -1,0 +1,60 @@
+\hypertarget{utils_8h_source}{}\doxysection{utils.\+h}
+\label{utils_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/utils.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/utils.h}}
+\mbox{\hyperlink{utils_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00013\ T\ square(T\ d)}
+\DoxyCodeLine{00014\ \{}
+\DoxyCodeLine{00015\ \ \ \textcolor{keywordflow}{return}\ d*d;}
+\DoxyCodeLine{00016\ \}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00019\ T\ maxElement(\textcolor{keyword}{const}\ T*\ rgd,\ \textcolor{keywordtype}{int}\ len)}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordflow}{return}\ *std::max\_element(rgd,\ rgd\ +\ len);}
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00025\ T\ minElement(\textcolor{keyword}{const}\ T*\ rgd,\ \textcolor{keywordtype}{int}\ len)}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \ \ \textcolor{keywordflow}{return}\ *std::min\_element(rgd,\ rgd\ +\ len);}
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{int}\ maxIndex(\textcolor{keyword}{const}\ T*\ rgd,\ \textcolor{keywordtype}{int}\ len)}
+\DoxyCodeLine{00032\ \{}
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordflow}{return}\ std::max\_element(rgd,\ rgd\ +\ len)\ -\/\ rgd;}
+\DoxyCodeLine{00034\ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{int}\ minIndex(\textcolor{keyword}{const}\ T*\ rgd,\ \textcolor{keywordtype}{int}\ len)}
+\DoxyCodeLine{00038\ \{}
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordflow}{return}\ std::min\_element(rgd,\ rgd\ +\ len)\ -\/\ rgd;}
+\DoxyCodeLine{00040\ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00044\ T\ \mbox{\hyperlink{utils_8h_ad4188c97df9a6a63692e13e7d7accca3}{myhypot}}(T\ a,\ T\ b)}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00046\ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{register}\ T\ fabsa\ =\ std::fabs(a),\ fabsb\ =\ std::fabs(b);}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordflow}{if}(fabsa\ >\ fabsb)}
+\DoxyCodeLine{00048\ \ \ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{register}\ T\ r\ =\ b\ /\ a;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{return}\ fabsa*std::sqrt(T(1)+r*r);}
+\DoxyCodeLine{00051\ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(b\ !=\ T(0))}
+\DoxyCodeLine{00053\ \ \ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{register}\ T\ r\ =\ a\ /\ b;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordflow}{return}\ fabsb*std::sqrt(T(1)+r*r);}
+\DoxyCodeLine{00056\ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordflow}{return}\ T(0);}
+\DoxyCodeLine{00059\ \}}
+
+\end{DoxyCode}

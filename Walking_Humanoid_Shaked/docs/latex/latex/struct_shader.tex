@@ -1,0 +1,86 @@
+\hypertarget{struct_shader}{}\doxysection{Shader Struct Reference}
+\label{struct_shader}\index{Shader@{Shader}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_shader_a7b994b384a1591771ff53de642bd92dd}\label{struct_shader_a7b994b384a1591771ff53de642bd92dd}} 
+{\bfseries Shader} (std\+::string name)
+\item 
+\mbox{\Hypertarget{struct_shader_ab4b2b0dd6c05da8d267146da7220268a}\label{struct_shader_ab4b2b0dd6c05da8d267146da7220268a}} 
+{\bfseries Shader} (std\+::string name, const char $\ast$compute\+Shader)
+\item 
+\mbox{\Hypertarget{struct_shader_ad924279ef4d4a093dd3d47670c0a8707}\label{struct_shader_ad924279ef4d4a093dd3d47670c0a8707}} 
+\mbox{\hyperlink{struct_shader}{Shader}} $\ast$ {\bfseries attach\+Shader} (\mbox{\hyperlink{struct_base_shader}{Base\+Shader}} s)
+\item 
+\mbox{\Hypertarget{struct_shader_a8dbb9047893a51cd97cf084f53ba4485}\label{struct_shader_a8dbb9047893a51cd97cf084f53ba4485}} 
+void {\bfseries link\+Programs} ()
+\item 
+\mbox{\Hypertarget{struct_shader_a870fa9f13d69e558815d6fd351a469dc}\label{struct_shader_a870fa9f13d69e558815d6fd351a469dc}} 
+void {\bfseries use} ()
+\item 
+\mbox{\Hypertarget{struct_shader_ab1a56d6c299bd7eaa18c2e142ef7bd9f}\label{struct_shader_ab1a56d6c299bd7eaa18c2e142ef7bd9f}} 
+void {\bfseries set\+Bool} (const std\+::string \&name, bool value) const
+\item 
+\mbox{\Hypertarget{struct_shader_ad362e2b654cd95a3574cd505411e41fd}\label{struct_shader_ad362e2b654cd95a3574cd505411e41fd}} 
+void {\bfseries set\+Int} (const std\+::string \&name, int value) const
+\item 
+\mbox{\Hypertarget{struct_shader_afe7367621f74c2d26431d8ac15252bf3}\label{struct_shader_afe7367621f74c2d26431d8ac15252bf3}} 
+void {\bfseries set\+Float} (const std\+::string \&name, float value) const
+\item 
+\mbox{\Hypertarget{struct_shader_a2f5bb66a1ba4b9d86c77d2de92bfc7fa}\label{struct_shader_a2f5bb66a1ba4b9d86c77d2de92bfc7fa}} 
+void {\bfseries set\+Vec2} (const std\+::string \&name, glm\+::vec2 vector) const
+\item 
+\mbox{\Hypertarget{struct_shader_ad8cefad8f7ececc6d2550e79380cebc3}\label{struct_shader_ad8cefad8f7ececc6d2550e79380cebc3}} 
+void {\bfseries set\+Vec3} (const std\+::string \&name, glm\+::vec3 vector) const
+\item 
+\mbox{\Hypertarget{struct_shader_a2cee644112bde681a8fc14c3559274ab}\label{struct_shader_a2cee644112bde681a8fc14c3559274ab}} 
+void {\bfseries set\+Vec4} (const std\+::string \&name, glm\+::vec4 vector) const
+\item 
+\mbox{\Hypertarget{struct_shader_aeadbfa9b99c7bcc28b7e2d2dcf273465}\label{struct_shader_aeadbfa9b99c7bcc28b7e2d2dcf273465}} 
+void {\bfseries set\+NVec4} (const std\+::string \&name, d\+Vector vector) const
+\item 
+\mbox{\Hypertarget{struct_shader_a56b5909eb443ca64643e85bb9d22da27}\label{struct_shader_a56b5909eb443ca64643e85bb9d22da27}} 
+void {\bfseries set\+Mat4} (const std\+::string \&name, glm\+::mat4 matrix) const
+\item 
+\mbox{\Hypertarget{struct_shader_a13e2200c02f1933904c9e5cafcdd3b94}\label{struct_shader_a13e2200c02f1933904c9e5cafcdd3b94}} 
+void {\bfseries set\+NMat4} (const std\+::string \&name, d\+Matrix matrix) const
+\item 
+\mbox{\Hypertarget{struct_shader_a2bfe31b3b15fc88fa4cb0c8318761536}\label{struct_shader_a2bfe31b3b15fc88fa4cb0c8318761536}} 
+void {\bfseries set\+Sampler2D} (const std\+::string \&name, unsigned int texture, int id) const
+\item 
+\mbox{\Hypertarget{struct_shader_a99eb6ec2c71da62c7604c63d8dfd16ba}\label{struct_shader_a99eb6ec2c71da62c7604c63d8dfd16ba}} 
+void {\bfseries set\+Sampler3D} (const std\+::string \&name, unsigned int texture, int id) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_shader_a7be2afcbd5ba5873a04536a2b4b5e576}\label{struct_shader_a7be2afcbd5ba5873a04536a2b4b5e576}} 
+GLuint {\bfseries ID}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_shader_a33eec095655dc280c485dd2f211cb23d}\label{struct_shader_a33eec095655dc280c485dd2f211cb23d}} 
+\mbox{\hyperlink{structshader_type}{shader\+Type}} {\bfseries get\+Shader\+Type} (const char $\ast$path)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_shader_ac7c86423e81f77af7a36a053371065c3}\label{struct_shader_ac7c86423e81f77af7a36a053371065c3}} 
+bool {\bfseries linked}
+\item 
+\mbox{\Hypertarget{struct_shader_a2974e36e20333e5091df034dc66afc8f}\label{struct_shader_a2974e36e20333e5091df034dc66afc8f}} 
+bool {\bfseries is\+Compute}
+\item 
+\mbox{\Hypertarget{struct_shader_a0c5924450625537dbf9c697c2e24db88}\label{struct_shader_a0c5924450625537dbf9c697c2e24db88}} 
+std\+::list$<$ GLuint $>$ {\bfseries shaders}
+\item 
+\mbox{\Hypertarget{struct_shader_a8c8fba8311ca3a7cfeac5afeb346e51b}\label{struct_shader_a8c8fba8311ca3a7cfeac5afeb346e51b}} 
+std\+::string {\bfseries name}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/shader.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/shader.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,88 @@
+\hypertarget{class_walker_manager}{}\doxysection{Walker\+Manager Class Reference}
+\label{class_walker_manager}\index{WalkerManager@{WalkerManager}}
+
+
+{\ttfamily \#include $<$Humanoid.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_walker_manager_ad34b8af1f1182d1500bbab6ff314725a}\label{class_walker_manager_ad34b8af1f1182d1500bbab6ff314725a}} 
+{\bfseries Walker\+Manager} (\mbox{\hyperlink{struct_window_main}{Window\+Main}} $\ast$winctx)
+\item 
+virtual void \mbox{\hyperlink{class_walker_manager_a96c043b65291422a74c16f9e761c24b0}{On\+Pre\+Update}} (d\+Model\+Root\+Node $\ast$const model, d\+Float timestep, int thread\+ID) const
+\item 
+\mbox{\Hypertarget{class_walker_manager_a64acb4636e14f32bb180efb8cb130bcd}\label{class_walker_manager_a64acb4636e14f32bb180efb8cb130bcd}} 
+virtual void {\bfseries On\+Post\+Update} (d\+Model\+Root\+Node $\ast$const model, d\+Float timestep, int thread\+ID) const
+\item 
+\mbox{\Hypertarget{class_walker_manager_a0502797bf22afe4bc390d0eef4f598e6}\label{class_walker_manager_a0502797bf22afe4bc390d0eef4f598e6}} 
+virtual void {\bfseries On\+Update\+Transform} (const d\+Model\+Node $\ast$const bone, const d\+Matrix \&local\+Matrix) const
+\item 
+\mbox{\Hypertarget{class_walker_manager_ab94a3df4f5c0a3653d49d5a8b0c23a31}\label{class_walker_manager_ab94a3df4f5c0a3653d49d5a8b0c23a31}} 
+virtual void {\bfseries On\+Debug} (d\+Model\+Root\+Node $\ast$const model, d\+Custom\+Joint\+::d\+Debug\+Display $\ast$const debug\+Context)
+\item 
+\mbox{\hyperlink{classd_walker_model}{d\+Walker\+Model}} $\ast$ \mbox{\hyperlink{class_walker_manager_a2c9f63ded93e69f5096c519701ea9af4}{Create\+Walker\+Player}} (const char $\ast$const model\+Name, const d\+Matrix \&location, double $\ast$params, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\item 
+int \mbox{\hyperlink{class_walker_manager_a72f607911ec7d67b1dc3f93d56f67c2d}{Get\+Contact\+Points}} (Newton\+Body $\ast$const body, d\+Vector $\ast$const points) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Walker manager definition for Newton update. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_walker_manager_a2c9f63ded93e69f5096c519701ea9af4}\label{class_walker_manager_a2c9f63ded93e69f5096c519701ea9af4}} 
+\index{WalkerManager@{WalkerManager}!CreateWalkerPlayer@{CreateWalkerPlayer}}
+\index{CreateWalkerPlayer@{CreateWalkerPlayer}!WalkerManager@{WalkerManager}}
+\doxysubsubsection{\texorpdfstring{CreateWalkerPlayer()}{CreateWalkerPlayer()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classd_walker_model}{d\+Walker\+Model}} $\ast$ Walker\+Manager\+::\+Create\+Walker\+Player (\begin{DoxyParamCaption}\item[{const char $\ast$const}]{model\+Name,  }\item[{const d\+Matrix \&}]{location,  }\item[{double $\ast$}]{params,  }\item[{\mbox{\hyperlink{class_w_b_v}{WBV}}}]{wbv }\end{DoxyParamCaption})}
+
+Creates the walker model 
+\begin{DoxyParams}{Parameters}
+{\em model\+Name} & (input) walker name \\
+\hline
+{\em location} & (input) initial position of the model \\
+\hline
+{\em params} & (input) pointer to optimization parameters of the model \\
+\hline
+{\em wbv} & (input) whole-\/body vibration settings \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_walker_manager_a72f607911ec7d67b1dc3f93d56f67c2d}\label{class_walker_manager_a72f607911ec7d67b1dc3f93d56f67c2d}} 
+\index{WalkerManager@{WalkerManager}!GetContactPoints@{GetContactPoints}}
+\index{GetContactPoints@{GetContactPoints}!WalkerManager@{WalkerManager}}
+\doxysubsubsection{\texorpdfstring{GetContactPoints()}{GetContactPoints()}}
+{\footnotesize\ttfamily int Walker\+Manager\+::\+Get\+Contact\+Points (\begin{DoxyParamCaption}\item[{Newton\+Body $\ast$const}]{body,  }\item[{d\+Vector $\ast$const}]{points }\end{DoxyParamCaption}) const}
+
+Computes the contact points between the foot and the floor 
+\begin{DoxyParams}{Parameters}
+{\em body} & (input) newton body of the foot \\
+\hline
+{\em points} & (input) vector of contact points \\
+\hline
+{\em N} & (output) number of contact points \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_walker_manager_a96c043b65291422a74c16f9e761c24b0}\label{class_walker_manager_a96c043b65291422a74c16f9e761c24b0}} 
+\index{WalkerManager@{WalkerManager}!OnPreUpdate@{OnPreUpdate}}
+\index{OnPreUpdate@{OnPreUpdate}!WalkerManager@{WalkerManager}}
+\doxysubsubsection{\texorpdfstring{OnPreUpdate()}{OnPreUpdate()}}
+{\footnotesize\ttfamily void Walker\+Manager\+::\+On\+Pre\+Update (\begin{DoxyParamCaption}\item[{d\+Model\+Root\+Node $\ast$const}]{model,  }\item[{d\+Float}]{timestep,  }\item[{int}]{thread\+ID }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Updates Newton World\+: all torques from MTU and PD controllers. It is used by newton.\+dll and activated in Window\+Main\+::\+Main\+Render 
+\begin{DoxyParams}{Parameters}
+{\em model} & (input) walker model \\
+\hline
+{\em timestep} & (input) time step of the simulation \\
+\hline
+{\em thread\+ID} & (input) thread id \\
+\hline
+\end{DoxyParams}
+MUSCLE STUFF /////////////////////////////////////////////////////////////////////////////////////////////
+
+END OF MUSCLE STUFF /////////////////////////////////////////////////////////////////////////////
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Humanoid.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Humanoid.\+cpp\end{DoxyCompactItemize}

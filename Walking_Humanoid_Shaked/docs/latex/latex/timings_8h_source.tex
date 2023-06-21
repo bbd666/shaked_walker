@@ -1,0 +1,93 @@
+\hypertarget{timings_8h_source}{}\doxysection{timings.\+h}
+\label{timings_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/timings.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/timings.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utils_8h}{utils.h}}"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <ctime>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_timing}{Timing}}}
+\DoxyCodeLine{00016\ \{}
+\DoxyCodeLine{00017\ \ \ clock\_t\ lastclock;}
+\DoxyCodeLine{00018\ \ \ time\_t\ lasttime;}
+\DoxyCodeLine{00019\ \ \ clock\_t\ ticclock;}
+\DoxyCodeLine{00020\ \ \ time\_t\ tictime;}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordtype}{short}\ istic;}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{short}\ isstarted;}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{double}\ lastdiff;}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{double}\ tictoczwischensumme;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \textcolor{keywordtype}{double}\ totaltime;\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}};}
+\DoxyCodeLine{00030\ \ \ \textcolor{keywordtype}{double}\ tictoctime;}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{double}\ lasttictoctime;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \mbox{\hyperlink{class_timing}{Timing}}()}
+\DoxyCodeLine{00034\ \ \ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}}\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \ \ start();}
+\DoxyCodeLine{00037\ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{void}\ start()}
+\DoxyCodeLine{00040\ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ totaltime\ =\ 0;}
+\DoxyCodeLine{00042\ \ \ \ \ tictoctime\ =\ 0;}
+\DoxyCodeLine{00043\ \ \ \ \ lasttictoctime\ =\ 0;}
+\DoxyCodeLine{00044\ \ \ \ \ istic\ =\ 0;}
+\DoxyCodeLine{00045\ \ \ \ \ lastclock\ =\ clock();}
+\DoxyCodeLine{00046\ \ \ \ \ lasttime\ =\ time(NULL);}
+\DoxyCodeLine{00047\ \ \ \ \ lastdiff\ =\ 0;}
+\DoxyCodeLine{00048\ \ \ \ \ tictoczwischensumme\ =\ 0;}
+\DoxyCodeLine{00049\ \ \ \ \ isstarted\ =\ 1;}
+\DoxyCodeLine{00050\ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}}()}
+\DoxyCodeLine{00056\ \ \ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{double}\ diffc,\ difft;}
+\DoxyCodeLine{00058\ \ \ \ \ clock\_t\ lc\ =\ lastclock;\ \textcolor{comment}{//\ measure\ CPU\ in\ 1e-\/6s}}
+\DoxyCodeLine{00059\ \ \ \ \ time\_t\ lt\ =\ lasttime;\ \textcolor{comment}{//\ measure\ time\ in\ s}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ assert(isstarted\ ==\ 1\ \&\&\ \textcolor{stringliteral}{"{}timings\_started()\ must\ be\ called\ before\ using\ timings...\ functions"{}});}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ lastclock\ =\ clock();\ \textcolor{comment}{//\ measures\ at\ most\ 2147\ seconds,\ where\ 1s\ =\ 1e6\ CLOCKS\_PER\_SEC}}
+\DoxyCodeLine{00064\ \ \ \ \ lasttime\ =\ time(NULL);}
+\DoxyCodeLine{00065\ \ \ \ \ diffc\ =\ (double)\ (lastclock\ -\/\ lc)\ /\ CLOCKS\_PER\_SEC;\ \textcolor{comment}{//\ is\ presumably\ in\ [-\/21??,\ 21??]}}
+\DoxyCodeLine{00066\ \ \ \ \ difft\ =\ difftime(lasttime,\ lt);\ \textcolor{comment}{//\ is\ presumably\ an\ integer}}
+\DoxyCodeLine{00067\ \ \ \ \ lastdiff\ =\ difft;\ \textcolor{comment}{//\ on\ the\ "{}save"{}\ side}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ use\ diffc\ clock\ measurement\ if\ appropriate}}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordflow}{if}(diffc\ >\ 0\ \&\&\ difft\ <\ 1000)}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ lastdiff\ =\ diffc;}
+\DoxyCodeLine{00071\ \ \ \ \ assert(lastdiff\ >=\ 0\ \&\&\ \textcolor{stringliteral}{"{}BUG\ in\ time\ measurement"{}});}
+\DoxyCodeLine{00072\ \ \ \ \ totaltime\ +=\ lastdiff;}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{class_timing_aaf5612cb0d03c6b03c904f574fdcc929}{totaltotaltime}}\ +=\ lastdiff;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{if}(istic)}
+\DoxyCodeLine{00075\ \ \ \ \ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ tictoczwischensumme\ +=\ lastdiff;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ tictoctime\ +=\ lastdiff;}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordflow}{return}\ lastdiff;}
+\DoxyCodeLine{00080\ \ \ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \textcolor{keywordtype}{void}\ tic()}
+\DoxyCodeLine{00083\ \ \ \{}
+\DoxyCodeLine{00084\ \ \ \ \ assert(!istic\ \&\&\ \textcolor{stringliteral}{"{}Timingic\ called\ twice\ without\ toc"{}});}
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}}();}
+\DoxyCodeLine{00086\ \ \ \ \ istic\ =\ 1;}
+\DoxyCodeLine{00087\ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{double}\ toc()}
+\DoxyCodeLine{00090\ \ \ \{}
+\DoxyCodeLine{00091\ \ \ \ \ assert(istic\ \&\&\ \textcolor{stringliteral}{"{}Timingoc\ called\ without\ tic"{}});}
+\DoxyCodeLine{00092\ \ \ \ \ \mbox{\hyperlink{class_timing_a9973978adb63702db5affd6f77b98fc5}{update}}();}
+\DoxyCodeLine{00093\ \ \ \ \ lasttictoctime\ =\ tictoczwischensumme;}
+\DoxyCodeLine{00094\ \ \ \ \ tictoczwischensumme\ =\ 0;}
+\DoxyCodeLine{00095\ \ \ \ \ istic\ =\ 0;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{return}\ lasttictoctime;}
+\DoxyCodeLine{00097\ \ \ \}}
+\DoxyCodeLine{00098\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,495 @@
+\hypertarget{struct_muscle}{}\doxysection{Muscle Struct Reference}
+\label{struct_muscle}\index{Muscle@{Muscle}}
+
+
+{\ttfamily \#include $<$Muscle.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_muscle_aae4592927257ddc20f610da6253bc9d0}\label{struct_muscle_aae4592927257ddc20f610da6253bc9d0}} 
+{\bfseries Muscle} (\mbox{\hyperlink{struct_line_debug_manager}{Line\+Debug\+Manager}} $\ast$LManager, \mbox{\hyperlink{struct_newton_manager}{Newton\+Manager}} $\ast$w\+Main, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$insert1, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$insert2, \mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$insert3, d\+Vector ins1, d\+Vector ins2, Joint\+Name jname, Joint\+Type jtype, Joint\+Name jname1, Joint\+Type jtype1, Mtuname mname)
+\item 
+Mtuname \mbox{\hyperlink{struct_muscle_a2539e15a04f3118ce547b0b5d0ff5a5d}{Get\+Muscle\+Name}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a50759e5fbf2092d33ad4a6e97f6fa09f}{Update\+Line\+Coord}} (\mbox{\hyperlink{struct_shader}{Shader}} $\ast$cshd, d\+Float steptime)
+\item 
+void \mbox{\hyperlink{struct_muscle_a45744298a8de06de38b27d728c1d229f}{Set\+Insert1}} (float px, float py, float pz)
+\item 
+void \mbox{\hyperlink{struct_muscle_af8cfabb7058af642e91bf7ab2bfc5f71}{Set\+Insert2}} (float px, float py, float pz)
+\item 
+d\+Vector \mbox{\hyperlink{struct_muscle_aaf5dc8b416c05e0b0d21932d2cc61718}{Get\+Insert1\+\_\+\+Global\+Ref}} ()
+\item 
+d\+Vector \mbox{\hyperlink{struct_muscle_a5b3088c6a2abece57bfc5223c72be0a3}{Get\+Insert2\+\_\+\+Global\+Ref}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a55bf9d74c90154506c9ee8ed2543f20b}{Get\+Origin\+And\+Insertion}} (d\+Vector \&v\+Origin, d\+Vector \&v\+Insert)
+\item 
+void \mbox{\hyperlink{struct_muscle_a717dc76b74138d581aa40f34c4eb001a}{Set\+Activation}} (const float i\+Excitation)
+\item 
+float \mbox{\hyperlink{struct_muscle_ad29deaad6cc67699b79b8014ca962e0b}{Get\+Activation}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a694ba35c9729e54e14eeddae6ebbfa47}{Get\+Muscle\+Params}} (float \&angle, float \&angle1, float \&lce, float \&lopt, float \&lmtu, float \&Fmuscle, float \&Fmax, float \&V)
+\item 
+void \mbox{\hyperlink{struct_muscle_ac1933ce4ac0d9a734e333faf95bbd0cd}{Set\+Neural\+Delay}} (const float i\+Step\+Size)
+\item 
+float \mbox{\hyperlink{struct_muscle_a46cb0ccc5c05e17b0008d868f2f28820}{Get\+Angle}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a27ddc83d7881b329df96ace273104a6f}{Set\+Angle}} (float ang)
+\item 
+float \mbox{\hyperlink{struct_muscle_a78dbf040ef746bf510ae24cddfc5b6e8}{Get\+Angle1}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a1b50d913e4460ef5f8bf388da6121b5d}{Set\+Angle1}} (float ang)
+\item 
+void \mbox{\hyperlink{struct_muscle_a06c2a0870757756fde47226edca81c48}{Set\+Limits}} (float a\+\_\+lim, float a1\+\_\+lim)
+\item 
+float \mbox{\hyperlink{struct_muscle_ae45362c45206c5de11ca1b5141fb45c1}{dresidu}} (const float l, const float t)
+\item 
+float \mbox{\hyperlink{struct_muscle_a4553b3e8f526b0b9c2f550a4630f9310}{residu}} (const float l, const float t)
+\item 
+float \mbox{\hyperlink{struct_muscle_abd9493d8905e2d64a4a5291d2ee36d7c}{f\+SE}} (const float l)
+\item 
+float \mbox{\hyperlink{struct_muscle_afcb4f2800440be4f2df691762dd369b6}{f\+CE}} (const float l, const float t)
+\item 
+float \mbox{\hyperlink{struct_muscle_ae36bb51bb89a928b9addf53c7dc05af4}{f\+PE}} (const float l)
+\item 
+float \mbox{\hyperlink{struct_muscle_a445095eb4e60a873378662b9b0112f51}{f\+DE}} (const float l, const float t)
+\item 
+d\+Vector \mbox{\hyperlink{struct_muscle_a1a1ad2624f9994382d5c6f51a01005d9}{Compute\+\_\+muscle\+\_\+\+Torque}} (d\+Float time)
+\item 
+float \mbox{\hyperlink{struct_muscle_a9577dcc6ceaa1c27bffe3629bf9550d4}{Compute\+\_\+muscle\+\_\+length}} (float jointangle, float jointangle1)
+\item 
+void \mbox{\hyperlink{struct_muscle_a9ebc680d1848ec68137e677c247e5f77}{Set\+Thetazero}} (float angle)
+\item 
+void \mbox{\hyperlink{struct_muscle_a9191fc67f5d3bca3680ec64cf9e2b327}{Set\+Theta1zero}} (float angle)
+\item 
+void \mbox{\hyperlink{struct_muscle_afbc30d987ed36cd5e659fc3af5d182f0}{Set\+Muscle\+Params}} (const float Fmax, const float v\+\_\+max, const float opt, const float slk, const float rhoin, const float r, const float r1, const float phiM, const float phiR, const float phi1M, const float phi1R)
+\item 
+void \mbox{\hyperlink{struct_muscle_ac7a454c41c4de01c578715862c1b8e6a}{Generate\+Mesh}} ()
+\item 
+float \mbox{\hyperlink{struct_muscle_a0a88e9b096c79ef965d2976bbdd4ab6e}{Get\+Nmax}} ()
+\item 
+float \mbox{\hyperlink{struct_muscle_aad19bcffb1c1bf80ff20c23b7344a76f}{Get\+Delta\+\_\+l}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_aa5fbd3f75b6c2e963e695bcfb47f6944}{Set\+Delta\+\_\+l}} (const float l)
+\item 
+float \mbox{\hyperlink{struct_muscle_a2c94d6d28eea1b762bce2aedc984eacd}{Get\+LCE}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a436cf60cacdec4b8ecc799cc5a678023}{Set\+LCE}} (const float l)
+\item 
+char \mbox{\hyperlink{struct_muscle_a3635a8c9d628ff5b37155b4511d91f4f}{Get\+Laterality}} ()
+\item 
+void \mbox{\hyperlink{struct_muscle_a97055a71ca9a12883e41bccf5fd4d807}{Set\+Laterality}} (char letter)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct_muscle_a518cbd2e067874d51c07f43550849d29}\label{struct_muscle_a518cbd2e067874d51c07f43550849d29}} 
+glm\+::vec3 {\bfseries m\+Color}
+\item 
+\mbox{\Hypertarget{struct_muscle_a40c7c391153f30c10fb4833e09b7b6ef}\label{struct_muscle_a40c7c391153f30c10fb4833e09b7b6ef}} 
+\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ {\bfseries body1}
+\item 
+\mbox{\Hypertarget{struct_muscle_a969106e06a968704e90559af09a9525c}\label{struct_muscle_a969106e06a968704e90559af09a9525c}} 
+\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ {\bfseries body2}
+\item 
+\mbox{\Hypertarget{struct_muscle_a2f3010c4534f2913d8dd6cc54c2a4b8e}\label{struct_muscle_a2f3010c4534f2913d8dd6cc54c2a4b8e}} 
+\mbox{\hyperlink{struct_geom_newton}{Geom\+Newton}} $\ast$ {\bfseries body3}
+\item 
+\mbox{\Hypertarget{struct_muscle_a07299c25482d2b45f3eca66421923a52}\label{struct_muscle_a07299c25482d2b45f3eca66421923a52}} 
+Joint\+Name {\bfseries Jname}
+\item 
+\mbox{\Hypertarget{struct_muscle_a4587628b52b5e9c3ddba097809383aca}\label{struct_muscle_a4587628b52b5e9c3ddba097809383aca}} 
+Joint\+Type {\bfseries Jtype}
+\item 
+\mbox{\Hypertarget{struct_muscle_a9bcfa34dfc6d957b2e9af6346a4e2c5b}\label{struct_muscle_a9bcfa34dfc6d957b2e9af6346a4e2c5b}} 
+Joint\+Name {\bfseries Jname1}
+\item 
+\mbox{\Hypertarget{struct_muscle_af1357fd438e0b35055f546aef06aae2c}\label{struct_muscle_af1357fd438e0b35055f546aef06aae2c}} 
+Joint\+Type {\bfseries Jtype1}
+\item 
+\mbox{\Hypertarget{struct_muscle_ac42f1afd0552544780236c3bcbfb3d54}\label{struct_muscle_ac42f1afd0552544780236c3bcbfb3d54}} 
+Mtuname {\bfseries m\+\_\+name}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Muscle-\/\+Tendon Unit model definition 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{struct_muscle_a9577dcc6ceaa1c27bffe3629bf9550d4}\label{struct_muscle_a9577dcc6ceaa1c27bffe3629bf9550d4}} 
+\index{Muscle@{Muscle}!Compute\_muscle\_length@{Compute\_muscle\_length}}
+\index{Compute\_muscle\_length@{Compute\_muscle\_length}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{Compute\_muscle\_length()}{Compute\_muscle\_length()}}
+{\footnotesize\ttfamily float Muscle\+::\+Compute\+\_\+muscle\+\_\+length (\begin{DoxyParamCaption}\item[{float}]{jointangle,  }\item[{float}]{jointangle1 }\end{DoxyParamCaption})}
+
+Compute MTU length 
+\begin{DoxyParams}{Parameters}
+{\em jointangle} & (input) angle of joint 1 on the MTU \\
+\hline
+{\em jointangle1} & (input) angle of joint 2 on the MTU \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a1a1ad2624f9994382d5c6f51a01005d9}\label{struct_muscle_a1a1ad2624f9994382d5c6f51a01005d9}} 
+\index{Muscle@{Muscle}!Compute\_muscle\_Torque@{Compute\_muscle\_Torque}}
+\index{Compute\_muscle\_Torque@{Compute\_muscle\_Torque}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{Compute\_muscle\_Torque()}{Compute\_muscle\_Torque()}}
+{\footnotesize\ttfamily d\+Vector Muscle\+::\+Compute\+\_\+muscle\+\_\+\+Torque (\begin{DoxyParamCaption}\item[{d\+Float}]{time }\end{DoxyParamCaption})}
+
+Compute muscle torque with implicit integration method(Newton -\/ Rhaphson) 
+\begin{DoxyParams}{Parameters}
+{\em time} & (input) timestep \\
+\hline
+{\em torques} & (output) T.\+m\+\_\+x = torque joint 1, T.\+m\+\_\+y = torque joint 2 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_ae45362c45206c5de11ca1b5141fb45c1}\label{struct_muscle_ae45362c45206c5de11ca1b5141fb45c1}} 
+\index{Muscle@{Muscle}!dresidu@{dresidu}}
+\index{dresidu@{dresidu}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{dresidu()}{dresidu()}}
+{\footnotesize\ttfamily float Muscle\+::dresidu (\begin{DoxyParamCaption}\item[{const float}]{l,  }\item[{const float}]{t }\end{DoxyParamCaption})}
+
+compute derivative of residu 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+{\em t} & (input) timestep \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_afcb4f2800440be4f2df691762dd369b6}\label{struct_muscle_afcb4f2800440be4f2df691762dd369b6}} 
+\index{Muscle@{Muscle}!fCE@{fCE}}
+\index{fCE@{fCE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{fCE()}{fCE()}}
+{\footnotesize\ttfamily float Muscle\+::f\+CE (\begin{DoxyParamCaption}\item[{const float}]{l,  }\item[{const float}]{t }\end{DoxyParamCaption})}
+
+Force of the contractile element 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+{\em t} & (input) timestep \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a445095eb4e60a873378662b9b0112f51}\label{struct_muscle_a445095eb4e60a873378662b9b0112f51}} 
+\index{Muscle@{Muscle}!fDE@{fDE}}
+\index{fDE@{fDE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{fDE()}{fDE()}}
+{\footnotesize\ttfamily float Muscle\+::f\+DE (\begin{DoxyParamCaption}\item[{const float}]{l,  }\item[{const float}]{t }\end{DoxyParamCaption})}
+
+Force of the dumper element 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+{\em t} & (input) timestep \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_ae36bb51bb89a928b9addf53c7dc05af4}\label{struct_muscle_ae36bb51bb89a928b9addf53c7dc05af4}} 
+\index{Muscle@{Muscle}!fPE@{fPE}}
+\index{fPE@{fPE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{fPE()}{fPE()}}
+{\footnotesize\ttfamily float Muscle\+::f\+PE (\begin{DoxyParamCaption}\item[{const float}]{l }\end{DoxyParamCaption})}
+
+Force of the parallel element 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_abd9493d8905e2d64a4a5291d2ee36d7c}\label{struct_muscle_abd9493d8905e2d64a4a5291d2ee36d7c}} 
+\index{Muscle@{Muscle}!fSE@{fSE}}
+\index{fSE@{fSE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{fSE()}{fSE()}}
+{\footnotesize\ttfamily float Muscle\+::f\+SE (\begin{DoxyParamCaption}\item[{const float}]{l }\end{DoxyParamCaption})}
+
+Force of the series element 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_ac7a454c41c4de01c578715862c1b8e6a}\label{struct_muscle_ac7a454c41c4de01c578715862c1b8e6a}} 
+\index{Muscle@{Muscle}!GenerateMesh@{GenerateMesh}}
+\index{GenerateMesh@{GenerateMesh}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GenerateMesh()}{GenerateMesh()}}
+{\footnotesize\ttfamily void Muscle\+::\+Generate\+Mesh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Activate the graphics rendering of the MTU \mbox{\Hypertarget{struct_muscle_ad29deaad6cc67699b79b8014ca962e0b}\label{struct_muscle_ad29deaad6cc67699b79b8014ca962e0b}} 
+\index{Muscle@{Muscle}!GetActivation@{GetActivation}}
+\index{GetActivation@{GetActivation}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetActivation()}{GetActivation()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+Activation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get activation 
+\begin{DoxyParams}{Parameters}
+{\em a} & (input) activation value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a46cb0ccc5c05e17b0008d868f2f28820}\label{struct_muscle_a46cb0ccc5c05e17b0008d868f2f28820}} 
+\index{Muscle@{Muscle}!GetAngle@{GetAngle}}
+\index{GetAngle@{GetAngle}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetAngle()}{GetAngle()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+Angle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the angle of the joint 1 actuated by the MTU \mbox{\Hypertarget{struct_muscle_a78dbf040ef746bf510ae24cddfc5b6e8}\label{struct_muscle_a78dbf040ef746bf510ae24cddfc5b6e8}} 
+\index{Muscle@{Muscle}!GetAngle1@{GetAngle1}}
+\index{GetAngle1@{GetAngle1}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetAngle1()}{GetAngle1()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+Angle1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the angle of the joint 2 actuated by the MTU \mbox{\Hypertarget{struct_muscle_aad19bcffb1c1bf80ff20c23b7344a76f}\label{struct_muscle_aad19bcffb1c1bf80ff20c23b7344a76f}} 
+\index{Muscle@{Muscle}!GetDelta\_l@{GetDelta\_l}}
+\index{GetDelta\_l@{GetDelta\_l}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetDelta\_l()}{GetDelta\_l()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+Delta\+\_\+l (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the length delta of MTU \mbox{\Hypertarget{struct_muscle_aaf5dc8b416c05e0b0d21932d2cc61718}\label{struct_muscle_aaf5dc8b416c05e0b0d21932d2cc61718}} 
+\index{Muscle@{Muscle}!GetInsert1\_GlobalRef@{GetInsert1\_GlobalRef}}
+\index{GetInsert1\_GlobalRef@{GetInsert1\_GlobalRef}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetInsert1\_GlobalRef()}{GetInsert1\_GlobalRef()}}
+{\footnotesize\ttfamily d\+Vector Muscle\+::\+Get\+Insert1\+\_\+\+Global\+Ref (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Convert line point 1 coords in global coords \mbox{\Hypertarget{struct_muscle_a5b3088c6a2abece57bfc5223c72be0a3}\label{struct_muscle_a5b3088c6a2abece57bfc5223c72be0a3}} 
+\index{Muscle@{Muscle}!GetInsert2\_GlobalRef@{GetInsert2\_GlobalRef}}
+\index{GetInsert2\_GlobalRef@{GetInsert2\_GlobalRef}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetInsert2\_GlobalRef()}{GetInsert2\_GlobalRef()}}
+{\footnotesize\ttfamily d\+Vector Muscle\+::\+Get\+Insert2\+\_\+\+Global\+Ref (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Convert line point 2 coords in global coords \mbox{\Hypertarget{struct_muscle_a3635a8c9d628ff5b37155b4511d91f4f}\label{struct_muscle_a3635a8c9d628ff5b37155b4511d91f4f}} 
+\index{Muscle@{Muscle}!GetLaterality@{GetLaterality}}
+\index{GetLaterality@{GetLaterality}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetLaterality()}{GetLaterality()}}
+{\footnotesize\ttfamily char Muscle\+::\+Get\+Laterality (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the laterality of MTU \mbox{\Hypertarget{struct_muscle_a2c94d6d28eea1b762bce2aedc984eacd}\label{struct_muscle_a2c94d6d28eea1b762bce2aedc984eacd}} 
+\index{Muscle@{Muscle}!GetLCE@{GetLCE}}
+\index{GetLCE@{GetLCE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetLCE()}{GetLCE()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+LCE (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the CE length MTU \mbox{\Hypertarget{struct_muscle_a2539e15a04f3118ce547b0b5d0ff5a5d}\label{struct_muscle_a2539e15a04f3118ce547b0b5d0ff5a5d}} 
+\index{Muscle@{Muscle}!GetMuscleName@{GetMuscleName}}
+\index{GetMuscleName@{GetMuscleName}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetMuscleName()}{GetMuscleName()}}
+{\footnotesize\ttfamily Mtuname Muscle\+::\+Get\+Muscle\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets MTU name enum 
+\begin{DoxyParams}{Parameters}
+{\em name} & (output) enum of MTU name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a694ba35c9729e54e14eeddae6ebbfa47}\label{struct_muscle_a694ba35c9729e54e14eeddae6ebbfa47}} 
+\index{Muscle@{Muscle}!GetMuscleParams@{GetMuscleParams}}
+\index{GetMuscleParams@{GetMuscleParams}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetMuscleParams()}{GetMuscleParams()}}
+{\footnotesize\ttfamily void Muscle\+::\+Get\+Muscle\+Params (\begin{DoxyParamCaption}\item[{float \&}]{angle,  }\item[{float \&}]{angle1,  }\item[{float \&}]{lce,  }\item[{float \&}]{lopt,  }\item[{float \&}]{lmtu,  }\item[{float \&}]{Fmuscle,  }\item[{float \&}]{Fmax,  }\item[{float \&}]{V }\end{DoxyParamCaption})}
+
+Get MTU parameters 
+\begin{DoxyParams}{Parameters}
+{\em angle} & (input) actual angle of joint 1 \\
+\hline
+{\em angle1} & (input) actual angle of joint 2 \\
+\hline
+{\em lce} & (input) length of contractile element \\
+\hline
+{\em lopt} & (input) optimal length of contractile element \\
+\hline
+{\em lmtu} & (input) length of MTU \\
+\hline
+{\em Fmuscle} & (input) force of the muscle \\
+\hline
+{\em Fmax} & (input) maximum force of the MTU \\
+\hline
+{\em V} & (input) contraction velocity \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a0a88e9b096c79ef965d2976bbdd4ab6e}\label{struct_muscle_a0a88e9b096c79ef965d2976bbdd4ab6e}} 
+\index{Muscle@{Muscle}!GetNmax@{GetNmax}}
+\index{GetNmax@{GetNmax}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetNmax()}{GetNmax()}}
+{\footnotesize\ttfamily float Muscle\+::\+Get\+Nmax (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the number of iterations of Newton\+Raphson algo \mbox{\Hypertarget{struct_muscle_a55bf9d74c90154506c9ee8ed2543f20b}\label{struct_muscle_a55bf9d74c90154506c9ee8ed2543f20b}} 
+\index{Muscle@{Muscle}!GetOriginAndInsertion@{GetOriginAndInsertion}}
+\index{GetOriginAndInsertion@{GetOriginAndInsertion}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{GetOriginAndInsertion()}{GetOriginAndInsertion()}}
+{\footnotesize\ttfamily void Muscle\+::\+Get\+Origin\+And\+Insertion (\begin{DoxyParamCaption}\item[{d\+Vector \&}]{v\+Origin,  }\item[{d\+Vector \&}]{v\+Insert }\end{DoxyParamCaption})}
+
+Get origin and insertion points coordinates of MTU \mbox{\Hypertarget{struct_muscle_a4553b3e8f526b0b9c2f550a4630f9310}\label{struct_muscle_a4553b3e8f526b0b9c2f550a4630f9310}} 
+\index{Muscle@{Muscle}!residu@{residu}}
+\index{residu@{residu}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{residu()}{residu()}}
+{\footnotesize\ttfamily float Muscle\+::residu (\begin{DoxyParamCaption}\item[{const float}]{l,  }\item[{const float}]{t }\end{DoxyParamCaption})}
+
+compute Err(delta) = Fce + Fpe + Fse as a function of ce increment 
+\begin{DoxyParams}{Parameters}
+{\em l} & (input) length \\
+\hline
+{\em t} & (input) timestep \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a717dc76b74138d581aa40f34c4eb001a}\label{struct_muscle_a717dc76b74138d581aa40f34c4eb001a}} 
+\index{Muscle@{Muscle}!SetActivation@{SetActivation}}
+\index{SetActivation@{SetActivation}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetActivation()}{SetActivation()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Activation (\begin{DoxyParamCaption}\item[{const float}]{i\+Excitation }\end{DoxyParamCaption})}
+
+Convert excitation in activation of MTU due to neural delay 
+\begin{DoxyParams}{Parameters}
+{\em i\+Excitation} & (input) excitation value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a27ddc83d7881b329df96ace273104a6f}\label{struct_muscle_a27ddc83d7881b329df96ace273104a6f}} 
+\index{Muscle@{Muscle}!SetAngle@{SetAngle}}
+\index{SetAngle@{SetAngle}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetAngle()}{SetAngle()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Angle (\begin{DoxyParamCaption}\item[{float}]{ang }\end{DoxyParamCaption})}
+
+Set the angle of the joint 1 actuated by the MTU 
+\begin{DoxyParams}{Parameters}
+{\em a} & (input) angle value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a1b50d913e4460ef5f8bf388da6121b5d}\label{struct_muscle_a1b50d913e4460ef5f8bf388da6121b5d}} 
+\index{Muscle@{Muscle}!SetAngle1@{SetAngle1}}
+\index{SetAngle1@{SetAngle1}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetAngle1()}{SetAngle1()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Angle1 (\begin{DoxyParamCaption}\item[{float}]{ang }\end{DoxyParamCaption})}
+
+Set the angle of the joint 2 actuated by the MTU 
+\begin{DoxyParams}{Parameters}
+{\em a} & (input) angle value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_aa5fbd3f75b6c2e963e695bcfb47f6944}\label{struct_muscle_aa5fbd3f75b6c2e963e695bcfb47f6944}} 
+\index{Muscle@{Muscle}!SetDelta\_l@{SetDelta\_l}}
+\index{SetDelta\_l@{SetDelta\_l}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetDelta\_l()}{SetDelta\_l()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Delta\+\_\+l (\begin{DoxyParamCaption}\item[{const float}]{l }\end{DoxyParamCaption})}
+
+Set the length delta of MTU \mbox{\Hypertarget{struct_muscle_a45744298a8de06de38b27d728c1d229f}\label{struct_muscle_a45744298a8de06de38b27d728c1d229f}} 
+\index{Muscle@{Muscle}!SetInsert1@{SetInsert1}}
+\index{SetInsert1@{SetInsert1}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetInsert1()}{SetInsert1()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Insert1 (\begin{DoxyParamCaption}\item[{float}]{px,  }\item[{float}]{py,  }\item[{float}]{pz }\end{DoxyParamCaption})}
+
+Define insertion point of MTU line 
+\begin{DoxyParams}{Parameters}
+{\em px} & (input) x coord \\
+\hline
+{\em py} & (input) y coord \\
+\hline
+{\em pz} & (input) z coord \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_af8cfabb7058af642e91bf7ab2bfc5f71}\label{struct_muscle_af8cfabb7058af642e91bf7ab2bfc5f71}} 
+\index{Muscle@{Muscle}!SetInsert2@{SetInsert2}}
+\index{SetInsert2@{SetInsert2}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetInsert2()}{SetInsert2()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Insert2 (\begin{DoxyParamCaption}\item[{float}]{px,  }\item[{float}]{py,  }\item[{float}]{pz }\end{DoxyParamCaption})}
+
+Define insertion point 2 of MTU line 
+\begin{DoxyParams}{Parameters}
+{\em px} & (input) x coord \\
+\hline
+{\em py} & (input) y coord \\
+\hline
+{\em pz} & (input) z coord \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a97055a71ca9a12883e41bccf5fd4d807}\label{struct_muscle_a97055a71ca9a12883e41bccf5fd4d807}} 
+\index{Muscle@{Muscle}!SetLaterality@{SetLaterality}}
+\index{SetLaterality@{SetLaterality}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetLaterality()}{SetLaterality()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Laterality (\begin{DoxyParamCaption}\item[{char}]{letter }\end{DoxyParamCaption})}
+
+Set the laterality of MTU \mbox{\Hypertarget{struct_muscle_a436cf60cacdec4b8ecc799cc5a678023}\label{struct_muscle_a436cf60cacdec4b8ecc799cc5a678023}} 
+\index{Muscle@{Muscle}!SetLCE@{SetLCE}}
+\index{SetLCE@{SetLCE}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetLCE()}{SetLCE()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+LCE (\begin{DoxyParamCaption}\item[{const float}]{l }\end{DoxyParamCaption})}
+
+Set the CE length MTU \mbox{\Hypertarget{struct_muscle_a06c2a0870757756fde47226edca81c48}\label{struct_muscle_a06c2a0870757756fde47226edca81c48}} 
+\index{Muscle@{Muscle}!SetLimits@{SetLimits}}
+\index{SetLimits@{SetLimits}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetLimits()}{SetLimits()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Limits (\begin{DoxyParamCaption}\item[{float}]{a\+\_\+lim,  }\item[{float}]{a1\+\_\+lim }\end{DoxyParamCaption})}
+
+Set the angle limits of the two joints actuated by the MTU 
+\begin{DoxyParams}{Parameters}
+{\em a\+\_\+lim} & (input) limit 1 value \\
+\hline
+{\em a\+\_\+lim1} & (input) limit 2 value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_afbc30d987ed36cd5e659fc3af5d182f0}\label{struct_muscle_afbc30d987ed36cd5e659fc3af5d182f0}} 
+\index{Muscle@{Muscle}!SetMuscleParams@{SetMuscleParams}}
+\index{SetMuscleParams@{SetMuscleParams}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetMuscleParams()}{SetMuscleParams()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Muscle\+Params (\begin{DoxyParamCaption}\item[{const float}]{Fmax,  }\item[{const float}]{v\+\_\+max,  }\item[{const float}]{opt,  }\item[{const float}]{slk,  }\item[{const float}]{rhoin,  }\item[{const float}]{r,  }\item[{const float}]{r1,  }\item[{const float}]{phiM,  }\item[{const float}]{phiR,  }\item[{const float}]{phi1M,  }\item[{const float}]{phi1R }\end{DoxyParamCaption})}
+
+Set the MTU parameters 
+\begin{DoxyParams}{Parameters}
+{\em Fmax} & (input) angle of joint 1 on the MTU \\
+\hline
+{\em v\+\_\+max} & (input) contraction velocity \\
+\hline
+{\em opt} & (input) optimal length \\
+\hline
+{\em slk} & (input) slack length \\
+\hline
+{\em rhoin} & (input) pennation angle \\
+\hline
+{\em r} & (input) arm on joint 1 \\
+\hline
+{\em r1} & (input) arm on joint 2 \\
+\hline
+{\em phiM} & (input) angle of joint 1 with max moment arm \\
+\hline
+{\em phiR} & (input) angle of joint 1 with delta equal to 0 \\
+\hline
+{\em phi\+M1} & (input) angle of joint 2 with max moment arm \\
+\hline
+{\em phi\+R1} & (input) angle of joint 2 with delta equal to 0 \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_ac1933ce4ac0d9a734e333faf95bbd0cd}\label{struct_muscle_ac1933ce4ac0d9a734e333faf95bbd0cd}} 
+\index{Muscle@{Muscle}!SetNeuralDelay@{SetNeuralDelay}}
+\index{SetNeuralDelay@{SetNeuralDelay}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetNeuralDelay()}{SetNeuralDelay()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Neural\+Delay (\begin{DoxyParamCaption}\item[{const float}]{i\+Step\+Size }\end{DoxyParamCaption})}
+
+Set stepsize 
+\begin{DoxyParams}{Parameters}
+{\em i\+Step\+Size} & (input) step size \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a9191fc67f5d3bca3680ec64cf9e2b327}\label{struct_muscle_a9191fc67f5d3bca3680ec64cf9e2b327}} 
+\index{Muscle@{Muscle}!SetTheta1zero@{SetTheta1zero}}
+\index{SetTheta1zero@{SetTheta1zero}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetTheta1zero()}{SetTheta1zero()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Theta1zero (\begin{DoxyParamCaption}\item[{float}]{angle }\end{DoxyParamCaption})}
+
+Set the initial angle of joint 2 
+\begin{DoxyParams}{Parameters}
+{\em angle} & (input) angle of joint 2 on the MTU \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a9ebc680d1848ec68137e677c247e5f77}\label{struct_muscle_a9ebc680d1848ec68137e677c247e5f77}} 
+\index{Muscle@{Muscle}!SetThetazero@{SetThetazero}}
+\index{SetThetazero@{SetThetazero}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{SetThetazero()}{SetThetazero()}}
+{\footnotesize\ttfamily void Muscle\+::\+Set\+Thetazero (\begin{DoxyParamCaption}\item[{float}]{angle }\end{DoxyParamCaption})}
+
+Set the initial angle of joint 1 
+\begin{DoxyParams}{Parameters}
+{\em angle} & (input) angle of joint 1 on the MTU \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_muscle_a50759e5fbf2092d33ad4a6e97f6fa09f}\label{struct_muscle_a50759e5fbf2092d33ad4a6e97f6fa09f}} 
+\index{Muscle@{Muscle}!UpdateLineCoord@{UpdateLineCoord}}
+\index{UpdateLineCoord@{UpdateLineCoord}!Muscle@{Muscle}}
+\doxysubsubsection{\texorpdfstring{UpdateLineCoord()}{UpdateLineCoord()}}
+{\footnotesize\ttfamily void Muscle\+::\+Update\+Line\+Coord (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_shader}{Shader}} $\ast$}]{cshd,  }\item[{d\+Float}]{steptime }\end{DoxyParamCaption})}
+
+Update graphic line of the MTU 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Muscle.\+h\item 
+C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+System/Muscle.\+cpp\end{DoxyCompactItemize}

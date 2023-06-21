@@ -1,0 +1,37 @@
+\hypertarget{_shaked___walker_8cpp}{}\doxysection{C\+:/\+Users/\+Admin/\+Documents/\+Git\+Hub/shaked\+\_\+walker/\+Walking\+\_\+\+Humanoid\+\_\+\+Shaked/\+Shaked\+\_\+\+Walker.cpp File Reference}
+\label{_shaked___walker_8cpp}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/Shaked\_Walker.cpp@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/Shaked\_Walker.cpp}}
+{\ttfamily \#include \char`\"{}pch.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Window\+GL.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Geom\+GL.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Muscle.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Humanoid.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Params.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}cmaes.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}tinyxml.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_a16cfe4f955a0cd4c1a29f3bb2a9f65a7}\label{_shaked___walker_8cpp_a16cfe4f955a0cd4c1a29f3bb2a9f65a7}} 
+float {\bfseries Call\+Newton} (double $\ast$params, int operation, int write\+\_\+txt, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_af1909badf1fe9946abec07e5ea53a05b}\label{_shaked___walker_8cpp_af1909badf1fe9946abec07e5ea53a05b}} 
+float {\bfseries Call\+Newton} (double $\ast$params, int operation, int iteration\+\_\+max, int current\+\_\+iteration, int popsize, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_a513363239393dc1f73402d32fe9097a2}\label{_shaked___walker_8cpp_a513363239393dc1f73402d32fe9097a2}} 
+int {\bfseries call\+\_\+cmaes} (\mbox{\hyperlink{class_opt_params}{Opt\+Params}} params, int simulationtime, int iteration\+\_\+max, int operation, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_a4c52ea64a6351cd88e7155c1669dc754}\label{_shaked___walker_8cpp_a4c52ea64a6351cd88e7155c1669dc754}} 
+bool {\bfseries is\+\_\+feasible} (double $\ast$p)
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_a67c2637f956beebee99f9833e91fe8b1}\label{_shaked___walker_8cpp_a67c2637f956beebee99f9833e91fe8b1}} 
+int WINAPI {\bfseries w\+Win\+Main} (HINSTANCE h\+Instance, HINSTANCE h\+Prev\+Instance, PWSTR lp\+Cmd\+Line, int n\+Cmd\+Show)
+\item 
+\mbox{\Hypertarget{_shaked___walker_8cpp_a0cf8f01935596bf965c11092e3e6bcbf}\label{_shaked___walker_8cpp_a0cf8f01935596bf965c11092e3e6bcbf}} 
+double {\bfseries fitfun} (double const $\ast$x, int N, \mbox{\hyperlink{class_opt_params}{Opt\+Params}} P, int simulationtime, int iteration\+\_\+max, int current\+\_\+it, int popsize, \mbox{\hyperlink{class_w_b_v}{WBV}} wbv)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Stefano Marelli 
+\end{DoxyAuthor}

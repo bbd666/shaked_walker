@@ -1,0 +1,90 @@
+\hypertarget{_camera_8h_source}{}\doxysection{Camera.\+h}
+\label{_camera_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Camera.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/Camera.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright(c)\ <\ 1999\ -\/\ 2019\ >\ <Dave\ Gravel,\ Free\ Tutorial\ -\/\ Newton\ Dynamics\ and\ more.>}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ warranty.In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ freely,\ subject\ to\ the\ following\ restrictions\ :}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ 1.\ The\ origin\ of\ this\ software\ must\ not\ be\ misrepresented;\ you\ must\ not}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ claim\ that\ you\ wrote\ the\ original\ software.If\ you\ use\ this\ software}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ a\ product,\ an\ acknowledgment\ in\ the\ product\ documentation\ would\ be}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ appreciated\ but\ is\ not\ required.}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ 2.\ Altered\ source\ versions\ must\ be\ plainly\ marked\ as\ such,\ and\ must\ not\ be}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ misrepresented\ as\ being\ the\ original\ software.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ 3.\ This\ notice\ may\ not\ be\ removed\ or\ altered\ from\ any\ source\ distribution.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00022\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ Tutorial\ for\ show\ how\ to\ use\ newton\ dynamics\ api\ with\ pure\ gl\ write\ by\ Dave\ Gravel\ -\/\ 2019.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ This\ tutorial\ if\ the\ first\ version,\ Some\ parts\ is\ quickly\ coded\ and\ need\ a\ better\ implementation.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ I\ have\ try\ to\ add\ the\ most\ options\ possible\ without\ have\ very\ complex\ code.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ I\ can\ surely\ update\ this\ tutorial\ later\ with\ better\ features\ and\ implementation.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ I\ think\ for\ the\ first\ version\ it\ already\ touch\ pretty\ much\ all\ subject\ about\ newton\ and\ GL.}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ Have\ Fun...}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ Dave\ Gravel.}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00031\ \textcolor{comment}{//}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ WIP:\ Just\ a\ very\ simple\ camera\ helper}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#ifndef\ CAMERA\_H}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ CAMERA\_H}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}pch.h"{}}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_main_camera}{MainCamera}}}
+\DoxyCodeLine{00039\ \{\ \ \ \textcolor{comment}{//\ public}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{MainCamera}}();}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{struct_main_camera}{\string~MainCamera}}();}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPosition(\textcolor{keywordtype}{float}\ px,\ \textcolor{keywordtype}{float}\ py,\ \textcolor{keywordtype}{float}\ pz);}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ SetCenter(\textcolor{keywordtype}{float}\ cx,\ \textcolor{keywordtype}{float}\ cy,\ \textcolor{keywordtype}{float}\ cz);}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ SetUp(\textcolor{keywordtype}{float}\ upx,\ \textcolor{keywordtype}{float}\ upy,\ \textcolor{keywordtype}{float}\ upz);}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ ApplyView(\textcolor{keywordtype}{int}\ dwidth,\ \textcolor{keywordtype}{int}\ dheight);}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ MoveAround(\textcolor{keywordtype}{double}\ amousex,\ \textcolor{keywordtype}{double}\ amousey);}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ MouseAction(\textcolor{keywordtype}{double}\ amousex,\ \textcolor{keywordtype}{double}\ amousey,\ \textcolor{keywordtype}{int}\ aaction);}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00049\ \ \ \ \ glm::mat4\ GetMatrixProjection();}
+\DoxyCodeLine{00050\ \ \ \ \ glm::mat4\ GetMatrixView();}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{int}\ GetContextWidth();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{int}\ GetContextHeight();}
+\DoxyCodeLine{00053\ \ \ \ \ glm::vec3\ GetEye();}
+\DoxyCodeLine{00054\ \ \ \ \ glm::vec3\ GetCenter();}
+\DoxyCodeLine{00055\ \ \ \ \ glm::vec3\ GetUp();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ offsetOrientation(dFloat\ upAngle,\ dFloat\ rightAngle);}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ normalizeAngles();}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{float}\ afov;}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{float}\ aAspectRatio;}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{int}\ awidth;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{int}\ aheight;}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{float}\ azNear;}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{float}\ azFar;}
+\DoxyCodeLine{00067\ \ \ \ \ glm::mat4\ aMatProj;}
+\DoxyCodeLine{00068\ \ \ \ \ glm::mat4\ aMatView;}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00070\ \ \ \ \ glm::vec3\ aEye;}
+\DoxyCodeLine{00071\ \ \ \ \ glm::vec3\ aCenter;}
+\DoxyCodeLine{00072\ \ \ \ \ glm::vec3\ aUp;}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{float}\ aCurrentRotationX;}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{float}\ aCurrentRotationY;}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{float}\ aCamposrotoldX;}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{float}\ aCamposrotoldY;}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{float}\ oldRotationX;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{float}\ oldRotationY;}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{float}\ aHorizontalAngle;}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{float}\ aVerticalAngle;}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{bool}\ aOrientationchanged;}
+\DoxyCodeLine{00082\ \};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//CAMERA\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,71 @@
+\hypertarget{d_custom_ball_and_socket_8h_source}{}\doxysection{d\+Custom\+Ball\+And\+Socket.\+h}
+\label{d_custom_ball_and_socket_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/Newton\_files\_for\_BallAndSocket\_angle/dCustomBallAndSocket.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/Newton\_files\_for\_BallAndSocket\_angle/dCustomBallAndSocket.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ Copyright\ (c)\ <2003-\/2019>\ <Newton\ Game\ Dynamics>}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ }}
+\DoxyCodeLine{00003\ \textcolor{comment}{*\ This\ software\ is\ provided\ 'as-\/is',\ without\ any\ express\ or\ implied}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ warranty.\ In\ no\ event\ will\ the\ authors\ be\ held\ liable\ for\ any\ damages}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ arising\ from\ the\ use\ of\ this\ software.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ }}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ Permission\ is\ granted\ to\ anyone\ to\ use\ this\ software\ for\ any\ purpose,}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ including\ commercial\ applications,\ and\ to\ alter\ it\ and\ redistribute\ it}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ freely}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ \_D\_CUSTOM\_BALLANDSOCKET\_H\_}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ \_D\_CUSTOM\_BALLANDSOCKET\_H\_}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}dCustomJoint.h"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classd_custom_ball_and_socket}{dCustomBallAndSocket}}:\ \textcolor{keyword}{public}\ dCustomJoint\ \ }
+\DoxyCodeLine{00019\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ CUSTOM\_JOINTS\_API\ \mbox{\hyperlink{classd_custom_ball_and_socket}{dCustomBallAndSocket}}(\textcolor{keyword}{const}\ dMatrix\&\ pinAndPivotFrame,\ NewtonBody*\ \textcolor{keyword}{const}\ child,\ NewtonBody*\ \textcolor{keyword}{const}\ parent\ =\ NULL);}
+\DoxyCodeLine{00022\ \ \ \ \ CUSTOM\_JOINTS\_API\ \mbox{\hyperlink{classd_custom_ball_and_socket}{dCustomBallAndSocket}}(\textcolor{keyword}{const}\ dMatrix\&\ pinAndPivotFrame0,\ \textcolor{keyword}{const}\ dMatrix\&\ pinAndPivotFrame1,\ NewtonBody*\ \textcolor{keyword}{const}\ child,\ NewtonBody*\ \textcolor{keyword}{const}\ parent\ =\ NULL);}
+\DoxyCodeLine{00023\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classd_custom_ball_and_socket}{\string~dCustomBallAndSocket}}();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ EnableTwist(\textcolor{keywordtype}{bool}\ state);}
+\DoxyCodeLine{00026\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ SetTwistLimits(dFloat\ minAngle,\ dFloat\ maxAngle);}
+\DoxyCodeLine{00027\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ GetTwistLimits(dFloat\&\ minAngle,\ dFloat\&\ maxAngle)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ EnableCone(\textcolor{keywordtype}{bool}\ state);}
+\DoxyCodeLine{00030\ \ \ \ \ CUSTOM\_JOINTS\_API\ dFloat\ GetConeLimits()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ SetConeLimits(dFloat\ maxAngle);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ SetTwistFriction\ (dFloat\ frictionTorque);}
+\DoxyCodeLine{00034\ \ \ \ \ CUSTOM\_JOINTS\_API\ dFloat\ GetTwistFriction\ (dFloat\ frictionTorque)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keywordtype}{void}\ SetConeFriction(dFloat\ frictionTorque);}
+\DoxyCodeLine{00037\ \ \ \ \ CUSTOM\_JOINTS\_API\ dFloat\ GetConeFriction(dFloat\ frictionTorque)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Debug(dDebugDisplay*\ \textcolor{keyword}{const}\ debugDisplay)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ CUSTOM\_JOINTS\_API\ dFloat\ GetJointAngle()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \ \ CUSTOM\_JOINTS\_API\ dVector\ GetPinAxis()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00045\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Deserialize\ (NewtonDeserializeCallback\ callback,\ \textcolor{keywordtype}{void}*\ \textcolor{keyword}{const}\ userData);}
+\DoxyCodeLine{00046\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ Serialize\ (NewtonSerializeCallback\ callback,\ \textcolor{keywordtype}{void}*\ \textcolor{keyword}{const}\ userData)\ \textcolor{keyword}{const};\ }
+\DoxyCodeLine{00047\ \ \ \ \ CUSTOM\_JOINTS\_API\ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ SubmitConstraints\ (dFloat\ timestep,\ \textcolor{keywordtype}{int}\ threadIndex);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ SubmitTwistAngle(\textcolor{keyword}{const}\ dVector\&\ pin,\ dFloat\ pitchAngle,\ dFloat\ timestep);}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ SubmitAngularAxis(\textcolor{keyword}{const}\ dMatrix\&\ matrix0,\ \textcolor{keyword}{const}\ dMatrix\&\ matrix1,\ dFloat\ timestep);}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ SubmitAngularAxisCartisianApproximation(\textcolor{keyword}{const}\ dMatrix\&\ matrix0,\ \textcolor{keyword}{const}\ dMatrix\&\ matrix1,\ dFloat\ timestep);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ dAngularIntegration\ m\_curJointAngle;}
+\DoxyCodeLine{00054\ \ \ \ \ dAngularIntegration\ m\_twistAngle;}
+\DoxyCodeLine{00055\ \ \ \ \ dFloat\ m\_minTwistAngle;}
+\DoxyCodeLine{00056\ \ \ \ \ dFloat\ m\_maxTwistAngle;}
+\DoxyCodeLine{00057\ \ \ \ \ dFloat\ m\_maxConeAngle;}
+\DoxyCodeLine{00058\ \ \ \ \ dFloat\ m\_coneFriction;}
+\DoxyCodeLine{00059\ \ \ \ \ dFloat\ m\_twistFriction;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ DECLARE\_CUSTOM\_JOINT(\mbox{\hyperlink{classd_custom_ball_and_socket}{dCustomBallAndSocket}},\ dCustomJoint)}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{00065\ }
+
+\end{DoxyCode}

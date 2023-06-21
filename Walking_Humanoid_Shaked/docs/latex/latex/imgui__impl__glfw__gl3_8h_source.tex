@@ -1,0 +1,31 @@
+\hypertarget{imgui__impl__glfw__gl3_8h_source}{}\doxysection{imgui\+\_\+impl\+\_\+glfw\+\_\+gl3.\+h}
+\label{imgui__impl__glfw__gl3_8h_source}\index{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/imgui\_impl\_glfw\_gl3.h@{C:/Users/Admin/Documents/GitHub/shaked\_walker/Walking\_Humanoid\_Shaked/System/imgui\_impl\_glfw\_gl3.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ ImGui\ GLFW\ binding\ with\ OpenGL3\ +\ shaders}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ In\ this\ binding,\ ImTextureID\ is\ used\ to\ store\ an\ OpenGL\ 'GLuint'\ texture\ identifier.\ Read\ the\ FAQ\ about\ ImTextureID\ in\ imgui.cpp.}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ You\ can\ copy\ and\ use\ unmodified\ imgui\_impl\_*\ files\ in\ your\ project.\ See\ main.cpp\ for\ an\ example\ of\ using\ this.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ If\ you\ use\ this\ binding\ you'll\ need\ to\ call\ 4\ functions:\ ImGui\_ImplXXXX\_Init(),\ ImGui\_ImplXXXX\_NewFrame(),\ ImGui::Render()\ and\ ImGui\_ImplXXXX\_Shutdown().}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ If\ you\ are\ new\ to\ ImGui,\ see\ examples/README.txt\ and\ documentation\ at\ the\ top\ of\ imgui.cpp.}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//\ https://github.com/ocornut/imgui}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{struct\ }GLFWwindow;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ IMGUI\_API\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_Init(GLFWwindow*\ window,\ \textcolor{keywordtype}{bool}\ install\_callbacks);}
+\DoxyCodeLine{00012\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_Shutdown();}
+\DoxyCodeLine{00013\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_NewFrame();}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ Use\ if\ you\ want\ to\ reset\ your\ rendering\ device\ without\ losing\ ImGui\ state.}}
+\DoxyCodeLine{00016\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_InvalidateDeviceObjects();}
+\DoxyCodeLine{00017\ IMGUI\_API\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_CreateDeviceObjects();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ GLFW\ callbacks\ (installed\ by\ default\ if\ you\ enable\ 'install\_callbacks'\ during\ initialization)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ Provided\ here\ if\ you\ want\ to\ chain\ callbacks.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ You\ can\ also\ handle\ inputs\ yourself\ and\ use\ those\ as\ a\ reference.}}
+\DoxyCodeLine{00022\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_MouseButtonCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ button,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00023\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_ScrollCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{double}\ xoffset,\ \textcolor{keywordtype}{double}\ yoffset);}
+\DoxyCodeLine{00024\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_KeyCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{int}\ key,\ \textcolor{keywordtype}{int}\ scancode,\ \textcolor{keywordtype}{int}\ action,\ \textcolor{keywordtype}{int}\ mods);}
+\DoxyCodeLine{00025\ IMGUI\_API\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ ImGui\_ImplGlfwGL3\_CharCallback(GLFWwindow*\ window,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ c);}
+
+\end{DoxyCode}

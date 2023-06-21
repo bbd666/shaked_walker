@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{EB551E3C-2FC2-4306-BBDB-877EC6A7E019}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Newton</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Shaked_Walker</ProjectName>
+    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)</OutDir>
+    <TargetName>Walking_Humanoid_Shaked_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)</OutDir>
+    <TargetName>Walking_Humanoid_Shaked</TargetName>
+    <CopyLocalDeploymentContent>false</CopyLocalDeploymentContent>
+    <CopyLocalProjectReference>false</CopyLocalProjectReference>
+    <CopyLocalDebugSymbols>false</CopyLocalDebugSymbols>
+    <CopyCppRuntimeToOutputDir>false</CopyCppRuntimeToOutputDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>..\newton-3.14\sdk\dScene;..\newton-3.14\sdk\dgNewton;..\newton-3.14\sdk\dContainers;..\newton-3.14\sdk\dModel;..\newton-3.14\sdk\dMath;..\newton-3.14\sdk\dCustomJoints;..\glfw-3.3\include\GLFW;..\glew-2.1.0\include\GL;..\glm;.\stb_image;..\newton-3.14\sdk\dgCore;..\newton-3.14\sdk\dVehicle;.\System;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>wsock32.lib;opengl32.lib;..\glfw-3.3\src\Debug\glfw3.lib;..\glew-2.1.0\lib\Debug\x64\glew32sd.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\newton\Debug\newton_d.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dCustomJoints\Debug\dCustomJoints_d.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dMath\Debug\dMath_d.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dModel\Debug\dModel_d.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dContainers\Debug\dContainers_d.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dVehicle\Debug\dVehicle_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT /NODEFAULTLIB:LIBCMTD %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>..\newton-3.14\sdk\dContainers;..\newton-3.14\sdk\dModel;..\newton-3.14\sdk\dMath;..\newton-3.14\sdk\dgNewton;..\newton-3.14\sdk\dCustomJoints;..\newton-3.14\sdk\dgMeshUtil;.\stb_image;..\newton-3.14\sdk\dgCore;.\System;..\glew-2.1.0\include\GL;..\glfw-3.3\include\GLFW;..\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>wsock32.lib;opengl32.lib;..\glfw-3.3\src\Debug\glfw3.lib;..\glew-2.1.0\lib\Debug\x64\glew32sd.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\newton\Release\newton.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dModel\Release\dModel.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dMath\Release\dMath.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dCustomJoints\Release\dCustomJoints.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dContainers\Release\dContainers.lib;..\newton-3.14\sdk\projects\visualStudio_2015_dll\x64\dVehicle\Release\dVehicle.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="Shaders\MainShader.frag" />
+    <None Include="Shaders\MainShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="System\BaseShader.h" />
+    <ClInclude Include="System\Camera.h" />
+    <ClInclude Include="System\cmaes.h" />
+    <ClInclude Include="System\ControlAlgorithm.h" />
+    <ClInclude Include="System\dHighResolutionTimer.h" />
+    <ClInclude Include="System\GeomGL.h" />
+    <ClInclude Include="System\Humanoid.h" />
+    <ClInclude Include="System\Muscle.h" />
+    <ClInclude Include="System\NewtonManager.h" />
+    <ClInclude Include="System\NewtonUtil.h" />
+    <ClInclude Include="System\parameters.h" />
+    <ClInclude Include="System\Params.h" />
+    <ClInclude Include="System\pch.h" />
+    <ClInclude Include="System\random.h" />
+    <ClInclude Include="System\shader.h" />
+    <ClInclude Include="System\texture.h" />
+    <ClInclude Include="System\timings.h" />
+    <ClInclude Include="System\tinystr.h" />
+    <ClInclude Include="System\tinyxml.h" />
+    <ClInclude Include="System\utils.h" />
+    <ClInclude Include="System\VertexGL.h" />
+    <ClInclude Include="System\WindowGL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Shaked_Walker.cpp" />
+    <ClCompile Include="System\BaseShader.cpp" />
+    <ClCompile Include="System\Camera.cpp" />
+    <ClCompile Include="System\ControlAlgorithm.cpp" />
+    <ClCompile Include="System\dHighResolutionTimer.cpp" />
+    <ClCompile Include="System\GeomGL.cpp" />
+    <ClCompile Include="System\Humanoid.cpp" />
+    <ClCompile Include="System\Muscle.cpp" />
+    <ClCompile Include="System\NewtonManager.cpp" />
+    <ClCompile Include="System\NewtonUtil.cpp" />
+    <ClCompile Include="System\pch.cpp" />
+    <ClCompile Include="System\shader.cpp" />
+    <ClCompile Include="System\texture.cpp" />
+    <ClCompile Include="System\tinystr.cpp" />
+    <ClCompile Include="System\tinyxml.cpp" />
+    <ClCompile Include="System\tinyxmlerror.cpp" />
+    <ClCompile Include="System\tinyxmlparser.cpp" />
+    <ClCompile Include="System\WindowGL.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Shaked_Walker.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Configuration.xml" />
+    <Xml Include="DummyGeometricProperties.xml" />
+    <Xml Include="OptimizationParameters.xml" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
